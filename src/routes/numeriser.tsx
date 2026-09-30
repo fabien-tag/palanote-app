@@ -31,6 +31,21 @@ const etapes = [
   },
 ];
 
+// Cadence d'apparition : chaque élément part du repos et attend son tour.
+const PAS = 90;
+const retards = {
+  retour: 80,
+  icone: 170,
+  titre: 260,
+  accroche: 350,
+  etapes: 460,
+  boutonPrincipal: 730,
+  boutonSecondaire: 820,
+  import: 910,
+};
+
+const d = (ms: number) => ({ animationDelay: `${ms}ms` });
+
 function Numeriser() {
   const navigate = useNavigate();
 
@@ -56,7 +71,8 @@ function Numeriser() {
             type="button"
             aria-label="Retour"
             onClick={() => navigate({ to: "/carnet" })}
-            className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/[0.18]"
+            style={d(retards.retour)}
+            className="apparition flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/[0.18]"
           >
             <ChevronLeft className="h-[18px] w-[18px] text-white" strokeWidth={2.4} />
           </button>
@@ -64,21 +80,25 @@ function Numeriser() {
 
         <div className="flex min-h-0 flex-grow flex-col px-6">
           <div className="h-[66px]" />
-          <div className="flex justify-center">
+          <div style={d(retards.icone)} className="apparition flex justify-center">
             <Camera className="h-11 w-11 text-[#3DEFBE]" strokeWidth={1.9} aria-hidden="true" />
           </div>
-          <h1 className="mt-4 text-center text-[27px] font-bold leading-[1.22] text-white">
+          <h1 style={d(retards.titre)} className="apparition mt-4 text-center text-[27px] font-bold leading-[1.22] text-white">
             Tes carnets papier,
             <br />
             page par page
           </h1>
-          <p className="mt-2.5 text-center text-[14.5px] leading-normal text-white/90">
+          <p style={d(retards.accroche)} className="apparition mt-2.5 text-center text-[14.5px] leading-normal text-white/90">
             Photographie une page, l'app en tire les plongées. Tu relis, tu corriges, tu valides.
           </p>
 
           <ol className="mt-[26px] flex flex-col gap-[19px]">
             {etapes.map((e, i) => (
-              <li key={e.titre} className="flex items-start gap-[13px]">
+              <li
+                key={e.titre}
+                style={d(retards.etapes + i * PAS)}
+                className="apparition flex items-start gap-[13px]"
+              >
                 <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[#3DEFBE] bg-[#3DEFBE]/[0.18] text-[12.5px] font-bold text-[#3DEFBE]">
                   {i + 1}
                 </span>
@@ -96,18 +116,20 @@ function Numeriser() {
         <div className="flex shrink-0 flex-col gap-[11px] px-[22px] pb-[26px] pt-[14px]">
           <button
             type="button"
-            className="flex h-14 items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
+            style={d(retards.boutonPrincipal)}
+            className="apparition flex h-14 items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
           >
             PHOTOGRAPHIER UNE PAGE
           </button>
           <button
             type="button"
-            className="flex h-[54px] items-center justify-center gap-[9px] rounded-2xl border-2 border-[#3DEFBE] text-[13.5px] font-bold tracking-[.05em] text-[#3DEFBE]"
+            style={d(retards.boutonSecondaire)}
+            className="apparition flex h-[54px] items-center justify-center gap-[9px] rounded-2xl border-2 border-[#3DEFBE] text-[13.5px] font-bold tracking-[.05em] text-[#3DEFBE]"
           >
             <ImageIcon className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
             CHOISIR DANS MES PHOTOS
           </button>
-          <p className="text-center text-[13px] leading-[1.45] text-white/70">
+          <p style={d(retards.import)} className="apparition text-center text-[13px] leading-[1.45] text-white/70">
             Tes plongées sont déjà dans une autre app&nbsp;?
             <br />
             <button type="button" className="font-bold text-[#3DEFBE] underline underline-offset-4">
