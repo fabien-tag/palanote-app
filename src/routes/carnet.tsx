@@ -29,7 +29,8 @@ const onglets = [
 function Carnet() {
   // Mode maquette temporaire : la page est visible sans connexion
   // pour pouvoir la relire et la corriger. Remettre la vérification avant lancement.
-  void useNavigate; void useEffect; void useState; void supabase;
+  const navigate = useNavigate();
+  void useEffect; void useState; void supabase;
 
   return (
     <div className="flex min-h-screen flex-col bg-[#E7F1FA]">
@@ -73,6 +74,7 @@ function Carnet() {
         <div className="relative mx-auto w-full max-w-[430px] px-[26px] pb-[26px]">
           <button
             type="button"
+            onClick={() => navigate({ to: "/numeriser" })}
             className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] text-sm font-bold tracking-wide text-[#0B2A4A]"
           >
             NUMÉRISER MES CARNETS AVEC L'IA
