@@ -14,9 +14,12 @@
   encore que `profiles`.
 
 ## En cours
-- Rien d'attendu côté base de données
+- Écran « Numériser mes carnets » (`/numeriser`) : maquette en place, apparition en cascade ;
+  les boutons ne font encore rien et aucune table n'est nécessaire pour l'instant.
 
 ## À faire
+- Écran de prise de photo : livrer avec son script (`ocr_batches`, `ocr_pages`, `ocr_extractions`, `media`, `dives`)
 - Tester une inscription complète (email + Google) de bout en bout
+
 - Page carnet : livrer avec son script (`dives`, `dive_buddies`, `dive_sites`, `media`)
 - Gérer les ajouts que Fabien annoncera dans le schéma
