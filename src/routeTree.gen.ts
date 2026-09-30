@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CarnetRouteImport } from './routes/carnet'
+import { Route as CompteCreeRouteImport } from './routes/compte-cree'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
+import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
+import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
+import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CarnetRoute = CarnetRouteImport.update({
+  id: '/carnet',
+  path: '/carnet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompteCreeRoute = CompteCreeRouteImport.update({
+  id: '/compte-cree',
+  path: '/compte-cree',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreerUnCompteRoute = CreerUnCompteRouteImport.update({
+  id: '/creer-un-compte',
+  path: '/creer-un-compte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
+  id: '/mot-de-passe-oublie',
+  path: '/mot-de-passe-oublie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NouveauMotDePasseRoute = NouveauMotDePasseRouteImport.update({
+  id: '/nouveau-mot-de-passe',
+  path: '/nouveau-mot-de-passe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
+  id: '/profil-plongeur',
+  path: '/profil-plongeur',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/carnet': typeof CarnetRoute
+  '/compte-cree': typeof CompteCreeRoute
+  '/connexion': typeof ConnexionRoute
+  '/creer-un-compte': typeof CreerUnCompteRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
+  '/profil-plongeur': typeof ProfilPlongeurRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/carnet': typeof CarnetRoute
+  '/compte-cree': typeof CompteCreeRoute
+  '/connexion': typeof ConnexionRoute
+  '/creer-un-compte': typeof CreerUnCompteRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
+  '/profil-plongeur': typeof ProfilPlongeurRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/carnet': typeof CarnetRoute
+  '/compte-cree': typeof CompteCreeRoute
+  '/connexion': typeof ConnexionRoute
+  '/creer-un-compte': typeof CreerUnCompteRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
+  '/profil-plongeur': typeof ProfilPlongeurRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/carnet'
+    | '/compte-cree'
+    | '/connexion'
+    | '/creer-un-compte'
+    | '/mot-de-passe-oublie'
+    | '/nouveau-mot-de-passe'
+    | '/profil-plongeur'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/carnet'
+    | '/compte-cree'
+    | '/connexion'
+    | '/creer-un-compte'
+    | '/mot-de-passe-oublie'
+    | '/nouveau-mot-de-passe'
+    | '/profil-plongeur'
+  id:
+    | '__root__'
+    | '/'
+    | '/carnet'
+    | '/compte-cree'
+    | '/connexion'
+    | '/creer-un-compte'
+    | '/mot-de-passe-oublie'
+    | '/nouveau-mot-de-passe'
+    | '/profil-plongeur'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CarnetRoute: typeof CarnetRoute
+  CompteCreeRoute: typeof CompteCreeRoute
+  ConnexionRoute: typeof ConnexionRoute
+  CreerUnCompteRoute: typeof CreerUnCompteRoute
+  MotDePasseOublieRoute: typeof MotDePasseOublieRoute
+  NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
+  ProfilPlongeurRoute: typeof ProfilPlongeurRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/carnet': {
+      id: '/carnet'
+      path: '/carnet'
+      fullPath: '/carnet'
+      preLoaderRoute: typeof CarnetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compte-cree': {
+      id: '/compte-cree'
+      path: '/compte-cree'
+      fullPath: '/compte-cree'
+      preLoaderRoute: typeof CompteCreeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creer-un-compte': {
+      id: '/creer-un-compte'
+      path: '/creer-un-compte'
+      fullPath: '/creer-un-compte'
+      preLoaderRoute: typeof CreerUnCompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mot-de-passe-oublie': {
+      id: '/mot-de-passe-oublie'
+      path: '/mot-de-passe-oublie'
+      fullPath: '/mot-de-passe-oublie'
+      preLoaderRoute: typeof MotDePasseOublieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nouveau-mot-de-passe': {
+      id: '/nouveau-mot-de-passe'
+      path: '/nouveau-mot-de-passe'
+      fullPath: '/nouveau-mot-de-passe'
+      preLoaderRoute: typeof NouveauMotDePasseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil-plongeur': {
+      id: '/profil-plongeur'
+      path: '/profil-plongeur'
+      fullPath: '/profil-plongeur'
+      preLoaderRoute: typeof ProfilPlongeurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CarnetRoute: CarnetRoute,
+  CompteCreeRoute: CompteCreeRoute,
+  ConnexionRoute: ConnexionRoute,
+  CreerUnCompteRoute: CreerUnCompteRoute,
+  MotDePasseOublieRoute: MotDePasseOublieRoute,
+  NouveauMotDePasseRoute: NouveauMotDePasseRoute,
+  ProfilPlongeurRoute: ProfilPlongeurRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

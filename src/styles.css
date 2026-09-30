@@ -142,3 +142,17 @@
     color: var(--color-foreground);
   }
 }
+
+/* Palanote — palette produit */
+@theme inline {
+  --color-menthe: #3DEFBE;
+  --color-lagon: #57D4F5;
+  --color-soleil: #FFC65C;
+  --color-corail: #FF8A75;
+  --color-abyss: #0F3D70;
+  --color-encre: #123A63;
+  --color-ciel: #E8F4FB;
+  --color-gblue: #7C93A8;
+  --color-gblue-light: #9FB6C8;
+  --color-blanc: #FFFFFF;
+}
