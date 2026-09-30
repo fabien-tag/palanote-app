@@ -47,7 +47,7 @@ function Carnet() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/25 to-black/55" aria-hidden="true" />
         <div className="relative mx-auto flex w-full max-w-[430px] flex-1 flex-col px-6 pt-5">
           <div className="flex items-center justify-between">
-            <img src={logoHorizontal.url} alt="Palanote" className="h-9 w-auto" />
+            <img src={logoHorizontal} alt="Palanote" className="h-9 w-auto" />
             <button
               type="button"
               aria-label="Notifications"

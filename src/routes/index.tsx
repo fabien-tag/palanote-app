@@ -50,7 +50,7 @@ function Splash() {
   return (
     <div className="relative flex min-h-screen justify-center bg-abyss">
       <img
-        src={fondAsset.url}
+        src={fondAsset}
         alt=""
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
@@ -58,7 +58,7 @@ function Splash() {
       <div className="relative flex min-h-screen w-full max-w-[430px] flex-col px-6 pt-16 pb-6">
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           <img
-            src={logoAsset.url}
+            src={logoAsset}
             alt="Palanote"
             className="h-28 w-auto"
           />

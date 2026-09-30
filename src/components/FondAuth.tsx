@@ -8,7 +8,7 @@ export function FondAuth() {
   return (
     <>
       <img
-        src={fondAsset.url}
+        src={fondAsset}
         alt=""
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
