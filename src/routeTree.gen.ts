@@ -16,6 +16,7 @@ import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
 import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
+import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +54,11 @@ const NouveauMotDePasseRoute = NouveauMotDePasseRouteImport.update({
   path: '/nouveau-mot-de-passe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NumeriserRoute = NumeriserRouteImport.update({
+  id: '/numeriser',
+  path: '/numeriser',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
   id: '/profil-plongeur',
   path: '/profil-plongeur',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
+  '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
+  '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
+  '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/creer-un-compte'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
+    | '/numeriser'
     | '/profil-plongeur'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/creer-un-compte'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
+    | '/numeriser'
     | '/profil-plongeur'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/creer-un-compte'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
+    | '/numeriser'
     | '/profil-plongeur'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   CreerUnCompteRoute: typeof CreerUnCompteRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
   NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
+  NumeriserRoute: typeof NumeriserRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
 }
 
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NouveauMotDePasseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/numeriser': {
+      id: '/numeriser'
+      path: '/numeriser'
+      fullPath: '/numeriser'
+      preLoaderRoute: typeof NumeriserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profil-plongeur': {
       id: '/profil-plongeur'
       path: '/profil-plongeur'
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   CreerUnCompteRoute: CreerUnCompteRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
   NouveauMotDePasseRoute: NouveauMotDePasseRoute,
+  NumeriserRoute: NumeriserRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
 }
 export const routeTree = rootRouteImport
