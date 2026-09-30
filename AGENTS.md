@@ -11,3 +11,4 @@
 
 ## Rules
 - Backend is the user's own Supabase project (Palanote), wired manually via src/lib/supabase.ts with the publishable key — the OAuth integration failed; schema changes are delivered as SQL scripts for the user to run in the Supabase SQL editor.
+- Ship schema incrementally: every new page/feature comes with its own self-contained, idempotent SQL script (enums, parent tables, children, RLS, buckets) delivered in the same message, because Fabien runs one page's worth of tables at a time in the SQL editor; sql/palanote-schema-complet.sql stays the reference.
