@@ -4,6 +4,8 @@ import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from 
 import { supabase } from "@/lib/supabase";
 import logoHorizontal from "@/assets/logo-horizontal.png";
 import fondMarin from "@/assets/fond-marin.mp4";
+import { lirePlongees, type CartePlongee } from "@/lib/plongees";
+import { CarteDePlongee } from "@/components/CarteDePlongee";
 
 export const Route = createFileRoute("/carnet")({
   head: () => ({
@@ -30,7 +32,9 @@ function Carnet() {
   // Mode maquette temporaire : la page est visible sans connexion
   // pour pouvoir la relire et la corriger. Remettre la vérification avant lancement.
   const navigate = useNavigate();
-  void useEffect; void useState; void supabase;
+  void supabase;
+  const [plongees, setPlongees] = useState<CartePlongee[]>([]);
+  useEffect(() => setPlongees([...lirePlongees()]), []);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#E7F1FA]">
@@ -120,13 +124,27 @@ function Carnet() {
             </span>
           </button>
 
+          {plongees.length > 0 && (
+            <div className="flex flex-col gap-[10px] pt-[5px]">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[15px] font-bold text-[#123A63]">Mes plongées</span>
+                <span className="text-[12px] text-[#9DB0C0]">
+                  {plongees.length} plongée{plongees.length > 1 ? "s" : ""}
+                </span>
+              </div>
+              {plongees.map((p) => (
+                <CarteDePlongee key={p.id} p={p} />
+              ))}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={() => navigate({ to: "/nouvelle-plongee" })}
             className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
           >
             <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
-            AJOUTER MA PREMIÈRE PLONGÉE
+            {plongees.length > 0 ? "AJOUTER UNE PLONGÉE" : "AJOUTER MA PREMIÈRE PLONGÉE"}
           </button>
         </div>
 
