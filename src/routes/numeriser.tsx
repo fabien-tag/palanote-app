@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ChevronLeft, Camera, Image as ImageIcon } from "lucide-react";
+import { ChevronLeft, Camera, Image as ImageIcon, X } from "lucide-react";
 import fondOcr from "@/assets/ocr-fond.jpg";
 
 export const Route = createFileRoute("/numeriser")({
@@ -46,8 +47,44 @@ const retards = {
 
 const d = (ms: number) => ({ animationDelay: `${ms}ms` });
 
+type Photo = { id: string; nom: string; url: string };
+
 function Numeriser() {
   const navigate = useNavigate();
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const galerieRef = useRef<HTMLInputElement>(null);
+  const photosRef = useRef<Photo[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+
+  // Les aperçus vivent en mémoire : on les libère en quittant l'écran.
+  useEffect(
+    () => () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.url)),
+    [],
+  );
+
+  const ajouter = (files: FileList | null) => {
+    if (!files?.length) return;
+    const nouveaux = Array.from(files).map((f) => ({
+      id: crypto.randomUUID(),
+      nom: f.name || "page.jpg",
+      url: URL.createObjectURL(f),
+    }));
+    photosRef.current = [...photosRef.current, ...nouveaux];
+    setPhotos(photosRef.current);
+  };
+
+  const retirer = (id: string) => {
+    const p = photosRef.current.find((x) => x.id === id);
+    if (p) URL.revokeObjectURL(p.url);
+    photosRef.current = photosRef.current.filter((x) => x.id !== id);
+    setPhotos(photosRef.current);
+  };
+
+  const toutRetirer = () => {
+    photosRef.current.forEach((p) => URL.revokeObjectURL(p.url));
+    photosRef.current = [];
+    setPhotos([]);
+  };
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-[#0E3D72]">
