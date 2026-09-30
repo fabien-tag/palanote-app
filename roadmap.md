@@ -26,3 +26,9 @@
 
 - Page carnet : livrer avec son script (`dives`, `dive_buddies`, `dive_sites`, `media`)
 - Gérer les ajouts que Fabien annoncera dans le schéma
+
+## Fait — page Nouvelle plongée (30/09)
+- Route /nouvelle-plongee : tous les champs de la maquette SaisieComplete, modifiables ; « Enregistrer » bascule en affichage en ligne (texte aux mêmes endroits), « Modifier » repasse en édition. Vérifié dans l'aperçu.
+- Bouton « Ajouter ma première plongée » du carnet câblé vers /nouvelle-plongee.
+- Script SQL livré : sql/palanote-page-nouvelle-plongee.sql (table dives + RLS + index), à coller dans le SQL Editor. Données pas encore persistées (mode maquette).
+- À faire ensuite : enregistrement réel dans Supabase (nécessite connexion utilisateur), puis liste des plongées sur le carnet.
