@@ -515,7 +515,7 @@ function NouvellePlongee() {
               <Label>Binômes</Label>
               <div className="flex flex-wrap gap-2">
                 {plongee.binomes.map((b, i) => {
-                  const c = COULEURS_BINOMES[i % COULEURS_BINOMES.length];
+                  const c = COULEURS_BINOMES[i % COULEURS_BINOMES.length] ?? COULEURS_BINOMES[0]!;
                   return (
                     <div
                       key={b + i}
