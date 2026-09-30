@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { MapPin, Crosshair, Plus, X, Star, Camera } from "lucide-react";
+import { enregistrerPlongee } from "@/lib/plongees";
 
 export const Route = createFileRoute("/nouvelle-plongee")({
   head: () => ({
@@ -280,7 +281,23 @@ function NouvellePlongee() {
   const set = <K extends keyof Plongee>(cle: K, valeur: Plongee[K]) =>
     setPlongee((p) => ({ ...p, [cle]: valeur }));
 
-  const enregistrer = () => setEdition(false);
+  const [idPlongee] = useState(() => crypto.randomUUID());
+  const enregistrer = () => {
+    enregistrerPlongee({
+      id: idPlongee,
+      date: plongee.date,
+      siteNom: plongee.siteNom,
+      siteLieu: plongee.siteLieu,
+      profMax: plongee.profMax,
+      duree: plongee.duree,
+      tempFond: plongee.tempFond,
+      melange: plongee.melange,
+      note: plongee.note,
+      binomes: plongee.binomes,
+      photo: photos[0],
+    });
+    setEdition(false);
+  };
 
   return (
     <div className="min-h-screen bg-[#F5F9FC]">
