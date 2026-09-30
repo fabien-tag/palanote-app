@@ -122,6 +122,7 @@ function Carnet() {
 
           <button
             type="button"
+            onClick={() => navigate({ to: "/nouvelle-plongee" })}
             className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
           >
             <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
