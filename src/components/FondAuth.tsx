@@ -1,4 +1,4 @@
-import fondAsset from "@/assets/BG.png.asset.json";
+import fondAsset from "@/assets/BG.png";
 
 /**
  * Fond plein écran des écrans de connexion : photo sous-marine officielle

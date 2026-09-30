@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import logoHorizontal from "@/assets/logo-horizontal.png.asset.json";
+import logoHorizontal from "@/assets/logo-horizontal.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 
 export const Route = createFileRoute("/carnet")({

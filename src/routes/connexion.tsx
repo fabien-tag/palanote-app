@@ -5,7 +5,7 @@ import { BoutonRetour } from "@/components/BoutonRetour";
 import { FondAuth } from "@/components/FondAuth";
 import { ChampMotDePasse } from "@/components/ChampMotDePasse";
 import { LogoGoogle } from "@/components/LogoGoogle";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoAsset from "@/assets/logo.png";
 const logoImg = logoAsset.url;
 
 export const Route = createFileRoute("/connexion")({
