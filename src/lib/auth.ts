@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase";
-import { lovable } from "@/integrations/lovable";
 
 export async function signInWithEmail(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -48,18 +47,13 @@ async function appliquerProfilEnAttente(
 }
 
 export async function signInWithGoogle() {
-  const result = await lovable.auth.signInWithOAuth("google", {
-    redirect_uri: window.location.origin,
+  // Google via le projet Supabase de l'utilisateur (pas de Lovable Cloud).
+  // Nécessite l'activation du fournisseur Google dans Supabase > Authentication > Sign In / Providers.
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: window.location.origin },
   });
-
-  if (result.error) {
-    throw result.error;
-  }
-
-  // Si le navigateur part vers Google, la suite est gérée par la redirection.
-  if (result.redirected) {
-    return;
-  }
+  if (error) throw error;
 }
 
 export async function sendResetLink(email: string) {
