@@ -14,11 +14,14 @@
   encore que `profiles`.
 
 ## En cours
-- Écran « Numériser mes carnets » (`/numeriser`) : maquette en place, apparition en cascade ;
-  les boutons ne font encore rien et aucune table n'est nécessaire pour l'instant.
+- Écran « Numériser mes carnets » (`/numeriser`) : maquette en place, apparition en cascade.
+  Les deux boutons ouvrent bien l'appareil photo (capteur arrière) et la galerie du téléphone ;
+  les pages choisies s'empilent en aperçus sous les boutons. Rien n'est encore envoyé ni stocké,
+  donc aucune table n'est nécessaire pour l'instant.
 
 ## À faire
-- Écran de prise de photo : livrer avec son script (`ocr_batches`, `ocr_pages`, `ocr_extractions`, `media`, `dives`)
+- Envoi des photos vers Supabase + écran de prise de photo : livrer avec son script
+  (`ocr_batches`, `ocr_pages`, `ocr_extractions`, `media`, `dives`) et le bucket `photos`
 - Tester une inscription complète (email + Google) de bout en bout
 
 - Page carnet : livrer avec son script (`dives`, `dive_buddies`, `dive_sites`, `media`)
