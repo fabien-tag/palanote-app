@@ -7,10 +7,10 @@
 - Tables de création de compte présentes dans Palanote : profiles, user_settings, consents
 
 ## En cours
-- Comparer les 31 tables du PDF « Schema-Supabase-Palanote » avec la base Palanote, table par table
+- Attendre l'exécution du script du schéma complet dans le SQL Editor de Palanote
 
 ## À faire
-- Livrer le script SQL des tables manquantes (à coller dans SQL Editor)
-- Créer les 4 buckets de stockage
+- Vérifier après exécution que les 32 tables existent toutes
 - Tester une inscription complète (email + Google) de bout en bout
+- Raccorder les écrans de l'app aux nouvelles tables (carnet, photos, sorties)
 - Gérer les ajouts que Fabien annoncera dans le schéma
