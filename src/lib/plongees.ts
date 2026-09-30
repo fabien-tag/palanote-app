@@ -11,14 +11,14 @@ export type CartePlongee = {
   melange: string;
   note: number;
   binomes: string[];
-  photo?: string;
+  photo?: string | undefined;
 };
 
 const CLE = "palanote-plongees";
 let memoire: CartePlongee[] | null = null;
 
 export function lirePlongees(): CartePlongee[] {
-  if (memoire) return memoire;
+  if (memoire !== null) return memoire;
   if (typeof window === "undefined") return [];
   try {
     memoire = (JSON.parse(localStorage.getItem(CLE) || "[]") as CartePlongee[]).map((p) => ({
@@ -28,7 +28,7 @@ export function lirePlongees(): CartePlongee[] {
   } catch {
     memoire = [];
   }
-  return memoire;
+  return memoire ?? [];
 }
 
 export function enregistrerPlongee(p: CartePlongee) {
