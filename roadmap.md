@@ -6,11 +6,17 @@
 - Fournisseur Google activé dans Supabase, bouton « Continuer avec Google » branché
 - Tables de création de compte présentes dans Palanote : profiles, user_settings, consents
 
+## Façon de travailler
+- Schéma au fur et à mesure : chaque nouvelle page livrée vient avec son script SQL
+  autonome et relançable à coller dans SQL Editor. `sql/palanote-schema-complet.sql`
+  reste la référence et la solution de secours.
+- Base actuelle : `profiles`, `user_settings`, `consents` uniquement. Le code n'utilise
+  encore que `profiles`.
+
 ## En cours
-- Attendre l'exécution du script du schéma complet dans le SQL Editor de Palanote
+- Rien d'attendu côté base de données
 
 ## À faire
-- Vérifier après exécution que les 32 tables existent toutes
 - Tester une inscription complète (email + Google) de bout en bout
-- Raccorder les écrans de l'app aux nouvelles tables (carnet, photos, sorties)
+- Page carnet : livrer avec son script (`dives`, `dive_buddies`, `dive_sites`, `media`)
 - Gérer les ajouts que Fabien annoncera dans le schéma
