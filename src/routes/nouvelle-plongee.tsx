@@ -135,6 +135,12 @@ function Label({ children }: { children: React.ReactNode }) {
   return <div className="text-[12px] font-bold tracking-[0.06em] text-[#5B7189]">{children}</div>;
 }
 
+const HEURES_10_MIN = Array.from({ length: 144 }, (_, i) => {
+  const h = String(Math.floor(i / 6)).padStart(2, "0");
+  const m = String((i % 6) * 10).padStart(2, "0");
+  return `${h}:${m}`;
+});
+
 const DUREES_10_MIN = Array.from({ length: 13 }, (_, i) => {
   const total = i * 10;
   const h = Math.floor(total / 60);
@@ -350,7 +356,7 @@ function NouvellePlongee() {
           <Section titre="ESSENTIEL">
             <div className="flex gap-3">
               <Champ label="Date" valeur={plongee.date} placeholder="14/07/2026" edition={edition} onChange={(v) => set("date", v)} type="date" />
-              <Champ label="Immersion" valeur={plongee.immersion} placeholder="Durée" edition={edition} onChange={(v) => set("immersion", v)} options={DUREES_10_MIN} />
+              <Champ label="Heure de la plongée" valeur={plongee.immersion} placeholder="Heure" edition={edition} onChange={(v) => set("immersion", v)} options={HEURES_10_MIN} />
             </div>
 
             <div className="flex flex-col gap-[7px]">
@@ -414,7 +420,7 @@ function NouvellePlongee() {
 
             <div className="flex gap-3">
               <Champ label="Profondeur max" valeur={plongee.profMax} unite="m" edition={edition} onChange={(v) => set("profMax", v)} type="number" />
-              <Champ label="Durée" valeur={plongee.duree} unite="min" edition={edition} onChange={(v) => set("duree", v)} type="number" />
+              <Champ label="Durée" valeur={plongee.duree} placeholder="Durée" edition={edition} onChange={(v) => set("duree", v)} options={DUREES_10_MIN} />
             </div>
           </Section>
 
