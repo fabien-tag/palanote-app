@@ -1,11 +1,44 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from "lucide-react";
+import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell, GalleryVerticalEnd, List } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoHorizontal from "@/assets/logo-horizontal.png";
 import fondMarin from "@/assets/fond-marin.mp4";
-import { chargerPlongees, lirePlongees, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
+import {
+  chargerNumeroDepart,
+  chargerPlongees,
+  lirePlongees,
+  utilisateurConnecte,
+  type CartePlongee,
+} from "@/lib/plongees";
 import { CarteDePlongee } from "@/components/CarteDePlongee";
+import { LigneDePlongee } from "@/components/LigneDePlongee";
+
+type Vue = "cartes" | "liste";
+const CLE_VUE = "palanote-vue-carnet";
+
+function lireVue(): Vue {
+  try {
+    return localStorage.getItem(CLE_VUE) === "cartes" ? "cartes" : "liste";
+  } catch {
+    return "liste";
+  }
+}
+
+// Regroupe les plongées par année (de la plus récente à la plus ancienne)
+// et calcule leur numéro : plongées déjà faites avant l'app + rang chronologique.
+function grouperParAnnee(plongees: CartePlongee[], numeroDepart: number) {
+  const total = plongees.length;
+  const groupes: { annee: string; plongees: { p: CartePlongee; numero: number }[] }[] = [];
+  plongees.forEach((p, i) => {
+    const d = p.date ? new Date(p.date) : null;
+    const annee = d && !isNaN(d.getTime()) ? String(d.getFullYear()) : "Sans date";
+    let g = groupes.find((x) => x.annee === annee);
+    if (!g) groupes.push((g = { annee, plongees: [] }));
+    g.plongees.push({ p, numero: numeroDepart + total - i });
+  });
+  return groupes;
+}
 
 export const Route = createFileRoute("/carnet")({
   head: () => ({
@@ -34,13 +67,28 @@ function Carnet() {
   const navigate = useNavigate();
   void supabase;
   const [plongees, setPlongees] = useState<CartePlongee[]>([]);
+  const [numeroDepart, setNumeroDepart] = useState(0);
+  const [vue, setVue] = useState<Vue>("liste");
+  useEffect(() => setVue(lireVue()), []);
+  const changerVue = (v: Vue) => {
+    setVue(v);
+    try {
+      localStorage.setItem(CLE_VUE, v);
+    } catch {
+      /* stockage indisponible */
+    }
+  };
   useEffect(() => {
     let actif = true;
     (async () => {
       // Connecté : plongées du compte (Supabase). Sinon : celles gardées sur l'appareil.
       try {
-        const liste = (await utilisateurConnecte()) ? await chargerPlongees() : [...lirePlongees()];
-        if (actif) setPlongees(liste);
+        const user = await utilisateurConnecte();
+        const liste = user ? await chargerPlongees() : [...lirePlongees()];
+        const depart = user ? await chargerNumeroDepart(user.id) : 0;
+        if (!actif) return;
+        setPlongees(liste);
+        setNumeroDepart(depart);
       } catch (e) {
         console.error(e);
         if (actif) setPlongees([...lirePlongees()]);
@@ -139,36 +187,81 @@ function Carnet() {
             </span>
           </button>
 
-          {plongees.length > 0 && (
-            <div className="flex flex-col gap-[10px] pt-[5px]">
-              <div className="flex items-baseline gap-2">
-                <span className="text-[15px] font-bold text-[#123A63]">Mes plongées</span>
-                <span className="text-[12px] text-[#9DB0C0]">
-                  {plongees.length} plongée{plongees.length > 1 ? "s" : ""}
-                </span>
+          {plongees.length > 0 &&
+            grouperParAnnee(plongees, numeroDepart).map((g, gi) => (
+              <div key={g.annee} className="flex flex-col gap-[10px] pt-[8px]">
+                <div className="flex min-h-[42px] items-center justify-between">
+                  <div className="flex items-baseline gap-[10px]">
+                    <span className="text-[18px] font-bold text-[#123A63]">{g.annee}</span>
+                    <span className="text-[13px] text-[#9DB0C0]">
+                      {g.plongees.length} plongée{g.plongees.length > 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  {gi === 0 && (
+                    <div role="group" aria-label="Affichage" className="flex gap-1 rounded-[14px] bg-[#E2ECF5] p-[4px]">
+                      {(
+                        [
+                          { v: "cartes", label: "Vue en cartes", Icone: GalleryVerticalEnd },
+                          { v: "liste", label: "Vue en liste", Icone: List },
+                        ] as const
+                      ).map(({ v, label, Icone }) => (
+                        <button
+                          key={v}
+                          type="button"
+                          aria-label={label}
+                          aria-pressed={vue === v}
+                          onClick={() => changerVue(v)}
+                          className={`flex h-[32px] w-[38px] items-center justify-center rounded-[12px] transition ${
+                            vue === v ? "bg-white text-[#123A63] shadow-[0_2px_8px_rgba(18,58,99,.12)]" : "text-[#9DB0C0]"
+                          }`}
+                        >
+                          <Icone className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {g.plongees.map(({ p, numero }) =>
+                  vue === "liste" ? (
+                    <LigneDePlongee key={p.id} p={p} numero={numero} />
+                  ) : (
+                    <CarteDePlongee key={p.id} p={p} />
+                  ),
+                )}
               </div>
-              {plongees.map((p) => (
-                <CarteDePlongee key={p.id} p={p} />
-              ))}
-            </div>
-          )}
+            ))}
 
+          {plongees.length === 0 && (
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/nouvelle-plongee" })}
+              className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
+            >
+              <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
+              AJOUTER MA PREMIÈRE PLONGÉE
+            </button>
+          )}
+          {plongees.length > 0 && <div className="h-[70px]" aria-hidden="true" />}
+        </div>
+
+        {/* Bouton flottant : visible dès la première plongée enregistrée */}
+        {plongees.length > 0 && (
           <button
             type="button"
             onClick={() => navigate({ to: "/nouvelle-plongee" })}
-            className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
+            className="fixed bottom-[112px] right-[max(18px,calc(50vw-215px+18px))] z-20 flex h-[52px] items-center gap-[10px] rounded-[26px] bg-[#78EAC6] pl-[18px] pr-[22px] text-[15px] font-bold text-[#123A63] shadow-[0_8px_22px_rgba(18,58,99,.22)]"
           >
-            <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
-            {plongees.length > 0 ? "AJOUTER UNE PLONGÉE" : "AJOUTER MA PREMIÈRE PLONGÉE"}
+            <Plus className="h-[20px] w-[20px]" strokeWidth={2.4} aria-hidden="true" />
+            Plongée
           </button>
-        </div>
+        )}
 
         <div className="flex-grow" />
 
         {/* Navigation du bas */}
         <nav
           aria-label="Navigation principale"
-          className="sticky bottom-0 flex items-stretch border-t border-[#DFEAF2] bg-white px-[28px] pb-[24px] pt-[10px] min-h-[96px]"
+          className="sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white px-[28px] pb-[24px] pt-[10px] min-h-[96px]"
         >
           <span
             aria-hidden="true"

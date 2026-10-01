@@ -144,6 +144,13 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
   }));
 }
 
+// Nombre de plongées déjà faites avant l'app (question du profil plongeur).
+export async function chargerNumeroDepart(userId: string): Promise<number> {
+  const { data } = await supabase.from("profiles").select("numero_depart").eq("id", userId).maybeSingle();
+  const n = Number(data?.numero_depart ?? 0);
+  return Number.isFinite(n) ? n : 0;
+}
+
 // ---------- Mode maquette (non connecté) ----------
 
 const CLE = "palanote-plongees";
