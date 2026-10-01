@@ -16,6 +16,7 @@ import { LigneDePlongee } from "@/components/LigneDePlongee";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
+import { accepterInvitationGardee } from "@/lib/amis";
 import {
   BandeauCarnetsPapier,
   EnTeteStatistiques,
@@ -95,7 +96,17 @@ function Carnet() {
   useEffect(() => setVue(lireVue()), []);
   // Message laissé par l'écran précédent (ex. plongée enregistrée).
   const [confirmation, setConfirmation] = useState<string | null>(null);
-  useEffect(() => setConfirmation(lireMessageAccueil()), []);
+  useEffect(() => {
+    setConfirmation(lireMessageAccueil());
+    // Invitation de binôme scannée avant la connexion : acceptée dès le retour sur l'accueil.
+    let actif = true;
+    void accepterInvitationGardee().then((m) => {
+      if (m && actif) setConfirmation(m);
+    });
+    return () => {
+      actif = false;
+    };
+  }, []);
   const finConfirmation = useCallback(() => {
     effacerMessageAccueil();
     setConfirmation(null);

@@ -10,11 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AmisRouteImport } from './routes/amis'
 import { Route as CarnetRouteImport } from './routes/carnet'
 import { Route as CarteRouteImport } from './routes/carte'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
+import { Route as InvitationRouteImport } from './routes/invitation'
 import { Route as MoiRouteImport } from './routes/moi'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
 import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
@@ -22,6 +24,7 @@ import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as SiteRouteImport } from './routes/site'
+import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
 import { Route as NumeriserChoisirRouteImport } from './routes/numeriser_.choisir'
 import { Route as NumeriserFinRouteImport } from './routes/numeriser_.fin'
@@ -32,6 +35,11 @@ import { Route as NumeriserReprendreRouteImport } from './routes/numeriser_.repr
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AmisRoute = AmisRouteImport.update({
+  id: '/amis',
+  path: '/amis',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CarnetRoute = CarnetRouteImport.update({
@@ -57,6 +65,11 @@ const ConnexionRoute = ConnexionRouteImport.update({
 const CreerUnCompteRoute = CreerUnCompteRouteImport.update({
   id: '/creer-un-compte',
   path: '/creer-un-compte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvitationRoute = InvitationRouteImport.update({
+  id: '/invitation',
+  path: '/invitation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoiRoute = MoiRouteImport.update({
@@ -94,6 +107,11 @@ const SiteRoute = SiteRouteImport.update({
   path: '/site',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AmisAjouterRoute = AmisAjouterRouteImport.update({
+  id: '/amis_/ajouter',
+  path: '/amis/ajouter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NumeriserCaptureRoute = NumeriserCaptureRouteImport.update({
   id: '/numeriser_/capture',
   path: '/numeriser/capture',
@@ -127,11 +145,13 @@ const NumeriserReprendreRoute = NumeriserReprendreRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
@@ -139,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/site': typeof SiteRoute
+  '/amis/ajouter': typeof AmisAjouterRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -148,11 +169,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
@@ -160,6 +183,7 @@ export interface FileRoutesByTo {
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/site': typeof SiteRoute
+  '/amis/ajouter': typeof AmisAjouterRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -170,11 +194,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
@@ -182,6 +208,7 @@ export interface FileRoutesById {
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/site': typeof SiteRoute
+  '/amis_/ajouter': typeof AmisAjouterRoute
   '/numeriser_/capture': typeof NumeriserCaptureRoute
   '/numeriser_/choisir': typeof NumeriserChoisirRoute
   '/numeriser_/fin': typeof NumeriserFinRoute
@@ -193,11 +220,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/amis'
     | '/carnet'
     | '/carte'
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
@@ -205,6 +234,7 @@ export interface FileRouteTypes {
     | '/numeriser'
     | '/profil-plongeur'
     | '/site'
+    | '/amis/ajouter'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -214,11 +244,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/amis'
     | '/carnet'
     | '/carte'
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
@@ -226,6 +258,7 @@ export interface FileRouteTypes {
     | '/numeriser'
     | '/profil-plongeur'
     | '/site'
+    | '/amis/ajouter'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -235,11 +268,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/amis'
     | '/carnet'
     | '/carte'
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
@@ -247,6 +282,7 @@ export interface FileRouteTypes {
     | '/numeriser'
     | '/profil-plongeur'
     | '/site'
+    | '/amis_/ajouter'
     | '/numeriser_/capture'
     | '/numeriser_/choisir'
     | '/numeriser_/fin'
@@ -257,11 +293,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AmisRoute: typeof AmisRoute
   CarnetRoute: typeof CarnetRoute
   CarteRoute: typeof CarteRoute
   CompteCreeRoute: typeof CompteCreeRoute
   ConnexionRoute: typeof ConnexionRoute
   CreerUnCompteRoute: typeof CreerUnCompteRoute
+  InvitationRoute: typeof InvitationRoute
   MoiRoute: typeof MoiRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
   NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
@@ -269,6 +307,7 @@ export interface RootRouteChildren {
   NumeriserRoute: typeof NumeriserRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   SiteRoute: typeof SiteRoute
+  AmisAjouterRoute: typeof AmisAjouterRoute
   NumeriserCaptureRoute: typeof NumeriserCaptureRoute
   NumeriserChoisirRoute: typeof NumeriserChoisirRoute
   NumeriserFinRoute: typeof NumeriserFinRoute
@@ -284,6 +323,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/amis': {
+      id: '/amis'
+      path: '/amis'
+      fullPath: '/amis'
+      preLoaderRoute: typeof AmisRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/carnet': {
@@ -319,6 +365,13 @@ declare module '@tanstack/react-router' {
       path: '/creer-un-compte'
       fullPath: '/creer-un-compte'
       preLoaderRoute: typeof CreerUnCompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invitation': {
+      id: '/invitation'
+      path: '/invitation'
+      fullPath: '/invitation'
+      preLoaderRoute: typeof InvitationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/moi': {
@@ -370,6 +423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/amis_/ajouter': {
+      id: '/amis_/ajouter'
+      path: '/amis/ajouter'
+      fullPath: '/amis/ajouter'
+      preLoaderRoute: typeof AmisAjouterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/numeriser_/capture': {
       id: '/numeriser_/capture'
       path: '/numeriser/capture'
@@ -417,11 +477,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AmisRoute: AmisRoute,
   CarnetRoute: CarnetRoute,
   CarteRoute: CarteRoute,
   CompteCreeRoute: CompteCreeRoute,
   ConnexionRoute: ConnexionRoute,
   CreerUnCompteRoute: CreerUnCompteRoute,
+  InvitationRoute: InvitationRoute,
   MoiRoute: MoiRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
   NouveauMotDePasseRoute: NouveauMotDePasseRoute,
@@ -429,6 +491,7 @@ const rootRouteChildren: RootRouteChildren = {
   NumeriserRoute: NumeriserRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   SiteRoute: SiteRoute,
+  AmisAjouterRoute: AmisAjouterRoute,
   NumeriserCaptureRoute: NumeriserCaptureRoute,
   NumeriserChoisirRoute: NumeriserChoisirRoute,
   NumeriserFinRoute: NumeriserFinRoute,
