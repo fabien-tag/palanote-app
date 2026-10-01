@@ -60,7 +60,9 @@ function Numeriser() {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#0E3D72]">
+    // Hauteur calée sur la partie visible de l'écran (dvh) : promesse, 3 étapes et boutons
+    // tiennent sans défiler. Les tailles suivent la petite hauteur visible (svh, barres affichées).
+    <div className="relative h-screen supports-[height:100dvh]:h-[100dvh] w-full overflow-hidden bg-[#0E3D72]">
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-cover"
@@ -75,8 +77,8 @@ function Numeriser() {
         }}
       />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col">
-        <div className="shrink-0 px-[22px] pt-[18px]">
+      <div className="relative mx-auto flex h-full w-full max-w-[430px] flex-col">
+        <div className="shrink-0 px-[22px] pt-[clamp(10px,2.2svh,18px)]">
           <button
             type="button"
             aria-label="Retour"
@@ -88,21 +90,21 @@ function Numeriser() {
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-grow flex-col px-6">
-          <div className="h-[66px]" />
+        <div className="flex min-h-0 flex-grow flex-col overflow-y-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="h-[clamp(0px,calc(10svh-40px),66px)] shrink-0" />
           <div style={d(retards.icone)} className="apparition flex justify-center">
-            <Camera className="h-11 w-11 text-[#3DEFBE]" strokeWidth={1.9} aria-hidden="true" />
+            <Camera className="h-[clamp(30px,5.4svh,44px)] w-[clamp(30px,5.4svh,44px)] text-[#3DEFBE]" strokeWidth={1.9} aria-hidden="true" />
           </div>
-          <h1 style={d(retards.titre)} className="apparition mt-4 text-center text-[27px] font-bold leading-[1.22] text-white">
+          <h1 style={d(retards.titre)} className="apparition mt-[clamp(6px,1.8svh,16px)] text-center text-[clamp(22px,3.9svh,27px)] font-bold leading-[1.22] text-white">
             Tes carnets papier,
             <br />
             page par page
           </h1>
-          <p style={d(retards.accroche)} className="apparition mt-2.5 text-center text-[14.5px] leading-normal text-white/90">
+          <p style={d(retards.accroche)} className="apparition mt-[clamp(4px,1.2svh,10px)] text-center text-[clamp(13.5px,2.1svh,14.5px)] leading-normal text-white/90">
             Photographie une page, l'app en tire les plongées. Tu relis, tu corriges, tu valides.
           </p>
 
-          <ol className="mt-[26px] flex flex-col gap-[19px]">
+          <ol className="mt-[clamp(10px,2.6svh,26px)] flex flex-col gap-[clamp(8px,1.9svh,19px)]">
             {etapes.map((e, i) => (
               <li
                 key={e.titre}
@@ -113,14 +115,14 @@ function Numeriser() {
                   {i + 1}
                 </span>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[15.5px] font-bold leading-[1.3] text-white">{e.titre}</span>
-                  <span className="text-[14px] leading-normal text-white/85">{e.texte}</span>
+                  <span className="text-[clamp(14.5px,2.2svh,15.5px)] font-bold leading-[1.3] text-white">{e.titre}</span>
+                  <span className="text-[clamp(13px,2svh,14px)] leading-snug text-white/85">{e.texte}</span>
                 </div>
               </li>
             ))}
           </ol>
 
-          <div className="min-h-4 flex-grow" />
+          <div className="min-h-2 flex-grow" />
         </div>
 
         {/* Galerie du téléphone : les photos choisies passent à l'écran « Choisir des pages ». */}
@@ -140,7 +142,7 @@ function Numeriser() {
         />
 
         {enCours && (
-          <div className="shrink-0 px-[22px] pt-[14px]">
+          <div className="shrink-0 px-[22px] pt-[clamp(8px,1.6svh,14px)]">
             <button
               type="button"
               onClick={() => navigate({ to: "/numeriser/reprendre", search: { lot: enCours.id } })}
@@ -155,12 +157,12 @@ function Numeriser() {
           </div>
         )}
 
-        <div className="flex shrink-0 flex-col gap-[11px] px-[22px] pb-[26px] pt-[14px]">
+        <div className="flex shrink-0 flex-col gap-[clamp(8px,1.4svh,11px)] px-[22px] pb-[max(clamp(12px,2.8svh,26px),env(safe-area-inset-bottom))] pt-[clamp(8px,1.6svh,14px)]">
           <button
             type="button"
             onClick={() => navigate({ to: "/numeriser/capture" })}
             style={d(retards.boutonPrincipal)}
-            className="apparition flex h-14 items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
+            className="apparition flex h-[clamp(48px,7svh,56px)] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
           >
             PHOTOGRAPHIER UNE PAGE
           </button>
@@ -168,7 +170,7 @@ function Numeriser() {
             type="button"
             onClick={() => galerieRef.current?.click()}
             style={d(retards.boutonSecondaire)}
-            className="apparition flex h-[54px] items-center justify-center gap-[9px] rounded-2xl border-2 border-[#3DEFBE] text-[13.5px] font-bold tracking-[.05em] text-[#3DEFBE]"
+            className="apparition flex h-[clamp(46px,6.8svh,54px)] items-center justify-center gap-[9px] rounded-2xl border-2 border-[#3DEFBE] text-[13.5px] font-bold tracking-[.05em] text-[#3DEFBE]"
           >
             <ImageIcon className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
             CHOISIR DANS MES PHOTOS
