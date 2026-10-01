@@ -19,6 +19,9 @@ import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-p
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
+import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
+import { Route as NumeriserChoisirRouteImport } from './routes/numeriser_.choisir'
+import { Route as NumeriserLectureRouteImport } from './routes/numeriser_.lecture'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +73,21 @@ const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
   path: '/profil-plongeur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NumeriserCaptureRoute = NumeriserCaptureRouteImport.update({
+  id: '/numeriser_/capture',
+  path: '/numeriser/capture',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NumeriserChoisirRoute = NumeriserChoisirRouteImport.update({
+  id: '/numeriser_/choisir',
+  path: '/numeriser/choisir',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NumeriserLectureRoute = NumeriserLectureRouteImport.update({
+  id: '/numeriser_/lecture',
+  path: '/numeriser/lecture',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +100,9 @@ export interface FileRoutesByFullPath {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/numeriser/capture': typeof NumeriserCaptureRoute
+  '/numeriser/choisir': typeof NumeriserChoisirRoute
+  '/numeriser/lecture': typeof NumeriserLectureRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +115,9 @@ export interface FileRoutesByTo {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/numeriser/capture': typeof NumeriserCaptureRoute
+  '/numeriser/choisir': typeof NumeriserChoisirRoute
+  '/numeriser/lecture': typeof NumeriserLectureRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +131,9 @@ export interface FileRoutesById {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/numeriser_/capture': typeof NumeriserCaptureRoute
+  '/numeriser_/choisir': typeof NumeriserChoisirRoute
+  '/numeriser_/lecture': typeof NumeriserLectureRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +148,9 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/numeriser/capture'
+    | '/numeriser/choisir'
+    | '/numeriser/lecture'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +163,9 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/numeriser/capture'
+    | '/numeriser/choisir'
+    | '/numeriser/lecture'
   id:
     | '__root__'
     | '/'
@@ -145,6 +178,9 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/numeriser_/capture'
+    | '/numeriser_/choisir'
+    | '/numeriser_/lecture'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +194,9 @@ export interface RootRouteChildren {
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
   NumeriserRoute: typeof NumeriserRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
+  NumeriserCaptureRoute: typeof NumeriserCaptureRoute
+  NumeriserChoisirRoute: typeof NumeriserChoisirRoute
+  NumeriserLectureRoute: typeof NumeriserLectureRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,6 +271,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfilPlongeurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/numeriser_/capture': {
+      id: '/numeriser_/capture'
+      path: '/numeriser/capture'
+      fullPath: '/numeriser/capture'
+      preLoaderRoute: typeof NumeriserCaptureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/numeriser_/choisir': {
+      id: '/numeriser_/choisir'
+      path: '/numeriser/choisir'
+      fullPath: '/numeriser/choisir'
+      preLoaderRoute: typeof NumeriserChoisirRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/numeriser_/lecture': {
+      id: '/numeriser_/lecture'
+      path: '/numeriser/lecture'
+      fullPath: '/numeriser/lecture'
+      preLoaderRoute: typeof NumeriserLectureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -246,6 +306,9 @@ const rootRouteChildren: RootRouteChildren = {
   NouvellePlongeeRoute: NouvellePlongeeRoute,
   NumeriserRoute: NumeriserRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
+  NumeriserCaptureRoute: NumeriserCaptureRoute,
+  NumeriserChoisirRoute: NumeriserChoisirRoute,
+  NumeriserLectureRoute: NumeriserLectureRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
