@@ -1,9 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapPin, Crosshair, Plus, X, Star, Camera } from "lucide-react";
 import {
+  chargerPlongee,
   dureeEnMinutes,
   enregistrerPlongee,
+  lirePlongees,
+  minutesEnTexte,
+  VISIBILITE_DEPUIS_BASE,
   entier,
   nombre,
   sauverPlongee,
@@ -24,8 +28,66 @@ export const Route = createFileRoute("/nouvelle-plongee")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  // ?id=… : ouvre une plongée existante en lecture (page détail), sinon nouvelle fiche.
+  validateSearch: (search: Record<string, unknown>): { id?: string } =>
+    typeof search["id"] === "string" && search["id"] ? { id: search["id"] } : {},
   component: NouvellePlongee,
 });
+
+const texteOuVide = (v: unknown) => (v === null || v === undefined ? "" : String(v));
+
+// Ligne de la base → champs du formulaire.
+function depuisLigne(l: LignePlongee): Plongee {
+  return {
+    ...plongeeVide,
+    date: texteOuVide(l.dive_date),
+    immersion: texteOuVide(l.start_time).slice(0, 5),
+    siteNom: texteOuVide(l.site_name),
+    siteLieu: texteOuVide(l.site_location),
+    siteCoords: texteOuVide(l.site_coords),
+    profMax: texteOuVide(l.max_depth_m),
+    duree: minutesEnTexte(l.duration_min),
+    profMoyenne: texteOuVide(l.avg_depth_m),
+    sortie: texteOuVide(l.end_time).slice(0, 5),
+    tempsTotal: texteOuVide(l.total_time_min),
+    intervalleSurface: texteOuVide(l.surface_interval_min),
+    paliers: (l.stops ?? []).map((x) => ({ profondeur: texteOuVide(x.profondeur), duree: texteOuVide(x.duree) })),
+    methode: l.method ?? plongeeVide.methode,
+    ordinateur: texteOuVide(l.computer),
+    melange: l.gas_mix ?? plongeeVide.melange,
+    o2: texteOuVide(l.o2_pct),
+    he: texteOuVide(l.he_pct),
+    configuration: l.tank_config ?? plongeeVide.configuration,
+    volumeBloc: texteOuVide(l.tank_volume_l),
+    lestage: texteOuVide(l.weight_kg),
+    pressionDepart: texteOuVide(l.pressure_start_bar),
+    pressionSortie: texteOuVide(l.pressure_end_bar),
+    combinaison: l.suit_type ?? plongeeVide.combinaison,
+    epaisseur: texteOuVide(l.suit_thickness_mm),
+    tempSurface: texteOuVide(l.temp_surface_c),
+    tempFond: texteOuVide(l.temp_bottom_c),
+    tempAir: texteOuVide(l.temp_air_c),
+    visibilite: texteOuVide(l.visibility_m),
+    courant: l.current_strength ?? plongeeVide.courant,
+    etatMer: texteOuVide(l.sea_state),
+    meteo: texteOuVide(l.weather),
+    binomes: l.buddies ?? [],
+    encadrant: texteOuVide(l.guide_name),
+    directeur: texteOuVide(l.dive_leader),
+    club: texteOuVide(l.club_name),
+    bateau: texteOuVide(l.boat_name),
+    typePlongee: l.dive_type ?? plongeeVide.typePlongee,
+    milieu: l.environment ?? plongeeVide.milieu,
+    miseALEau: l.entry_type ?? plongeeVide.miseALEau,
+    note: l.rating ?? 0,
+    noteLieu: l.rating_place ?? 0,
+    noteConditions: l.rating_conditions ?? 0,
+    noteFaune: l.rating_wildlife ?? 0,
+    commentaire: texteOuVide(l.comment),
+    faune: l.wildlife ?? [],
+    visibiliteFiche: VISIBILITE_DEPUIS_BASE[l.visibility] ?? plongeeVide.visibiliteFiche,
+  };
+}
 
 type Palier = { profondeur: string; duree: string };
 
@@ -306,8 +368,12 @@ const COULEURS_BINOMES = [
 
 function NouvellePlongee() {
   const navigate = useNavigate();
+  const { id: idExistant } = Route.useSearch();
+  const existante = Boolean(idExistant);
   const [plongee, setPlongee] = useState<Plongee>(plongeeVide);
-  const [edition, setEdition] = useState(true);
+  const [edition, setEdition] = useState(!existante);
+  const [chargement, setChargement] = useState(existante);
+  const original = useRef<Plongee>(plongeeVide);
   const [photos, setPhotos] = useState<string[]>([]);
   const [ajoutBinome, setAjoutBinome] = useState(false);
   const [nomBinome, setNomBinome] = useState("");
@@ -321,7 +387,53 @@ function NouvellePlongee() {
   const set = <K extends keyof Plongee>(cle: K, valeur: Plongee[K]) =>
     setPlongee((p) => ({ ...p, [cle]: valeur }));
 
-  const [idPlongee] = useState(() => crypto.randomUUID());
+  const [idPlongee] = useState(() => idExistant ?? crypto.randomUUID());
+
+  // Page détail : charge la plongée enregistrée.
+  useEffect(() => {
+    if (!idExistant) return;
+    let actif = true;
+    (async () => {
+      try {
+        let fiche: Plongee | null = null;
+        if (await utilisateurConnecte()) {
+          const ligne = await chargerPlongee(idExistant);
+          if (ligne) fiche = depuisLigne(ligne);
+        } else {
+          const c = lirePlongees().find((x) => x.id === idExistant);
+          if (c)
+            fiche = {
+              ...plongeeVide,
+              date: c.date,
+              siteNom: c.siteNom,
+              siteLieu: c.siteLieu,
+              profMax: c.profMax,
+              duree: minutesEnTexte(c.duree),
+              tempFond: c.tempFond,
+              melange: c.melange || plongeeVide.melange,
+              note: c.note,
+              binomes: c.binomes,
+              typePlongee: c.type || plongeeVide.typePlongee,
+            };
+        }
+        if (!actif) return;
+        if (fiche) {
+          original.current = fiche;
+          setPlongee(fiche);
+        } else {
+          setMessage({ type: "erreur", texte: "Cette plongée est introuvable." });
+        }
+      } catch (e) {
+        console.error(e);
+        if (actif) setMessage({ type: "erreur", texte: "La plongée n'a pas pu être chargée." });
+      } finally {
+        if (actif) setChargement(false);
+      }
+    })();
+    return () => {
+      actif = false;
+    };
+  }, [idExistant]);
   const [enCours, setEnCours] = useState(false);
   const [message, setMessage] = useState<{ type: "erreur" | "info"; texte: string } | null>(null);
 
@@ -398,12 +510,9 @@ function NouvellePlongee() {
           type: plongee.typePlongee,
           photo: photos[0],
         });
-        setMessage({
-          type: "info",
-          texte: "Tu n'es pas connecté : la plongée est gardée sur cet appareil uniquement.",
-        });
       }
-      setEdition(false);
+      // Enregistrée : retour automatique à l'écran d'accueil.
+      navigate({ to: "/carnet" });
     } catch (e) {
       console.error(e);
       setMessage({
@@ -422,16 +531,23 @@ function NouvellePlongee() {
         <div className="sticky top-0 z-10 flex items-center justify-between border-b-[1.5px] border-[#E4EBF1] bg-[#F5F9FC]/95 px-[22px] py-4">
           <button
             type="button"
-            onClick={() => navigate({ to: "/carnet" })}
+            onClick={() => {
+              // Plongée existante en cours de modification : on annule les changements.
+              if (existante && edition) {
+                setPlongee(original.current);
+                setEdition(false);
+                setMessage(null);
+              } else navigate({ to: "/carnet" });
+            }}
             className="text-[14.5px] font-medium text-[#5B7189]"
           >
             {edition ? "Annuler" : "Retour"}
           </button>
-          <div className="text-[16px] font-bold text-[#123A63]">Nouvelle plongée</div>
+          <div className="text-[16px] font-bold text-[#123A63]">{existante ? "Ma plongée" : "Nouvelle plongée"}</div>
           <button
             type="button"
             onClick={() => (edition ? void enregistrer() : setEdition(true))}
-            disabled={enCours}
+            disabled={enCours || chargement}
             className="text-[14.5px] font-bold text-[#1176A8] disabled:opacity-50"
           >
             {edition ? (enCours ? "Enregistrement…" : "Enregistrer") : "Modifier"}
@@ -930,8 +1046,9 @@ function NouvellePlongee() {
             <>
               <button
                 type="button"
-                onClick={enregistrer}
-                className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] text-sm font-bold tracking-wide text-[#0B2A4A]"
+                onClick={() => void enregistrer()}
+                disabled={enCours || chargement}
+                className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] disabled:opacity-50 text-sm font-bold tracking-wide text-[#0B2A4A]"
               >
                 ENREGISTRER LA PLONGÉE
               </button>

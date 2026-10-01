@@ -103,6 +103,12 @@ export function minutesEnTexte(min: number | string | null | undefined): string 
   return m === 0 ? `${h} h` : `${h} h ${m}`;
 }
 
+export const VISIBILITE_DEPUIS_BASE: Record<LignePlongee["visibility"], string> = {
+  private: "Moi seul",
+  friends: "Mes amis",
+  public: "Public",
+};
+
 export const VISIBILITE_VERS_BASE: Record<string, LignePlongee["visibility"]> = {
   "Moi seul": "private",
   "Mes amis": "friends",
@@ -144,6 +150,13 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
     binomes: d.buddies ?? [],
     type: d.dive_type ?? "",
   }));
+}
+
+// Une plongée complète du compte connecté (pour la page détail).
+export async function chargerPlongee(id: string): Promise<LignePlongee | null> {
+  const { data, error } = await supabase.from("dives").select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  return (data as LignePlongee | null) ?? null;
 }
 
 // Nombre de plongées déjà faites avant l'app (question du profil plongeur).
