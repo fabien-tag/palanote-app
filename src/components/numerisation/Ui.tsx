@@ -6,9 +6,23 @@ import { utilisateurConnecte } from "@/lib/plongees";
 
 // Éléments communs aux écrans de numérisation (maquettes 12 à 17).
 
-export function FondNumerisation({ children, className = "" }: { children: ReactNode; className?: string }) {
+// « fixe » : la page prend exactement la hauteur visible de l'écran (le contenu du milieu
+// défile, les boutons du bas restent visibles).
+export function FondNumerisation({
+  children,
+  className = "",
+  fixe = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  fixe?: boolean;
+}) {
   return (
-    <div className={`relative min-h-screen w-full overflow-x-hidden bg-[#F1F6FC] text-[#123A63] ${className}`}>
+    <div
+      className={`relative w-full overflow-x-hidden bg-[#F1F6FC] text-[#123A63] ${
+        fixe ? "h-screen overflow-y-hidden supports-[height:100dvh]:h-[100dvh]" : "min-h-screen"
+      } ${className}`}
+    >
       <svg
         aria-hidden="true"
         viewBox="0 0 430 1140"
@@ -20,7 +34,7 @@ export function FondNumerisation({ children, className = "" }: { children: React
         <path fill="#DFEDF9" opacity=".65" d="M0 504C85 458 122 491 192 511C285 537 352 451 430 481V647C340 581 244 635 169 601C93 567 62 608 0 632Z" />
         <path fill="#E5F0FA" d="M430 693C308 646 208 743 98 702L0 681V835C132 795 220 826 309 800L430 759Z" />
       </svg>
-      <div className="cascade relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col">{children}</div>
+      <div className={`cascade relative mx-auto flex w-full max-w-[430px] flex-col ${fixe ? "h-full" : "min-h-screen"}`}>{children}</div>
     </div>
   );
 }

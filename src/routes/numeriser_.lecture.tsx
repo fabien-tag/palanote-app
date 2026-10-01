@@ -80,14 +80,16 @@ function Lecture() {
   };
 
   return (
-    <FondNumerisation>
-      <div className="flex items-center justify-between px-[22px] pt-[22px]">
+    <FondNumerisation fixe>
+      <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
         <h1 className="text-[20px] font-bold">Lecture des pages</h1>
         {donnees?.lot.libelle && (
           <span className="rounded-[14px] bg-[#E3EDF6] px-3 py-[6px] text-[12.5px] font-bold text-[#5B7189]">{donnees.lot.libelle}</span>
         )}
       </div>
 
+      {/* Milieu : défile si besoin, les boutons du bas restent toujours visibles. */}
+      <div className="min-h-0 flex-1 overflow-y-auto pb-[14px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="px-[22px] pt-[22px]">
         <div className="flex items-baseline justify-between">
           <div className="flex items-baseline gap-2">
@@ -145,7 +147,7 @@ function Lecture() {
         ))}
       {erreur && <p className="px-[22px] pt-3 text-[13px] text-[#8A2A1A]">{erreur}</p>}
 
-      <div className="min-h-6 flex-grow" />
+      <div className="h-[clamp(10px,3svh,28px)]" />
 
       <div className="relative mx-[22px] flex items-start gap-3 rounded-[18px] border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px]">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#C7EAF8]">
@@ -157,7 +159,10 @@ function Lecture() {
         <Meduse className="-right-[8px] -top-[14px]" />
       </div>
 
-      <div className="flex flex-col gap-[11px] px-[22px] pb-[24px] pt-[22px]">
+      </div>
+
+      {/* Bas : toujours visible */}
+      <div className="flex shrink-0 flex-col gap-[clamp(8px,1.4svh,11px)] bg-gradient-to-t from-[#F1F6FC] via-[#F1F6FC] to-[#F1F6FC]/0 px-[22px] pb-[max(clamp(12px,2.6svh,24px),env(safe-area-inset-bottom))] pt-[12px]">
         <BoutonPrincipal disabled={pretes === 0} onClick={() => navigate({ to: "/numeriser/relecture", search: { lot } })}>
           {pretes > 0
             ? `Relire ${pretes > 1 ? `les ${pretes} pages déjà prêtes` : "la page déjà prête"}`
@@ -166,7 +171,7 @@ function Lecture() {
               : "Rien à relire pour l'instant"}
         </BoutonPrincipal>
         <BoutonSecondaire onClick={() => navigate({ to: "/numeriser/capture", search: { lot } })}>Photographier la suite</BoutonSecondaire>
-        <div className="pt-2">
+        <div className="pt-[clamp(0px,0.8svh,8px)]">
           <LienDiscret onClick={() => navigate({ to: "/carnet" })}>Je reviendrai plus tard</LienDiscret>
         </div>
       </div>
