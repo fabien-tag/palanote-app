@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Camera, Download, HelpCircle, Lock, Pencil, SlidersHorizontal, Upload } from "lucide-react";
+import { Camera, ChevronRight, Download, HelpCircle, Lock, Pencil, SlidersHorizontal, Upload } from "lucide-react";
 import fondAsset from "@/assets/BG.png";
+import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { Bloc, Ligne, TitreSection } from "@/components/moi/Ui";
@@ -151,6 +152,22 @@ function Moi() {
                   </div>
                 ))}
               </div>
+
+              {/* Appel au Récif */}
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/recif" })}
+                className="mt-[12px] flex w-full items-center gap-[13px] rounded-[20px] border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left shadow-[0_4px_14px_#123A6309]"
+              >
+                <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[13px] bg-[#0F3D70] p-[8px]">
+                  <img src={logoCorail} alt="" className="h-full w-auto" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14.5px] font-bold">Rejoins le Récif</span>
+                  <span className="block pt-[1px] text-[12.5px] leading-snug text-[#3F5B76]">L'app reste gratuite. Le Récif, c'est ceux qui la font tenir.</span>
+                </span>
+                <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#3F5B76]" aria-hidden="true" />
+              </button>
 
               <TitreSection>Mon carnet</TitreSection>
               <Bloc>
