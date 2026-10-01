@@ -1,7 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { MapPin, Crosshair, Plus, X, Star, Camera } from "lucide-react";
-import { enregistrerPlongee } from "@/lib/plongees";
+import {
+  dureeEnMinutes,
+  enregistrerPlongee,
+  entier,
+  nombre,
+  sauverPlongee,
+  texte,
+  utilisateurConnecte,
+  VISIBILITE_VERS_BASE,
+  type LignePlongee,
+} from "@/lib/plongees";
 
 export const Route = createFileRoute("/nouvelle-plongee")({
   head: () => ({
@@ -312,21 +322,96 @@ function NouvellePlongee() {
     setPlongee((p) => ({ ...p, [cle]: valeur }));
 
   const [idPlongee] = useState(() => crypto.randomUUID());
-  const enregistrer = () => {
-    enregistrerPlongee({
-      id: idPlongee,
-      date: plongee.date,
-      siteNom: plongee.siteNom,
-      siteLieu: plongee.siteLieu,
-      profMax: plongee.profMax,
-      duree: plongee.duree,
-      tempFond: plongee.tempFond,
-      melange: plongee.melange,
-      note: plongee.note,
-      binomes: plongee.binomes,
-      photo: photos[0],
-    });
-    setEdition(false);
+  const [enCours, setEnCours] = useState(false);
+  const [message, setMessage] = useState<{ type: "erreur" | "info"; texte: string } | null>(null);
+
+  const versLigne = (p: Plongee): LignePlongee => ({
+    id: idPlongee,
+    dive_date: texte(p.date),
+    start_time: texte(p.immersion),
+    site_name: texte(p.siteNom),
+    site_location: texte(p.siteLieu),
+    site_coords: texte(p.siteCoords),
+    max_depth_m: nombre(p.profMax),
+    avg_depth_m: nombre(p.profMoyenne),
+    duration_min: dureeEnMinutes(p.duree),
+    end_time: texte(p.sortie),
+    total_time_min: entier(p.tempsTotal),
+    surface_interval_min: entier(p.intervalleSurface),
+    stops: p.paliers.map((x) => ({ profondeur: nombre(x.profondeur), duree: entier(x.duree) })),
+    method: texte(p.methode),
+    computer: texte(p.ordinateur),
+    gas_mix: texte(p.melange),
+    o2_pct: entier(p.o2),
+    he_pct: entier(p.he),
+    tank_config: texte(p.configuration),
+    tank_volume_l: nombre(p.volumeBloc),
+    weight_kg: nombre(p.lestage),
+    pressure_start_bar: entier(p.pressionDepart),
+    pressure_end_bar: entier(p.pressionSortie),
+    suit_type: texte(p.combinaison),
+    suit_thickness_mm: entier(p.epaisseur),
+    temp_surface_c: nombre(p.tempSurface),
+    temp_bottom_c: nombre(p.tempFond),
+    temp_air_c: nombre(p.tempAir),
+    visibility_m: entier(p.visibilite),
+    current_strength: texte(p.courant),
+    sea_state: texte(p.etatMer),
+    weather: texte(p.meteo),
+    buddies: p.binomes,
+    guide_name: texte(p.encadrant),
+    dive_leader: texte(p.directeur),
+    club_name: texte(p.club),
+    boat_name: texte(p.bateau),
+    dive_type: texte(p.typePlongee),
+    environment: texte(p.milieu),
+    entry_type: texte(p.miseALEau),
+    rating: p.note || null,
+    rating_place: p.noteLieu || null,
+    rating_conditions: p.noteConditions || null,
+    rating_wildlife: p.noteFaune || null,
+    comment: texte(p.commentaire),
+    wildlife: p.faune,
+    visibility: VISIBILITE_VERS_BASE[p.visibiliteFiche] ?? "private",
+  });
+
+  const enregistrer = async () => {
+    if (enCours) return;
+    setEnCours(true);
+    setMessage(null);
+    try {
+      if (await utilisateurConnecte()) {
+        await sauverPlongee(versLigne(plongee));
+      } else {
+        // Mode maquette : pas de compte connecté, la plongée reste sur cet appareil.
+        enregistrerPlongee({
+          id: idPlongee,
+          date: plongee.date,
+          siteNom: plongee.siteNom,
+          siteLieu: plongee.siteLieu,
+          profMax: plongee.profMax,
+          duree: String(dureeEnMinutes(plongee.duree) ?? ""),
+          tempFond: plongee.tempFond,
+          melange: plongee.melange,
+          note: plongee.note,
+          binomes: plongee.binomes,
+          photo: photos[0],
+        });
+        setMessage({
+          type: "info",
+          texte: "Tu n'es pas connecté : la plongée est gardée sur cet appareil uniquement.",
+        });
+      }
+      setEdition(false);
+    } catch (e) {
+      console.error(e);
+      setMessage({
+        type: "erreur",
+        texte: "La plongée n'a pas pu être enregistrée. Vérifie ta connexion et réessaie.",
+      });
+    } finally {
+      setEnCours(false);
+    }
   };
 
   return (
@@ -344,12 +429,24 @@ function NouvellePlongee() {
           <div className="text-[16px] font-bold text-[#123A63]">Nouvelle plongée</div>
           <button
             type="button"
-            onClick={() => (edition ? enregistrer() : setEdition(true))}
-            className="text-[14.5px] font-bold text-[#1176A8]"
+            onClick={() => (edition ? void enregistrer() : setEdition(true))}
+            disabled={enCours}
+            className="text-[14.5px] font-bold text-[#1176A8] disabled:opacity-50"
           >
-            {edition ? "Enregistrer" : "Modifier"}
+            {edition ? (enCours ? "Enregistrement…" : "Enregistrer") : "Modifier"}
           </button>
         </div>
+
+        {message && (
+          <div
+            role={message.type === "erreur" ? "alert" : "status"}
+            className={`mx-[22px] mt-4 rounded-[14px] px-[15px] py-3 text-[13.5px] font-medium ${
+              message.type === "erreur" ? "bg-[#FFE4DE] text-[#8A2A1A]" : "bg-[#E1F3FB] text-[#0F3D70]"
+            }`}
+          >
+            {message.texte}
+          </div>
+        )}
 
         <div className="px-[22px] pb-[30px]">
           {/* ESSENTIEL */}

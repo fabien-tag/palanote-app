@@ -32,3 +32,9 @@
 - Bouton « Ajouter ma première plongée » du carnet câblé vers /nouvelle-plongee.
 - Script SQL livré : sql/palanote-page-nouvelle-plongee.sql (table dives + RLS + index), à coller dans le SQL Editor. Données pas encore persistées (mode maquette).
 - À faire ensuite : enregistrement réel dans Supabase (nécessite connexion utilisateur), puis liste des plongées sur le carnet.
+
+## Fait — enregistrement réel des plongées (01/10)
+- « Enregistrer » sur /nouvelle-plongee écrit la plongée dans la table `dives` (création, puis mise à jour si on modifie). Heure de la plongée → `start_time`, durée (menu 0–2 h) → `duration_min` en minutes.
+- Sans connexion : la plongée reste sur l'appareil (mode maquette) et un message le signale.
+- Le carnet affiche les plongées du compte connecté depuis Supabase.
+- Prérequis : avoir exécuté sql/palanote-page-nouvelle-plongee.sql dans le SQL Editor.
