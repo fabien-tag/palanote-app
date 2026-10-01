@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PageMoi, TitreSection } from "@/components/moi/Ui";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
+import { signOut } from "@/lib/auth";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { chargerProfil, sauverProfil } from "@/lib/moi";
 
@@ -135,6 +136,13 @@ function ModifierProfil() {
             className="mt-[18px] flex h-[54px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-60"
           >
             {enCours ? "ENREGISTREMENT…" : "ENREGISTRER"}
+          </button>
+          <button
+            type="button"
+            onClick={() => void signOut().catch(() => undefined).then(() => navigate({ to: "/connexion", replace: true }))}
+            className="mt-[12px] flex h-[52px] items-center justify-center rounded-2xl border border-[#E4EBF1] bg-white text-[14px] font-bold text-[#123A63]"
+          >
+            Se déconnecter
           </button>
         </>
       )}
