@@ -196,3 +196,19 @@ export function enregistrerPlongee(p: CartePlongee) {
     /* stockage indisponible */
   }
 }
+
+// Supprime une plongée : connecté, elle est retirée du carnet (suppression douce, deleted_at) ;
+// sinon, elle est retirée de celles gardées sur l'appareil.
+export async function supprimerPlongee(id: string) {
+  if (await utilisateurConnecte()) {
+    const { error } = await supabase.from("dives").update({ deleted_at: new Date().toISOString() }).eq("id", id);
+    if (error) throw error;
+    return;
+  }
+  memoire = lirePlongees().filter((x) => x.id !== id);
+  try {
+    localStorage.setItem(CLE, JSON.stringify(memoire.map(({ photo: _p, ...r }) => r)));
+  } catch {
+    /* stockage indisponible */
+  }
+}

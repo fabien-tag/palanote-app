@@ -8,6 +8,7 @@ import {
   enregistrerPlongee,
   lirePlongees,
   minutesEnTexte,
+  supprimerPlongee,
   VISIBILITE_DEPUIS_BASE,
   entier,
   nombre,
@@ -436,6 +437,25 @@ function NouvellePlongee() {
     };
   }, [idExistant]);
   const [enCours, setEnCours] = useState(false);
+  const [confirmerSuppression, setConfirmerSuppression] = useState(false);
+  const [suppressionEnCours, setSuppressionEnCours] = useState(false);
+  const supprimer = async () => {
+    setSuppressionEnCours(true);
+    try {
+      await supprimerPlongee(idPlongee);
+      annoncerSurAccueil("Ta plongée a bien été supprimée");
+      navigate({ to: "/carnet" });
+    } catch (e) {
+      console.error(e);
+      setConfirmerSuppression(false);
+      setMessage({
+        type: "erreur",
+        texte: `La plongée n'a pas pu être supprimée.${e && typeof e === "object" && "message" in e ? ` (détail : ${String(e.message)})` : ""}`,
+      });
+    } finally {
+      setSuppressionEnCours(false);
+    }
+  };
   const [message, setMessage] = useState<{ type: "erreur" | "info"; texte: string } | null>(null);
 
   const versLigne = (p: Plongee): LignePlongee => ({
@@ -1068,16 +1088,72 @@ function NouvellePlongee() {
               </div>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={() => setEdition(true)}
-              className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] border-2 border-[#1176A8] text-sm font-bold tracking-wide text-[#1176A8]"
-            >
-              MODIFIER CETTE PLONGÉE
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => setEdition(true)}
+                className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] border-2 border-[#1176A8] text-sm font-bold tracking-wide text-[#1176A8]"
+              >
+                MODIFIER CETTE PLONGÉE
+              </button>
+              {existante && (
+                <div className="flex justify-center pt-5">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmerSuppression(true)}
+                    className="min-h-[44px] text-[14px] font-semibold text-[#D6402A] underline underline-offset-4"
+                  >
+                    Supprimer cette plongée
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
+
+      {/* Confirmation avant de supprimer */}
+      {confirmerSuppression && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-[#071A30]/55 p-4 sm:items-center"
+          onClick={() => !suppressionEnCours && setConfirmerSuppression(false)}
+        >
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="titre-suppression"
+            aria-describedby="texte-suppression"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[398px] rounded-[22px] bg-white p-[22px] shadow-[0_12px_40px_rgba(7,26,48,.35)]"
+          >
+            <h2 id="titre-suppression" className="text-[18px] font-bold text-[#123A63]">
+              Supprimer cette plongée ?
+            </h2>
+            <p id="texte-suppression" className="pt-2 text-[14px] leading-normal text-[#5B7189]">
+              {plongee.siteNom ? `« ${plongee.siteNom} » sera retirée de ton carnet.` : "Elle sera retirée de ton carnet."} Cette action ne peut pas être annulée.
+            </p>
+            <div className="flex flex-col gap-[10px] pt-[20px]">
+              <button
+                type="button"
+                autoFocus
+                disabled={suppressionEnCours}
+                onClick={() => void supprimer()}
+                className="flex min-h-[50px] w-full items-center justify-center rounded-[14px] bg-[#D6402A] text-sm font-bold tracking-wide text-white disabled:opacity-60"
+              >
+                {suppressionEnCours ? "Suppression…" : "SUPPRIMER"}
+              </button>
+              <button
+                type="button"
+                disabled={suppressionEnCours}
+                onClick={() => setConfirmerSuppression(false)}
+                className="flex min-h-[50px] w-full items-center justify-center rounded-[14px] border border-[#D8E5EE] text-sm font-bold tracking-wide text-[#123A63]"
+              >
+                ANNULER
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
