@@ -107,7 +107,7 @@ Règles :
 - Normalise les valeurs : date en AAAA-MM-JJ (les carnets français écrivent JJ/MM/AA ; « 87 » = 1987), heure en HH:MM, nombres avec un point décimal, sans unité.
 - « lu » contient toujours le texte brut tel qu'il apparaît sur la page (ou null si rien n'est écrit).
 - Si la page n'est pas lisible ou n'est pas une page de carnet, lisible = false, plongees = [] et explique en une phrase dans « raison ».
-Appelle l'outil enregistrer_page avec ton résultat.`;
+Réponds uniquement en appelant l'outil enregistrer_page avec ton résultat, sans autre texte.`;
 
 // Clé secrète du projet, quel que soit le système de clés utilisé.
 function cleSecrete(): string {
@@ -127,6 +127,27 @@ function json(corps: unknown, status = 200) {
 
 type ChampLu = { valeur: string | null; lu: string | null; confiance: "sur" | "a_verifier" | "non_lu" };
 type ResultatPage = { lisible: boolean; raison?: string | null; plongees: Record<string, ChampLu>[] };
+
+// Résultat de l'IA : l'appel à l'outil, ou à défaut un objet JSON écrit dans sa réponse.
+function extraireResultat(contenu: { type: string; input?: unknown; text?: string }[]): ResultatPage {
+  const outil = contenu.find((c) => c.type === "tool_use");
+  if (outil?.input) return outil.input as ResultatPage;
+  const texte = contenu
+    .filter((c) => c.type === "text")
+    .map((c) => c.text ?? "")
+    .join("\n");
+  const debut = texte.indexOf("{");
+  const fin = texte.lastIndexOf("}");
+  if (debut >= 0 && fin > debut) {
+    try {
+      const objet = JSON.parse(texte.slice(debut, fin + 1));
+      if (objet && typeof objet === "object" && "plongees" in objet) return objet as ResultatPage;
+    } catch {
+      /* pas du JSON valide */
+    }
+  }
+  throw new Error(`IA : réponse sans résultat structuré (${texte.slice(0, 160) || "vide"})`);
+}
 
 async function lirePage(admin: SupabaseClient, pageId: string) {
   // Page + photo
@@ -156,7 +177,9 @@ async function lirePage(admin: SupabaseClient, pageId: string) {
       model: MODELE,
       max_tokens: 4096,
       tools: [OUTIL],
-      tool_choice: { type: "tool", name: OUTIL.name },
+      // Les modèles récents (Sonnet / Opus 5.5) refusent un outil imposé : on laisse le choix
+      // en « auto », la consigne demande d'appeler l'outil, et on sait aussi lire une réponse JSON.
+      tool_choice: { type: "auto" },
       messages: [
         {
           role: "user",
@@ -171,9 +194,7 @@ async function lirePage(admin: SupabaseClient, pageId: string) {
   const corps = await reponse.json();
   if (!reponse.ok) throw new Error(`IA : ${reponse.status} ${corps?.error?.message ?? JSON.stringify(corps)}`);
 
-  const bloc = (corps.content ?? []).find((c: { type: string }) => c.type === "tool_use");
-  if (!bloc) throw new Error("IA : réponse sans résultat structuré");
-  const resultat = bloc.input as ResultatPage;
+  const resultat = extraireResultat(corps.content ?? []);
 
   // Une extraction par plongée lue
   const plongees = resultat.lisible ? resultat.plongees ?? [] : [];
