@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell, GalleryVerticalEnd, List } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoHorizontal from "@/assets/logo-horizontal.png";
@@ -70,7 +70,16 @@ function Carnet() {
   const [numeroDepart, setNumeroDepart] = useState(0);
   const [vue, setVue] = useState<Vue>("liste");
   useEffect(() => setVue(lireVue()), []);
-  const changerVue = (v: Vue) => {
+  // Changement de vue sans que l'écran bouge : le bouton cliqué reste exactement
+  // à la même hauteur à l'écran, quelle que soit la position de défilement.
+  const racine = useRef<HTMLDivElement>(null);
+  const ancre = useRef<{ el: HTMLElement; haut: number } | null>(null);
+  const changerVue = (v: Vue, bouton: HTMLElement) => {
+    if (v === vue) return;
+    ancre.current = { el: bouton, haut: bouton.getBoundingClientRect().top };
+    // Garde la hauteur de page le temps du changement, pour que le navigateur
+    // ne remonte pas tout seul quand la nouvelle vue est plus courte.
+    if (racine.current) racine.current.style.minHeight = `${document.documentElement.scrollHeight}px`;
     setVue(v);
     try {
       localStorage.setItem(CLE_VUE, v);
@@ -78,6 +87,24 @@ function Carnet() {
       /* stockage indisponible */
     }
   };
+  useLayoutEffect(() => {
+    const a = ancre.current;
+    const el = racine.current;
+    if (!a || !el) return;
+    ancre.current = null;
+    const ecart = a.el.getBoundingClientRect().top - a.haut;
+    if (ecart !== 0) window.scrollBy(0, ecart);
+    // Ne garde que la hauteur nécessaire pour rester à cette position…
+    el.style.minHeight = `${window.scrollY + window.innerHeight}px`;
+    // …puis la relâche au fur et à mesure que l'utilisateur remonte.
+    const relacher = () => {
+      const besoin = window.scrollY + window.innerHeight;
+      if (besoin < parseFloat(el.style.minHeight || "0")) el.style.minHeight = `${besoin}px`;
+    };
+    window.addEventListener("scroll", relacher, { passive: true });
+    return () => window.removeEventListener("scroll", relacher);
+  }, [vue]);
+
   useEffect(() => {
     let actif = true;
     (async () => {
@@ -100,7 +127,7 @@ function Carnet() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#E7F1FA]">
+    <div ref={racine} className="flex min-h-screen flex-col bg-[#E7F1FA]" style={{ overflowAnchor: "none" }}>
       {/* Haut : vidéo marine, pleine largeur de l'écran */}
       <div className="relative flex h-[412px] w-full shrink-0 flex-col overflow-hidden rounded-b-[34px]">
         <video
@@ -210,7 +237,7 @@ function Carnet() {
                           type="button"
                           aria-label={label}
                           aria-pressed={vue === v}
-                          onClick={() => changerVue(v)}
+                          onClick={(e) => changerVue(v, e.currentTarget)}
                           className={`flex h-[32px] w-[38px] items-center justify-center rounded-[12px] transition ${
                             vue === v ? "bg-white text-[#123A63] shadow-[0_2px_8px_rgba(18,58,99,.12)]" : "text-[#9DB0C0]"
                           }`}
