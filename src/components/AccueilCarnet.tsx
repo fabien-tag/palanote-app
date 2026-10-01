@@ -130,16 +130,18 @@ export function FiltresPlongees({
   filtres,
   actif,
   onChange,
+  className = "px-[22px] pt-[18px]",
 }: {
   filtres: Filtre[];
   actif: string;
   onChange: (id: string) => void;
+  className?: string;
 }) {
   return (
     <div
       role="group"
       aria-label="Filtrer les plongées"
-      className="flex shrink-0 gap-[7px] overflow-x-auto px-[22px] pt-[18px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className={`flex shrink-0 gap-[7px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
     >
       {filtres.map((f) => {
         const on = f.id === actif;

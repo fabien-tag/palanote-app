@@ -84,6 +84,14 @@ function Carnet() {
   const filtres = filtresDisponibles(plongees);
   const filtreActif = filtres.find((f) => f.id === filtre) ?? filtres[0]!;
   const groupes = grouperParAnnee(numeroter(plongees, numeroDepart).filter(({ p }) => filtreActif.teste(p)));
+  const filtresListe = (
+    <FiltresPlongees
+      filtres={filtres}
+      actif={filtreActif.id}
+      onChange={setFiltre}
+      className="-mx-[22px] px-[22px] pb-[14px]"
+    />
+  );
   useEffect(() => setVue(lireVue()), []);
   // Message laissé par l'écran précédent (ex. plongée enregistrée).
   const [confirmation, setConfirmation] = useState<string | null>(null);
@@ -248,7 +256,6 @@ function Carnet() {
       ) : (
         /* Dès la première plongée : statistiques, filtres, raccourcis et liste */
         <>
-          <FiltresPlongees filtres={filtres} actif={filtreActif.id} onChange={setFiltre} />
           <BandeauCarnetsPapier onClick={() => navigate({ to: "/numeriser" })} />
           <RaccourcisAccueil />
 
@@ -286,6 +293,8 @@ function Carnet() {
                     </div>
                   )}
                 </div>
+                {/* Filtres : sous le titre des plongées, juste avant les cartes */}
+                {gi === 0 && filtresListe}
                 <div className={`flex flex-col ${vue === "liste" ? "gap-2" : "gap-[13px]"}`}>
                   {g.plongees.map(({ p, numero }) => (
                     <button
@@ -301,6 +310,7 @@ function Carnet() {
                 </div>
               </div>
             ))}
+            {groupes.length === 0 && <div className="pt-[18px]">{filtresListe}</div>}
             {groupes.length === 0 && (
               <p className="pt-8 text-center text-[13px] text-[#5B7189]">Aucune plongée pour ce filtre.</p>
             )}
