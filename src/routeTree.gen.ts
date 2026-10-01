@@ -23,6 +23,7 @@ import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-p
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
+import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
@@ -106,6 +107,11 @@ const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
   path: '/profil-plongeur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecifRoute = RecifRouteImport.update({
+  id: '/recif',
+  path: '/recif',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SiteRoute = SiteRouteImport.update({
   id: '/site',
   path: '/site',
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
@@ -239,6 +247,7 @@ export interface FileRoutesById {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/recif'
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/recif'
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/recif'
     | '/site'
     | '/amis_/ajouter'
     | '/amis_/binome'
@@ -354,6 +366,7 @@ export interface RootRouteChildren {
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
   NumeriserRoute: typeof NumeriserRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
+  RecifRoute: typeof RecifRoute
   SiteRoute: typeof SiteRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
@@ -468,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfilPlongeurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recif': {
+      id: '/recif'
+      path: '/recif'
+      fullPath: '/recif'
+      preLoaderRoute: typeof RecifRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/site': {
       id: '/site'
       path: '/site'
@@ -570,6 +590,7 @@ const rootRouteChildren: RootRouteChildren = {
   NouvellePlongeeRoute: NouvellePlongeeRoute,
   NumeriserRoute: NumeriserRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
+  RecifRoute: RecifRoute,
   SiteRoute: SiteRoute,
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
