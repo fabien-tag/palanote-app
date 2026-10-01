@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ChevronLeft, Camera, Image as ImageIcon, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Camera, Image as ImageIcon } from "lucide-react";
 import fondOcr from "@/assets/ocr-fond.jpg";
+import { lotEnCours, type Lot } from "@/lib/numerisation";
+import { deposerPhotosEnAttente } from "@/lib/photos-en-attente";
 
 export const Route = createFileRoute("/numeriser")({
   head: () => ({
@@ -47,44 +49,15 @@ const retards = {
 
 const d = (ms: number) => ({ animationDelay: `${ms}ms` });
 
-type Photo = { id: string; nom: string; url: string };
-
 function Numeriser() {
   const navigate = useNavigate();
-  const cameraRef = useRef<HTMLInputElement>(null);
   const galerieRef = useRef<HTMLInputElement>(null);
-  const photosRef = useRef<Photo[]>([]);
-  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [enCours, setEnCours] = useState<Lot | null>(null);
 
-  // Les aperçus vivent en mémoire : on les libère en quittant l'écran.
-  useEffect(
-    () => () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.url)),
-    [],
-  );
-
-  const ajouter = (files: FileList | null) => {
-    if (!files?.length) return;
-    const nouveaux = Array.from(files).map((f) => ({
-      id: crypto.randomUUID(),
-      nom: f.name || "page.jpg",
-      url: URL.createObjectURL(f),
-    }));
-    photosRef.current = [...photosRef.current, ...nouveaux];
-    setPhotos(photosRef.current);
-  };
-
-  const retirer = (id: string) => {
-    const p = photosRef.current.find((x) => x.id === id);
-    if (p) URL.revokeObjectURL(p.url);
-    photosRef.current = photosRef.current.filter((x) => x.id !== id);
-    setPhotos(photosRef.current);
-  };
-
-  const toutRetirer = () => {
-    photosRef.current.forEach((p) => URL.revokeObjectURL(p.url));
-    photosRef.current = [];
-    setPhotos([]);
-  };
+  // Un carnet commencé et pas terminé : on propose de le reprendre.
+  useEffect(() => {
+    void lotEnCours().then(setEnCours);
+  }, []);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-[#0E3D72]">
@@ -150,18 +123,7 @@ function Numeriser() {
           <div className="min-h-4 flex-grow" />
         </div>
 
-        {/* Champs cachés : c'est eux qui ouvrent l'appareil photo ou la galerie du téléphone. */}
-        <input
-          ref={cameraRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={(e) => {
-            ajouter(e.target.files);
-            e.target.value = "";
-          }}
-        />
+        {/* Galerie du téléphone : les photos choisies passent à l'écran « Choisir des pages ». */}
         <input
           ref={galerieRef}
           type="file"
@@ -169,53 +131,34 @@ function Numeriser() {
           multiple
           className="hidden"
           onChange={(e) => {
-            ajouter(e.target.files);
+            const fichiers = Array.from(e.target.files ?? []);
             e.target.value = "";
+            if (!fichiers.length) return;
+            deposerPhotosEnAttente(fichiers);
+            navigate({ to: "/numeriser/choisir" });
           }}
         />
 
-        {photos.length > 0 && (
-          <div className="shrink-0 px-[22px] pt-[16px]">
-            <div className="mb-[9px] flex items-baseline justify-between">
-              <span className="text-[12.5px] font-bold text-white/90">
-                {photos.length === 1
-                  ? "1 page en attente"
-                  : `${photos.length} pages en attente`}
+        {enCours && (
+          <div className="shrink-0 px-[22px] pt-[14px]">
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/numeriser/reprendre", search: { lot: enCours.id } })}
+              className="flex w-full items-center gap-3 rounded-2xl bg-white/[0.14] px-4 py-3 text-left backdrop-blur-sm"
+            >
+              <span className="flex-grow">
+                <span className="block text-[14px] font-bold text-white">{enCours.libelle ?? "Ton carnet"} en cours</span>
+                <span className="block text-[12.5px] text-white/75">Reprends là où tu t'étais arrêté.</span>
               </span>
-              <button
-                type="button"
-                onClick={toutRetirer}
-                className="text-[12px] text-white/60 underline underline-offset-4"
-              >
-                Tout retirer
-              </button>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {photos.map((p) => (
-                <div key={p.id} className="relative shrink-0">
-                  <img
-                    src={p.url}
-                    alt={p.nom}
-                    className="h-[64px] w-[64px] rounded-xl object-cover ring-1 ring-white/30"
-                  />
-                  <button
-                    type="button"
-                    aria-label={`Retirer ${p.nom}`}
-                    onClick={() => retirer(p.id)}
-                    className="absolute -right-[6px] -top-[6px] flex h-[19px] w-[19px] items-center justify-center rounded-full bg-[#0B3B63] ring-1 ring-white/50"
-                  >
-                    <X className="h-[11px] w-[11px] text-white" strokeWidth={3} />
-                  </button>
-                </div>
-              ))}
-            </div>
+              <ChevronRight className="h-[17px] w-[17px] text-white" strokeWidth={2.4} aria-hidden="true" />
+            </button>
           </div>
         )}
 
         <div className="flex shrink-0 flex-col gap-[11px] px-[22px] pb-[26px] pt-[14px]">
           <button
             type="button"
-            onClick={() => cameraRef.current?.click()}
+            onClick={() => navigate({ to: "/numeriser/capture" })}
             style={d(retards.boutonPrincipal)}
             className="apparition flex h-14 items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
           >
