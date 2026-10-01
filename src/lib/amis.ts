@@ -118,3 +118,97 @@ export async function accepterInvitationGardee(): Promise<string | null> {
     return null;
   }
 }
+
+// ---------- Binômes identifiés sur une plongée ----------
+// On choisit ses binômes Palanote dans la fiche de plongée ; la plongée leur est
+// proposée (« À confirmer »). Sur la fiche d'un binôme, on ne voit que les plongées faites ensemble.
+
+export type ResumePlongee = {
+  date: string | null;
+  site: string | null;
+  lieu: string | null;
+  prof_max: number | null;
+  duree: number | null;
+  temp_fond: number | null;
+  melange: string | null;
+};
+export type PlongeeAConfirmer = ResumePlongee & { id: string; de: Plongeur };
+export type PlongeeEnsemble = ResumePlongee & {
+  id: string;
+  statut: "a_confirmer" | "ajoutee" | "refusee";
+  identifie_par_moi: boolean;
+  ma_plongee: string | null;
+};
+
+export async function identifierBinomes(diveId: string, amis: string[]) {
+  const { error } = await supabase.rpc("identifier_binomes", { p_dive: diveId, p_amis: amis });
+  if (error) throw error;
+}
+
+// Binômes déjà identifiés sur une de mes plongées.
+export async function binomesIdentifies(diveId: string): Promise<string[]> {
+  const { data: s } = await supabase.auth.getSession();
+  const moi = s.session?.user.id;
+  const { data, error } = await supabase.from("dive_buddies").select("buddy_user_id, identifie_par").eq("dive_id", diveId);
+  if (error) throw error;
+  return (data ?? [])
+    .filter((r: { buddy_user_id: string | null; identifie_par: string | null }) => r.identifie_par === moi && r.buddy_user_id)
+    .map((r: { buddy_user_id: string | null }) => r.buddy_user_id as string);
+}
+
+export async function plongeesAConfirmer(): Promise<PlongeeAConfirmer[]> {
+  const { data, error } = await supabase.rpc("plongees_a_confirmer");
+  if (error) throw error;
+  return (data ?? []) as PlongeeAConfirmer[];
+}
+
+export async function ajouterPlongeeIdentifiee(id: string): Promise<string> {
+  const { data, error } = await supabase.rpc("ajouter_plongee_identifiee", { p_id: id });
+  if (error) throw error;
+  return data as string;
+}
+
+export async function refuserIdentification(id: string) {
+  const { error } = await supabase.rpc("refuser_identification", { p_id: id });
+  if (error) throw error;
+}
+
+export async function plongeesEnsemble(ami: string): Promise<PlongeeEnsemble[]> {
+  const { data, error } = await supabase.rpc("plongees_ensemble", { p_ami: ami });
+  if (error) throw error;
+  return (data ?? []) as PlongeeEnsemble[];
+}
+
+// { idDuBinome: nombre de plongées ensemble }
+export async function compterPlongeesEnsemble(): Promise<Record<string, number>> {
+  const { data, error } = await supabase.rpc("compter_plongees_ensemble");
+  if (error) throw error;
+  const r: Record<string, number> = {};
+  for (const x of (data ?? []) as { id: string; n: number }[]) r[x.id] = Number(x.n);
+  return r;
+}
+
+export function plongeesEnsembleTexte(n: number) {
+  return n === 0 ? "Pas encore de plongée ensemble" : `${n} plongée${n > 1 ? "s" : ""} ensemble`;
+}
+
+const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+export function dateCourte(iso: string | null | undefined) {
+  if (!iso) return "Date inconnue";
+  const [a, m, j] = iso.slice(0, 10).split("-").map(Number);
+  if (!a || !m || !j) return iso;
+  const annee = a === new Date().getFullYear() ? "" : ` ${a}`;
+  return `${j} ${MOIS[m - 1]}${annee}`;
+}
+
+export function chiffresPlongee(p: ResumePlongee) {
+  const nb = (v: number | null) => (v === null || v === undefined ? null : String(Number(v)).replace(".", ","));
+  return [
+    nb(p.prof_max) && `${nb(p.prof_max)} m`,
+    p.duree ? `${p.duree} min` : null,
+    nb(p.temp_fond) && `${nb(p.temp_fond)} °C`,
+    p.melange ? p.melange.toLowerCase() : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}

@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
-import { MapPin, LocateFixed, Plus, X, Star, Camera } from "lucide-react";
+import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
+import { MapPin, LocateFixed, Plus, X, Star, Camera, Check } from "lucide-react";
 import { Carte } from "@/components/carte/Carte";
 import { ChoisirLieu } from "@/components/carte/ChoisirLieu";
 import { coordsLisibles, coordsVersTexte, texteVersCoords } from "@/lib/carte";
@@ -393,6 +394,10 @@ function NouvellePlongee() {
   const [photos, setPhotos] = useState<string[]>([]);
   const [ajoutBinome, setAjoutBinome] = useState(false);
   const [nomBinome, setNomBinome] = useState("");
+  // Binômes Palanote identifiés sur la plongée (ids) et liste de mes binômes
+  const [amis, setAmis] = useState<Plongeur[]>([]);
+  const [identifies, setIdentifies] = useState<string[]>([]);
+  const identifiesOriginaux = useRef<string[]>([]);
   const [ajoutFaune, setAjoutFaune] = useState(false);
   const [nomFaune, setNomFaune] = useState("");
   const [ajoutPalier, setAjoutPalier] = useState(false);
@@ -415,6 +420,21 @@ function NouvellePlongee() {
         if (await utilisateurConnecte()) {
           const ligne = await chargerPlongee(idExistant);
           if (ligne) fiche = depuisLigne(ligne);
+          if (fiche) {
+            // Binômes Palanote déjà identifiés : on les retire des noms saisis pour ne pas les afficher deux fois.
+            const [ids, liste] = await Promise.all([binomesIdentifies(idExistant).catch(() => []), mesBinomes().catch(() => [])]);
+            if (!actif) return;
+            const reste = [...fiche.binomes];
+            for (const id of ids) {
+              const prenom = liste.find((a) => a.id === id)?.prenom;
+              const i = prenom ? reste.indexOf(prenom) : -1;
+              if (i >= 0) reste.splice(i, 1);
+            }
+            fiche = { ...fiche, binomes: reste };
+            setAmis(liste);
+            identifiesOriginaux.current = ids;
+            setIdentifies(ids);
+          }
         } else {
           const c = lirePlongees().find((x) => x.id === idExistant);
           if (c)
@@ -450,6 +470,21 @@ function NouvellePlongee() {
       actif = false;
     };
   }, [idExistant]);
+  // Nouvelle plongée : liste de mes binômes pour pouvoir les identifier.
+  useEffect(() => {
+    if (idExistant) return;
+    let actif = true;
+    void utilisateurConnecte().then(async (u) => {
+      if (!u) return;
+      const liste = await mesBinomes().catch(() => []);
+      if (actif) setAmis(liste);
+    });
+    return () => {
+      actif = false;
+    };
+  }, [idExistant]);
+  const prenomAmi = (id: string) => amis.find((a) => a.id === id)?.prenom ?? "Binôme";
+
   const [enCours, setEnCours] = useState(false);
   const [confirmerSuppression, setConfirmerSuppression] = useState(false);
   // Choix du lieu sur la carte (null = fermé)
@@ -531,7 +566,16 @@ function NouvellePlongee() {
     setMessage(null);
     try {
       if (await utilisateurConnecte()) {
-        await sauverPlongee(versLigne(plongee));
+        const ligne = versLigne(plongee);
+        // Les binômes Palanote apparaissent aussi dans la liste des noms (carte du carnet).
+        await sauverPlongee({ ...ligne, buddies: [...identifies.map(prenomAmi), ...ligne.buddies] });
+        if (identifies.length > 0 || identifiesOriginaux.current.length > 0) {
+          try {
+            await identifierBinomes(idPlongee, identifies);
+          } catch (e) {
+            console.error("Identification des binômes impossible", e);
+          }
+        }
       } else {
         // Mode maquette : pas de compte connecté, la plongée reste sur cet appareil.
         enregistrerPlongee({
@@ -579,6 +623,7 @@ function NouvellePlongee() {
               // Plongée existante en cours de modification : on annule les changements.
               if (existante && edition) {
                 setPlongee(original.current);
+                setIdentifies(identifiesOriginaux.current);
                 setEdition(false);
                 setMessage(null);
               } else navigate({ to: "/carnet" });
@@ -842,6 +887,32 @@ function NouvellePlongee() {
             <div className="flex flex-col gap-[9px]">
               <Label>Binômes</Label>
               <div className="flex flex-wrap gap-2">
+                {identifies.map((id) => {
+                  const prenom = prenomAmi(id);
+                  return (
+                    <div
+                      key={id}
+                      className="flex h-10 items-center gap-2 rounded-full py-0 pl-1 pr-[13px]"
+                      style={{ background: `${couleurAvatar(id)}40` }}
+                    >
+                      <div
+                        className="relative flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold text-[#0F3D70]"
+                        style={{ background: couleurAvatar(id) }}
+                      >
+                        {initialesAmi(prenom)}
+                        <span className="absolute -bottom-[2px] -right-[2px] flex h-[13px] w-[13px] items-center justify-center rounded-full border-[1.5px] border-white bg-[#0F3D70]">
+                          <Check className="h-[7px] w-[7px] text-white" strokeWidth={4} aria-hidden="true" />
+                        </span>
+                      </div>
+                      <span className="text-[13.5px] font-bold text-[#0F3D70]">{prenom}</span>
+                      {edition && (
+                        <button type="button" aria-label={`Retirer ${prenom}`} onClick={() => setIdentifies((l) => l.filter((x) => x !== id))}>
+                          <X className="h-3.5 w-3.5 text-[#0F3D70]" aria-hidden="true" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
                 {plongee.binomes.map((b, i) => {
                   const c = COULEURS_BINOMES[i % COULEURS_BINOMES.length] ?? COULEURS_BINOMES[0]!;
                   return (
@@ -881,6 +952,35 @@ function NouvellePlongee() {
                     <span className="text-[13.5px] font-semibold text-[#1176A8]">Ajouter</span>
                   </button>
                 )}
+                {edition && ajoutBinome && amis.some((a) => !identifies.includes(a.id)) && (
+                  <div className="flex w-full flex-col gap-[7px] rounded-[16px] border-[1.5px] border-[#E4EBF1] bg-white p-[10px]">
+                    <span className="text-[11.5px] font-semibold text-[#5B7189]">Tes binômes Palanote</span>
+                    <div className="flex flex-wrap gap-[7px]">
+                      {amis
+                        .filter((a) => !identifies.includes(a.id))
+                        .map((a) => (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => {
+                              setIdentifies((l) => [...l, a.id]);
+                              setAjoutBinome(false);
+                            }}
+                            className="flex h-9 items-center gap-[7px] rounded-full border-[1.5px] border-[#DCE7F0] bg-[#F5F9FC] pl-[3px] pr-[12px]"
+                          >
+                            <span
+                              className="flex h-7 w-7 items-center justify-center rounded-full text-[10.5px] font-bold text-[#0F3D70]"
+                              style={{ background: couleurAvatar(a.id) }}
+                            >
+                              {initialesAmi(a.prenom)}
+                            </span>
+                            <span className="text-[13px] font-semibold text-[#123A63]">{a.prenom}</span>
+                          </button>
+                        ))}
+                    </div>
+                    <span className="pt-[2px] text-[11.5px] font-semibold text-[#5B7189]">Ou un autre nom</span>
+                  </div>
+                )}
                 {edition && ajoutBinome && (
                   <div className="flex h-10 items-center gap-2 rounded-full border-[1.5px] border-[#E4EBF1] bg-white px-3">
                     <input
@@ -914,7 +1014,13 @@ function NouvellePlongee() {
                 )}
               </div>
               {edition && (
-                <div className="text-[11.5px] text-[#9DB0C0]">Chacun recevra sa fiche pré-remplie.</div>
+                <div className="text-[11.5px] text-[#9DB0C0]">
+                  {identifies.length > 0
+                    ? `${identifies.map(prenomAmi).join(", ")} ${identifies.length > 1 ? "recevront la plongée dans leur carnet" : "recevra la plongée dans son carnet"}, à confirmer.`
+                    : amis.length > 0
+                      ? "Choisis tes binômes Palanote : la plongée leur sera proposée dans leur carnet."
+                      : "Invite tes binômes depuis l'onglet Amis pour leur envoyer la plongée."}
+                </div>
               )}
             </div>
             <div className="flex gap-3">
