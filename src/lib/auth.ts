@@ -51,7 +51,7 @@ export async function signInWithGoogle() {
   // Nécessite l'activation du fournisseur Google dans Supabase > Authentication > Sign In / Providers.
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo: window.location.origin },
+    options: { redirectTo: `${window.location.origin}/carnet` }, // retour direct sur l'accueil connecté
   });
   if (error) throw error;
 }

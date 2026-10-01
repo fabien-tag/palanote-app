@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import fondAsset from "@/assets/BG.png";
 import logoAsset from "@/assets/logo.png";
 
@@ -45,6 +46,13 @@ const BENEFITS = [
 ];
 
 function Splash() {
+  // Déjà connecté (ou retour de Google) : on passe directement à l'accueil.
+  const navigate = useNavigate();
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      if (data.session) navigate({ to: "/carnet", replace: true });
+    });
+  }, [navigate]);
   const [expanded, setExpanded] = useState(false);
 
   return (
