@@ -20,7 +20,7 @@ export function FondNumerisation({ children, className = "" }: { children: React
         <path fill="#DFEDF9" opacity=".65" d="M0 504C85 458 122 491 192 511C285 537 352 451 430 481V647C340 581 244 635 169 601C93 567 62 608 0 632Z" />
         <path fill="#E5F0FA" d="M430 693C308 646 208 743 98 702L0 681V835C132 795 220 826 309 800L430 759Z" />
       </svg>
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col">{children}</div>
+      <div className="cascade relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col">{children}</div>
     </div>
   );
 }

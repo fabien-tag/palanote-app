@@ -174,8 +174,28 @@
   animation: apparition 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
+/* Même apparition, appliquée automatiquement aux enfants directs d'un bloc « cascade »
+   (écrans de la numérisation). « backwards » : rien ne reste transformé une fois arrivé. */
+.cascade > * {
+  animation: apparition 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  animation-delay: 1070ms;
+}
+.cascade > *:nth-child(1) { animation-delay: 80ms; }
+.cascade > *:nth-child(2) { animation-delay: 170ms; }
+.cascade > *:nth-child(3) { animation-delay: 260ms; }
+.cascade > *:nth-child(4) { animation-delay: 350ms; }
+.cascade > *:nth-child(5) { animation-delay: 440ms; }
+.cascade > *:nth-child(6) { animation-delay: 530ms; }
+.cascade > *:nth-child(7) { animation-delay: 620ms; }
+.cascade > *:nth-child(8) { animation-delay: 710ms; }
+.cascade > *:nth-child(9) { animation-delay: 800ms; }
+.cascade > *:nth-child(10) { animation-delay: 890ms; }
+.cascade > *:nth-child(11) { animation-delay: 980ms; }
+.cascade > *:nth-child(12) { animation-delay: 1070ms; }
+
 @media (prefers-reduced-motion: reduce) {
-  .apparition {
+  .apparition,
+  .cascade > * {
     animation: none;
     opacity: 1;
     transform: none;
