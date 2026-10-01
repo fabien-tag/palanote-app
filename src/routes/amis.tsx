@@ -1,9 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Search, UserPlus } from "lucide-react";
+import { ChevronRight, Search, UserPlus } from "lucide-react";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
-import { accepterInvitationGardee, couleurAvatar, initiales, mesBinomes, type Plongeur } from "@/lib/amis";
+import {
+  accepterInvitationGardee,
+  ajouterPlongeeIdentifiee,
+  chiffresPlongee,
+  compterPlongeesEnsemble,
+  couleurAvatar,
+  dateCourte,
+  initiales,
+  mesBinomes,
+  plongeesAConfirmer,
+  plongeesEnsembleTexte,
+  refuserIdentification,
+  type PlongeeAConfirmer,
+  type Plongeur,
+} from "@/lib/amis";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { utilisateurConnecte } from "@/lib/plongees";
 
@@ -28,6 +42,9 @@ function PageAmis() {
   const [binomes, setBinomes] = useState<Plongeur[] | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [aConfirmer, setAConfirmer] = useState<PlongeeAConfirmer[]>([]);
+  const [comptes, setComptes] = useState<Record<string, number>>({});
+  const [reponseEnCours, setReponseEnCours] = useState<string | null>(null);
   const finMessage = useCallback(() => {
     effacerMessageAccueil();
     setMessage(null);
@@ -45,8 +62,15 @@ function PageAmis() {
       const recu = accepte ?? lireMessageAccueil();
       if (recu && actif) setMessage(recu);
       try {
-        const liste = await mesBinomes();
-        if (actif) setBinomes(liste);
+        const [liste, attente, nb] = await Promise.all([
+          mesBinomes(),
+          plongeesAConfirmer().catch(() => []),
+          compterPlongeesEnsemble().catch(() => ({})),
+        ]);
+        if (!actif) return;
+        setBinomes(liste);
+        setAConfirmer(attente);
+        setComptes(nb);
       } catch (e) {
         console.error(e);
         if (actif) {
@@ -61,6 +85,26 @@ function PageAmis() {
   }, []);
 
   const vide = binomes !== null && binomes.length === 0;
+
+  const repondre = async (p: PlongeeAConfirmer, ajouter: boolean) => {
+    setReponseEnCours(p.id);
+    try {
+      if (ajouter) {
+        await ajouterPlongeeIdentifiee(p.id);
+        setMessage("La plongée a été ajoutée à ton carnet");
+      } else {
+        await refuserIdentification(p.id);
+        setComptes((c) => ({ ...c, [p.de.id]: Math.max(0, (c[p.de.id] ?? 1) - 1) }));
+      }
+      setAConfirmer((l) => l.filter((x) => x.id !== p.id));
+    } catch (e) {
+      console.error(e);
+      setMessage(null);
+      setErreur(`Ça n'a pas marché, réessaie.${e && typeof e === "object" && "message" in e ? ` (détail : ${String(e.message)})` : ""}`);
+    } finally {
+      setReponseEnCours(null);
+    }
+  };
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#F1F6FC] text-[#123A63] supports-[height:100dvh]:h-[100dvh]">
@@ -122,6 +166,59 @@ function PageAmis() {
             </div>
           ) : binomes ? (
             <>
+              {aConfirmer.length > 0 && (
+                <>
+                  <div className="flex items-center gap-[8px] pb-[10px] pt-[22px]">
+                    <h2 className="text-[17px] font-bold">À confirmer</h2>
+                    <span className="flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-[#FF8A75] px-[6px] text-[12px] font-bold text-white">
+                      {aConfirmer.length}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-[10px]">
+                    {aConfirmer.map((p) => (
+                      <div key={p.id} className="rounded-[20px] border border-[#FFD3C8] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
+                        <div className="flex items-center gap-[11px]">
+                          <span
+                            className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full text-[13.5px] font-bold text-[#0F3D70]"
+                            style={{ background: couleurAvatar(p.de.id) }}
+                          >
+                            {initiales(p.de.prenom)}
+                          </span>
+                          <span className="min-w-0 text-[13.5px] leading-snug text-[#5B7189]">
+                            <b className="text-[#123A63]">{p.de.prenom}</b> t'a identifié sur une plongée
+                          </span>
+                        </div>
+                        <div className="mt-[11px] rounded-[14px] bg-[#F1F6FC] px-[12px] py-[10px]">
+                          <div className="truncate text-[14.5px] font-bold">
+                            {p.site || "Site non renseigné"} · {dateCourte(p.date)}
+                          </div>
+                          {(p.lieu || chiffresPlongee(p)) && (
+                            <div className="truncate pt-[2px] text-[12.5px] text-[#5B7189]">{[p.lieu, chiffresPlongee(p)].filter(Boolean).join(" · ")}</div>
+                          )}
+                        </div>
+                        <div className="mt-[11px] flex items-center gap-[12px]">
+                          <button
+                            type="button"
+                            disabled={reponseEnCours === p.id}
+                            onClick={() => void repondre(p, true)}
+                            className="flex h-[42px] flex-1 items-center justify-center rounded-[14px] bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
+                          >
+                            AJOUTER À MON CARNET
+                          </button>
+                          <button
+                            type="button"
+                            disabled={reponseEnCours === p.id}
+                            onClick={() => void repondre(p, false)}
+                            className="px-[4px] text-[12.5px] font-semibold text-[#5B7189] underline underline-offset-4 disabled:opacity-60"
+                          >
+                            Pas moi
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
               <div className="flex items-baseline justify-between pb-[10px] pt-[22px]">
                 <h2 className="text-[17px] font-bold">Mes binômes</h2>
                 <span className="text-[12.5px] text-[#9DB0C0]">
@@ -130,20 +227,26 @@ function PageAmis() {
               </div>
               <div className="overflow-hidden rounded-[20px] border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
                 {binomes.map((b) => (
-                  <div key={b.id} className="flex items-center gap-[12px] border-t border-[#EDF2F7] px-[14px] py-[12px] first:border-t-0">
+                  <button
+                    key={b.id}
+                    type="button"
+                    onClick={() => navigate({ to: "/amis/binome", search: { id: b.id } })}
+                    className="flex w-full items-center gap-[12px] border-t border-[#EDF2F7] px-[14px] py-[12px] text-left first:border-t-0"
+                  >
                     <span
                       className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full text-[14px] font-bold text-[#0F3D70]"
                       style={{ background: couleurAvatar(b.id) }}
                     >
                       {initiales(b.prenom)}
                     </span>
-                    <span className="min-w-0">
+                    <span className="min-w-0 flex-1">
                       <span className="block truncate text-[15.5px] font-bold">{b.prenom}</span>
                       <span className="block truncate text-[12.5px] text-[#5B7189]">
-                        {[b.niveau, b.club].filter(Boolean).join(" · ") || "Binôme Palanote"}
+                        {[plongeesEnsembleTexte(comptes[b.id] ?? 0), b.niveau].filter(Boolean).join(" · ")}
                       </span>
                     </span>
-                  </div>
+                    <ChevronRight className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+                  </button>
                 ))}
               </div>
               <button

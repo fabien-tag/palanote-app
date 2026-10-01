@@ -25,6 +25,7 @@ import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
+import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
 import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
 import { Route as NumeriserChoisirRouteImport } from './routes/numeriser_.choisir'
 import { Route as NumeriserFinRouteImport } from './routes/numeriser_.fin'
@@ -112,6 +113,11 @@ const AmisAjouterRoute = AmisAjouterRouteImport.update({
   path: '/amis/ajouter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AmisBinomeRoute = AmisBinomeRouteImport.update({
+  id: '/amis_/binome',
+  path: '/amis/binome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NumeriserCaptureRoute = NumeriserCaptureRouteImport.update({
   id: '/numeriser_/capture',
   path: '/numeriser/capture',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
+  '/amis/binome': typeof AmisBinomeRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -184,6 +191,7 @@ export interface FileRoutesByTo {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
+  '/amis/binome': typeof AmisBinomeRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -209,6 +217,7 @@ export interface FileRoutesById {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/site': typeof SiteRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
+  '/amis_/binome': typeof AmisBinomeRoute
   '/numeriser_/capture': typeof NumeriserCaptureRoute
   '/numeriser_/choisir': typeof NumeriserChoisirRoute
   '/numeriser_/fin': typeof NumeriserFinRoute
@@ -235,6 +244,7 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/site'
     | '/amis/ajouter'
+    | '/amis/binome'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -259,6 +269,7 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/site'
     | '/amis/ajouter'
+    | '/amis/binome'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -283,6 +294,7 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/site'
     | '/amis_/ajouter'
+    | '/amis_/binome'
     | '/numeriser_/capture'
     | '/numeriser_/choisir'
     | '/numeriser_/fin'
@@ -308,6 +320,7 @@ export interface RootRouteChildren {
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   SiteRoute: typeof SiteRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
+  AmisBinomeRoute: typeof AmisBinomeRoute
   NumeriserCaptureRoute: typeof NumeriserCaptureRoute
   NumeriserChoisirRoute: typeof NumeriserChoisirRoute
   NumeriserFinRoute: typeof NumeriserFinRoute
@@ -430,6 +443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisAjouterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/amis_/binome': {
+      id: '/amis_/binome'
+      path: '/amis/binome'
+      fullPath: '/amis/binome'
+      preLoaderRoute: typeof AmisBinomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/numeriser_/capture': {
       id: '/numeriser_/capture'
       path: '/numeriser/capture'
@@ -492,6 +512,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   SiteRoute: SiteRoute,
   AmisAjouterRoute: AmisAjouterRoute,
+  AmisBinomeRoute: AmisBinomeRoute,
   NumeriserCaptureRoute: NumeriserCaptureRoute,
   NumeriserChoisirRoute: NumeriserChoisirRoute,
   NumeriserFinRoute: NumeriserFinRoute,
