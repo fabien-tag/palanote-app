@@ -313,7 +313,7 @@ function Carnet() {
         <button
           type="button"
           onClick={() => navigate({ to: "/nouvelle-plongee" })}
-          className="fixed bottom-[112px] right-[max(24px,calc(50vw-215px+24px))] z-20 flex h-[52px] items-center gap-[9px] rounded-[26px] bg-[#3DEFBE] px-[19px] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322]"
+          className="fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-[max(24px,calc(50vw-215px+24px))] z-20 flex h-[52px] items-center gap-[9px] rounded-[26px] bg-[#3DEFBE] px-[19px] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322]"
         >
           <Plus className="h-[20px] w-[20px]" strokeWidth={2} aria-hidden="true" />
           Plongée

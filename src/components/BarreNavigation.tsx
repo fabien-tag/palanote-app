@@ -16,11 +16,11 @@ export function BarreNavigation({ actif }: { actif: Onglet }) {
   return (
     <nav
       aria-label="Navigation principale"
-      className="sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white px-[28px] pb-[24px] pt-[10px] min-h-[96px]"
+      className="sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white px-[28px] pt-[10px] pb-[calc(10px+env(safe-area-inset-bottom))]"
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-[3px] top-[48%] h-[49px] w-[27px] -rotate-[8deg]"
+        className="pointer-events-none absolute bottom-[calc(4px+env(safe-area-inset-bottom))] left-[3px] h-[49px] w-[27px] -rotate-[8deg]"
       >
         <svg viewBox="0 0 58 108" className="h-full w-full" fill="none">
           <g stroke="#FF8A75" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round">
