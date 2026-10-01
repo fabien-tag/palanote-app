@@ -134,6 +134,7 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
   const { data, error } = await supabase
     .from("dives")
     .select("id, dive_date, site_name, site_location, max_depth_m, duration_min, temp_bottom_c, gas_mix, rating, buddies, dive_type")
+    .is("deleted_at", null) // les plongées supprimées n'apparaissent plus
     .order("dive_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
   if (error) throw error;
@@ -154,7 +155,7 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
 
 // Une plongée complète du compte connecté (pour la page détail).
 export async function chargerPlongee(id: string): Promise<LignePlongee | null> {
-  const { data, error } = await supabase.from("dives").select("*").eq("id", id).maybeSingle();
+  const { data, error } = await supabase.from("dives").select("*").eq("id", id).is("deleted_at", null).maybeSingle();
   if (error) throw error;
   return (data as LignePlongee | null) ?? null;
 }
