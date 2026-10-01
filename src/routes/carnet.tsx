@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Camera, ChevronRight, Plus, BookOpen, Bell } from "lucide-react";
+import { Camera, ChevronRight, Plus, Watch, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -222,7 +222,7 @@ function Carnet() {
             className="relative flex items-center gap-[13px] rounded-2xl bg-white p-[13px] text-left shadow-sm"
           >
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#57D4F5]/[0.18]">
-              <BookOpen className="h-[30px] w-[30px] text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
+              <Watch className="h-[30px] w-[30px] text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
             </div>
             <div className="flex min-w-0 flex-grow flex-col gap-0.5">
               <span className="text-[15px] font-semibold text-[#123A63]">
