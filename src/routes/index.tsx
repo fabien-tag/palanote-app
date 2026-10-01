@@ -59,7 +59,7 @@ function Splash() {
     // Hauteur calée sur la partie visible de l'écran (100dvh = hors barres du navigateur) :
     // tout reste visible, accordéon ouvert compris : quand il s'ouvre, le reste se compacte
     // (logo, titre, phrase d'accroche) pour laisser la place à la liste. Défilement en dernier recours.
-    <div className="relative flex h-screen h-[100dvh] justify-center overflow-hidden bg-abyss">
+    <div className="relative flex h-screen supports-[height:100dvh]:h-[100dvh] justify-center overflow-hidden bg-abyss">
       <img
         src={fondAsset}
         alt=""
@@ -67,8 +67,8 @@ function Splash() {
       />
       <div className="pointer-events-none absolute inset-0 bg-abyss/40" />
       <div
-        className={`relative flex h-full w-full max-w-[430px] flex-col px-6 pb-[clamp(14px,3vh,24px)] transition-all duration-300 ${
-          expanded ? "pt-[clamp(12px,3.5vh,48px)]" : "pt-[clamp(20px,7vh,64px)]"
+        className={`relative flex h-full w-full max-w-[430px] flex-col px-6 pb-[max(clamp(14px,3svh,24px),env(safe-area-inset-bottom))] transition-all duration-300 ${
+          expanded ? "pt-[clamp(12px,3.5svh,48px)]" : "pt-[clamp(20px,7svh,64px)]"
         }`}
       >
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -76,13 +76,13 @@ function Splash() {
           <img
             src={logoAsset}
             alt="Palanote"
-            className={`w-auto transition-all duration-300 ${expanded ? "h-[clamp(36px,6.4vh,72px)]" : "h-[clamp(64px,12.5vh,112px)]"}`}
+            className={`w-auto transition-all duration-300 ${expanded ? "h-[clamp(36px,6.4svh,72px)]" : "h-[clamp(64px,12.5svh,112px)]"}`}
           />
           <h1
             className={`leading-tight font-bold text-white transition-all duration-300 ${
               expanded
-                ? "mt-[clamp(8px,1.8vh,20px)] text-[clamp(20px,3.3vh,26px)]"
-                : "mt-[clamp(14px,3.6vh,32px)] text-[clamp(24px,4.3vh,30px)]"
+                ? "mt-[clamp(8px,1.8svh,20px)] text-[clamp(20px,3.3svh,26px)]"
+                : "mt-[clamp(14px,3.6svh,32px)] text-[clamp(24px,4.3svh,30px)]"
             }`}
           >
             Ton carnet de plongée
@@ -95,7 +95,7 @@ function Splash() {
               expanded ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
             }`}
           >
-            <p className="overflow-hidden pt-[clamp(8px,1.9vh,16px)] text-[clamp(14px,2.3vh,16px)] leading-relaxed text-ciel">
+            <p className="overflow-hidden pt-[clamp(8px,1.9svh,16px)] text-[clamp(14px,2.3svh,16px)] leading-relaxed text-ciel">
               Photographie tes anciens carnets, retrouve tes binômes, organise
               tes sorties et équipe-toi d'occasion. Tout au même endroit.
             </p>
@@ -105,7 +105,7 @@ function Splash() {
             type="button"
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
-            className={`flex items-center gap-2 text-sm font-medium text-lagon ${expanded ? "mt-[clamp(0px,0.6vh,8px)] min-h-[40px]" : "mt-[clamp(6px,2.4vh,24px)] min-h-[44px]"}`}
+            className={`flex items-center gap-2 text-sm font-medium text-lagon ${expanded ? "mt-[clamp(0px,0.6svh,8px)] min-h-[40px]" : "mt-[clamp(6px,2.4svh,24px)] min-h-[44px]"}`}
           >
             Voir tout ce que l'app fait
             <span
@@ -124,13 +124,13 @@ function Splash() {
             }`}
           >
             <div className="overflow-hidden">
-              <ul className="space-y-[clamp(7px,1.6vh,20px)] text-left">
+              <ul className="space-y-[clamp(7px,1.6svh,20px)] text-left">
                 {BENEFITS.map((b) => (
                   <li key={b.title}>
-                    <p className="text-[clamp(14px,2.3vh,16px)] font-semibold leading-snug text-white">
+                    <p className="text-[clamp(14px,2.3svh,16px)] font-semibold leading-snug text-white">
                       {b.title}
                     </p>
-                    <p className="mt-[2px] text-[clamp(12.5px,2vh,14px)] leading-snug text-ciel/80">
+                    <p className="mt-[2px] text-[clamp(12.5px,2svh,14px)] leading-snug text-ciel/80">
                       {b.body}
                     </p>
                   </li>
@@ -141,7 +141,7 @@ function Splash() {
           </div>
         </div>
 
-        <div className="shrink-0 space-y-3 pt-[clamp(10px,2vh,16px)]">
+        <div className="shrink-0 space-y-3 pt-[clamp(10px,2svh,16px)]">
           <Link
             to="/connexion"
             className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] border border-ciel/40 text-sm font-bold tracking-wide text-white"
@@ -155,7 +155,7 @@ function Splash() {
             CRÉER UN COMPTE
           </Link>
         </div>
-        <p className="mt-[clamp(8px,1.9vh,16px)] shrink-0 text-center text-xs leading-relaxed text-blanc/70">
+        <p className="mt-[clamp(8px,1.9svh,16px)] shrink-0 text-center text-xs leading-relaxed text-blanc/70">
           En continuant, tu acceptes nos conditions d'utilisation et notre
           politique de confidentialité.
         </p>
