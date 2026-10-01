@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import logoHorizontal from "@/assets/logo-horizontal.png";
+import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 import {
   chargerNumeroDepart,
@@ -172,7 +172,7 @@ function Carnet() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/25 to-black/55" aria-hidden="true" />
         <div className="relative mx-auto flex w-full max-w-[430px] flex-1 flex-col px-6 pt-5">
           <div className="flex items-center justify-between">
-            <img src={logoHorizontal} alt="Palanote" className="h-auto w-[142px]" />
+            <img src={logoCorail} alt="Palanote" className="h-[30px] w-auto" />
             <button
               type="button"
               aria-label="Notifications"

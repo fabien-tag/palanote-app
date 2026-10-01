@@ -1,5 +1,5 @@
 import { Bell, Camera, ChevronRight, Fish, Star, Users } from "lucide-react";
-import logoHorizontal from "@/assets/logo-horizontal.png";
+import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 import { dureeEnMinutes, type CartePlongee } from "@/lib/plongees";
 
@@ -65,7 +65,7 @@ export function EnTeteStatistiques({
       />
       <div className="relative mx-auto flex h-full w-full max-w-[430px] flex-col">
         <div className="flex items-center justify-between px-[22px] pt-[18px]">
-          <img src={logoHorizontal} alt="Palanote" className="h-auto w-[142px]" />
+          <img src={logoCorail} alt="Palanote" className="h-[30px] w-auto" />
           <button
             type="button"
             aria-label="Notifications"
