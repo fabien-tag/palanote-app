@@ -38,6 +38,7 @@ function Moi() {
   const [connecte, setConnecte] = useState<boolean | null>(null);
   const [profil, setProfil] = useState<Profil | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [mesPlongees, setMesPlongees] = useState<CartePlongee[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [exportEnCours, setExportEnCours] = useState(false);
@@ -63,6 +64,7 @@ function Moi() {
       if (!actif) return;
       setProfil(p);
       setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? ""));
+      setMesPlongees(liste);
     })();
     return () => {
       actif = false;
@@ -154,6 +156,9 @@ function Moi() {
                 ))}
               </div>
 
+              {/* Graphique : plongées mois par mois */}
+              {mesPlongees.length > 0 && <GraphiqueMois plongees={mesPlongees} />}
+
               {/* Appel au Récif */}
               <button
                 type="button"
@@ -196,6 +201,70 @@ function Moi() {
       <div className="mx-auto w-full max-w-[430px] shrink-0">
         <BarreNavigation actif="moi" />
       </div>
+    </div>
+  );
+}
+
+// ---------- « Tes plongées, mois par mois » (maquette du bilan annuel) ----------
+
+const INITIALES_MOIS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+const NOMS_MOIS = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+function GraphiqueMois({ plongees }: { plongees: CartePlongee[] }) {
+  const annees = [...new Set(plongees.map((p) => p.date.slice(0, 4)).filter((a) => /^\d{4}$/.test(a)))].sort().reverse();
+  const [annee, setAnnee] = useState(annees[0] ?? "");
+  if (annees.length === 0) return null;
+  const parMois = Array.from({ length: 12 }, () => 0);
+  for (const p of plongees) if (p.date.startsWith(annee)) parMois[Number(p.date.slice(5, 7)) - 1]! += 1;
+  const max = Math.max(...parMois);
+  const total = parMois.reduce((a, b) => a + b, 0);
+  const meilleur = parMois.indexOf(max);
+  const vides = parMois.filter((n) => n === 0).length;
+  const seulMeilleur = max > 1 && parMois.filter((n) => n === max).length === 1;
+  return (
+    <div className="mt-[12px] rounded-[20px] border border-[#E4EBF1] bg-white px-[16px] pb-[14px] pt-[15px] shadow-[0_4px_14px_#123A6306]">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-[14.5px] font-bold">Tes plongées, mois par mois</h2>
+        {annees.length > 1 ? (
+          <select
+            value={annee}
+            onChange={(e) => setAnnee(e.target.value)}
+            aria-label="Année"
+            className="rounded-[10px] bg-[#EEF4F9] px-[8px] py-[4px] text-[12.5px] font-semibold text-[#123A63] outline-none"
+          >
+            {annees.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <span className="text-[12.5px] font-semibold text-[#9DB0C0]">{annee}</span>
+        )}
+      </div>
+      <div className="mt-[14px] flex h-[96px] items-end gap-[5px]" role="img" aria-label={`Plongées par mois en ${annee}`}>
+        {parMois.map((n, i) => (
+          <div key={i} className="flex h-full flex-1 flex-col items-center justify-end gap-[3px]">
+            {n > 0 && <span className={`text-[11px] font-bold ${seulMeilleur && i === meilleur ? "text-[#123A63]" : "text-[#7D93A8]"}`}>{n}</span>}
+            <div
+              className={`w-full rounded-t-[5px] ${n === 0 ? "bg-[#E7EFF6]" : seulMeilleur && i === meilleur ? "bg-[#0F3D70]" : "bg-[#9ACDEB]"}`}
+              style={{ height: n === 0 ? 3 : `${Math.max(10, (n / max) * 70)}px` }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="mt-[6px] flex gap-[5px]">
+        {INITIALES_MOIS.map((m, i) => (
+          <span key={i} className="flex-1 text-center text-[10.5px] text-[#9DB0C0]">
+            {m}
+          </span>
+        ))}
+      </div>
+      <p className="pt-[10px] text-[12.5px] leading-normal text-[#5B7189]">
+        {total} plongée{total > 1 ? "s" : ""} en {annee}.
+        {seulMeilleur ? ` ${NOMS_MOIS[meilleur]} t'en a pris ${max}.` : ""}
+        {vides > 0 ? ` ${vides} mois sans plongée.` : ""}
+      </p>
     </div>
   );
 }
