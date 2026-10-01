@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CarnetRouteImport } from './routes/carnet'
+import { Route as CarteRouteImport } from './routes/carte'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
@@ -20,6 +21,7 @@ import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-p
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
+import { Route as SiteRouteImport } from './routes/site'
 import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
 import { Route as NumeriserChoisirRouteImport } from './routes/numeriser_.choisir'
 import { Route as NumeriserFinRouteImport } from './routes/numeriser_.fin'
@@ -35,6 +37,11 @@ const IndexRoute = IndexRouteImport.update({
 const CarnetRoute = CarnetRouteImport.update({
   id: '/carnet',
   path: '/carnet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarteRoute = CarteRouteImport.update({
+  id: '/carte',
+  path: '/carte',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompteCreeRoute = CompteCreeRouteImport.update({
@@ -82,6 +89,11 @@ const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
   path: '/profil-plongeur',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SiteRoute = SiteRouteImport.update({
+  id: '/site',
+  path: '/site',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NumeriserCaptureRoute = NumeriserCaptureRouteImport.update({
   id: '/numeriser_/capture',
   path: '/numeriser/capture',
@@ -116,6 +128,7 @@ const NumeriserReprendreRoute = NumeriserReprendreRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/carnet': typeof CarnetRoute
+  '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
@@ -125,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/site': typeof SiteRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -135,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/carnet': typeof CarnetRoute
+  '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
@@ -144,6 +159,7 @@ export interface FileRoutesByTo {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/site': typeof SiteRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -155,6 +171,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/carnet': typeof CarnetRoute
+  '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
@@ -164,6 +181,7 @@ export interface FileRoutesById {
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
+  '/site': typeof SiteRoute
   '/numeriser_/capture': typeof NumeriserCaptureRoute
   '/numeriser_/choisir': typeof NumeriserChoisirRoute
   '/numeriser_/fin': typeof NumeriserFinRoute
@@ -176,6 +194,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/carnet'
+    | '/carte'
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
@@ -185,6 +204,7 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/site'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -195,6 +215,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/carnet'
+    | '/carte'
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
@@ -204,6 +225,7 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/site'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -214,6 +236,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/carnet'
+    | '/carte'
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
@@ -223,6 +246,7 @@ export interface FileRouteTypes {
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/profil-plongeur'
+    | '/site'
     | '/numeriser_/capture'
     | '/numeriser_/choisir'
     | '/numeriser_/fin'
@@ -234,6 +258,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CarnetRoute: typeof CarnetRoute
+  CarteRoute: typeof CarteRoute
   CompteCreeRoute: typeof CompteCreeRoute
   ConnexionRoute: typeof ConnexionRoute
   CreerUnCompteRoute: typeof CreerUnCompteRoute
@@ -243,6 +268,7 @@ export interface RootRouteChildren {
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
   NumeriserRoute: typeof NumeriserRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
+  SiteRoute: typeof SiteRoute
   NumeriserCaptureRoute: typeof NumeriserCaptureRoute
   NumeriserChoisirRoute: typeof NumeriserChoisirRoute
   NumeriserFinRoute: typeof NumeriserFinRoute
@@ -265,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/carnet'
       fullPath: '/carnet'
       preLoaderRoute: typeof CarnetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carte': {
+      id: '/carte'
+      path: '/carte'
+      fullPath: '/carte'
+      preLoaderRoute: typeof CarteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compte-cree': {
@@ -330,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfilPlongeurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/site': {
+      id: '/site'
+      path: '/site'
+      fullPath: '/site'
+      preLoaderRoute: typeof SiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/numeriser_/capture': {
       id: '/numeriser_/capture'
       path: '/numeriser/capture'
@@ -378,6 +418,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CarnetRoute: CarnetRoute,
+  CarteRoute: CarteRoute,
   CompteCreeRoute: CompteCreeRoute,
   ConnexionRoute: ConnexionRoute,
   CreerUnCompteRoute: CreerUnCompteRoute,
@@ -387,6 +428,7 @@ const rootRouteChildren: RootRouteChildren = {
   NouvellePlongeeRoute: NouvellePlongeeRoute,
   NumeriserRoute: NumeriserRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
+  SiteRoute: SiteRoute,
   NumeriserCaptureRoute: NumeriserCaptureRoute,
   NumeriserChoisirRoute: NumeriserChoisirRoute,
   NumeriserFinRoute: NumeriserFinRoute,

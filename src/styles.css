@@ -202,3 +202,24 @@
   }
 }
 
+
+/* Cartes : mention des sources discrète, en petite pastille (comme sur les maquettes). */
+.leaflet-container {
+  font-family: inherit;
+}
+.leaflet-container .leaflet-control-attribution {
+  margin: 0 0 6px 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 1px 6px;
+  font-size: 9px;
+  line-height: 1.5;
+  color: #5b7189;
+}
+.leaflet-container .leaflet-control-attribution a {
+  color: #1176a8;
+}
+.leaflet-bottom.leaflet-right {
+  right: auto;
+  left: 0;
+}

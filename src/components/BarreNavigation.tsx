@@ -4,9 +4,9 @@ import { BookOpen, MapPin, User, Users } from "lucide-react";
 // Barre de navigation du bas, commune aux pages internes.
 type Onglet = "carnet" | "carte" | "amis" | "moi";
 
-const onglets: { id: Onglet; label: string; icone: typeof BookOpen; to?: "/carnet" | "/moi" }[] = [
+const onglets: { id: Onglet; label: string; icone: typeof BookOpen; to?: "/carnet" | "/carte" | "/moi" }[] = [
   { id: "carnet", label: "Carnet", icone: BookOpen, to: "/carnet" },
-  { id: "carte", label: "Carte", icone: MapPin },
+  { id: "carte", label: "Carte", icone: MapPin, to: "/carte" },
   { id: "amis", label: "Amis", icone: Users },
   { id: "moi", label: "Moi", icone: User, to: "/moi" },
 ];

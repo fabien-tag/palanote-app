@@ -35,7 +35,7 @@ export const FONDS: Record<"osm" | "ocean", FondDeCarte> = {
     fond: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 10, maxZoom: 10 },
     noms: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 10, maxZoom: 10 },
     relais: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", maxNativeZoom: 19, minZoom: 11 },
-    attribution: 'Fond © Esri — GEBCO, NOAA, National Geographic · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    attribution: '© Esri, GEBCO, NOAA · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     zoomMax: 19,
   },
 };
