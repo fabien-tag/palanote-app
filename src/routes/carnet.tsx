@@ -4,7 +4,7 @@ import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from 
 import { supabase } from "@/lib/supabase";
 import logoHorizontal from "@/assets/logo-horizontal.png";
 import fondMarin from "@/assets/fond-marin.mp4";
-import { lirePlongees, type CartePlongee } from "@/lib/plongees";
+import { chargerPlongees, lirePlongees, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
 import { CarteDePlongee } from "@/components/CarteDePlongee";
 
 export const Route = createFileRoute("/carnet")({
@@ -34,7 +34,22 @@ function Carnet() {
   const navigate = useNavigate();
   void supabase;
   const [plongees, setPlongees] = useState<CartePlongee[]>([]);
-  useEffect(() => setPlongees([...lirePlongees()]), []);
+  useEffect(() => {
+    let actif = true;
+    (async () => {
+      // Connecté : plongées du compte (Supabase). Sinon : celles gardées sur l'appareil.
+      try {
+        const liste = (await utilisateurConnecte()) ? await chargerPlongees() : [...lirePlongees()];
+        if (actif) setPlongees(liste);
+      } catch (e) {
+        console.error(e);
+        if (actif) setPlongees([...lirePlongees()]);
+      }
+    })();
+    return () => {
+      actif = false;
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#E7F1FA]">

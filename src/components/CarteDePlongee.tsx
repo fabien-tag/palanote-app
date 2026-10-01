@@ -1,5 +1,5 @@
 import { MapPin, Star, CameraOff } from "lucide-react";
-import type { CartePlongee } from "@/lib/plongees";
+import { minutesEnTexte, type CartePlongee } from "@/lib/plongees";
 
 const MOIS = ["JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DÉCEMBRE"];
 const AVATARS = ["#3DEFBE", "#FF8A75", "#57D4F5", "#FFC65C"];
@@ -13,7 +13,7 @@ export function CarteDePlongee({ p }: { p: CartePlongee }) {
   const d = p.date ? new Date(p.date) : null;
   const valide = d && !isNaN(d.getTime());
   const infos = [
-    p.duree && `${p.duree} min`,
+    p.duree && minutesEnTexte(p.duree),
     p.tempFond && `${p.tempFond} °C`,
     p.melange && p.melange.toLowerCase(),
   ].filter(Boolean);
