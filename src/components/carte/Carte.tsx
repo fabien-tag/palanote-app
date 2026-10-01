@@ -67,10 +67,18 @@ export function Carte({
         boxZoom: interactive,
         keyboard: interactive,
       });
-      const { fond, noms, attribution, zoomMax } = FOND_DE_CARTE;
-      const options = { maxZoom: zoomMax, referrerPolicy: "strict-origin-when-cross-origin" as const };
-      L.tileLayer(fond.url, { ...options, maxNativeZoom: fond.maxNativeZoom, attribution }).addTo(c);
-      if (noms) L.tileLayer(noms.url, { ...options, maxNativeZoom: noms.maxNativeZoom }).addTo(c);
+      const { fond, relais, noms, attribution, zoomMax } = FOND_DE_CARTE;
+      const couche = (x: NonNullable<typeof relais>, avecAttribution = false) =>
+        L.tileLayer(x.url, {
+          maxNativeZoom: x.maxNativeZoom,
+          minZoom: x.minZoom ?? 0,
+          maxZoom: x.maxZoom ?? zoomMax,
+          referrerPolicy: "strict-origin-when-cross-origin",
+          ...(avecAttribution ? { attribution } : {}),
+        }).addTo(c);
+      couche(fond, true);
+      if (relais) couche(relais);
+      if (noms) couche(noms);
       c.attributionControl.setPrefix(false);
       c.on("moveend", () => {
         const m = c.getCenter();

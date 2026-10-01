@@ -8,9 +8,12 @@
 // par un fournisseur avec clé (MapTiler, Stadia…) : le reste de l'app ne bouge pas.
 // ============================================================
 
-type Couche = { url: string; maxNativeZoom: number };
+// minZoom / maxZoom : niveaux de zoom où la couche s'affiche.
+type Couche = { url: string; maxNativeZoom: number; minZoom?: number; maxZoom?: number };
 export type FondDeCarte = {
   fond: Couche;
+  /** Fond de relais quand on zoome au-delà du fond principal (facultatif). */
+  relais?: Couche;
   /** Couche de noms posée par-dessus (facultative). */
   noms?: Couche;
   attribution: string;
@@ -24,14 +27,16 @@ export const FONDS: Record<"osm" | "ocean", FondDeCarte> = {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     zoomMax: 19,
   },
-  // Carte « océan » d'Esri : relief des fonds marins en dégradés de bleu.
-  // Gratuite pour tester ; pour une app publiée, Esri demande un compte (gratuit).
-  // Les tuiles détaillées s'arrêtent vers le zoom 13 : au-delà, elles sont agrandies.
+  // Carte « océan » d'Esri (relief des fonds marins en dégradés de bleu), utilisée tant qu'on
+  // voit large (jusqu'au zoom 10, couvert partout dans le monde). Plus près, Esri n'a pas
+  // de données partout (« Map data not yet available ») : on passe sur OpenStreetMap,
+  // qui fonctionne à tous les niveaux. Pour une app publiée, Esri demande un compte (gratuit).
   ocean: {
-    fond: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 13 },
-    noms: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 13 },
-    attribution: "Fond © Esri — GEBCO, NOAA, National Geographic, Garmin, HERE",
-    zoomMax: 17,
+    fond: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 10, maxZoom: 10 },
+    noms: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 10, maxZoom: 10 },
+    relais: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", maxNativeZoom: 19, minZoom: 11 },
+    attribution: 'Fond © Esri — GEBCO, NOAA, National Geographic · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    zoomMax: 19,
   },
 };
 
