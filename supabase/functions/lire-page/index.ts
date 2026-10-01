@@ -8,8 +8,10 @@
 //
 // Secret requis (Supabase → Edge Functions → Secrets) : ANTHROPIC_API_KEY
 // Optionnel : ANTHROPIC_MODEL (par défaut claude-sonnet-5-5)
-// SUPABASE_URL, SUPABASE_ANON_KEY et SUPABASE_SERVICE_ROLE_KEY sont fournis
-// automatiquement par Supabase.
+// SUPABASE_URL et la clé secrète du projet sont fournis automatiquement par
+// Supabase (nouvelles clés SUPABASE_SECRET_KEYS ou ancienne SUPABASE_SERVICE_ROLE_KEY).
+// La personne connectée est vérifiée ici même : l'option « Verify JWT with legacy
+// secret » de la fonction peut rester désactivée.
 // ============================================================
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 
@@ -106,6 +108,18 @@ Règles :
 - « lu » contient toujours le texte brut tel qu'il apparaît sur la page (ou null si rien n'est écrit).
 - Si la page n'est pas lisible ou n'est pas une page de carnet, lisible = false, plongees = [] et explique en une phrase dans « raison ».
 Appelle l'outil enregistrer_page avec ton résultat.`;
+
+// Clé secrète du projet, quel que soit le système de clés utilisé.
+function cleSecrete(): string {
+  const legacy = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (legacy) return legacy;
+  try {
+    const cles = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") ?? "{}") as Record<string, string>;
+    return cles["default"] ?? Object.values(cles)[0] ?? "";
+  } catch {
+    return "";
+  }
+}
 
 function json(corps: unknown, status = 200) {
   return new Response(JSON.stringify(corps), { status, headers: { ...CORS, "Content-Type": "application/json" } });
@@ -221,15 +235,22 @@ Deno.serve(async (req) => {
   }
   if (!pageId) return json({ erreur: "page_id manquant" }, 400);
 
-  // Vérifie que la page appartient bien à la personne connectée (règles RLS).
   const url = Deno.env.get("SUPABASE_URL")!;
-  const utilisateur = createClient(url, Deno.env.get("SUPABASE_ANON_KEY")!, {
-    global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } },
-  });
-  const { data: possedee } = await utilisateur.from("ocr_pages").select("id, batch_id").eq("id", pageId).maybeSingle();
+  const admin = createClient(url, cleSecrete(), { auth: { persistSession: false } });
+
+  // Vérifie la personne connectée, puis que la page lui appartient bien.
+  const jeton = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  const { data: auth } = jeton ? await admin.auth.getUser(jeton) : { data: { user: null } };
+  if (!auth?.user) return json({ erreur: "connexion requise" }, 401);
+
+  const { data: possedee } = await admin
+    .from("ocr_pages")
+    .select("id, batch_id, ocr_batches!inner(user_id)")
+    .eq("id", pageId)
+    .eq("ocr_batches.user_id", auth.user.id)
+    .maybeSingle();
   if (!possedee) return json({ erreur: "page introuvable" }, 404);
 
-  const admin = createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   await admin.from("ocr_pages").update({ statut: "en_cours", erreur: null }).eq("id", pageId);
   await admin.from("ocr_batches").update({ statut: "en_cours" }).eq("id", possedee.batch_id);
 
