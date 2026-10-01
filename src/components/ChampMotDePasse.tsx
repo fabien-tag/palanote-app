@@ -16,7 +16,7 @@ export function ChampMotDePasse({
 }) {
   const [visible, setVisible] = useState(false);
   return (
-    <div className="relative mt-2">
+    <div className="relative mt-[clamp(4px,0.9vh,8px)]">
       <input
         id={id}
         type={visible ? "text" : "password"}
@@ -25,7 +25,7 @@ export function ChampMotDePasse({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 pr-12 text-base text-foreground outline-none focus:border-lagon"
+        className="min-h-[clamp(46px,6.6vh,52px)] w-full rounded-[14px] border-0 bg-blanc px-4 pr-12 text-base text-foreground outline-none focus:border-lagon"
       />
       <button
         type="button"
