@@ -1,7 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
-import { MapPin, Crosshair, Plus, X, Star, Camera } from "lucide-react";
+import { MapPin, LocateFixed, Plus, X, Star, Camera } from "lucide-react";
+import { Carte } from "@/components/carte/Carte";
+import { ChoisirLieu } from "@/components/carte/ChoisirLieu";
+import { coordsLisibles, coordsVersTexte, texteVersCoords } from "@/lib/carte";
 import {
   chargerPlongee,
   dureeEnMinutes,
@@ -438,6 +441,9 @@ function NouvellePlongee() {
   }, [idExistant]);
   const [enCours, setEnCours] = useState(false);
   const [confirmerSuppression, setConfirmerSuppression] = useState(false);
+  // Choix du lieu sur la carte (null = fermé)
+  const [choixLieu, setChoixLieu] = useState<null | { geolocaliser: boolean }>(null);
+  const coordsSite = texteVersCoords(plongee.siteCoords);
   const [suppressionEnCours, setSuppressionEnCours] = useState(false);
   const supprimer = async () => {
     setSuppressionEnCours(true);
@@ -601,13 +607,28 @@ function NouvellePlongee() {
               <Label>Site</Label>
               <div className="overflow-hidden rounded-[14px] border-[1.5px] border-[#57D4F5]/75 bg-white">
                 <div className="flex gap-[13px] p-[14px]">
-                  <div className="relative h-[82px] w-[82px] shrink-0 overflow-hidden rounded-[14px] bg-gradient-to-br from-[#BFEBFA] via-[#7FD3F0] to-[#2E9FCB]">
-                    <div className="absolute inset-0 flex items-center justify-center">
+                  <button
+                    type="button"
+                    aria-label={coordsSite ? "Voir ou changer le lieu sur la carte" : "Choisir le lieu sur la carte"}
+                    disabled={!edition && !coordsSite}
+                    onClick={() => (edition ? setChoixLieu({ geolocaliser: false }) : undefined)}
+                    className="relative isolate h-[82px] w-[82px] shrink-0 overflow-hidden rounded-[14px] bg-gradient-to-br from-[#BFEBFA] via-[#7FD3F0] to-[#2E9FCB]"
+                  >
+                    {coordsSite && (
+                      <Carte
+                        key={`${coordsSite.lat},${coordsSite.lng}`}
+                        centre={coordsSite}
+                        zoom={10}
+                        interactive={false}
+                        className="pointer-events-none absolute inset-0 [&_.leaflet-control-attribution]:hidden"
+                      />
+                    )}
+                    <div className="absolute inset-0 z-[500] flex items-center justify-center">
                       <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border-[2.5px] border-white bg-[#FF8A75] shadow-md">
                         <MapPin className="h-3.5 w-3.5 text-white" strokeWidth={2.6} aria-hidden="true" />
                       </div>
                     </div>
-                  </div>
+                  </button>
                   <div className="flex min-w-0 flex-grow flex-col justify-center gap-1">
                     {edition ? (
                       <>
@@ -635,21 +656,29 @@ function NouvellePlongee() {
                     {plongee.siteCoords && (
                       <div className="flex items-center gap-1.5 pt-[2px]">
                         <div className="h-1.5 w-1.5 rounded-full bg-[#3DEFBE]" />
-                        <div className="text-[11.5px] text-[#9DB0C0]">{plongee.siteCoords}</div>
+                        <div className="text-[11.5px] text-[#9DB0C0]">{coordsSite ? coordsLisibles(coordsSite) : plongee.siteCoords}</div>
                       </div>
                     )}
                   </div>
                 </div>
                 {edition && (
                   <div className="flex border-t-[1.5px] border-[#EDF2F7]">
-                    <button type="button" className="flex h-[50px] flex-grow items-center justify-center gap-2 text-[13.5px] font-bold text-[#1176A8]">
-                      <MapPin className="h-[17px] w-[17px]" strokeWidth={2.1} aria-hidden="true" />
-                      Changer le site
+                    <button
+                      type="button"
+                      onClick={() => setChoixLieu({ geolocaliser: true })}
+                      className="flex h-[50px] flex-grow basis-0 items-center justify-center gap-2 text-[13.5px] font-bold text-[#1176A8]"
+                    >
+                      <LocateFixed className="h-[17px] w-[17px]" strokeWidth={2.1} aria-hidden="true" />
+                      Ma position
                     </button>
                     <div className="w-[1.5px] bg-[#EDF2F7]" />
-                    <button type="button" className="flex h-[50px] flex-grow items-center justify-center gap-2 text-[13.5px] font-bold text-[#1176A8]">
-                      <Crosshair className="h-[17px] w-[17px]" strokeWidth={2.1} aria-hidden="true" />
-                      Ajuster la position
+                    <button
+                      type="button"
+                      onClick={() => setChoixLieu({ geolocaliser: false })}
+                      className="flex h-[50px] flex-grow basis-0 items-center justify-center gap-2 text-[13.5px] font-bold text-[#1176A8]"
+                    >
+                      <MapPin className="h-[17px] w-[17px]" strokeWidth={2.1} aria-hidden="true" />
+                      {coordsSite ? "Ajuster sur la carte" : "Choisir sur la carte"}
                     </button>
                   </div>
                 )}
@@ -1111,6 +1140,24 @@ function NouvellePlongee() {
           )}
         </div>
       </div>
+
+      {choixLieu && (
+        <ChoisirLieu
+          depart={coordsSite}
+          lieuDepart={plongee.siteLieu || null}
+          geolocaliser={choixLieu.geolocaliser}
+          onFermer={() => setChoixLieu(null)}
+          onValider={({ coords, lieu, nom }) => {
+            setPlongee((p) => ({
+              ...p,
+              siteCoords: coordsVersTexte(coords),
+              siteLieu: lieu ?? p.siteLieu,
+              siteNom: p.siteNom || nom || "",
+            }));
+            setChoixLieu(null);
+          }}
+        />
+      )}
 
       {/* Confirmation avant de supprimer */}
       {confirmerSuppression && (
