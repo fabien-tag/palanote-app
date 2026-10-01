@@ -12,15 +12,6 @@ export function LigneDePlongee({ p, numero }: { p: CartePlongee; numero: number 
     p.tempFond && `${p.tempFond.replace(".", ",")} °C`,
     p.melange && p.melange.toLowerCase(),
   ].filter(Boolean);
-  const profondeur = p.profMax ? Number(p.profMax.replace(",", ".")) : null;
-  // Couleur de la pastille selon la profondeur : < 30 m, 30–39 m, 40 m et plus.
-  const couleur =
-    profondeur !== null && profondeur >= 40
-      ? "bg-[#FF8A75] text-[#6B1F14]"
-      : profondeur !== null && profondeur >= 30
-        ? "bg-[#3DEFBE] text-[#0B3B63]"
-        : "bg-[#57D4F5] text-[#06455F]";
-
   return (
     <div className="flex items-center gap-[11px] rounded-[16px] border border-[#DCE7F0] bg-white p-[9px] shadow-[0_4px_14px_#123A6308]">
       <div
@@ -37,7 +28,7 @@ export function LigneDePlongee({ p, numero }: { p: CartePlongee; numero: number 
           </span>
           {p.profMax && (
             <span
-              className={`flex h-[19px] shrink-0 items-center rounded-[10px] px-[8px] text-[10px] font-bold ${couleur}`}
+              className="flex h-[19px] shrink-0 items-center rounded-[10px] bg-[#3DEFBE] px-[8px] text-[10px] font-bold text-[#0B3B63]"
             >
               {p.profMax.replace(".", ",")} m
             </span>
