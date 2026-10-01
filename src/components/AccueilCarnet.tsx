@@ -219,7 +219,9 @@ export function RaccourcisAccueil() {
         <button
           key={titre}
           type="button"
-          className={`relative flex h-[150px] flex-col items-start gap-[10px] rounded-[20px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
+          aria-disabled="true"
+          aria-label={`${titre} — bientôt disponible`}
+          className={`relative flex h-[150px] cursor-default flex-col items-start gap-[10px] rounded-[20px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
         >
           <span className="flex h-[35px] w-[35px] shrink-0 items-center justify-center rounded-[12px] bg-[#DCEEF8]">
             <Icone className="h-[21px] w-[21px] text-[#5B7189]" strokeWidth={1.7} aria-hidden="true" />
@@ -228,11 +230,9 @@ export function RaccourcisAccueil() {
             <span className="block text-[14px] font-semibold leading-[1.35] text-[#123A63]">{titre}</span>
             <span className="mt-[6px] block text-[10px] leading-normal text-[#5B7189]">{texte}</span>
           </span>
-          <ChevronRight
-            className="absolute right-[14px] top-[22px] h-[15px] w-[15px] text-[#6387A4]"
-            strokeWidth={1.7}
-            aria-hidden="true"
-          />
+          <span className="absolute right-[12px] top-[21px] flex h-[19px] items-center rounded-[10px] bg-[#FFE6CC] px-[8px] text-[10px] font-semibold text-[#C2570C]">
+            Bientôt
+          </span>
         </button>
       ))}
     </div>
