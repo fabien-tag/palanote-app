@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { viderCacheCarnet } from "@/lib/plongees";
 
 // ============================================================
 // Binômes et invitations par QR code (onglet Amis)
@@ -165,6 +166,7 @@ export async function plongeesAConfirmer(): Promise<PlongeeAConfirmer[]> {
 export async function ajouterPlongeeIdentifiee(id: string): Promise<string> {
   const { data, error } = await supabase.rpc("ajouter_plongee_identifiee", { p_id: id });
   if (error) throw error;
+  viderCacheCarnet();
   return data as string;
 }
 

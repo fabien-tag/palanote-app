@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { chargerPlongees, lirePlongees, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
+import { cacheCarnetEnMemoire, chargerPlongees, lirePlongees, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
 
 // Plongées du carnet : celles du compte connecté (Supabase), sinon celles gardées sur l'appareil.
 export function usePlongees() {
-  const [plongees, setPlongees] = useState<CartePlongee[] | null>(null);
+  const [plongees, setPlongees] = useState<CartePlongee[] | null>(() => cacheCarnetEnMemoire()?.plongees ?? null);
   useEffect(() => {
     let actif = true;
     (async () => {

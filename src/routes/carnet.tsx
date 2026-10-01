@@ -5,8 +5,11 @@ import { supabase } from "@/lib/supabase";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 import {
+  cacheCarnetEnMemoire,
   chargerNumeroDepart,
   chargerPlongees,
+  ecrireCacheCarnet,
+  lireCacheCarnet,
   lirePlongees,
   utilisateurConnecte,
   type CartePlongee,
@@ -77,11 +80,14 @@ function Carnet() {
   // pour pouvoir la relire et la corriger. Remettre la vérification avant lancement.
   const navigate = useNavigate();
   void supabase;
-  const [plongees, setPlongees] = useState<CartePlongee[]>([]);
-  const [numeroDepart, setNumeroDepart] = useState(0);
+  // null = pas encore chargé : on n'affiche surtout pas l'accueil vide en attendant.
+  const [chargees, setPlongees] = useState<CartePlongee[] | null>(() => cacheCarnetEnMemoire()?.plongees ?? null);
+  const [numeroDepart, setNumeroDepart] = useState(() => cacheCarnetEnMemoire()?.depart ?? 0);
+  const plongees = chargees ?? [];
+  const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
-  const vide = plongees.length === 0;
+  const vide = !chargement && plongees.length === 0;
   const filtres = filtresDisponibles(plongees);
   const filtreActif = filtres.find((f) => f.id === filtre) ?? filtres[0]!;
   const groupes = grouperParAnnee(numeroter(plongees, numeroDepart).filter(({ p }) => filtreActif.teste(p)));
@@ -150,13 +156,22 @@ function Carnet() {
     let actif = true;
     (async () => {
       // Connecté : plongées du compte (Supabase). Sinon : celles gardées sur l'appareil.
+      // Copie de la session (après un rechargement de page) : affichée tout de suite.
+      const copie = lireCacheCarnet();
+      if (copie) {
+        setPlongees((p) => p ?? copie.plongees);
+        setNumeroDepart(copie.depart);
+      }
       try {
         const user = await utilisateurConnecte();
-        const liste = user ? await chargerPlongees() : [...lirePlongees()];
-        const depart = user ? await chargerNumeroDepart(user.id) : 0;
+        const [liste, depart] = await Promise.all([
+          user ? chargerPlongees() : Promise.resolve([...lirePlongees()]),
+          user ? chargerNumeroDepart(user.id) : Promise.resolve(0),
+        ]);
         if (!actif) return;
         setPlongees(liste);
         setNumeroDepart(depart);
+        ecrireCacheCarnet({ plongees: liste, depart });
       } catch (e) {
         console.error(e);
         if (actif) setPlongees([...lirePlongees()]);
@@ -166,6 +181,23 @@ function Carnet() {
       actif = false;
     };
   }, []);
+
+  // Premier chargement (aucune copie en mémoire) : squelette neutre, jamais l'accueil vide.
+  if (chargement)
+    return (
+      <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
+        <div className="h-[230px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
+        <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
+          <div className="flex flex-col gap-[12px] p-[22px]">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-[86px] animate-pulse rounded-[20px] bg-white shadow-[0_4px_14px_#123A6306]" />
+            ))}
+          </div>
+          <div className="flex-grow" />
+          <BarreNavigation actif="carnet" />
+        </div>
+      </div>
+    );
 
   return (
     <div ref={racine} className={`flex min-h-screen flex-col ${vide ? "bg-[#E7F1FA]" : "bg-[#F5F9FC]"}`} style={{ overflowAnchor: "none" }}>

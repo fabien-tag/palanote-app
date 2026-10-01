@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { viderCacheCarnet } from "@/lib/plongees";
 
 export async function signInWithEmail(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -69,5 +70,6 @@ export async function updatePassword(newPassword: string) {
 }
 
 export async function signOut() {
+  viderCacheCarnet();
   await supabase.auth.signOut();
 }

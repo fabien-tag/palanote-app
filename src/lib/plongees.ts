@@ -131,6 +131,7 @@ export async function sauverPlongee(ligne: LignePlongee) {
   if (!user) throw Object.assign(new Error("non_connecte"), { code: "non_connecte" });
   const { error } = await supabase.from("dives").upsert({ ...ligne, user_id: user.id });
   if (error) throw error;
+  viderCacheCarnet();
 }
 
 export async function chargerPlongees(): Promise<CartePlongee[]> {
@@ -195,6 +196,7 @@ export function lirePlongees(): CartePlongee[] {
 }
 
 export function enregistrerPlongee(p: CartePlongee) {
+  viderCacheCarnet();
   const liste = lirePlongees().filter((x) => x.id !== p.id);
   liste.push(p);
   liste.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
@@ -209,6 +211,7 @@ export function enregistrerPlongee(p: CartePlongee) {
 // Supprime une plongée : connecté, elle est retirée du carnet (suppression douce, deleted_at) ;
 // sinon, elle est retirée de celles gardées sur l'appareil.
 export async function supprimerPlongee(id: string) {
+  retirerDuCacheCarnet(id);
   if (await utilisateurConnecte()) {
     const { error } = await supabase.from("dives").update({ deleted_at: new Date().toISOString() }).eq("id", id);
     if (error) throw error;
@@ -220,4 +223,53 @@ export async function supprimerPlongee(id: string) {
   } catch {
     /* stockage indisponible */
   }
+}
+
+// ---------- Copie du carnet gardée pendant la session ----------
+// Revenir sur l'accueil affiche tout de suite les plongées déjà chargées,
+// puis la liste se met à jour en arrière-plan (plus d'accueil vide qui clignote).
+
+export type CacheCarnet = { plongees: CartePlongee[]; depart: number };
+const CLE_CACHE = "palanote-cache-carnet";
+let cacheCarnet: CacheCarnet | null = null;
+
+// Copie en mémoire uniquement (lisible dès le premier affichage, sans décalage serveur/navigateur).
+export function cacheCarnetEnMemoire(): CacheCarnet | null {
+  return typeof window === "undefined" ? null : cacheCarnet;
+}
+
+export function lireCacheCarnet(): CacheCarnet | null {
+  if (typeof window === "undefined") return null;
+  if (cacheCarnet) return cacheCarnet;
+  try {
+    const t = sessionStorage.getItem(CLE_CACHE);
+    if (t) cacheCarnet = JSON.parse(t) as CacheCarnet;
+  } catch {
+    /* stockage indisponible */
+  }
+  return cacheCarnet;
+}
+
+export function ecrireCacheCarnet(c: CacheCarnet) {
+  if (typeof window === "undefined") return;
+  cacheCarnet = c;
+  try {
+    sessionStorage.setItem(CLE_CACHE, JSON.stringify({ ...c, plongees: c.plongees.map(({ photo: _p, ...r }) => r) }));
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
+export function viderCacheCarnet() {
+  cacheCarnet = null;
+  try {
+    sessionStorage.removeItem(CLE_CACHE);
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
+function retirerDuCacheCarnet(id: string) {
+  const c = lireCacheCarnet();
+  if (c) ecrireCacheCarnet({ ...c, plongees: c.plongees.filter((p) => p.id !== id) });
 }
