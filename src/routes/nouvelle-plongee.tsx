@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { MapPin, Crosshair, Plus, X, Star, Camera } from "lucide-react";
 import {
   chargerPlongee,
@@ -511,13 +512,16 @@ function NouvellePlongee() {
           photo: photos[0],
         });
       }
-      // Enregistrée : retour automatique à l'écran d'accueil.
+      // Enregistrée : retour automatique à l'écran d'accueil, avec un bandeau de confirmation.
+      annoncerSurAccueil(existante ? "Ta plongée a bien été mise à jour" : "Ta plongée a bien été enregistrée");
       navigate({ to: "/carnet" });
     } catch (e) {
       console.error(e);
       setMessage({
         type: "erreur",
-        texte: "La plongée n'a pas pu être enregistrée. Vérifie ta connexion et réessaie.",
+        texte: `La plongée n'a pas pu être enregistrée. Vérifie ta connexion et réessaie.${
+          e && typeof e === "object" && "message" in e && e.message ? ` (détail : ${String(e.message)})` : ""
+        }`,
       });
     } finally {
       setEnCours(false);

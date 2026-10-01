@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoHorizontal from "@/assets/logo-horizontal.png";
@@ -13,6 +13,8 @@ import {
 } from "@/lib/plongees";
 import { CarteDePlongee } from "@/components/CarteDePlongee";
 import { LigneDePlongee } from "@/components/LigneDePlongee";
+import { BandeauConfirmation } from "@/components/BandeauConfirmation";
+import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import {
   BandeauCarnetsPapier,
   EnTeteStatistiques,
@@ -88,6 +90,13 @@ function Carnet() {
   const filtreActif = filtres.find((f) => f.id === filtre) ?? filtres[0]!;
   const groupes = grouperParAnnee(numeroter(plongees, numeroDepart).filter(({ p }) => filtreActif.teste(p)));
   useEffect(() => setVue(lireVue()), []);
+  // Message laissé par l'écran précédent (ex. plongée enregistrée).
+  const [confirmation, setConfirmation] = useState<string | null>(null);
+  useEffect(() => setConfirmation(lireMessageAccueil()), []);
+  const finConfirmation = useCallback(() => {
+    effacerMessageAccueil();
+    setConfirmation(null);
+  }, []);
   // Changement de vue sans que l'écran bouge : le bouton cliqué reste exactement
   // à la même hauteur à l'écran, quelle que soit la position de défilement.
   const racine = useRef<HTMLDivElement>(null);
@@ -146,6 +155,7 @@ function Carnet() {
 
   return (
     <div ref={racine} className={`flex min-h-screen flex-col ${vide ? "bg-[#E7F1FA]" : "bg-[#F5F9FC]"}`} style={{ overflowAnchor: "none" }}>
+      {confirmation && <BandeauConfirmation texte={confirmation} onFin={finConfirmation} />}
       {vide ? (
         <>
       {/* Haut : vidéo marine, pleine largeur de l'écran */}
