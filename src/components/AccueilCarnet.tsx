@@ -75,7 +75,7 @@ export function EnTeteStatistiques({
           </button>
         </div>
         <div className="px-[22px] pt-[14px]">
-          <h1 className="text-[27px] font-bold leading-[1.2] text-white">Mes plongées</h1>
+          <h1 className="text-[24px] font-bold leading-[1.2] text-white">Mes plongées</h1>
           {sousTitre && <p className="pt-1 text-[14px] leading-normal text-white/90">{sousTitre}</p>}
         </div>
         <div className="mt-auto px-[22px] pb-[6px]">
