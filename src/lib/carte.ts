@@ -1,16 +1,17 @@
 // ============================================================
 // Cartes et lieux (OpenStreetMap)
-// - Fond de carte : CARTO Voyager (données OpenStreetMap), gratuit avec attribution.
+// - Fond de carte : tuiles standard OpenStreetMap, gratuites et sans clé (attribution obligatoire).
+//   (Les fonds CARTO demandent désormais une clé : « API key required ».)
 // - Recherche et nom des lieux : Nominatim (OpenStreetMap), gratuit, sans clé.
 //   Règle d'usage : 1 requête par seconde au maximum → recherches temporisées.
-// Pour une forte audience, il suffira de changer FOND_DE_CARTE / les URL Nominatim
-// vers un fournisseur (MapTiler, Stadia…) : le reste de l'app ne bouge pas.
+// Pour une forte audience, il suffira de remplacer FOND_DE_CARTE (et les URL Nominatim)
+// par un fournisseur avec clé (MapTiler, Stadia…) : le reste de l'app ne bouge pas.
 // ============================================================
 
 export const FOND_DE_CARTE = {
-  url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
-  sousDomaines: "abcd",
+  url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  sousDomaines: "",
   zoomMax: 19,
 };
 

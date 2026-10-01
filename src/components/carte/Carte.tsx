@@ -68,8 +68,9 @@ export function Carte({
       });
       L.tileLayer(FOND_DE_CARTE.url, {
         attribution: FOND_DE_CARTE.attribution,
-        subdomains: FOND_DE_CARTE.sousDomaines,
+        ...(FOND_DE_CARTE.sousDomaines ? { subdomains: FOND_DE_CARTE.sousDomaines } : {}),
         maxZoom: FOND_DE_CARTE.zoomMax,
+        referrerPolicy: "strict-origin-when-cross-origin", // demandé par OpenStreetMap
       }).addTo(c);
       c.attributionControl.setPrefix(false);
       c.on("moveend", () => {
