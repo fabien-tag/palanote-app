@@ -15,6 +15,9 @@ export type CartePlongee = {
   note: number;
   binomes: string[];
   type?: string; // type de plongée : Exploration, Épave, Formation…
+  coords?: string; // « 43.55120, 7.04780 » (déjà décalé de 100 à 150 m)
+  faune?: string[];
+  club?: string;
   photo?: string | undefined;
 };
 
@@ -133,7 +136,9 @@ export async function sauverPlongee(ligne: LignePlongee) {
 export async function chargerPlongees(): Promise<CartePlongee[]> {
   const { data, error } = await supabase
     .from("dives")
-    .select("id, dive_date, site_name, site_location, max_depth_m, duration_min, temp_bottom_c, gas_mix, rating, buddies, dive_type")
+    .select(
+      "id, dive_date, site_name, site_location, site_coords, max_depth_m, duration_min, temp_bottom_c, gas_mix, rating, buddies, dive_type, wildlife, club_name",
+    )
     .is("deleted_at", null) // les plongées supprimées n'apparaissent plus
     .order("dive_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
@@ -150,6 +155,9 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
     note: d.rating ?? 0,
     binomes: d.buddies ?? [],
     type: d.dive_type ?? "",
+    coords: d.site_coords ?? "",
+    faune: d.wildlife ?? [],
+    club: d.club_name ?? "",
   }));
 }
 
