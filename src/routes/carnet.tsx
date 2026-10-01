@@ -239,14 +239,6 @@ function Carnet() {
             </span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/nouvelle-plongee" })}
-            className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
-          >
-            <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
-            AJOUTER MA PREMIÈRE PLONGÉE
-          </button>
         </div>
       ) : (
         /* Dès la première plongée : statistiques, filtres, raccourcis et liste */
@@ -308,17 +300,15 @@ function Carnet() {
         </>
       )}
 
-        {/* Bouton flottant : visible dès la première plongée enregistrée */}
-        {!vide && (
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/nouvelle-plongee" })}
-            className="fixed bottom-[112px] right-[max(24px,calc(50vw-215px+24px))] z-20 flex h-[52px] items-center gap-[9px] rounded-[26px] bg-[#3DEFBE] px-[19px] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322]"
-          >
-            <Plus className="h-[20px] w-[20px]" strokeWidth={2} aria-hidden="true" />
-            Plongée
-          </button>
-        )}
+        {/* Bouton flottant : toujours visible, avec ou sans plongée */}
+        <button
+          type="button"
+          onClick={() => navigate({ to: "/nouvelle-plongee" })}
+          className="fixed bottom-[112px] right-[max(24px,calc(50vw-215px+24px))] z-20 flex h-[52px] items-center gap-[9px] rounded-[26px] bg-[#3DEFBE] px-[19px] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322]"
+        >
+          <Plus className="h-[20px] w-[20px]" strokeWidth={2} aria-hidden="true" />
+          Plongée
+        </button>
 
         <div className="flex-grow" />
 
