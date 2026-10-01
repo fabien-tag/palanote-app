@@ -104,7 +104,7 @@ alter table public.dives enable row level security;
 drop policy if exists "dives_select_own" on public.dives;
 create policy "dives_select_own" on public.dives
   for select to authenticated
-  using (auth.uid() = user_id and deleted_at is null);
+  using (auth.uid() = user_id); -- les plongées supprimées (deleted_at) sont masquées par l'app
 
 drop policy if exists "dives_insert_own" on public.dives;
 create policy "dives_insert_own" on public.dives
