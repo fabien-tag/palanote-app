@@ -1,6 +1,6 @@
 // ============================================================
 // Cartes et lieux (OpenStreetMap)
-// - Fond de carte : tuiles standard OpenStreetMap, gratuites et sans clé (attribution obligatoire).
+// - Fond de carte : au choix dans FONDS (OpenStreetMap standard, ou « océan » d'Esri).
 //   (Les fonds CARTO demandent désormais une clé : « API key required ».)
 // - Recherche et nom des lieux : Nominatim (OpenStreetMap), gratuit, sans clé.
 //   Règle d'usage : 1 requête par seconde au maximum → recherches temporisées.
@@ -8,12 +8,35 @@
 // par un fournisseur avec clé (MapTiler, Stadia…) : le reste de l'app ne bouge pas.
 // ============================================================
 
-export const FOND_DE_CARTE = {
-  url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  sousDomaines: "",
-  zoomMax: 19,
+type Couche = { url: string; maxNativeZoom: number };
+export type FondDeCarte = {
+  fond: Couche;
+  /** Couche de noms posée par-dessus (facultative). */
+  noms?: Couche;
+  attribution: string;
+  zoomMax: number;
 };
+
+export const FONDS: Record<"osm" | "ocean", FondDeCarte> = {
+  // Carte standard OpenStreetMap : gratuite, sans clé, détaillée (routes, noms…).
+  osm: {
+    fond: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", maxNativeZoom: 19 },
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    zoomMax: 19,
+  },
+  // Carte « océan » d'Esri : relief des fonds marins en dégradés de bleu.
+  // Gratuite pour tester ; pour une app publiée, Esri demande un compte (gratuit).
+  // Les tuiles détaillées s'arrêtent vers le zoom 13 : au-delà, elles sont agrandies.
+  ocean: {
+    fond: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 13 },
+    noms: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}", maxNativeZoom: 13 },
+    attribution: "Fond © Esri — GEBCO, NOAA, National Geographic, Garmin, HERE",
+    zoomMax: 17,
+  },
+};
+
+// Fond utilisé partout dans l'app : changer cette ligne suffit pour changer de carte.
+export const FOND_DE_CARTE: FondDeCarte = FONDS.ocean;
 
 export type Coords = { lat: number; lng: number };
 export type Lieu = { nom: string; lieu: string; coords: Coords };

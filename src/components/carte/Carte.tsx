@@ -56,7 +56,8 @@ export function Carte({
       const v = vueActuelle.current;
       const c = L.map(conteneur.current, {
         center: [v.centre.lat, v.centre.lng],
-        zoom: v.zoom,
+        zoom: Math.min(v.zoom, FOND_DE_CARTE.zoomMax),
+        maxZoom: FOND_DE_CARTE.zoomMax,
         zoomControl: false,
         attributionControl: true,
         dragging: interactive,
@@ -66,12 +67,10 @@ export function Carte({
         boxZoom: interactive,
         keyboard: interactive,
       });
-      L.tileLayer(FOND_DE_CARTE.url, {
-        attribution: FOND_DE_CARTE.attribution,
-        ...(FOND_DE_CARTE.sousDomaines ? { subdomains: FOND_DE_CARTE.sousDomaines } : {}),
-        maxZoom: FOND_DE_CARTE.zoomMax,
-        referrerPolicy: "strict-origin-when-cross-origin", // demandé par OpenStreetMap
-      }).addTo(c);
+      const { fond, noms, attribution, zoomMax } = FOND_DE_CARTE;
+      const options = { maxZoom: zoomMax, referrerPolicy: "strict-origin-when-cross-origin" as const };
+      L.tileLayer(fond.url, { ...options, maxNativeZoom: fond.maxNativeZoom, attribution }).addTo(c);
+      if (noms) L.tileLayer(noms.url, { ...options, maxNativeZoom: noms.maxNativeZoom }).addTo(c);
       c.attributionControl.setPrefix(false);
       c.on("moveend", () => {
         const m = c.getCenter();
