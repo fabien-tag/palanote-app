@@ -135,6 +135,12 @@ function Label({ children }: { children: React.ReactNode }) {
   return <div className="text-[12px] font-bold tracking-[0.06em] text-[#5B7189]">{children}</div>;
 }
 
+const HEURES_10_MIN = Array.from({ length: 144 }, (_, i) => {
+  const h = String(Math.floor(i / 6)).padStart(2, "0");
+  const m = String((i % 6) * 10).padStart(2, "0");
+  return `${h}:${m}`;
+});
+
 function Champ({
   label,
   valeur,
@@ -143,6 +149,7 @@ function Champ({
   edition,
   onChange,
   type = "text",
+  options,
 }: {
   label: string;
   valeur: string;
@@ -151,12 +158,27 @@ function Champ({
   edition: boolean;
   onChange: (v: string) => void;
   type?: string;
+  options?: string[];
 }) {
+  const choix = options && valeur && !options.includes(valeur) ? [valeur, ...options] : options;
   return (
     <div className="flex min-w-0 flex-grow basis-0 flex-col gap-[7px]">
       <Label>{label}</Label>
       <div className="flex min-h-[50px] items-center gap-1.5 rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[15px]">
-        {edition ? (
+        {edition && choix ? (
+          <select
+            value={valeur}
+            onChange={(e) => onChange(e.target.value)}
+            className={`w-full min-w-0 cursor-pointer bg-transparent text-[14.5px] outline-none ${valeur ? "text-[#123A63]" : "text-[#9AAAB9]"}`}
+          >
+            <option value="">{placeholder ?? "—"}</option>
+            {choix.map((opt) => (
+              <option key={opt} value={opt} className="text-[#123A63]">
+                {opt}
+              </option>
+            ))}
+          </select>
+        ) : edition ? (
           <input
             type={type}
             value={valeur}
@@ -326,7 +348,7 @@ function NouvellePlongee() {
           <Section titre="ESSENTIEL">
             <div className="flex gap-3">
               <Champ label="Date" valeur={plongee.date} placeholder="14/07/2026" edition={edition} onChange={(v) => set("date", v)} type="date" />
-              <Champ label="Immersion" valeur={plongee.immersion} placeholder="10:35" edition={edition} onChange={(v) => set("immersion", v)} type="time" />
+              <Champ label="Immersion" valeur={plongee.immersion} placeholder="Heure" edition={edition} onChange={(v) => set("immersion", v)} options={HEURES_10_MIN} />
             </div>
 
             <div className="flex flex-col gap-[7px]">
