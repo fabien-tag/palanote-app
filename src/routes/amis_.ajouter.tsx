@@ -7,12 +7,17 @@ import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
 import { creerInvitation, initiales, lienInvitation, monProfil } from "@/lib/amis";
 
 export const Route = createFileRoute("/amis_/ajouter")({
+  // ?depuis=carnet : ouvert depuis l'accueil, le bouton retour y ramène.
+  validateSearch: (search: Record<string, unknown>): { depuis?: "carnet" | undefined } => ({
+    depuis: search["depuis"] === "carnet" ? "carnet" : undefined,
+  }),
   head: () => ({ meta: [{ title: "Palanote — Ajouter un binôme" }] }),
   component: AjouterBinome,
 });
 
 function AjouterBinome() {
   const navigate = useNavigate();
+  const { depuis } = Route.useSearch();
   const { pret, ecran } = useConnexionRequise();
   const [profil, setProfil] = useState<{ prenom: string; niveau: string | null; club: string | null } | null>(null);
   const [invitation, setInvitation] = useState<{ lien: string; expire: number } | null>(null);
@@ -81,7 +86,7 @@ function AjouterBinome() {
           <button
             type="button"
             aria-label="Retour"
-            onClick={() => navigate({ to: "/amis" })}
+            onClick={() => navigate({ to: depuis === "carnet" ? "/carnet" : "/amis" })}
             className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#E3EDF6]"
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />

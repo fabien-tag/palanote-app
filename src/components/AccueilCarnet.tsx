@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { Bell, Camera, ChevronRight, Fish, Star, Users } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -201,12 +202,15 @@ export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
 // ---------- Raccourcis ----------
 
 export function RaccourcisAccueil() {
-  const raccourcis = [
+  const navigate = useNavigate();
+  const raccourcis: { titre: string; texte: string; Icone: typeof Users; fond: string; ouvrir?: () => void }[] = [
     {
       titre: "Plonger ensemble",
       texte: "Un QR, les photos, des carnets préremplis.",
       Icone: Users,
       fond: "bg-white",
+      // Ouvre directement le QR code d'invitation ; « retour » ramène sur l'accueil.
+      ouvrir: () => navigate({ to: "/amis/ajouter", search: { depuis: "carnet" } }),
     },
     {
       titre: "Qui as-tu croisé sous l’eau ?",
@@ -217,13 +221,14 @@ export function RaccourcisAccueil() {
   ];
   return (
     <div className="grid grid-cols-2 gap-3 px-[22px] pt-[18px]">
-      {raccourcis.map(({ titre, texte, Icone, fond }) => (
+      {raccourcis.map(({ titre, texte, Icone, fond, ouvrir }) => (
         <button
           key={titre}
           type="button"
-          aria-disabled="true"
-          aria-label={`${titre} — bientôt disponible`}
-          className={`relative flex h-[150px] cursor-default flex-col items-start gap-[10px] rounded-[20px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
+          onClick={ouvrir}
+          aria-disabled={ouvrir ? undefined : "true"}
+          aria-label={ouvrir ? titre : `${titre} — bientôt disponible`}
+          className={`relative flex h-[150px] ${ouvrir ? "" : "cursor-default"} flex-col items-start gap-[10px] rounded-[20px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
         >
           <span className="flex h-[35px] w-[35px] shrink-0 items-center justify-center rounded-[12px] bg-[#DCEEF8]">
             <Icone className="h-[21px] w-[21px] text-[#5B7189]" strokeWidth={1.7} aria-hidden="true" />
@@ -232,9 +237,13 @@ export function RaccourcisAccueil() {
             <span className="block text-[14px] font-semibold leading-[1.35] text-[#123A63]">{titre}</span>
             <span className="mt-[6px] block text-[10px] leading-normal text-[#5B7189]">{texte}</span>
           </span>
-          <span className="absolute right-[12px] top-[21px] flex h-[19px] items-center rounded-[10px] bg-[#FFE6CC] px-[8px] text-[10px] font-semibold text-[#C2570C]">
-            Bientôt
-          </span>
+          {ouvrir ? (
+            <ChevronRight className="absolute right-[14px] top-[24px] h-[16px] w-[16px] text-[#6387A4]" strokeWidth={2.4} aria-hidden="true" />
+          ) : (
+            <span className="absolute right-[12px] top-[21px] flex h-[19px] items-center rounded-[10px] bg-[#FFE6CC] px-[8px] text-[10px] font-semibold text-[#C2570C]">
+              Bientôt
+            </span>
+          )}
         </button>
       ))}
     </div>
