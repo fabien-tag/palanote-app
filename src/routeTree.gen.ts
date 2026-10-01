@@ -26,6 +26,9 @@ import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
+import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
+import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
+import { Route as MoiReglagesRouteImport } from './routes/moi_.reglages'
 import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
 import { Route as NumeriserChoisirRouteImport } from './routes/numeriser_.choisir'
 import { Route as NumeriserFinRouteImport } from './routes/numeriser_.fin'
@@ -118,6 +121,21 @@ const AmisBinomeRoute = AmisBinomeRouteImport.update({
   path: '/amis/binome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MoiConfidentialiteRoute = MoiConfidentialiteRouteImport.update({
+  id: '/moi_/confidentialite',
+  path: '/moi/confidentialite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoiProfilRoute = MoiProfilRouteImport.update({
+  id: '/moi_/profil',
+  path: '/moi/profil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoiReglagesRoute = MoiReglagesRouteImport.update({
+  id: '/moi_/reglages',
+  path: '/moi/reglages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NumeriserCaptureRoute = NumeriserCaptureRouteImport.update({
   id: '/numeriser_/capture',
   path: '/numeriser/capture',
@@ -167,6 +185,9 @@ export interface FileRoutesByFullPath {
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/moi/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi/profil': typeof MoiProfilRoute
+  '/moi/reglages': typeof MoiReglagesRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -192,6 +213,9 @@ export interface FileRoutesByTo {
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/moi/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi/profil': typeof MoiProfilRoute
+  '/moi/reglages': typeof MoiReglagesRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
   '/numeriser/fin': typeof NumeriserFinRoute
@@ -218,6 +242,9 @@ export interface FileRoutesById {
   '/site': typeof SiteRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
+  '/moi_/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi_/profil': typeof MoiProfilRoute
+  '/moi_/reglages': typeof MoiReglagesRoute
   '/numeriser_/capture': typeof NumeriserCaptureRoute
   '/numeriser_/choisir': typeof NumeriserChoisirRoute
   '/numeriser_/fin': typeof NumeriserFinRoute
@@ -245,6 +272,9 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/moi/confidentialite'
+    | '/moi/profil'
+    | '/moi/reglages'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -270,6 +300,9 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/moi/confidentialite'
+    | '/moi/profil'
+    | '/moi/reglages'
     | '/numeriser/capture'
     | '/numeriser/choisir'
     | '/numeriser/fin'
@@ -295,6 +328,9 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis_/ajouter'
     | '/amis_/binome'
+    | '/moi_/confidentialite'
+    | '/moi_/profil'
+    | '/moi_/reglages'
     | '/numeriser_/capture'
     | '/numeriser_/choisir'
     | '/numeriser_/fin'
@@ -321,6 +357,9 @@ export interface RootRouteChildren {
   SiteRoute: typeof SiteRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
+  MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
+  MoiProfilRoute: typeof MoiProfilRoute
+  MoiReglagesRoute: typeof MoiReglagesRoute
   NumeriserCaptureRoute: typeof NumeriserCaptureRoute
   NumeriserChoisirRoute: typeof NumeriserChoisirRoute
   NumeriserFinRoute: typeof NumeriserFinRoute
@@ -450,6 +489,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisBinomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/moi_/confidentialite': {
+      id: '/moi_/confidentialite'
+      path: '/moi/confidentialite'
+      fullPath: '/moi/confidentialite'
+      preLoaderRoute: typeof MoiConfidentialiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/moi_/profil': {
+      id: '/moi_/profil'
+      path: '/moi/profil'
+      fullPath: '/moi/profil'
+      preLoaderRoute: typeof MoiProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/moi_/reglages': {
+      id: '/moi_/reglages'
+      path: '/moi/reglages'
+      fullPath: '/moi/reglages'
+      preLoaderRoute: typeof MoiReglagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/numeriser_/capture': {
       id: '/numeriser_/capture'
       path: '/numeriser/capture'
@@ -513,6 +573,9 @@ const rootRouteChildren: RootRouteChildren = {
   SiteRoute: SiteRoute,
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
+  MoiConfidentialiteRoute: MoiConfidentialiteRoute,
+  MoiProfilRoute: MoiProfilRoute,
+  MoiReglagesRoute: MoiReglagesRoute,
   NumeriserCaptureRoute: NumeriserCaptureRoute,
   NumeriserChoisirRoute: NumeriserChoisirRoute,
   NumeriserFinRoute: NumeriserFinRoute,
