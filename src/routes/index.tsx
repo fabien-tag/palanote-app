@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import fondAsset from "@/assets/BG.png";
 import logoAsset from "@/assets/logo.png";
@@ -54,17 +54,11 @@ function Splash() {
     });
   }, [navigate]);
   const [expanded, setExpanded] = useState(false);
-  // Liste dépliée : on fait défiler la zone du milieu pour la montrer, les boutons ne bougent pas.
-  const milieu = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!expanded) return;
-    const t = setTimeout(() => milieu.current?.scrollTo({ top: milieu.current.scrollHeight, behavior: "smooth" }), 320);
-    return () => clearTimeout(t);
-  }, [expanded]);
 
   return (
     // Hauteur calée sur la partie visible de l'écran (100dvh = hors barres du navigateur) :
-    // les boutons restent toujours visibles, le contenu du milieu s'adapte et défile si besoin.
+    // tout reste visible, accordéon ouvert compris : quand il s'ouvre, le reste se compacte
+    // (logo, titre, phrase d'accroche) pour laisser la place à la liste. Défilement en dernier recours.
     <div className="relative flex h-screen h-[100dvh] justify-center overflow-hidden bg-abyss">
       <img
         src={fondAsset}
@@ -72,29 +66,46 @@ function Splash() {
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0 bg-abyss/40" />
-      <div className="relative flex h-full w-full max-w-[430px] flex-col px-6 pt-[clamp(20px,7vh,64px)] pb-[clamp(14px,3vh,24px)]">
-        <div ref={milieu} className={`flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${expanded ? "[mask-image:linear-gradient(to_bottom,black_88%,transparent)]" : ""}`}>
-          <div className="my-auto flex flex-col items-center py-2 text-center">
+      <div
+        className={`relative flex h-full w-full max-w-[430px] flex-col px-6 pb-[clamp(14px,3vh,24px)] transition-all duration-300 ${
+          expanded ? "pt-[clamp(12px,3.5vh,48px)]" : "pt-[clamp(20px,7vh,64px)]"
+        }`}
+      >
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="my-auto flex flex-col items-center py-1 text-center">
           <img
             src={logoAsset}
             alt="Palanote"
-            className={`w-auto transition-all duration-300 ${expanded ? "h-[clamp(48px,8vh,72px)]" : "h-[clamp(64px,12.5vh,112px)]"}`}
+            className={`w-auto transition-all duration-300 ${expanded ? "h-[clamp(36px,6.4vh,72px)]" : "h-[clamp(64px,12.5vh,112px)]"}`}
           />
-          <h1 className="mt-[clamp(14px,3.6vh,32px)] text-[clamp(24px,4.3vh,30px)] leading-tight font-bold text-white">
+          <h1
+            className={`leading-tight font-bold text-white transition-all duration-300 ${
+              expanded
+                ? "mt-[clamp(8px,1.8vh,20px)] text-[clamp(20px,3.3vh,26px)]"
+                : "mt-[clamp(14px,3.6vh,32px)] text-[clamp(24px,4.3vh,30px)]"
+            }`}
+          >
             Ton carnet de plongée
             <br />
             dans la poche
           </h1>
-          <p className="mt-[clamp(8px,1.9vh,16px)] text-[clamp(14px,2.3vh,16px)] leading-relaxed text-ciel">
-            Photographie tes anciens carnets, retrouve tes binômes, organise
-            tes sorties et équipe-toi d'occasion. Tout au même endroit.
-          </p>
+          {/* Phrase d'accroche : repliée quand la liste détaillée est ouverte (elle la résume). */}
+          <div
+            className={`grid transition-all duration-300 ease-in-out ${
+              expanded ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
+            }`}
+          >
+            <p className="overflow-hidden pt-[clamp(8px,1.9vh,16px)] text-[clamp(14px,2.3vh,16px)] leading-relaxed text-ciel">
+              Photographie tes anciens carnets, retrouve tes binômes, organise
+              tes sorties et équipe-toi d'occasion. Tout au même endroit.
+            </p>
+          </div>
 
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
-            className="mt-[clamp(6px,2.4vh,24px)] flex min-h-[44px] items-center gap-2 text-sm font-medium text-lagon"
+            className={`flex items-center gap-2 text-sm font-medium text-lagon ${expanded ? "mt-[clamp(0px,0.6vh,8px)] min-h-[40px]" : "mt-[clamp(6px,2.4vh,24px)] min-h-[44px]"}`}
           >
             Voir tout ce que l'app fait
             <span
@@ -108,18 +119,18 @@ function Splash() {
           <div
             className={`grid transition-all duration-300 ease-in-out ${
               expanded
-                ? "mt-2 grid-rows-[1fr] opacity-100"
+                ? "grid-rows-[1fr] opacity-100"
                 : "grid-rows-[0fr] opacity-0"
             }`}
           >
             <div className="overflow-hidden">
-              <ul className="space-y-5 pb-2 text-left">
+              <ul className="space-y-[clamp(7px,1.6vh,20px)] text-left">
                 {BENEFITS.map((b) => (
                   <li key={b.title}>
-                    <p className="text-base font-semibold text-white">
+                    <p className="text-[clamp(14px,2.3vh,16px)] font-semibold leading-snug text-white">
                       {b.title}
                     </p>
-                    <p className="mt-1 text-sm leading-relaxed text-ciel/80">
+                    <p className="mt-[2px] text-[clamp(12.5px,2vh,14px)] leading-snug text-ciel/80">
                       {b.body}
                     </p>
                   </li>
