@@ -34,8 +34,15 @@ export const Route = createFileRoute("/nouvelle-plongee")({
     ],
   }),
   // ?id=… : ouvre une plongée existante en lecture (page détail), sinon nouvelle fiche.
-  validateSearch: (search: Record<string, unknown>): { id?: string } =>
-    typeof search["id"] === "string" && search["id"] ? { id: search["id"] } : {},
+  // ?site=…&lieu=…&coords=… : nouvelle plongée préremplie sur un spot (depuis la carte).
+  validateSearch: (search: Record<string, unknown>): { id?: string; site?: string; lieu?: string; coords?: string } => {
+    const r: { id?: string; site?: string; lieu?: string; coords?: string } = {};
+    for (const k of ["id", "site", "lieu", "coords"] as const) {
+      const v = search[k];
+      if (typeof v === "string" && v) r[k] = v;
+    }
+    return r;
+  },
   component: NouvellePlongee,
 });
 
@@ -373,9 +380,13 @@ const COULEURS_BINOMES = [
 
 function NouvellePlongee() {
   const navigate = useNavigate();
-  const { id: idExistant } = Route.useSearch();
+  const { id: idExistant, site: siteDepart, lieu: lieuDepart, coords: coordsDepart } = Route.useSearch();
   const existante = Boolean(idExistant);
-  const [plongee, setPlongee] = useState<Plongee>(plongeeVide);
+  const [plongee, setPlongee] = useState<Plongee>(() =>
+    idExistant
+      ? plongeeVide
+      : { ...plongeeVide, siteNom: siteDepart ?? "", siteLieu: lieuDepart ?? "", siteCoords: coordsDepart ?? "" },
+  );
   const [edition, setEdition] = useState(!existante);
   const [chargement, setChargement] = useState(existante);
   const original = useRef<Plongee>(plongeeVide);
@@ -535,6 +546,9 @@ function NouvellePlongee() {
           note: plongee.note,
           binomes: plongee.binomes,
           type: plongee.typePlongee,
+          coords: plongee.siteCoords,
+          faune: plongee.faune,
+          club: plongee.club,
           photo: photos[0],
         });
       }
