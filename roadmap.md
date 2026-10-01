@@ -38,3 +38,9 @@
 - Sans connexion : la plongée reste sur l'appareil (mode maquette) et un message le signale.
 - Le carnet affiche les plongées du compte connecté depuis Supabase.
 - Prérequis : avoir exécuté sql/palanote-page-nouvelle-plongee.sql dans le SQL Editor.
+
+## Fait — numérisation des carnets (01/10, maquettes 11 à 17)
+- Écrans : /numeriser (promesse + reprise d'un carnet en cours), /numeriser/capture (caméra en direct, repli appareil photo), /numeriser/choisir (galerie, ordre des pages), /numeriser/lecture (suivi), /numeriser/relecture (champs Sûr / À vérifier / Non lu), /numeriser/reprendre, /numeriser/fin.
+- Serveur : Edge Function `lire-page` (supabase/functions/lire-page) qui appelle Claude (vision) avec le secret ANTHROPIC_API_KEY ; lecture en arrière-plan.
+- Base : sql/palanote-numerisation.sql (media, ocr_batches, ocr_pages, ocr_extractions, bucket privé photos, colonnes dives.source / signed / stamped).
+- Pas encore fait : envoi hors réseau (file d'attente), PDF, lien vers le Récif.

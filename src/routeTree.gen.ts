@@ -21,7 +21,10 @@ import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
 import { Route as NumeriserChoisirRouteImport } from './routes/numeriser_.choisir'
+import { Route as NumeriserFinRouteImport } from './routes/numeriser_.fin'
 import { Route as NumeriserLectureRouteImport } from './routes/numeriser_.lecture'
+import { Route as NumeriserRelectureRouteImport } from './routes/numeriser_.relecture'
+import { Route as NumeriserReprendreRouteImport } from './routes/numeriser_.reprendre'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -83,9 +86,24 @@ const NumeriserChoisirRoute = NumeriserChoisirRouteImport.update({
   path: '/numeriser/choisir',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NumeriserFinRoute = NumeriserFinRouteImport.update({
+  id: '/numeriser_/fin',
+  path: '/numeriser/fin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NumeriserLectureRoute = NumeriserLectureRouteImport.update({
   id: '/numeriser_/lecture',
   path: '/numeriser/lecture',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NumeriserRelectureRoute = NumeriserRelectureRouteImport.update({
+  id: '/numeriser_/relecture',
+  path: '/numeriser/relecture',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NumeriserReprendreRoute = NumeriserReprendreRouteImport.update({
+  id: '/numeriser_/reprendre',
+  path: '/numeriser/reprendre',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -102,7 +120,10 @@ export interface FileRoutesByFullPath {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
+  '/numeriser/fin': typeof NumeriserFinRoute
   '/numeriser/lecture': typeof NumeriserLectureRoute
+  '/numeriser/relecture': typeof NumeriserRelectureRoute
+  '/numeriser/reprendre': typeof NumeriserReprendreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,7 +138,10 @@ export interface FileRoutesByTo {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
   '/numeriser/choisir': typeof NumeriserChoisirRoute
+  '/numeriser/fin': typeof NumeriserFinRoute
   '/numeriser/lecture': typeof NumeriserLectureRoute
+  '/numeriser/relecture': typeof NumeriserRelectureRoute
+  '/numeriser/reprendre': typeof NumeriserReprendreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,7 +157,10 @@ export interface FileRoutesById {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/numeriser_/capture': typeof NumeriserCaptureRoute
   '/numeriser_/choisir': typeof NumeriserChoisirRoute
+  '/numeriser_/fin': typeof NumeriserFinRoute
   '/numeriser_/lecture': typeof NumeriserLectureRoute
+  '/numeriser_/relecture': typeof NumeriserRelectureRoute
+  '/numeriser_/reprendre': typeof NumeriserReprendreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,7 +177,10 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/numeriser/capture'
     | '/numeriser/choisir'
+    | '/numeriser/fin'
     | '/numeriser/lecture'
+    | '/numeriser/relecture'
+    | '/numeriser/reprendre'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -165,7 +195,10 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/numeriser/capture'
     | '/numeriser/choisir'
+    | '/numeriser/fin'
     | '/numeriser/lecture'
+    | '/numeriser/relecture'
+    | '/numeriser/reprendre'
   id:
     | '__root__'
     | '/'
@@ -180,7 +213,10 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/numeriser_/capture'
     | '/numeriser_/choisir'
+    | '/numeriser_/fin'
     | '/numeriser_/lecture'
+    | '/numeriser_/relecture'
+    | '/numeriser_/reprendre'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,7 +232,10 @@ export interface RootRouteChildren {
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   NumeriserCaptureRoute: typeof NumeriserCaptureRoute
   NumeriserChoisirRoute: typeof NumeriserChoisirRoute
+  NumeriserFinRoute: typeof NumeriserFinRoute
   NumeriserLectureRoute: typeof NumeriserLectureRoute
+  NumeriserRelectureRoute: typeof NumeriserRelectureRoute
+  NumeriserReprendreRoute: typeof NumeriserReprendreRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -285,11 +324,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NumeriserChoisirRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/numeriser_/fin': {
+      id: '/numeriser_/fin'
+      path: '/numeriser/fin'
+      fullPath: '/numeriser/fin'
+      preLoaderRoute: typeof NumeriserFinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/numeriser_/lecture': {
       id: '/numeriser_/lecture'
       path: '/numeriser/lecture'
       fullPath: '/numeriser/lecture'
       preLoaderRoute: typeof NumeriserLectureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/numeriser_/relecture': {
+      id: '/numeriser_/relecture'
+      path: '/numeriser/relecture'
+      fullPath: '/numeriser/relecture'
+      preLoaderRoute: typeof NumeriserRelectureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/numeriser_/reprendre': {
+      id: '/numeriser_/reprendre'
+      path: '/numeriser/reprendre'
+      fullPath: '/numeriser/reprendre'
+      preLoaderRoute: typeof NumeriserReprendreRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -308,7 +368,10 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   NumeriserCaptureRoute: NumeriserCaptureRoute,
   NumeriserChoisirRoute: NumeriserChoisirRoute,
+  NumeriserFinRoute: NumeriserFinRoute,
   NumeriserLectureRoute: NumeriserLectureRoute,
+  NumeriserRelectureRoute: NumeriserRelectureRoute,
+  NumeriserReprendreRoute: NumeriserReprendreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
