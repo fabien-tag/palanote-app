@@ -154,7 +154,7 @@ function Carnet() {
       {vide ? (
         <>
       {/* Haut : vidéo marine, pleine largeur de l'écran */}
-      <div className="relative flex h-[412px] w-full shrink-0 flex-col overflow-hidden rounded-b-[34px]">
+      <div className="relative flex h-[382px] w-full shrink-0 flex-col overflow-hidden rounded-b-[34px]">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           src={fondMarin}
