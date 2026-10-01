@@ -35,7 +35,7 @@ function CasePage({ p, onRelancer }: { p: Page; onRelancer: () => void }) {
       type="button"
       disabled={!probleme}
       onClick={onRelancer}
-      title={probleme ? (p.statut === "erreur" ? "Lecture interrompue : touche pour relancer" : "Trop floue : à reprendre en photo") : undefined}
+      aria-label={probleme ? `Reprendre la page ${p.ordre} en photo` : undefined}
       className={`flex aspect-[5/6] flex-col items-center justify-center gap-[5px] rounded-[14px] text-[12.5px] font-bold ${styles}`}
     >
       {p.statut === "lue" ? (
@@ -71,11 +71,12 @@ function Lecture() {
   const minutes = Math.max(1, Math.ceil((restantes * SECONDES_PAR_PAGE) / 60));
   const pretes = r.aRelire.length;
 
+  // Touche une page en orange : on revient à l'appareil photo pour la reprendre.
+  const reprendre = (p: Page) => navigate({ to: "/numeriser/capture", search: { lot, ordre: p.ordre } });
+  // Lecture échouée côté serveur : on peut aussi simplement la relancer.
   const relancer = async (p: Page) => {
-    if (p.statut === "erreur") {
-      await lancerLecture(p.id);
-      await recharger();
-    } else navigate({ to: "/numeriser/capture", search: { lot, ordre: p.ordre } });
+    await lancerLecture(p.id);
+    await recharger();
   };
 
   return (
@@ -107,7 +108,7 @@ function Lecture() {
 
       <div className="grid grid-cols-6 gap-[8px] px-[22px] pt-[22px]">
         {pages.map((p) => (
-          <CasePage key={p.id} p={p} onRelancer={() => void relancer(p)} />
+          <CasePage key={p.id} p={p} onRelancer={() => reprendre(p)} />
         ))}
       </div>
 
@@ -127,8 +128,21 @@ function Lecture() {
         </div>
       )}
       {r.illisibles.length > 0 && (
-        <p className="px-[22px] pt-[10px] text-[12.5px] text-[#8A5A10]">Touche une page en orange pour la reprendre.</p>
+        <p className="px-[22px] pt-[10px] text-[12.5px] text-[#8A5A10]">Touche une page en orange pour la reprendre en photo.</p>
       )}
+      {pages
+        .filter((p) => p.statut === "erreur")
+        .map((p) => (
+          <div key={p.id} className="mx-[22px] mt-[10px] rounded-[14px] border border-[#F5C9A0] bg-[#FFF5E5] px-[12px] py-[10px] text-[12.5px] text-[#6B4A14]">
+            <div className="flex items-center justify-between gap-3">
+              <b>La lecture de la page {p.ordre} a échoué.</b>
+              <button type="button" onClick={() => void relancer(p)} className="shrink-0 font-bold text-[#1176A8] underline underline-offset-2">
+                Relancer
+              </button>
+            </div>
+            {p.erreur && <p className="pt-1 break-words text-[11.5px] text-[#8A6A3A]">Détail : {p.erreur}</p>}
+          </div>
+        ))}
       {erreur && <p className="px-[22px] pt-3 text-[13px] text-[#8A2A1A]">{erreur}</p>}
 
       <div className="min-h-6 flex-grow" />
