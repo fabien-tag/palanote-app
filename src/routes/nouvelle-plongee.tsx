@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
+import { chargerPhotosPlongee, enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
 import { MapPin, LocateFixed, Plus, X, Star, Camera, Check } from "lucide-react";
 import { Carte } from "@/components/carte/Carte";
@@ -391,7 +392,11 @@ function NouvellePlongee() {
   const [edition, setEdition] = useState(!existante);
   const [chargement, setChargement] = useState(existante);
   const original = useRef<Plongee>(plongeeVide);
-  const [photos, setPhotos] = useState<string[]>([]);
+  // Photos de la plongée : déjà enregistrées (id) ou ajoutées à l'instant (fichier).
+  const [photos, setPhotos] = useState<PhotoPlongee[]>([]);
+  const [photosRetirees, setPhotosRetirees] = useState<PhotoPlongee[]>([]);
+  const photosOriginales = useRef<PhotoPlongee[]>([]);
+  const [envoiPhotos, setEnvoiPhotos] = useState(false);
   const [ajoutBinome, setAjoutBinome] = useState(false);
   const [nomBinome, setNomBinome] = useState("");
   // Binômes Palanote identifiés sur la plongée (ids) et liste de mes binômes
@@ -431,6 +436,10 @@ function NouvellePlongee() {
               if (i >= 0) reste.splice(i, 1);
             }
             fiche = { ...fiche, binomes: reste };
+            const enregistrees = await chargerPhotosPlongee(idExistant).catch(() => []);
+            if (!actif) return;
+            photosOriginales.current = enregistrees;
+            setPhotos(enregistrees);
             setAmis(liste);
             identifiesOriginaux.current = ids;
             setIdentifies(ids);
@@ -569,6 +578,17 @@ function NouvellePlongee() {
         const ligne = versLigne(plongee);
         // Les binômes Palanote apparaissent aussi dans la liste des noms (carte du carnet).
         await sauverPlongee({ ...ligne, buddies: [...identifies.map(prenomAmi), ...ligne.buddies] });
+        if (photos.some((p) => p.fichier) || photosRetirees.length > 0) {
+          setEnvoiPhotos(true);
+          try {
+            await enregistrerPhotosPlongee(idPlongee, photos, photosRetirees);
+          } catch (e) {
+            console.error(e);
+            throw Object.assign(new Error(`ta plongée est enregistrée, mais les photos n'ont pas pu être envoyées${e && typeof e === "object" && "message" in e ? ` : ${String(e.message)}` : ""}`), { photos: true });
+          } finally {
+            setEnvoiPhotos(false);
+          }
+        }
         if (identifies.length > 0 || identifiesOriginaux.current.length > 0) {
           try {
             await identifierBinomes(idPlongee, identifies);
@@ -593,7 +613,7 @@ function NouvellePlongee() {
           coords: plongee.siteCoords,
           faune: plongee.faune,
           club: plongee.club,
-          photo: photos[0],
+          photo: photos[0]?.url,
         });
       }
       // Enregistrée : retour automatique à l'écran d'accueil, avec un bandeau de confirmation.
@@ -601,6 +621,10 @@ function NouvellePlongee() {
       navigate({ to: "/carnet" });
     } catch (e) {
       console.error(e);
+      if (e && typeof e === "object" && "photos" in e) {
+        setMessage({ type: "erreur", texte: `Attention : ${String((e as unknown as Error).message)}. Réessaie d'enregistrer.` });
+        return;
+      }
       setMessage({
         type: "erreur",
         texte: `La plongée n'a pas pu être enregistrée. Vérifie ta connexion et réessaie.${
@@ -624,6 +648,8 @@ function NouvellePlongee() {
               if (existante && edition) {
                 setPlongee(original.current);
                 setIdentifies(identifiesOriginaux.current);
+                setPhotos(photosOriginales.current);
+                setPhotosRetirees([]);
                 setEdition(false);
                 setMessage(null);
               } else navigate({ to: "/carnet" });
@@ -639,7 +665,7 @@ function NouvellePlongee() {
             disabled={enCours || chargement}
             className="text-[14.5px] font-bold text-[#1176A8] disabled:opacity-50"
           >
-            {edition ? (enCours ? "Enregistrement…" : "Enregistrer") : "Modifier"}
+            {edition ? (enCours ? (envoiPhotos ? "Photos…" : "Enregistrement…") : "Enregistrer") : "Modifier"}
           </button>
         </div>
 
@@ -1162,14 +1188,22 @@ function NouvellePlongee() {
           {/* PHOTOS */}
           <Section titre="PHOTOS">
             <div className="grid grid-cols-4 gap-2">
-              {photos.map((src, i) => (
-                <div key={i} className="relative h-[82px] overflow-hidden rounded-[14px]">
-                  <img src={src} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
+              {photos.map((photo, i) => (
+                <div key={photo.id ?? photo.url} className="relative h-[82px] overflow-hidden rounded-[14px]">
+                  <img src={photo.url} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
+                  {i === 0 && (
+                    <span className="absolute inset-x-0 bottom-0 bg-[#0A2A50]/70 py-[2px] text-center text-[9.5px] font-bold uppercase tracking-[.06em] text-white">
+                      Couverture
+                    </span>
+                  )}
                   {edition && (
                     <button
                       type="button"
                       aria-label="Retirer cette photo"
-                      onClick={() => setPhotos(photos.filter((_, j) => j !== i))}
+                      onClick={() => {
+                        if (photo.id) setPhotosRetirees((r) => [...r, photo]);
+                        setPhotos(photos.filter((_, j) => j !== i));
+                      }}
                       className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/50"
                     >
                       <X className="h-3 w-3 text-white" aria-hidden="true" />
@@ -1199,7 +1233,7 @@ function NouvellePlongee() {
               className="hidden"
               onChange={(e) => {
                 const fichiers = Array.from(e.target.files ?? []);
-                setPhotos((p) => [...p, ...fichiers.map((f) => URL.createObjectURL(f))]);
+                setPhotos((p) => [...p, ...fichiers.map((f) => ({ url: URL.createObjectURL(f), fichier: f }))]);
                 e.target.value = "";
               }}
             />
@@ -1223,8 +1257,9 @@ function NouvellePlongee() {
                 disabled={enCours || chargement}
                 className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] disabled:opacity-50 text-sm font-bold tracking-wide text-[#0B2A4A]"
               >
-                ENREGISTRER LA PLONGÉE
+                {enCours ? (envoiPhotos ? "ENVOI DES PHOTOS…" : "ENREGISTREMENT…") : "ENREGISTRER LA PLONGÉE"}
               </button>
+              {message?.type === "erreur" && <p className="pt-3 text-center text-[13px] leading-snug text-[#8A2A1A]">{message.texte}</p>}
               <div className="h-4" />
               <div className="flex justify-center">
                 <button

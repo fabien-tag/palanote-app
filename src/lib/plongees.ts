@@ -144,7 +144,7 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
     .order("dive_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data ?? []).map((d) => ({
+  return ajouterCouvertures((data ?? []).map((d) => ({
     id: d.id,
     date: d.dive_date ?? "",
     siteNom: d.site_name ?? "",
@@ -159,7 +159,33 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
     coords: d.site_coords ?? "",
     faune: d.wildlife ?? [],
     club: d.club_name ?? "",
-  }));
+  })));
+}
+
+// Photo de couverture de chaque plongée : la première photo ajoutée (table media).
+async function ajouterCouvertures(liste: CartePlongee[]): Promise<CartePlongee[]> {
+  if (liste.length === 0) return liste;
+  try {
+    const { data, error } = await supabase
+      .from("media")
+      .select("dive_id, chemin")
+      .in("dive_id", liste.map((p) => p.id))
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
+    if (error || !data) return liste;
+    const premiere = new Map<string, string>();
+    for (const l of data as { dive_id: string; chemin: string }[]) if (!premiere.has(l.dive_id)) premiere.set(l.dive_id, l.chemin);
+    if (premiere.size === 0) return liste;
+    const { data: urls } = await supabase.storage.from("photos").createSignedUrls([...premiere.values()], 60 * 60 * 6);
+    const parChemin = new Map((urls ?? []).filter((u) => u.path && u.signedUrl).map((u) => [u.path as string, u.signedUrl]));
+    return liste.map((p) => {
+      const chemin = premiere.get(p.id);
+      const url = chemin ? parChemin.get(chemin) : undefined;
+      return url ? { ...p, photo: url } : p;
+    });
+  } catch {
+    return liste;
+  }
 }
 
 // Une plongée complète du compte connecté (pour la page détail).
@@ -254,7 +280,7 @@ export function ecrireCacheCarnet(c: CacheCarnet) {
   if (typeof window === "undefined") return;
   cacheCarnet = c;
   try {
-    sessionStorage.setItem(CLE_CACHE, JSON.stringify({ ...c, plongees: c.plongees.map(({ photo: _p, ...r }) => r) }));
+    sessionStorage.setItem(CLE_CACHE, JSON.stringify(c));
   } catch {
     /* stockage indisponible */
   }
