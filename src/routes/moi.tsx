@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Camera, ChevronRight, Download, HelpCircle, Lock, Pencil, SlidersHorizontal, Upload } from "lucide-react";
-import fondAsset from "@/assets/BG.png";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
@@ -97,34 +96,19 @@ function Moi() {
     <div className="flex h-screen flex-col overflow-hidden bg-[#F5F9FC] text-[#123A63] supports-[height:100dvh]:h-[100dvh]">
       {message && <BandeauConfirmation texte={message} onFin={finMessage} />}
       <div className="mx-auto flex min-h-0 w-full max-w-[430px] flex-1 flex-col overflow-y-auto">
-        {/* En-tête */}
-        <div
-          className="relative flex h-[clamp(200px,29svh,262px)] shrink-0 items-end overflow-hidden rounded-b-[30px] bg-[#0E3D72] bg-cover bg-center"
-          style={{ backgroundImage: `url(${fondAsset})` }}
-        >
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,61,114,0)_0%,rgba(14,61,114,.35)_45%,rgba(10,42,80,.92)_100%)]" />
-          <div className="relative flex w-full items-center gap-[15px] px-[22px] pb-[22px]">
-            <span className="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-full bg-[#3DEFBE] text-[25px] font-bold text-[#123A63]">
-              {profil ? initiales(profil.prenom || "?") : ""}
-            </span>
-            <div className="min-w-0 flex-1">
-              <h1 className="truncate text-[28px] font-bold leading-tight text-white">{connecte === false ? "Moi" : (profil?.prenom ?? " ")}</h1>
-              {profil && (profil.niveau || profil.club) && (
-                <p className="truncate text-[15px] text-white/75">{[profil.niveau, profil.club].filter(Boolean).join(" · ")}</p>
-              )}
-              {profil && !profil.niveau && !profil.club && <p className="text-[14px] text-white/75">Ajoute ton niveau et ton club</p>}
-            </div>
-            {connecte && (
-              <button
-                type="button"
-                aria-label="Modifier mon profil"
-                onClick={() => navigate({ to: "/moi/profil" })}
-                className="flex h-[36px] w-[36px] shrink-0 items-center justify-center self-end rounded-[11px] bg-white/20 backdrop-blur-sm"
-              >
-                <Pencil className="h-[16px] w-[16px] text-white" strokeWidth={2.2} />
-              </button>
-            )}
-          </div>
+        {/* Titre, comme sur les autres onglets */}
+        <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
+          <h1 className="text-[clamp(24px,3.6svh,28px)] font-bold">Moi</h1>
+          {connecte && (
+            <button
+              type="button"
+              aria-label="Modifier mon profil"
+              onClick={() => navigate({ to: "/moi/profil" })}
+              className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-[#E3EDF6]"
+            >
+              <Pencil className="h-[17px] w-[17px] text-[#123A63]" strokeWidth={2.2} />
+            </button>
+          )}
         </div>
 
         <div className="px-[22px] pb-[24px]">
@@ -143,8 +127,25 @@ function Moi() {
 
           {connecte && (
             <>
+              {/* Mon profil */}
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/moi/profil" })}
+                className="mt-[18px] flex w-full items-center gap-[14px] text-left"
+              >
+                <span className="flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full bg-[#3DEFBE] text-[20px] font-bold text-[#123A63]">
+                  {profil ? initiales(profil.prenom || "?") : ""}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[20px] font-bold leading-tight">{profil?.prenom ?? " "}</span>
+                  <span className="block truncate text-[13.5px] text-[#5B7189]">
+                    {profil && (profil.niveau || profil.club) ? [profil.niveau, profil.club].filter(Boolean).join(" · ") : "Ajoute ton niveau et ton club"}
+                  </span>
+                </span>
+              </button>
+
               {/* Statistiques */}
-              <div className="mt-[18px] grid grid-cols-3 gap-y-[16px] rounded-[20px] border border-[#E4EBF1] bg-white px-[8px] py-[18px] text-center shadow-[0_4px_14px_#123A6306]">
+              <div className="mt-[16px] grid grid-cols-3 gap-y-[16px] rounded-[20px] border border-[#E4EBF1] bg-white px-[8px] py-[18px] text-center shadow-[0_4px_14px_#123A6306]">
                 {tuiles.map(([label, cle]) => (
                   <div key={cle}>
                     <b className="block text-[19px] leading-tight">{stats ? stats[cle] : "…"}</b>
