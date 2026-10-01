@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Camera, ChevronRight, Plus, Watch, Bell } from "lucide-react";
+import { Camera, ChevronDown, ChevronRight, Plus, Watch, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -43,6 +43,8 @@ function lireVue(): Vue {
 
 // Numéro de chaque plongée : plongées déjà faites avant l'app + rang chronologique.
 // Calculé sur la liste complète, pour qu'un filtre ne change pas les numéros.
+const PAR_ANNEE = 5;
+
 function numeroter(plongees: CartePlongee[], numeroDepart: number) {
   return plongees.map((p, i) => ({ p, numero: numeroDepart + plongees.length - i }));
 }
@@ -87,6 +89,8 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
+  // Au plus 5 plongées par année ; « Voir plus » déplie l'année entière.
+  const [anneesDepliees, setAnneesDepliees] = useState<string[]>([]);
   const vide = !chargement && plongees.length === 0;
   const filtres = filtresDisponibles(plongees);
   const filtreActif = filtres.find((f) => f.id === filtre) ?? filtres[0]!;
@@ -339,7 +343,7 @@ function Carnet() {
                 {/* Filtres : sous le titre des plongées, juste avant les cartes */}
                 {gi === 0 && filtresListe}
                 <div className={`flex flex-col ${vue === "liste" ? "gap-2" : "gap-[13px]"}`}>
-                  {g.plongees.map(({ p, numero }) => (
+                  {(anneesDepliees.includes(g.annee) ? g.plongees : g.plongees.slice(0, PAR_ANNEE)).map(({ p, numero }) => (
                     <button
                       key={p.id}
                       type="button"
@@ -350,6 +354,18 @@ function Carnet() {
                       {vue === "liste" ? <LigneDePlongee p={p} numero={numero} /> : <CarteDePlongee p={p} />}
                     </button>
                   ))}
+                  {!anneesDepliees.includes(g.annee) && g.plongees.length > PAR_ANNEE && (
+                    <button
+                      type="button"
+                      onClick={() => setAnneesDepliees((a) => [...a, g.annee])}
+                      className={`flex w-full items-center justify-center gap-[8px] rounded-[22px] border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] shadow-[0_4px_14px_#123A6308] ${
+                        vue === "liste" ? "h-[56px]" : "h-[64px]"
+                      }`}
+                    >
+                      Voir plus de plongées ({g.plongees.length - PAR_ANNEE})
+                      <ChevronDown className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
