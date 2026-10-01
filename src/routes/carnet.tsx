@@ -282,13 +282,17 @@ function Carnet() {
                   )}
                 </div>
                 <div className={`flex flex-col ${vue === "liste" ? "gap-2" : "gap-[13px]"}`}>
-                  {g.plongees.map(({ p, numero }) =>
-                    vue === "liste" ? (
-                      <LigneDePlongee key={p.id} p={p} numero={numero} />
-                    ) : (
-                      <CarteDePlongee key={p.id} p={p} />
-                    ),
-                  )}
+                  {g.plongees.map(({ p, numero }) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      aria-label={`Voir la plongée Nº ${numero}${p.siteNom ? ` — ${p.siteNom}` : ""}`}
+                      onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: p.id } })}
+                      className="block w-full rounded-[22px] text-left transition active:scale-[0.99]"
+                    >
+                      {vue === "liste" ? <LigneDePlongee p={p} numero={numero} /> : <CarteDePlongee p={p} />}
+                    </button>
+                  ))}
                 </div>
               </div>
             ))}
