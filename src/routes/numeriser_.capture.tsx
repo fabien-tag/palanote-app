@@ -125,10 +125,12 @@ function Capture() {
   ].sort((a, b) => a.ordre - b.ordre);
 
   return (
-    <div className="min-h-screen w-full bg-[#071A30] text-white">
-      <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col px-[22px] pb-[22px] pt-[18px]">
+    // Hauteur calée sur la partie visible de l'écran : le viseur prend la place qui reste,
+    // le bouton de déclenchement est toujours visible en bas.
+    <div className="h-screen supports-[height:100dvh]:h-[100dvh] w-full overflow-hidden bg-[#071A30] text-white">
+      <div className="cascade mx-auto flex h-full w-full max-w-[430px] flex-col px-[22px] pb-[max(clamp(12px,2.6svh,22px),env(safe-area-inset-bottom))] pt-[clamp(10px,2.2svh,18px)]">
         {/* Haut */}
-        <div className="flex items-center justify-between">
+        <div className="flex shrink-0 items-center justify-between">
           <button
             type="button"
             aria-label="Fermer"
@@ -157,7 +159,7 @@ function Capture() {
         </div>
 
         {/* Viseur */}
-        <div className="relative mt-[22px] aspect-[3/4] w-full overflow-hidden rounded-[22px] bg-[linear-gradient(160deg,#1B3550,#11233A)]">
+        <div className="relative mt-[clamp(10px,2.4svh,22px)] min-h-[180px] w-full flex-1 overflow-hidden rounded-[22px] bg-[linear-gradient(160deg,#1B3550,#11233A)]">
           <video ref={video} playsInline muted className={`absolute inset-0 h-full w-full object-cover ${camera === "ok" ? "" : "hidden"}`} />
           {camera !== "ok" && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-8 text-center">
@@ -188,18 +190,18 @@ function Capture() {
           </div>
         </div>
 
-        <p className="mt-[14px] flex gap-[9px] text-[12.5px] leading-snug text-white/60">
+        <p className="mt-[clamp(8px,1.6svh,14px)] flex shrink-0 gap-[9px] text-[12.5px] leading-snug text-white/60">
           <Info className="mt-[1px] h-[15px] w-[15px] shrink-0" strokeWidth={2} aria-hidden="true" />
           Une seule page dans le cadre, à plat, sans ombre portée. Le reste, l'app s'en occupe.
         </p>
         {message && (
-          <p role="alert" className="mt-2 rounded-xl bg-[#FF8A75]/20 px-3 py-2 text-[12.5px] text-[#FFD4CB]">
+          <p role="alert" className="mt-2 shrink-0 rounded-xl bg-[#FF8A75]/20 px-3 py-2 text-[12.5px] text-[#FFD4CB]">
             {message}
           </p>
         )}
 
         {/* Pages déjà prises */}
-        <div className="mt-[16px] flex min-h-[54px] items-center justify-between gap-3">
+        <div className="mt-[clamp(8px,1.6svh,16px)] flex min-h-[54px] shrink-0 items-center justify-between gap-3">
           <div className="flex gap-2 overflow-x-auto">
             {vignettes.map((v) => (
               <div key={v.cle} className="relative flex h-[54px] w-[42px] shrink-0 items-end justify-center rounded-[10px] bg-white/10 pb-[6px] text-[12px] font-bold text-white/70">
@@ -230,10 +232,8 @@ function Capture() {
           )}
         </div>
 
-        <div className="min-h-4 flex-grow" />
-
         {/* Commandes */}
-        <div className="flex items-center justify-between">
+        <div className="mt-[clamp(8px,1.8svh,16px)] flex shrink-0 items-center justify-between">
           <button
             type="button"
             aria-label="Choisir dans mes photos"
