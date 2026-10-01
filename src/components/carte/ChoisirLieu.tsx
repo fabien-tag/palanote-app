@@ -4,6 +4,9 @@ import { LocateFixed, Search, X } from "lucide-react";
 import { Carte, HTML_REPERE } from "@/components/carte/Carte";
 import {
   coordsLisibles,
+  DECALAGE_MAX_M,
+  DECALAGE_MIN_M,
+  flouterPosition,
   lieuDepuisCoords,
   messageErreurPosition,
   positionActuelle,
@@ -209,10 +212,20 @@ export function ChoisirLieu({
               {aBouge ? coordsLisibles(centre) : "Cherche un lieu ou déplace la carte"}
             </div>
           </div>
+          <p className="pb-[10px] text-[11.5px] leading-snug text-[#7D93A8]">
+            Pour respecter les spots des clubs, le point enregistré est volontairement décalé de {DECALAGE_MIN_M} à {DECALAGE_MAX_M} m.
+          </p>
           <button
             type="button"
             disabled={!aBouge}
-            onClick={() => onValider({ coords: centre, lieu: libelle, nom: nomChoisi })}
+            onClick={() =>
+              onValider({
+                // Lieu inchangé : on garde la position déjà décalée (sinon elle dériverait à chaque validation).
+                coords: depart && centre.lat === depart.lat && centre.lng === depart.lng ? depart : flouterPosition(centre),
+                lieu: libelle,
+                nom: nomChoisi,
+              })
+            }
             className="flex h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] text-[14px] font-bold tracking-wide text-[#0B2A4A] disabled:opacity-50"
           >
             VALIDER CE LIEU

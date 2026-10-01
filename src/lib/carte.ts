@@ -37,6 +37,23 @@ export function texteVersCoords(t: string | null | undefined): Coords | null {
   return { lat, lng };
 }
 
+// ---------- Respect des spots des clubs ----------
+// La position enregistrée n'est jamais le point exact : elle est décalée au hasard
+// de 100 à 150 m (direction aléatoire), et le point exact n'est conservé nulle part.
+export const DECALAGE_MIN_M = 100;
+export const DECALAGE_MAX_M = 150;
+
+export function flouterPosition(c: Coords): Coords {
+  const distance = DECALAGE_MIN_M + Math.random() * (DECALAGE_MAX_M - DECALAGE_MIN_M);
+  const angle = Math.random() * 2 * Math.PI;
+  const mParDegreLat = 111_320;
+  const mParDegreLng = 111_320 * Math.cos((c.lat * Math.PI) / 180) || 1;
+  return {
+    lat: c.lat + (distance * Math.cos(angle)) / mParDegreLat,
+    lng: c.lng + (distance * Math.sin(angle)) / mParDegreLng,
+  };
+}
+
 // Affichage : « 43,5512° N · 7,0478° E »
 export function coordsLisibles(c: Coords) {
   const f = (n: number) => Math.abs(n).toFixed(4).replace(".", ",");
