@@ -395,6 +395,7 @@ function NouvellePlongee() {
           melange: plongee.melange,
           note: plongee.note,
           binomes: plongee.binomes,
+          type: plongee.typePlongee,
           photo: photos[0],
         });
         setMessage({

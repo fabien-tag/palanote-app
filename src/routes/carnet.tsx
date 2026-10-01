@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell, GalleryVerticalEnd, List } from "lucide-react";
+import { Camera, ChevronRight, Plus, BookOpen, MapPin, Users, User, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoHorizontal from "@/assets/logo-horizontal.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -13,6 +13,15 @@ import {
 } from "@/lib/plongees";
 import { CarteDePlongee } from "@/components/CarteDePlongee";
 import { LigneDePlongee } from "@/components/LigneDePlongee";
+import {
+  BandeauCarnetsPapier,
+  EnTeteStatistiques,
+  filtresDisponibles,
+  FiltresPlongees,
+  IconeVueCartes,
+  IconeVueListe,
+  RaccourcisAccueil,
+} from "@/components/AccueilCarnet";
 
 type Vue = "cartes" | "liste";
 const CLE_VUE = "palanote-vue-carnet";
@@ -25,17 +34,21 @@ function lireVue(): Vue {
   }
 }
 
-// Regroupe les plongées par année (de la plus récente à la plus ancienne)
-// et calcule leur numéro : plongées déjà faites avant l'app + rang chronologique.
-function grouperParAnnee(plongees: CartePlongee[], numeroDepart: number) {
-  const total = plongees.length;
+// Numéro de chaque plongée : plongées déjà faites avant l'app + rang chronologique.
+// Calculé sur la liste complète, pour qu'un filtre ne change pas les numéros.
+function numeroter(plongees: CartePlongee[], numeroDepart: number) {
+  return plongees.map((p, i) => ({ p, numero: numeroDepart + plongees.length - i }));
+}
+
+// Regroupe les plongées par année (de la plus récente à la plus ancienne).
+function grouperParAnnee(liste: { p: CartePlongee; numero: number }[]) {
   const groupes: { annee: string; plongees: { p: CartePlongee; numero: number }[] }[] = [];
-  plongees.forEach((p, i) => {
-    const d = p.date ? new Date(p.date) : null;
+  liste.forEach((x) => {
+    const d = x.p.date ? new Date(x.p.date) : null;
     const annee = d && !isNaN(d.getTime()) ? String(d.getFullYear()) : "Sans date";
-    let g = groupes.find((x) => x.annee === annee);
+    let g = groupes.find((y) => y.annee === annee);
     if (!g) groupes.push((g = { annee, plongees: [] }));
-    g.plongees.push({ p, numero: numeroDepart + total - i });
+    g.plongees.push(x);
   });
   return groupes;
 }
@@ -69,6 +82,11 @@ function Carnet() {
   const [plongees, setPlongees] = useState<CartePlongee[]>([]);
   const [numeroDepart, setNumeroDepart] = useState(0);
   const [vue, setVue] = useState<Vue>("liste");
+  const [filtre, setFiltre] = useState("toutes");
+  const vide = plongees.length === 0;
+  const filtres = filtresDisponibles(plongees);
+  const filtreActif = filtres.find((f) => f.id === filtre) ?? filtres[0]!;
+  const groupes = grouperParAnnee(numeroter(plongees, numeroDepart).filter(({ p }) => filtreActif.teste(p)));
   useEffect(() => setVue(lireVue()), []);
   // Changement de vue sans que l'écran bouge : le bouton cliqué reste exactement
   // à la même hauteur à l'écran, quelle que soit la position de défilement.
@@ -127,7 +145,9 @@ function Carnet() {
   }, []);
 
   return (
-    <div ref={racine} className="flex min-h-screen flex-col bg-[#E7F1FA]" style={{ overflowAnchor: "none" }}>
+    <div ref={racine} className={`flex min-h-screen flex-col ${vide ? "bg-[#E7F1FA]" : "bg-[#F5F9FC]"}`} style={{ overflowAnchor: "none" }}>
+      {vide ? (
+        <>
       {/* Haut : vidéo marine, pleine largeur de l'écran */}
       <div className="relative flex h-[412px] w-full shrink-0 flex-col overflow-hidden rounded-b-[34px]">
         <video
@@ -175,9 +195,14 @@ function Carnet() {
           </button>
         </div>
       </div>
+        </>
+      ) : (
+        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} />
+      )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
-      {/* Cartes */}
+      {vide ? (
+        /* Avant la première plongée : écran d'accueil d'origine */
         <div className="flex shrink-0 flex-col gap-[13px] p-[22px]">
           <button
             type="button"
@@ -214,22 +239,38 @@ function Carnet() {
             </span>
           </button>
 
-          {plongees.length > 0 &&
-            grouperParAnnee(plongees, numeroDepart).map((g, gi) => (
-              <div key={g.annee} className="flex flex-col gap-[10px] pt-[8px]">
-                <div className="flex min-h-[42px] items-center justify-between">
-                  <div className="flex items-baseline gap-[10px]">
-                    <span className="text-[18px] font-bold text-[#123A63]">{g.annee}</span>
-                    <span className="text-[13px] text-[#9DB0C0]">
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/nouvelle-plongee" })}
+            className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
+          >
+            <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
+            AJOUTER MA PREMIÈRE PLONGÉE
+          </button>
+        </div>
+      ) : (
+        /* Dès la première plongée : statistiques, filtres, raccourcis et liste */
+        <>
+          <FiltresPlongees filtres={filtres} actif={filtreActif.id} onChange={setFiltre} />
+          <BandeauCarnetsPapier onClick={() => navigate({ to: "/numeriser" })} />
+          <RaccourcisAccueil />
+
+          <div className="flex shrink-0 flex-col px-[22px] pb-[22px]">
+            {groupes.map((g, gi) => (
+              <div key={g.annee} className="flex flex-col">
+                <div className="flex items-center justify-between gap-3 pb-3 pt-[18px]">
+                  <div className="flex min-w-0 items-baseline gap-2">
+                    <span className="text-[15px] font-bold text-[#123A63]">{g.annee}</span>
+                    <span className="text-[12px] text-[#9DB0C0]">
                       {g.plongees.length} plongée{g.plongees.length > 1 ? "s" : ""}
                     </span>
                   </div>
                   {gi === 0 && (
-                    <div role="group" aria-label="Affichage" className="flex gap-1 rounded-[14px] bg-[#E2ECF5] p-[4px]">
+                    <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] rounded-[13px] bg-[#E7EFF6] p-[3px]">
                       {(
                         [
-                          { v: "cartes", label: "Vue en cartes", Icone: GalleryVerticalEnd },
-                          { v: "liste", label: "Vue en liste", Icone: List },
+                          { v: "cartes", label: "Vue en cartes", Icone: IconeVueCartes },
+                          { v: "liste", label: "Vue en liste", Icone: IconeVueListe },
                         ] as const
                       ).map(({ v, label, Icone }) => (
                         <button
@@ -238,47 +279,43 @@ function Carnet() {
                           aria-label={label}
                           aria-pressed={vue === v}
                           onClick={(e) => changerVue(v, e.currentTarget)}
-                          className={`flex h-[32px] w-[38px] items-center justify-center rounded-[12px] transition ${
-                            vue === v ? "bg-white text-[#123A63] shadow-[0_2px_8px_rgba(18,58,99,.12)]" : "text-[#9DB0C0]"
+                          className={`flex h-8 w-[38px] items-center justify-center rounded-[10px] transition ${
+                            vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""
                           }`}
                         >
-                          <Icone className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
+                          <Icone actif={vue === v} />
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
-                {g.plongees.map(({ p, numero }) =>
-                  vue === "liste" ? (
-                    <LigneDePlongee key={p.id} p={p} numero={numero} />
-                  ) : (
-                    <CarteDePlongee key={p.id} p={p} />
-                  ),
-                )}
+                <div className={`flex flex-col ${vue === "liste" ? "gap-2" : "gap-[13px]"}`}>
+                  {g.plongees.map(({ p, numero }) =>
+                    vue === "liste" ? (
+                      <LigneDePlongee key={p.id} p={p} numero={numero} />
+                    ) : (
+                      <CarteDePlongee key={p.id} p={p} />
+                    ),
+                  )}
+                </div>
               </div>
             ))}
-
-          {plongees.length === 0 && (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/nouvelle-plongee" })}
-              className="flex min-h-[52px] items-center justify-center gap-2 rounded-[14px] border-2 border-dashed border-[#1176A8]/40 text-sm font-bold tracking-wide text-[#1176A8]"
-            >
-              <Plus className="h-[17px] w-[17px]" strokeWidth={2.8} aria-hidden="true" />
-              AJOUTER MA PREMIÈRE PLONGÉE
-            </button>
-          )}
-          {plongees.length > 0 && <div className="h-[70px]" aria-hidden="true" />}
-        </div>
+            {groupes.length === 0 && (
+              <p className="pt-8 text-center text-[13px] text-[#5B7189]">Aucune plongée pour ce filtre.</p>
+            )}
+            <div className="h-[70px]" aria-hidden="true" />
+          </div>
+        </>
+      )}
 
         {/* Bouton flottant : visible dès la première plongée enregistrée */}
-        {plongees.length > 0 && (
+        {!vide && (
           <button
             type="button"
             onClick={() => navigate({ to: "/nouvelle-plongee" })}
-            className="fixed bottom-[112px] right-[max(18px,calc(50vw-215px+18px))] z-20 flex h-[52px] items-center gap-[10px] rounded-[26px] bg-[#78EAC6] pl-[18px] pr-[22px] text-[15px] font-bold text-[#123A63] shadow-[0_8px_22px_rgba(18,58,99,.22)]"
+            className="fixed bottom-[112px] right-[max(24px,calc(50vw-215px+24px))] z-20 flex h-[52px] items-center gap-[9px] rounded-[26px] bg-[#3DEFBE] px-[19px] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322]"
           >
-            <Plus className="h-[20px] w-[20px]" strokeWidth={2.4} aria-hidden="true" />
+            <Plus className="h-[20px] w-[20px]" strokeWidth={2} aria-hidden="true" />
             Plongée
           </button>
         )}

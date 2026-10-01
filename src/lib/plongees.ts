@@ -14,6 +14,7 @@ export type CartePlongee = {
   melange: string;
   note: number;
   binomes: string[];
+  type?: string; // type de plongée : Exploration, Épave, Formation…
   photo?: string | undefined;
 };
 
@@ -126,7 +127,7 @@ export async function sauverPlongee(ligne: LignePlongee) {
 export async function chargerPlongees(): Promise<CartePlongee[]> {
   const { data, error } = await supabase
     .from("dives")
-    .select("id, dive_date, site_name, site_location, max_depth_m, duration_min, temp_bottom_c, gas_mix, rating, buddies")
+    .select("id, dive_date, site_name, site_location, max_depth_m, duration_min, temp_bottom_c, gas_mix, rating, buddies, dive_type")
     .order("dive_date", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
   if (error) throw error;
@@ -141,6 +142,7 @@ export async function chargerPlongees(): Promise<CartePlongee[]> {
     melange: d.gas_mix ?? "",
     note: d.rating ?? 0,
     binomes: d.buddies ?? [],
+    type: d.dive_type ?? "",
   }));
 }
 
