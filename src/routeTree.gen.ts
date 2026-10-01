@@ -14,6 +14,7 @@ import { Route as CarnetRouteImport } from './routes/carnet'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
+import { Route as MoiRouteImport } from './routes/moi'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
 import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
@@ -49,6 +50,11 @@ const ConnexionRoute = ConnexionRouteImport.update({
 const CreerUnCompteRoute = CreerUnCompteRouteImport.update({
   id: '/creer-un-compte',
   path: '/creer-un-compte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoiRoute = MoiRouteImport.update({
+  id: '/moi',
+  path: '/moi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
@@ -225,6 +237,7 @@ export interface RootRouteChildren {
   CompteCreeRoute: typeof CompteCreeRoute
   ConnexionRoute: typeof ConnexionRoute
   CreerUnCompteRoute: typeof CreerUnCompteRoute
+  MoiRoute: typeof MoiRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
   NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/creer-un-compte'
       fullPath: '/creer-un-compte'
       preLoaderRoute: typeof CreerUnCompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/moi': {
+      id: '/moi'
+      path: '/moi'
+      fullPath: '/moi'
+      preLoaderRoute: typeof MoiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mot-de-passe-oublie': {
@@ -361,6 +381,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompteCreeRoute: CompteCreeRoute,
   ConnexionRoute: ConnexionRoute,
   CreerUnCompteRoute: CreerUnCompteRoute,
+  MoiRoute: MoiRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
   NouveauMotDePasseRoute: NouveauMotDePasseRoute,
   NouvellePlongeeRoute: NouvellePlongeeRoute,
