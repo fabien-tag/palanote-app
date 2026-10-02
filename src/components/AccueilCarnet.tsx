@@ -99,12 +99,12 @@ export function EnTeteStatistiques({
             {[
               { valeur: niveauCourt, label: "niveau" },
               { valeur: stats.total, label: stats.total > 1 ? "plongées" : "plongée" },
-              { valeur: stats.profMax, label: "profondeur max" },
+              { valeur: stats.profMax, label: "prof. max" },
               { valeur: stats.sousLEau, label: "sous l'eau" },
             ].map((s) => (
               <div key={s.label} className="flex flex-1 flex-col items-center gap-[2px] px-[6px] pb-[8px] pt-[12px]">
-                <div className={`font-semibold leading-tight text-white ${String(s.valeur).length > 5 ? "pt-[5px] text-[16px]" : "text-[23px]"}`}>{s.valeur}</div>
-                <div className="text-[10px] text-white/70">{s.label}</div>
+                <div className="max-w-full truncate whitespace-nowrap text-[20px] font-semibold leading-tight text-white">{s.valeur}</div>
+                <div className="whitespace-nowrap text-[10px] text-white/70">{s.label}</div>
               </div>
             ))}
           </div>
