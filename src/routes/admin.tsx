@@ -2,6 +2,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState, type ReactNode } f
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight, ChevronDown, Mail, RefreshCw, Search, Trash2 } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
+import { Arc, Bloc, carte, GrandNombre, nombre, Voyant, type Couleur } from "@/components/admin/Bento";
 import {
   chargerTableauDeBord,
   effacerErreurs,
@@ -13,6 +14,9 @@ import {
   type UtilisateurAdmin,
 } from "@/lib/suivi";
 import { utilisateurConnecte } from "@/lib/plongees";
+import { supabase } from "@/lib/supabase";
+import { SectionFinances } from "@/components/admin/Finances";
+import { SectionLettre } from "@/components/admin/Lettre";
 
 // Tableau de bord du développeur : clair, en blocs (bento), pensé pour l'ordinateur.
 // Des voyants de couleur signalent ce qui demande de l'attention.
@@ -22,7 +26,7 @@ export const Route = createFileRoute("/admin")({
   component: TableauDeBord,
 });
 
-type Section = "apercu" | "retours" | "erreurs" | "utilisateurs";
+type Section = "apercu" | "finances" | "lettre" | "retours" | "erreurs" | "utilisateurs";
 type Donnees = Awaited<ReturnType<typeof chargerTableauDeBord>>;
 
 // ---------- Outils ----------
@@ -51,8 +55,6 @@ function grouperErreurs(erreurs: ErreurApp[]): GroupeErreurs[] {
   }));
 }
 
-const carte = "rounded-[22px] border border-[#E9EEF3] bg-white";
-const nombre = (n: number | undefined) => (n === undefined ? "—" : n.toLocaleString("fr-FR"));
 
 
 function CarteRetour({ r, onChange, compact }: { r: Retour; onChange: (id: string, statut: Retour["statut"]) => void; compact?: boolean }) {
@@ -238,83 +240,6 @@ function SectionUtilisateurs({ utilisateurs }: { utilisateurs: UtilisateurAdmin[
   );
 }
 
-// ---------- Voyants ----------
-
-type Couleur = "vert" | "orange" | "rouge" | "gris";
-const VOYANT: Record<Couleur, string> = {
-  vert: "bg-[#14B88A] shadow-[0_0_0_4px_rgba(20,184,138,.15)]",
-  orange: "bg-[#F59E0B] shadow-[0_0_0_4px_rgba(245,158,11,.18)]",
-  rouge: "bg-[#E5484D] shadow-[0_0_0_4px_rgba(229,72,77,.16)]",
-  gris: "bg-[#C5D1DC]",
-};
-function Voyant({ couleur, pulse }: { couleur: Couleur; pulse?: boolean }) {
-  return <span className={`inline-block h-[8px] w-[8px] shrink-0 rounded-full ${VOYANT[couleur]} ${pulse ? "animate-pulse" : ""}`} aria-hidden="true" />;
-}
-
-// ---------- Bento ----------
-
-function Bloc({
-  titre,
-  fond,
-  voyant,
-  onOuvrir,
-  className = "",
-  sombre,
-  children,
-}: {
-  titre: string;
-  fond: string;
-  voyant?: Couleur | undefined;
-  onOuvrir?: (() => void) | undefined;
-  className?: string;
-  sombre?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <div className={`relative flex min-h-[188px] flex-col overflow-hidden rounded-[22px] p-[20px] ${fond} ${className}`}>
-      <div className="relative z-[1] flex items-start justify-between gap-2">
-        <span className={`flex items-center gap-[8px] text-[13px] font-medium ${sombre ? "text-white/80" : "text-[#123A63]/70"}`}>
-          {voyant && <Voyant couleur={voyant} pulse={voyant !== "gris" && voyant !== "vert"} />}
-          {titre}
-        </span>
-        {onOuvrir && (
-          <button
-            type="button"
-            onClick={onOuvrir}
-            aria-label={`Ouvrir : ${titre}`}
-            className={`-mr-[6px] -mt-[6px] flex h-[30px] w-[30px] items-center justify-center rounded-full transition ${sombre ? "text-white/80 hover:bg-white/15" : "text-[#123A63]/60 hover:bg-white/60"}`}
-          >
-            <ArrowUpRight className="h-[16px] w-[16px]" />
-          </button>
-        )}
-      </div>
-      <div className="relative z-[1] flex flex-1 flex-col">{children}</div>
-    </div>
-  );
-}
-
-function GrandNombre({ valeur, unite, sombre }: { valeur: string; unite?: string; sombre?: boolean }) {
-  return (
-    <div className={`mt-auto flex items-baseline gap-[8px] ${sombre ? "text-white" : "text-[#0F2A4A]"}`}>
-      <span className="text-[44px] font-light leading-none tracking-[-0.02em]">{valeur}</span>
-      {unite && <span className={`text-[13px] ${sombre ? "text-white/75" : "text-[#123A63]/60"}`}>{unite}</span>}
-    </div>
-  );
-}
-
-// Arc fin (jauge) dessiné en SVG
-function Arc({ part, couleur }: { part: number; couleur: string }) {
-  const p = Math.max(0, Math.min(1, part));
-  const r = 52;
-  const long = Math.PI * r;
-  return (
-    <svg viewBox="0 0 120 64" className="h-[64px] w-[120px]" aria-hidden="true">
-      <path d={`M8 60 A${r} ${r} 0 0 1 112 60`} fill="none" stroke="currentColor" strokeOpacity=".18" strokeWidth="2" strokeDasharray="2 5" strokeLinecap="round" />
-      <path d={`M8 60 A${r} ${r} 0 0 1 112 60`} fill="none" stroke={couleur} strokeWidth="2.5" strokeLinecap="round" strokeDasharray={`${long * p} ${long}`} />
-    </svg>
-  );
-}
-
 function Activite({ jours }: { jours: StatsAdmin["par_jour"] }) {
   const max = Math.max(1, ...jours.map((j) => j.actifs));
   const total = jours.reduce((t, j) => t + j.inscriptions, 0);
@@ -459,6 +384,10 @@ function TableauDeBord() {
   const [chargement, setChargement] = useState(false);
   const [majLe, setMajLe] = useState<Date | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [prenomAdmin, setPrenomAdmin] = useState("");
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => setPrenomAdmin(String(data.session?.user.user_metadata?.["first_name"] ?? "")));
+  }, []);
 
   const charger = useCallback(async () => {
     setChargement(true);
@@ -516,6 +445,8 @@ function TableauDeBord() {
     { id: "retours", label: "Retours", badge: nbRetours, couleur: "orange" },
     { id: "erreurs", label: "Erreurs", badge: nbErreurs, couleur: nbErreurs > 5 ? "rouge" : "orange" },
     { id: "utilisateurs", label: "Utilisateurs" },
+    { id: "finances", label: "Finances" },
+    { id: "lettre", label: "Lettre annuelle" },
   ];
 
   // Les voyants : ce qui demande de l'attention, d'un coup d'œil.
@@ -628,6 +559,8 @@ function TableauDeBord() {
             {section === "retours" && <SectionRetours retours={donnees.retours} onChange={changerRetour} />}
             {section === "erreurs" && <SectionErreurs erreurs={donnees.erreurs} onEffacer={effacer} />}
             {section === "utilisateurs" && <SectionUtilisateurs utilisateurs={donnees.utilisateurs} />}
+            {section === "finances" && <SectionFinances stats={donnees.stats} />}
+            {section === "lettre" && <SectionLettre prenomAdmin={prenomAdmin} />}
           </div>
         )}
       </main>
