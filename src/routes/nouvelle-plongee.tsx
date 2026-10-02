@@ -405,9 +405,6 @@ function NouvellePlongee() {
   const identifiesOriginaux = useRef<string[]>([]);
   const [ajoutFaune, setAjoutFaune] = useState(false);
   const [nomFaune, setNomFaune] = useState("");
-  const [ajoutPalier, setAjoutPalier] = useState(false);
-  const [palierProf, setPalierProf] = useState("");
-  const [palierDuree, setPalierDuree] = useState("");
   const fichierPhotos = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof Plongee>(cle: K, valeur: Plongee[K]) =>
@@ -532,7 +529,11 @@ function NouvellePlongee() {
     end_time: texte(p.sortie),
     total_time_min: entier(p.tempsTotal),
     surface_interval_min: entier(p.intervalleSurface),
-    stops: p.paliers.map((x) => ({ profondeur: nombre(x.profondeur), duree: entier(x.duree) })),
+    // Paliers vides retirés ; du plus profond au moins profond (6 m puis 3 m).
+    stops: p.paliers
+      .map((x) => ({ profondeur: nombre(x.profondeur.replace(",", ".")), duree: entier(x.duree) }))
+      .filter((x) => x.profondeur !== null || x.duree !== null)
+      .sort((a, b) => (b.profondeur ?? 0) - (a.profondeur ?? 0)),
     method: texte(p.methode),
     computer: texte(p.ordinateur),
     gas_mix: texte(p.melange),
@@ -790,75 +791,73 @@ function NouvellePlongee() {
             <div className="flex flex-col gap-[7px]">
               <Label>Paliers</Label>
               <div className="flex flex-col gap-[10px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px] py-3">
-                {plongee.paliers.length === 0 && !edition && (
-                  <div className="text-[14.5px] text-[#9AAAB9]">—</div>
-                )}
-                {plongee.paliers.map((p, i) => (
-                  <div key={i}>
-                    {i > 0 && <div className="mb-[10px] h-[1.5px] bg-[#EDF2F7]" />}
-                    <div className="flex items-center">
-                      <div className="flex-grow text-[14.5px] text-[#123A63]">
-                        {p.profondeur} m — {p.duree} min
+                {plongee.paliers.length === 0 && !edition && <div className="text-[14.5px] text-[#9AAAB9]">Aucun palier</div>}
+                {!edition &&
+                  plongee.paliers.map((p, i) => (
+                    <div key={i}>
+                      {i > 0 && <div className="mb-[10px] h-[1.5px] bg-[#EDF2F7]" />}
+                      <div className="flex items-baseline gap-2 text-[14.5px] text-[#123A63]">
+                        <span className="w-[70px] shrink-0 text-[12.5px] font-semibold text-[#7D93A8]">Palier {i + 1}</span>
+                        <span>
+                          <b>{p.profondeur ? `${p.profondeur.replace(".", ",")} m` : "—"}</b> pendant <b>{p.duree ? `${p.duree} min` : "—"}</b>
+                        </span>
                       </div>
-                      {edition && (
-                        <button
-                          type="button"
-                          aria-label="Retirer ce palier"
-                          onClick={() => set("paliers", plongee.paliers.filter((_, j) => j !== i))}
-                        >
-                          <X className="h-4 w-4 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
-                        </button>
-                      )}
                     </div>
+                  ))}
+                {edition && plongee.paliers.length > 0 && (
+                  <div className="flex items-center gap-2 text-[12px] font-semibold text-[#7D93A8]">
+                    <span className="w-[62px] shrink-0" />
+                    <span className="flex-1">Profondeur</span>
+                    <span className="flex-1">Durée</span>
+                    <span className="w-[24px] shrink-0" />
                   </div>
-                ))}
-                {edition && !ajoutPalier && (
+                )}
+                {edition &&
+                  plongee.paliers.map((p, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="w-[62px] shrink-0 text-[13px] font-semibold text-[#123A63]">Palier {i + 1}</span>
+                      {(["profondeur", "duree"] as const).map((cle) => (
+                        <label key={cle} className="relative flex-1">
+                          <input
+                            value={p[cle]}
+                            onChange={(e) =>
+                              set(
+                                "paliers",
+                                plongee.paliers.map((x, j) => (j === i ? { ...x, [cle]: e.target.value.replace(/[^\d.,]/g, "").slice(0, 4) } : x)),
+                              )
+                            }
+                            inputMode={cle === "profondeur" ? "decimal" : "numeric"}
+                            placeholder={cle === "profondeur" ? (i === 0 ? "6" : "3") : "3"}
+                            aria-label={`${cle === "profondeur" ? "Profondeur" : "Durée"} du palier ${i + 1}`}
+                            className="h-[44px] w-full galet-petit border-[1.5px] border-[#E4EBF1] bg-white pl-[12px] pr-[38px] text-[15px] text-[#123A63] outline-none placeholder:text-[#C2CFDB] focus:border-[#57D4F5]"
+                          />
+                          <span className="pointer-events-none absolute right-[11px] top-1/2 -translate-y-1/2 text-[13px] text-[#9DB0C0]">
+                            {cle === "profondeur" ? "m" : "min"}
+                          </span>
+                        </label>
+                      ))}
+                      <button
+                        type="button"
+                        aria-label={`Retirer le palier ${i + 1}`}
+                        onClick={() => set("paliers", plongee.paliers.filter((_, j) => j !== i))}
+                        className="flex h-[24px] w-[24px] shrink-0 items-center justify-center"
+                      >
+                        <X className="h-4 w-4 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
+                      </button>
+                    </div>
+                  ))}
+                {edition && (
                   <>
                     {plongee.paliers.length > 0 && <div className="h-[1.5px] bg-[#EDF2F7]" />}
                     <button
                       type="button"
-                      onClick={() => setAjoutPalier(true)}
+                      onClick={() => set("paliers", [...plongee.paliers, { profondeur: "", duree: "" }])}
                       className="flex items-center gap-2 text-[#1176A8]"
                     >
                       <Plus className="h-[15px] w-[15px]" strokeWidth={2.6} aria-hidden="true" />
-                      <span className="text-[14.5px] font-semibold">Ajouter un palier</span>
+                      <span className="text-[14.5px] font-semibold">{plongee.paliers.length === 0 ? "Ajouter un palier" : "Ajouter un autre palier"}</span>
                     </button>
                   </>
-                )}
-                {edition && ajoutPalier && (
-                  <div className="flex items-center gap-2">
-                    <input
-                      value={palierProf}
-                      onChange={(e) => setPalierProf(e.target.value)}
-                      placeholder="m"
-                      type="number"
-                      className="w-16 rounded-lg border-[1.5px] border-[#E4EBF1] px-2 py-1.5 text-[14px] outline-none"
-                    />
-                    <input
-                      value={palierDuree}
-                      onChange={(e) => setPalierDuree(e.target.value)}
-                      placeholder="min"
-                      type="number"
-                      className="w-16 rounded-lg border-[1.5px] border-[#E4EBF1] px-2 py-1.5 text-[14px] outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (palierProf && palierDuree) {
-                          set("paliers", [...plongee.paliers, { profondeur: palierProf, duree: palierDuree }]);
-                          setPalierProf("");
-                          setPalierDuree("");
-                          setAjoutPalier(false);
-                        }
-                      }}
-                      className="rounded-lg bg-[#3DEFBE] px-3 py-1.5 text-[13px] font-bold text-[#0F3D70]"
-                    >
-                      OK
-                    </button>
-                    <button type="button" onClick={() => setAjoutPalier(false)} aria-label="Annuler">
-                      <X className="h-4 w-4 text-[#9DB0C0]" aria-hidden="true" />
-                    </button>
-                  </div>
                 )}
               </div>
             </div>
