@@ -29,7 +29,6 @@ import {
   IconeVueCartes,
   IconeVueListe,
   RaccourcisAccueil,
-  ARRONDI_ENTETE,
 } from "@/components/AccueilCarnet";
 
 type Vue = "cartes" | "liste";
@@ -222,11 +221,11 @@ function Carnet() {
   if (chargement)
     return (
       <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
-        <div style={{ borderRadius: ARRONDI_ENTETE }} className="h-[300px] w-full shrink-0 bg-[#0E3D72]" />
+        <div className="h-[300px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
         <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
           <div className="flex flex-col gap-[12px] p-[22px]">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="h-[86px] animate-pulse rounded-[20px] bg-white shadow-[0_4px_14px_#123A6306]" />
+              <div key={i} className="h-[86px] animate-pulse galet-b bg-white shadow-[0_4px_14px_#123A6306]" />
             ))}
           </div>
           <div className="flex-grow" />
@@ -264,7 +263,7 @@ function Carnet() {
             </button>
           </div>
           <div className="mt-auto flex flex-col items-center pb-6">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center goutte bg-white/15">
               <Camera className="h-8 w-8 text-white" strokeWidth={1.7} aria-hidden="true" />
             </div>
             <h1 className="text-center text-[22px] font-bold text-white">
@@ -281,7 +280,7 @@ function Carnet() {
           <button
             type="button"
             onClick={() => navigate({ to: "/numeriser" })}
-            className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] text-sm font-bold tracking-wide text-[#0B2A4A]"
+            className="flex min-h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-sm font-bold tracking-wide text-[#0B2A4A]"
           >
             NUMÉRISER MES CARNETS AVEC L'IA
           </button>
@@ -298,9 +297,9 @@ function Carnet() {
         <div className="flex shrink-0 flex-col gap-[13px] p-[22px]">
           <button
             type="button"
-            className="relative flex items-center gap-[13px] rounded-2xl bg-white p-[13px] text-left shadow-sm"
+            className="relative flex items-center gap-[13px] galet-moyen bg-white p-[13px] text-left shadow-sm"
           >
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#57D4F5]/[0.18]">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center goutte bg-[#57D4F5]/[0.18]">
               <Watch className="h-[30px] w-[30px] text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
             </div>
             <div className="flex min-w-0 flex-grow flex-col gap-0.5">
@@ -349,7 +348,7 @@ function Carnet() {
                     </span>
                   </div>
                   {gi === 0 && (
-                    <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] rounded-[13px] bg-[#E7EFF6] p-[3px]">
+                    <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
                       {(
                         [
                           { v: "cartes", label: "Vue en cartes", Icone: IconeVueCartes },
@@ -362,7 +361,7 @@ function Carnet() {
                           aria-label={label}
                           aria-pressed={vue === v}
                           onClick={(e) => changerVue(v, e.currentTarget)}
-                          className={`flex h-8 w-[38px] items-center justify-center rounded-[10px] transition ${
+                          className={`flex h-8 w-[38px] items-center justify-center galet-petit transition ${
                             vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""
                           }`}
                         >
@@ -381,7 +380,7 @@ function Carnet() {
                       type="button"
                       aria-label={`Voir la plongée Nº ${numero}${p.siteNom ? ` — ${p.siteNom}` : ""}`}
                       onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: p.id } })}
-                      className="block w-full rounded-[28px] text-left transition active:scale-[0.99]"
+                      className="block w-full galet-c text-left transition active:scale-[0.99]"
                     >
                       {vue === "liste" ? <LigneDePlongee p={p} numero={numero} /> : <CarteDePlongee p={p} />}
                     </button>

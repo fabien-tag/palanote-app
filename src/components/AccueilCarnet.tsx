@@ -39,9 +39,6 @@ function statistiques(plongees: CartePlongee[], numeroDepart: number, profMaxAva
   };
 }
 
-// Bas de l'en-tête : coins arrondis différents à gauche et à droite (test formes organiques).
-export const ARRONDI_ENTETE = "0 0 24px 52px / 0 0 22px 40px";
-
 export function EnTeteStatistiques({
   plongees,
   numeroDepart,
@@ -60,7 +57,7 @@ export function EnTeteStatistiques({
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);
   return (
-    <div style={{ borderRadius: ARRONDI_ENTETE }} className="relative h-[300px] w-full shrink-0 overflow-hidden bg-[#0E3D72]">
+    <div className="relative h-[300px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={fondMarin}
