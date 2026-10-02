@@ -75,18 +75,18 @@ export function EnTeteStatistiques({
             <Bell className="h-[21px] w-[21px] text-white" strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
-        <div className="px-[22px] pt-[14px]">
+        <div className="mt-auto px-[22px] pb-[16px]">
           <h1 className="text-[24px] font-bold leading-[1.2] text-white">Mes plongées</h1>
           {sousTitre && <p className="pt-1 text-[14px] leading-normal text-white/90">{sousTitre}</p>}
         </div>
-        <div className="mt-auto px-[22px] pb-[6px]">
+        <div className="px-[22px] pb-[6px]">
           <div className="flex border-t border-white/20">
             {[
               { valeur: stats.total, label: stats.total > 1 ? "plongées" : "plongée" },
               { valeur: stats.profMax, label: "profondeur max" },
               { valeur: stats.sousLEau, label: "sous l'eau" },
             ].map((s) => (
-              <div key={s.label} className="flex flex-1 flex-col items-center gap-[2px] px-[6px] py-[10px]">
+              <div key={s.label} className="flex flex-1 flex-col items-center gap-[2px] px-[6px] py-[30px]">
                 <div className="text-[23px] font-semibold leading-tight text-white">{s.valeur}</div>
                 <div className="text-[10px] text-white/70">{s.label}</div>
               </div>
