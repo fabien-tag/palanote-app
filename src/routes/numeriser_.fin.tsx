@@ -79,10 +79,10 @@ function Fin() {
         </p>
       </div>
 
-      <div className="relative mx-[22px] mt-[18px] flex flex-col gap-[12px] rounded-[22px] border border-[#DCE7F0] bg-white p-[16px]">
+      <div className="relative mx-[22px] mt-[18px] flex flex-col gap-[12px] galet-c border border-[#DCE7F0] bg-white p-[16px]">
         {lignes.map((l) => (
           <div key={l.texte} className="flex items-center gap-[14px]">
-            <span className={`flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[14px] text-[17px] font-bold ${l.fond}`}>{l.n}</span>
+            <span className={`flex h-[42px] w-[42px] shrink-0 items-center justify-center goutte text-[17px] font-bold ${l.fond}`}>{l.n}</span>
             <span className="text-[14.5px] leading-snug">{l.texte}</span>
           </div>
         ))}
@@ -95,7 +95,7 @@ function Fin() {
         <button
           type="button"
           onClick={() => navigate({ to: "/numeriser/capture" })}
-          className="flex w-full items-center gap-3 rounded-[20px] border border-[#CFE6F3] bg-[#E3F2FB] p-[16px] text-left"
+          className="flex w-full items-center gap-3 galet border border-[#CFE6F3] bg-[#E3F2FB] p-[16px] text-left"
         >
           <BookOpen className="h-[20px] w-[20px] shrink-0 text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
           <span className="flex-grow">

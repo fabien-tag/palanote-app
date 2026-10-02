@@ -87,7 +87,7 @@ function AjouterBinome() {
             type="button"
             aria-label="Retour"
             onClick={() => navigate({ to: depuis === "carnet" ? "/carnet" : "/amis" })}
-            className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#E3EDF6]"
+            className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
@@ -101,11 +101,11 @@ function AjouterBinome() {
         </p>
 
         {/* QR code */}
-        <div className="mx-auto mt-[18px] flex h-[clamp(200px,30svh,236px)] w-[clamp(200px,30svh,236px)] items-center justify-center rounded-[26px] bg-white p-[18px] shadow-[0_8px_26px_rgba(15,61,112,.12)]">
+        <div className="mx-auto mt-[18px] flex h-[clamp(200px,30svh,236px)] w-[clamp(200px,30svh,236px)] items-center justify-center galet bg-white p-[18px] shadow-[0_8px_26px_rgba(15,61,112,.12)]">
           {qr ? (
             <div className="relative h-full w-full">
               <div className="h-full w-full [&>svg]:h-full [&>svg]:w-full" dangerouslySetInnerHTML={{ __html: qr }} />
-              <div className="absolute left-1/2 top-1/2 flex h-[42px] w-[42px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[12px] bg-[#0F3D70] p-[7px]">
+              <div className="absolute left-1/2 top-1/2 flex h-[42px] w-[42px] -translate-x-1/2 -translate-y-1/2 items-center justify-center goutte bg-[#0F3D70] p-[7px]">
                 <img src={logoCorail} alt="" className="h-full w-auto" />
               </div>
             </div>
@@ -144,7 +144,7 @@ function AjouterBinome() {
           </div>
         )}
 
-        <div className="relative mt-[clamp(14px,3svh,24px)] rounded-[18px] border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px] text-[13px] leading-normal">
+        <div className="relative mt-[clamp(14px,3svh,24px)] galet-b border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px] text-[13px] leading-normal">
           <b>Vous devenez binômes</b> dès qu'il a scanné le code. S'il n'a pas encore Palanote, il crée son compte : l'invitation l'attend, sans rien à
           retaper.
           <Meduse className="-right-[8px] -top-[14px]" />
@@ -157,7 +157,7 @@ function AjouterBinome() {
           type="button"
           disabled={!invitation}
           onClick={() => void envoyerLien()}
-          className="flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] disabled:opacity-50"
+          className="flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] disabled:opacity-50"
         >
           <Share2 className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
           ENVOYER LE LIEN À LA PLACE

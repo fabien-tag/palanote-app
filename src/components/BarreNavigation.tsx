@@ -46,7 +46,7 @@ export function BarreNavigation({ actif }: { actif: Onglet }) {
           }`}
         >
           <span
-            className={`flex h-[33px] w-[58px] items-center justify-center rounded-[13px] ${
+            className={`flex h-[33px] w-[58px] items-center justify-center galet-petit ${
               estActif ? "bg-[#D5FAF0]" : ""
             }`}
           >

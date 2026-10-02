@@ -115,7 +115,7 @@ function Choisir() {
       </div>
 
       <div className="px-[22px]">
-        <div role="tablist" className="flex rounded-[16px] bg-[#E3EDF6] p-[4px]">
+        <div role="tablist" className="flex galet-moyen bg-[#E3EDF6] p-[4px]">
           {(
             [
               ["photos", "Mes photos"],
@@ -128,7 +128,7 @@ function Choisir() {
               type="button"
               aria-selected={onglet === v}
               onClick={() => setOnglet(v)}
-              className={`h-[34px] flex-1 rounded-[13px] text-[13.5px] font-semibold ${onglet === v ? "bg-white text-[#123A63] shadow-[0_2px_6px_rgba(15,61,112,.10)]" : "text-[#7D93A8]"}`}
+              className={`h-[34px] flex-1 galet-petit text-[13.5px] font-semibold ${onglet === v ? "bg-white text-[#123A63] shadow-[0_2px_6px_rgba(15,61,112,.10)]" : "text-[#7D93A8]"}`}
             >
               {l}
             </button>
@@ -137,12 +137,12 @@ function Choisir() {
       </div>
 
       {onglet === "fichiers" ? (
-        <div className="mx-[22px] mt-[16px] rounded-[18px] border border-[#D9E6F0] bg-white p-[18px] text-[13.5px] leading-normal text-[#5B7189]">
+        <div className="mx-[22px] mt-[16px] galet-b border border-[#D9E6F0] bg-white p-[18px] text-[13.5px] leading-normal text-[#5B7189]">
           <b className="text-[#123A63]">Les PDF arrivent bientôt.</b> En attendant, choisis tes pages dans tes photos.
         </div>
       ) : (
         <>
-          <div className="mx-[22px] mt-[16px] flex items-start gap-3 rounded-[16px] border border-[#C6E3F2] bg-[#E3F2FB] px-[14px] py-[12px]">
+          <div className="mx-[22px] mt-[16px] flex items-start gap-3 galet-moyen border border-[#C6E3F2] bg-[#E3F2FB] px-[14px] py-[12px]">
             <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-[#3DEFBE] text-[12.5px] font-bold text-[#0B3B63]">1</span>
             <p className="text-[13px] leading-normal text-[#123A63]">
               <b>Touche-les dans l'ordre des pages.</b> Le chiffre te montre l'ordre retenu — c'est lui qui numérotera tes plongées.
@@ -177,7 +177,7 @@ function Choisir() {
                         onPointerLeave={() => appui.current && clearTimeout(appui.current)}
                         onClick={() => !appuiLong.current && basculer(p.id)}
                         onContextMenu={(e) => e.preventDefault()}
-                        className={`relative aspect-[3/4] overflow-hidden rounded-[14px] bg-cover bg-center ${choisie ? "ring-[2.5px] ring-[#3DEFBE]" : ""}`}
+                        className={`relative aspect-[3/4] overflow-hidden galet-moyen bg-cover bg-center ${choisie ? "ring-[2.5px] ring-[#3DEFBE]" : ""}`}
                         style={{ backgroundImage: `url(${p.url})`, backgroundColor: FONDS[i % FONDS.length] }}
                       >
                         <span
@@ -197,7 +197,7 @@ function Choisir() {
             <button
               type="button"
               onClick={() => champ.current?.click()}
-              className="mt-[18px] flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#1176A8]/35 text-[13.5px] font-bold text-[#1176A8]"
+              className="mt-[18px] flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border-2 border-dashed border-[#1176A8]/35 text-[13.5px] font-bold text-[#1176A8]"
             >
               <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
               {photos.length ? "Ajouter d'autres photos" : "Ouvrir mes photos"}
@@ -214,7 +214,7 @@ function Choisir() {
               }}
             />
             {erreur && (
-              <p role="alert" className="mt-3 rounded-xl bg-[#FFE4DE] px-3 py-2 text-[13px] text-[#8A2A1A]">
+              <p role="alert" className="mt-3 galet-petit bg-[#FFE4DE] px-3 py-2 text-[13px] text-[#8A2A1A]">
                 {erreur}
               </p>
             )}
@@ -234,7 +234,7 @@ function Choisir() {
 
       {agrandie && (
         <div role="dialog" aria-label="Photo agrandie" className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" onClick={() => setAgrandie(null)}>
-          <img src={agrandie.url} alt="Page agrandie" className="max-h-full max-w-full rounded-xl object-contain" />
+          <img src={agrandie.url} alt="Page agrandie" className="max-h-full max-w-full galet-petit object-contain" />
           <button type="button" aria-label="Fermer" className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white">
             <X className="h-5 w-5" />
           </button>

@@ -153,7 +153,7 @@ function ProfilPlongeur() {
                 value={firstDiveYear}
                 onChange={(e) => setFirstDiveYear(e.target.value)}
                 placeholder="Année"
-                className="mt-2 min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
+                className="mt-2 min-h-[52px] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
               />
             </div>
             <div>
@@ -167,7 +167,7 @@ function ProfilPlongeur() {
                 min={0}
                 value={diveCount}
                 onChange={(e) => setDiveCount(e.target.value)}
-                className="mt-2 min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
+                className="mt-2 min-h-[52px] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
               />
             </div>
           </div>
@@ -187,7 +187,7 @@ function ProfilPlongeur() {
                 value={club}
                 onChange={(e) => setClub(e.target.value)}
                 placeholder="Rechercher un club"
-                className="min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 pr-12 text-base text-foreground outline-none placeholder:text-foreground/50 focus:border-lagon"
+                className="min-h-[52px] w-full galet-moyen border-0 bg-blanc px-4 pr-12 text-base text-foreground outline-none placeholder:text-foreground/50 focus:border-lagon"
               />
               <Search
                 className="pointer-events-none absolute right-4 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-foreground/40"
@@ -210,7 +210,7 @@ function ProfilPlongeur() {
           <button
             type="submit"
             disabled={loading}
-            className="min-h-[52px] w-full rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
+            className="min-h-[52px] w-full galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
           >
             CRÉER MON COMPTE
           </button>

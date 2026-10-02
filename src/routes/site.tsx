@@ -75,7 +75,7 @@ function PageSite() {
             type="button"
             aria-label="Retour"
             onClick={() => (window.history.length > 1 ? window.history.back() : navigate({ to: "/carte" }))}
-            className="absolute left-[18px] top-[max(16px,env(safe-area-inset-top))] z-[500] flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/25 text-white backdrop-blur-sm"
+            className="absolute left-[18px] top-[max(16px,env(safe-area-inset-top))] z-[500] flex h-10 w-10 items-center justify-center goutte bg-white/25 text-white backdrop-blur-sm"
           >
             <ChevronLeft className="h-[19px] w-[19px]" strokeWidth={2.4} />
           </button>
@@ -86,7 +86,7 @@ function PageSite() {
         </div>
 
         {/* Chiffres */}
-        <div className="mx-[16px] mt-[16px] flex rounded-[20px] border border-[#DCE7F0] bg-white py-[14px] shadow-[0_4px_14px_#123A6308]">
+        <div className="mx-[16px] mt-[16px] flex galet-b border border-[#DCE7F0] bg-white py-[14px] shadow-[0_4px_14px_#123A6308]">
           {[
             { Icone: BookOpen, fond: "bg-[#DDF8EF]", couleur: "text-[#14B88A]", valeur: String(nb), label: nb > 1 ? "plongées" : "plongée" },
             {
@@ -105,7 +105,7 @@ function PageSite() {
             },
           ].map(({ Icone, fond, couleur, valeur, label }, i) => (
             <div key={label} className={`flex flex-1 flex-col items-center gap-[4px] ${i > 0 ? "border-l border-[#EDF2F7]" : ""}`}>
-              <span className={`flex h-[30px] w-[30px] items-center justify-center rounded-[10px] ${fond}`}>
+              <span className={`flex h-[30px] w-[30px] items-center justify-center goutte ${fond}`}>
                 <Icone className={`h-[16px] w-[16px] ${couleur}`} strokeWidth={2.2} aria-hidden="true" />
               </span>
               <span className="text-[19px] font-bold">{valeur}</span>
@@ -116,7 +116,7 @@ function PageSite() {
 
         {/* Plongées */}
         <h2 className="px-[22px] pb-[10px] pt-[22px] text-[16px] font-bold">Tes plongées ici</h2>
-        <div className="mx-[16px] overflow-hidden rounded-[20px] border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
+        <div className="mx-[16px] overflow-hidden galet-c border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
           {spot.plongees.map((p) => {
             const d = p.date ? new Date(p.date) : null;
             const ok = d && !isNaN(d.getTime());
@@ -164,7 +164,7 @@ function PageSite() {
 
         {/* Mois */}
         {avecDate > 0 && (
-          <div className="mx-[16px] mt-[22px] rounded-[20px] border border-[#DCE7F0] bg-white p-[16px] shadow-[0_4px_14px_#123A6308]">
+          <div className="mx-[16px] mt-[22px] galet border border-[#DCE7F0] bg-white p-[16px] shadow-[0_4px_14px_#123A6308]">
             <h2 className="text-[16px] font-bold">Quand tu y vas</h2>
             <div className="flex h-[86px] items-end gap-[6px] pt-[14px]" aria-hidden="true">
               {parMois.map((n, i) => {
@@ -189,8 +189,8 @@ function PageSite() {
 
         {/* Club */}
         {club && (
-          <div className="mx-[16px] mt-[14px] flex items-center gap-[12px] rounded-[20px] border border-[#DCE7F0] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
-            <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[12px] border-[1.5px] border-[#FF8A75] text-[#FF8A75]">
+          <div className="mx-[16px] mt-[14px] flex items-center gap-[12px] galet-b border border-[#DCE7F0] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
+            <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte border-[1.5px] border-[#FF8A75] text-[#FF8A75]">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="M8 9h8a3 3 0 0 1 0 6H8a3 3 0 0 1 0-6Z" />
                 <path d="M12 9v6" />
@@ -214,7 +214,7 @@ function PageSite() {
                 search: { site: spot.nom === "Site sans nom" ? "" : spot.nom, lieu: spot.lieu, coords: coordsVersTexte(spot.coords) },
               })
             }
-            className="flex h-[54px] w-full items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+            className="flex h-[54px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
           >
             AJOUTER UNE PLONGÉE ICI
           </button>

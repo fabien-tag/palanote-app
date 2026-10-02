@@ -113,7 +113,7 @@ function CreerUnCompte() {
                 setPrenomError(null);
               }}
               placeholder="Ex. : Camille"
-              className="mt-2 min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 text-base text-foreground outline-none placeholder:text-foreground/40 focus:border-lagon"
+              className="mt-2 min-h-[52px] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none placeholder:text-foreground/40 focus:border-lagon"
             />
             {prenomError && (
               <p role="alert" className="mt-2 text-xs font-medium text-corail">
@@ -136,7 +136,7 @@ function CreerUnCompte() {
                 setEmailError(null);
               }}
               placeholder="prenom@exemple.fr"
-              className="mt-2 min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
+              className="mt-2 min-h-[52px] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
             />
             {emailError && (
               <p role="alert" className="mt-2 text-xs font-medium text-corail">
@@ -169,7 +169,7 @@ function CreerUnCompte() {
           <button
             type="submit"
             disabled={loading || !passwordOk}
-            className="min-h-[52px] w-full rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
+            className="min-h-[52px] w-full galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
           >
             ÉTAPE SUIVANTE
           </button>
@@ -184,7 +184,7 @@ function CreerUnCompte() {
         <button
           type="button"
           onClick={onGoogle}
-          className="flex min-h-[52px] w-full items-center justify-center gap-3 rounded-[14px] border-0 bg-blanc text-sm font-bold tracking-wide text-encre"
+          className="flex min-h-[52px] w-full items-center justify-center gap-3 galet-moyen border-0 bg-blanc text-sm font-bold tracking-wide text-encre"
         >
           <LogoGoogle />
           CONTINUER AVEC GOOGLE

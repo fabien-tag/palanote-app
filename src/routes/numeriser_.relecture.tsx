@@ -76,7 +76,7 @@ function Champ({
         <Badge c={confiance} modifie={modifie} />
       </div>
       <div
-        className={`flex min-h-[56px] items-center gap-2 rounded-[18px] px-[18px] ${
+        className={`flex min-h-[56px] items-center gap-2 galet-c px-[18px] ${
           verifier
             ? "border-2 border-[#F5A524] bg-[#FFF5E5]"
             : vide
@@ -227,7 +227,7 @@ function Relecture() {
           type="button"
           aria-label="Revenir à la lecture"
           onClick={() => navigate({ to: "/numeriser/lecture", search: { lot } })}
-          className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#E3EDF6]"
+          className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
         >
           <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
         </button>
@@ -246,11 +246,11 @@ function Relecture() {
 
       <div className="flex flex-col gap-[18px] px-[22px] pb-[28px]">
         {/* La page photographiée */}
-        <div className="rounded-[22px] bg-white p-[9px] shadow-[0_3px_13px_#123A6308]">
+        <div className="galet bg-white p-[9px] shadow-[0_3px_13px_#123A6308]">
           <button
             type="button"
             onClick={() => photo && setAgrandie(true)}
-            className="relative flex h-[200px] w-full items-center justify-center overflow-hidden rounded-[16px] bg-[#E3F0FA] bg-cover bg-center"
+            className="relative flex h-[200px] w-full items-center justify-center overflow-hidden galet-moyen bg-[#E3F0FA] bg-cover bg-center"
             style={photo ? { backgroundImage: `url(${photo})` } : undefined}
           >
             {!photo && (
@@ -261,7 +261,7 @@ function Relecture() {
             )}
             <span className="absolute left-[10px] top-[10px] rounded-[10px] bg-white px-[10px] py-[4px] text-[12px] font-bold text-[#123A63] shadow-sm">Agrandir</span>
             {surLaPage.length > 1 && (
-              <span className="absolute bottom-[10px] right-[10px] rounded-[12px] bg-white px-[10px] py-[5px] text-[12px] font-bold text-[#123A63] shadow-sm">
+              <span className="absolute bottom-[10px] right-[10px] rounded-[10px] bg-white px-[10px] py-[5px] text-[12px] font-bold text-[#123A63] shadow-sm">
                 {surLaPage.length} plongées sur cette page
               </span>
             )}
@@ -272,7 +272,7 @@ function Relecture() {
         </div>
 
         {aVerifier > 0 && (
-          <div className="flex items-center gap-[13px] rounded-[18px] border-[1.5px] border-[#F5A524] bg-[#FFF5E5] px-[14px] py-[12px]">
+          <div className="flex items-center gap-[13px] galet-b border-[1.5px] border-[#F5A524] bg-[#FFF5E5] px-[14px] py-[12px]">
             <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[#FFC65C] text-[16px] font-bold text-[#6B4A14]">{aVerifier}</span>
             <p className="text-[13.5px] leading-snug text-[#6B4A14]">
               <b>
@@ -296,7 +296,7 @@ function Relecture() {
         ))}
 
         {/* Signature et tampon */}
-        <div className="relative rounded-[20px] border border-[#E4EBF1] bg-white p-[16px]">
+        <div className="relative galet-c border border-[#E4EBF1] bg-white p-[16px]">
           <div className="flex items-center justify-between pb-[12px]">
             <span className="text-[14px] font-bold text-[#5B7189]">Signature et tampon</span>
             <Badge c={signatureLue ? (confiance("signee") === "a_verifier" || confiance("tamponnee") === "a_verifier" ? "a_verifier" : "sur") : "non_lu"} modifie={modifies.has("signee") || modifies.has("tamponnee")} />
@@ -327,7 +327,7 @@ function Relecture() {
         {commentaire && (
           <div className="flex flex-col gap-[7px]">
             <span className="text-[13.5px] font-bold text-[#5B7189]">Commentaire manuscrit</span>
-            <div className="rounded-[20px] border border-[#E4EBF1] bg-white p-[16px]">
+            <div className="galet border border-[#E4EBF1] bg-white p-[16px]">
               <p className={`text-[15px] italic leading-snug ${garderCommentaire === false ? "text-[#B8C5D2] line-through" : "text-[#5B7189]"}`}>« {commentaire} »</p>
               <div className="flex gap-2 pt-[12px]">
                 <button
@@ -350,7 +350,7 @@ function Relecture() {
         )}
 
         {erreur && (
-          <p role="alert" className="rounded-xl bg-[#FFE4DE] px-3 py-2 text-[13px] text-[#8A2A1A]">
+          <p role="alert" className="galet-petit bg-[#FFE4DE] px-3 py-2 text-[13px] text-[#8A2A1A]">
             {erreur}
           </p>
         )}

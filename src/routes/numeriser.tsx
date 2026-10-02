@@ -84,7 +84,7 @@ function Numeriser() {
             aria-label="Retour"
             onClick={() => navigate({ to: "/carnet" })}
             style={d(retards.retour)}
-            className="apparition flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/[0.18]"
+            className="apparition flex h-10 w-10 items-center justify-center goutte bg-white/[0.18]"
           >
             <ChevronLeft className="h-[18px] w-[18px] text-white" strokeWidth={2.4} />
           </button>
@@ -146,7 +146,7 @@ function Numeriser() {
             <button
               type="button"
               onClick={() => navigate({ to: "/numeriser/reprendre", search: { lot: enCours.id } })}
-              className="flex w-full items-center gap-3 rounded-2xl bg-white/[0.14] px-4 py-3 text-left backdrop-blur-sm"
+              className="flex w-full items-center gap-3 galet-moyen bg-white/[0.14] px-4 py-3 text-left backdrop-blur-sm"
             >
               <span className="flex-grow">
                 <span className="block text-[14px] font-bold text-white">{enCours.libelle ?? "Ton carnet"} en cours</span>
@@ -162,7 +162,7 @@ function Numeriser() {
             type="button"
             onClick={() => navigate({ to: "/numeriser/capture" })}
             style={d(retards.boutonPrincipal)}
-            className="apparition flex h-[clamp(48px,7svh,56px)] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
+            className="apparition flex h-[clamp(48px,7svh,56px)] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
           >
             PHOTOGRAPHIER UNE PAGE
           </button>
@@ -170,7 +170,7 @@ function Numeriser() {
             type="button"
             onClick={() => galerieRef.current?.click()}
             style={d(retards.boutonSecondaire)}
-            className="apparition flex h-[clamp(46px,6.8svh,54px)] items-center justify-center gap-[9px] rounded-2xl border-2 border-[#3DEFBE] text-[13.5px] font-bold tracking-[.05em] text-[#3DEFBE]"
+            className="apparition flex h-[clamp(46px,6.8svh,54px)] items-center justify-center gap-[9px] galet-moyen border-2 border-[#3DEFBE] text-[13.5px] font-bold tracking-[.05em] text-[#3DEFBE]"
           >
             <ImageIcon className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
             CHOISIR DANS MES PHOTOS

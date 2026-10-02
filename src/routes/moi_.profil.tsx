@@ -28,7 +28,7 @@ function Champ({
       <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
       <input
         {...props}
-        className="block h-[52px] w-full rounded-[16px] border-[1.5px] border-[#E4EBF1] bg-white px-[16px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+        className="block h-[52px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
       />
       {aide && <span className="block pt-[6px] text-[12px] text-[#9DB0C0]">{aide}</span>}
     </label>
@@ -205,14 +205,14 @@ function ModifierProfil() {
             type="button"
             disabled={enCours}
             onClick={() => void enregistrer()}
-            className="mt-[18px] flex h-[54px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-60"
+            className="mt-[18px] flex h-[54px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-60"
           >
             {enCours ? "ENREGISTREMENT…" : "ENREGISTRER"}
           </button>
           <button
             type="button"
             onClick={() => void signOut().catch(() => undefined).then(() => navigate({ to: "/connexion", replace: true }))}
-            className="mt-[12px] flex h-[52px] items-center justify-center rounded-2xl border border-[#E4EBF1] bg-white text-[14px] font-bold text-[#123A63]"
+            className="mt-[12px] flex h-[52px] items-center justify-center galet-moyen border border-[#E4EBF1] bg-white text-[14px] font-bold text-[#123A63]"
           >
             Se déconnecter
           </button>

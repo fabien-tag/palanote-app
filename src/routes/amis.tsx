@@ -131,14 +131,14 @@ function PageAmis() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/connexion" })}
-                className="flex h-[52px] w-full items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+                className="flex h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
               >
                 ME CONNECTER
               </button>
             </div>
           ) : vide ? (
             <div className="flex min-h-full flex-col items-center justify-center pb-[4svh] text-center">
-              <div className="flex h-[88px] w-[88px] items-center justify-center rounded-[26px] bg-[#D6EEF9]">
+              <div className="flex h-[88px] w-[88px] items-center justify-center galet bg-[#D6EEF9]">
                 <Masques />
               </div>
               <h2 className="pt-[22px] text-[21px] font-bold">Personne ici pour l'instant</h2>
@@ -149,14 +149,14 @@ function PageAmis() {
                 <button
                   type="button"
                   onClick={() => navigate({ to: "/amis/ajouter" })}
-                  className="flex h-[54px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
+                  className="flex h-[54px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
                 >
                   INVITER UN BINÔME
                 </button>
                 <button
                   type="button"
                   disabled
-                  className="relative flex h-[52px] items-center justify-center gap-2 rounded-2xl border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] opacity-60"
+                  className="relative flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] opacity-60"
                 >
                   <Search className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
                   RECHERCHER QUELQU'UN
@@ -176,7 +176,7 @@ function PageAmis() {
                   </div>
                   <div className="flex flex-col gap-[10px]">
                     {aConfirmer.map((p) => (
-                      <div key={p.id} className="rounded-[20px] border border-[#FFD3C8] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
+                      <div key={p.id} className="galet-b border border-[#FFD3C8] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
                         <div className="flex items-center gap-[11px]">
                           <span
                             className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full text-[13.5px] font-bold text-[#0F3D70]"
@@ -188,7 +188,7 @@ function PageAmis() {
                             <b className="text-[#123A63]">{p.de.prenom}</b> t'a identifié sur une plongée
                           </span>
                         </div>
-                        <div className="mt-[11px] rounded-[14px] bg-[#F1F6FC] px-[12px] py-[10px]">
+                        <div className="mt-[11px] galet-moyen bg-[#F1F6FC] px-[12px] py-[10px]">
                           <div className="truncate text-[14.5px] font-bold">
                             {p.site || "Site non renseigné"} · {dateCourte(p.date)}
                           </div>
@@ -201,7 +201,7 @@ function PageAmis() {
                             type="button"
                             disabled={reponseEnCours === p.id}
                             onClick={() => void repondre(p, true)}
-                            className="flex h-[42px] flex-1 items-center justify-center rounded-[14px] bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
+                            className="flex h-[42px] flex-1 items-center justify-center galet-moyen bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
                           >
                             AJOUTER À MON CARNET
                           </button>
@@ -225,7 +225,7 @@ function PageAmis() {
                   {binomes.length} personne{binomes.length > 1 ? "s" : ""}
                 </span>
               </div>
-              <div className="overflow-hidden rounded-[20px] border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
+              <div className="overflow-hidden galet-c border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
                 {binomes.map((b) => (
                   <button
                     key={b.id}
@@ -252,7 +252,7 @@ function PageAmis() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/amis/ajouter" })}
-                className="mt-[16px] flex h-[52px] w-full items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+                className="mt-[16px] flex h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
               >
                 INVITER UN BINÔME
               </button>

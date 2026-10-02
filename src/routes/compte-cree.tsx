@@ -21,8 +21,8 @@ function CompteCree() {
     <div className="relative flex min-h-screen justify-center bg-abyss">
       <FondAuth />
       <div className="relative flex min-h-screen w-full max-w-[430px] flex-col justify-center px-6 py-6">
-        <div className="flex flex-col items-center rounded-[24px] border border-blanc/25 bg-blanc/10 px-6 py-10 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-[16px] border border-blanc/30 bg-blanc/15">
+        <div className="flex flex-col items-center galet-b border border-blanc/25 bg-blanc/10 px-6 py-10 text-center">
+          <div className="flex h-14 w-14 items-center justify-center goutte border border-blanc/30 bg-blanc/15">
             <Mail className="h-7 w-7 text-blanc" strokeWidth={2} />
           </div>
           <h1 className="mt-6 text-2xl font-bold text-blanc">
@@ -35,7 +35,7 @@ function CompteCree() {
         </div>
         <Link
           to="/connexion"
-          className="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss"
+          className="mt-6 flex min-h-[52px] w-full items-center justify-center galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss"
         >
           SE CONNECTER
         </Link>

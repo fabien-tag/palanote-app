@@ -14,8 +14,8 @@ export const Route = createFileRoute("/moi_/reglages")({
 });
 
 const champ =
-  "block h-[48px] w-full rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[14px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]";
-const boutonPetit = "flex h-[44px] flex-1 items-center justify-center rounded-[14px] text-[13px] font-bold disabled:opacity-50";
+  "block h-[48px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]";
+const boutonPetit = "flex h-[44px] flex-1 items-center justify-center galet-moyen text-[13px] font-bold disabled:opacity-50";
 
 function Reglages() {
   const navigate = useNavigate();
@@ -163,7 +163,7 @@ function Reglages() {
           onChange={(v) => void basculer("notif_binome", v)}
         />
       </Bloc>
-      <div className="mt-[12px] rounded-[18px] border border-[#BFE3F4] bg-[#E3F2FB] p-[15px]">
+      <div className="mt-[12px] galet-b border border-[#BFE3F4] bg-[#E3F2FB] p-[15px]">
         <div className="text-[14px] font-bold">Sur iPhone, ajoute Palanote à ton écran d'accueil</div>
         <div className="pt-[3px] text-[12.5px] leading-normal text-[#3F5B76]">
           C'est la seule façon de recevoir une notification. Règle d'Apple, pas de nous. Dans Safari : bouton Partager, puis « Sur l'écran d'accueil ».
@@ -227,7 +227,7 @@ function Reglages() {
       <button
         type="button"
         onClick={() => void deconnecter()}
-        className="mt-[22px] flex h-[56px] items-center justify-center rounded-[16px] border border-[#E4EBF1] bg-white text-[14px] font-bold"
+        className="mt-[22px] flex h-[56px] items-center justify-center galet-moyen border border-[#E4EBF1] bg-white text-[14px] font-bold"
       >
         Se déconnecter
       </button>

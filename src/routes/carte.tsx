@@ -122,7 +122,7 @@ function PageCarte() {
         <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
           <h1 className="text-[clamp(24px,3.6svh,28px)] font-bold text-[#123A63]">Carte</h1>
           {!vide && (
-            <div role="group" aria-label="Affichage" className="flex gap-[3px] rounded-[13px] bg-[#E7EFF6] p-[3px]">
+            <div role="group" aria-label="Affichage" className="flex gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
               {(
                 [
                   ["carte", "Vue carte", IconeCarte],
@@ -135,7 +135,7 @@ function PageCarte() {
                   aria-label={label}
                   aria-pressed={vue === v}
                   onClick={() => setVue(v)}
-                  className={`flex h-8 w-[38px] items-center justify-center rounded-[10px] ${vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""}`}
+                  className={`flex h-8 w-[38px] items-center justify-center galet-petit ${vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""}`}
                 >
                   <Icone actif={vue === v} />
                 </button>
@@ -146,7 +146,7 @@ function PageCarte() {
 
         {/* Recherche */}
         <div className="relative z-[1100] shrink-0 px-[22px] pt-[12px]">
-          <div className="flex h-[48px] items-center gap-2 rounded-[16px] border border-[#DCE7F0] bg-white px-[14px] shadow-[0_2px_8px_#123A6306]">
+          <div className="flex h-[48px] items-center gap-2 galet-moyen border border-[#DCE7F0] bg-white px-[14px] shadow-[0_2px_8px_#123A6306]">
             <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
             <input
               value={recherche}
@@ -167,7 +167,7 @@ function PageCarte() {
             )}
           </div>
           {rechercheOuverte && (spotsTrouves.length > 0 || lieux.length > 0) && (
-            <ul className="absolute inset-x-[22px] top-[64px] max-h-[50svh] overflow-y-auto rounded-[16px] border border-[#E4EBF1] bg-white shadow-[0_10px_28px_rgba(7,26,48,.18)]">
+            <ul className="absolute inset-x-[22px] top-[64px] max-h-[50svh] overflow-y-auto galet-moyen border border-[#E4EBF1] bg-white shadow-[0_10px_28px_rgba(7,26,48,.18)]">
               {spotsTrouves.map((s) => (
                 <li key={s.id} className="border-t border-[#EDF2F7] first:border-t-0">
                   <button type="button" onClick={() => ouvrirSpot(s)} className="flex w-full items-center gap-3 px-[14px] py-[10px] text-left">
@@ -226,7 +226,7 @@ function PageCarte() {
                 choisi={choisi}
                 onChoisir={setChoisi}
                 onPrete={(a) => (api.current = a)}
-                className="h-full rounded-[22px] border border-[#DCE7F0] shadow-[0_4px_14px_#123A6308]"
+                className="h-full galet border border-[#DCE7F0] shadow-[0_4px_14px_#123A6308]"
               />
             </div>
 
@@ -245,14 +245,14 @@ function PageCarte() {
                       <button
                         type="button"
                         onClick={() => navigate({ to: "/numeriser" })}
-                        className="flex h-[50px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+                        className="flex h-[50px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
                       >
                         NUMÉRISER MES CARNETS
                       </button>
                       <button
                         type="button"
                         onClick={() => navigate({ to: "/nouvelle-plongee" })}
-                        className="flex h-[50px] items-center justify-center rounded-2xl border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+                        className="flex h-[50px] items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
                       >
                         AJOUTER MA PREMIÈRE PLONGÉE
                       </button>
@@ -260,7 +260,7 @@ function PageCarte() {
                   )}
                 </div>
               ) : spotChoisi ? (
-                <div className="rounded-[20px] border border-[#DCE7F0] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
+                <div className="galet-b border border-[#DCE7F0] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="truncate text-[17px] font-bold text-[#123A63]">{spotChoisi.nom}</div>
@@ -285,14 +285,14 @@ function PageCarte() {
                   <button
                     type="button"
                     onClick={() => ficheSpot(spotChoisi)}
-                    className="mt-[12px] flex h-[48px] w-full items-center justify-center gap-2 rounded-[14px] bg-[#3DEFBE] text-[13.5px] font-bold text-[#0B3B63]"
+                    className="mt-[12px] flex h-[48px] w-full items-center justify-center gap-2 galet-moyen bg-[#3DEFBE] text-[13.5px] font-bold text-[#0B3B63]"
                   >
                     {spotChoisi.plongees.length > 1 ? `VOIR MES ${spotChoisi.plongees.length} PLONGÉES` : "VOIR MA PLONGÉE"}
                     <ChevronRight className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center justify-between gap-3 rounded-[20px] border border-[#DCE7F0] bg-white px-[16px] py-[12px] shadow-[0_4px_14px_#123A6308]">
+                <div className="flex items-center justify-between gap-3 galet-c border border-[#DCE7F0] bg-white px-[16px] py-[12px] shadow-[0_4px_14px_#123A6308]">
                   <div className="min-w-0">
                     <div className="text-[15px] font-bold text-[#123A63]">
                       {spots.length === 0
@@ -330,7 +330,7 @@ function PageCarte() {
                     <h2 className="text-[17px] font-bold text-[#123A63]">{g.pays}</h2>
                     <span className="text-[12.5px] text-[#9DB0C0]">{pluriel(g.spots.length, "site")}</span>
                   </div>
-                  <div className="overflow-hidden rounded-[20px] border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
+                  <div className="overflow-hidden galet border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
                     {visibles.map((s) => (
                       <button
                         key={s.id}

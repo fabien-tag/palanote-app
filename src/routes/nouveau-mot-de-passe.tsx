@@ -100,7 +100,7 @@ function NouveauMotDePasse() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="min-h-[52px] w-full rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
+            className="min-h-[52px] w-full galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
           >
             ENREGISTRER
           </button>

@@ -14,7 +14,7 @@ export function PageMoi({ titre, children }: { titre: string; children: ReactNod
             type="button"
             aria-label="Retour"
             onClick={() => navigate({ to: "/moi" })}
-            className="flex h-10 w-10 items-center justify-center rounded-[13px] bg-[#E3EDF6]"
+            className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
@@ -32,7 +32,7 @@ export function TitreSection({ children }: { children: ReactNode }) {
 
 export function Bloc({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`overflow-hidden rounded-[20px] border border-[#E4EBF1] bg-white px-[16px] shadow-[0_4px_14px_#123A6306] ${className}`}>
+    <div className={`overflow-hidden galet-b border border-[#E4EBF1] bg-white px-[16px] shadow-[0_4px_14px_#123A6306] ${className}`}>
       {children}
     </div>
   );
@@ -66,7 +66,7 @@ export function Ligne({
   const contenu = (
     <>
       {Icone && (
-        <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-[11px] bg-[#EEF4F9]">
+        <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center goutte bg-[#EEF4F9]">
           <Icone className={`h-[17px] w-[17px] ${danger ? "text-[#C94957]" : "text-[#123A63]"}`} strokeWidth={2} aria-hidden="true" />
         </span>
       )}
@@ -137,7 +137,7 @@ export function ModaleSuppressionCompte({
   const ok = saisie.trim().toUpperCase() === "SUPPRIMER";
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0A2A50]/55 px-4 pb-[max(16px,env(safe-area-inset-bottom))] sm:items-center">
-      <div role="dialog" aria-modal="true" className="w-full max-w-[398px] rounded-[24px] bg-white p-[20px] text-[#123A63] shadow-[0_18px_40px_rgba(10,42,80,.35)]">
+      <div role="dialog" aria-modal="true" className="w-full max-w-[398px] galet-c bg-white p-[20px] text-[#123A63] shadow-[0_18px_40px_rgba(10,42,80,.35)]">
         <h2 className="text-[19px] font-bold">Supprimer ton compte ?</h2>
         <p className="pt-[8px] text-[13.5px] leading-normal text-[#5B7189]">
           Tes plongées, tes photos, tes positions, tes binômes et ton compte seront effacés. Rien n'est gardé, rien n'est récupérable.
@@ -148,7 +148,7 @@ export function ModaleSuppressionCompte({
             value={saisie}
             onChange={(e) => setSaisie(e.target.value)}
             autoCapitalize="characters"
-            className="mt-[6px] block h-[48px] w-full rounded-[14px] border-[1.5px] border-[#E4EBF1] px-[14px] text-[15px] font-semibold outline-none focus:border-[#C94957]"
+            className="mt-[6px] block h-[48px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] px-[14px] text-[15px] font-semibold outline-none focus:border-[#C94957]"
           />
         </label>
         {erreur && <p className="pt-[10px] text-[13px] text-[#8A2A1A]">{erreur}</p>}
@@ -157,7 +157,7 @@ export function ModaleSuppressionCompte({
             type="button"
             disabled={!ok || enCours}
             onClick={onConfirmer}
-            className="flex h-[50px] items-center justify-center rounded-[16px] bg-[#C94957] text-[14px] font-bold text-white disabled:opacity-40"
+            className="flex h-[50px] items-center justify-center galet-moyen bg-[#C94957] text-[14px] font-bold text-white disabled:opacity-40"
           >
             {enCours ? "SUPPRESSION…" : "SUPPRIMER DÉFINITIVEMENT"}
           </button>

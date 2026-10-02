@@ -124,7 +124,7 @@ function Moi() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/connexion" })}
-                className="flex h-[52px] w-full items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+                className="flex h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
               >
                 ME CONNECTER
               </button>
@@ -151,7 +151,7 @@ function Moi() {
               </button>
 
               {/* Statistiques */}
-              <div className="mt-[16px] grid grid-cols-3 gap-y-[16px] rounded-[20px] border border-[#E4EBF1] bg-white px-[8px] py-[18px] text-center shadow-[0_4px_14px_#123A6306]">
+              <div className="mt-[16px] grid grid-cols-3 gap-y-[16px] galet-b border border-[#E4EBF1] bg-white px-[8px] py-[18px] text-center shadow-[0_4px_14px_#123A6306]">
                 {tuiles.map(([label, cle]) => (
                   <div key={cle}>
                     <b className="block text-[19px] leading-tight">{stats ? stats[cle] : "…"}</b>
@@ -167,9 +167,9 @@ function Moi() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/recif" })}
-                className="mt-[12px] flex w-full items-center gap-[13px] rounded-[20px] border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left shadow-[0_4px_14px_#123A6309]"
+                className="mt-[12px] flex w-full items-center gap-[13px] galet-c border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left shadow-[0_4px_14px_#123A6309]"
               >
-                <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[13px] bg-[#0F3D70] p-[8px]">
+                <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center goutte bg-[#0F3D70] p-[8px]">
                   <img src={logoCorail} alt="" className="h-full w-auto" />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -235,7 +235,7 @@ function GraphiqueMois({ plongees }: { plongees: CartePlongee[] }) {
   const vides = parMois.filter((n) => n === 0).length;
   const seulMeilleur = max > 1 && parMois.filter((n) => n === max).length === 1;
   return (
-    <div className="mt-[12px] rounded-[20px] border border-[#E4EBF1] bg-white px-[16px] pb-[14px] pt-[15px] shadow-[0_4px_14px_#123A6306]">
+    <div className="mt-[12px] galet border border-[#E4EBF1] bg-white px-[16px] pb-[14px] pt-[15px] shadow-[0_4px_14px_#123A6306]">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-[14.5px] font-bold">Tes plongées, mois par mois</h2>
         {annees.length > 1 ? (

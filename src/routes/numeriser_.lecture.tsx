@@ -36,7 +36,7 @@ function CasePage({ p, onRelancer }: { p: Page; onRelancer: () => void }) {
       disabled={!probleme}
       onClick={onRelancer}
       aria-label={probleme ? `Reprendre la page ${p.ordre} en photo` : undefined}
-      className={`flex aspect-[5/6] flex-col items-center justify-center gap-[5px] rounded-[14px] text-[12.5px] font-bold ${styles}`}
+      className={`flex aspect-[5/6] flex-col items-center justify-center gap-[5px] galet-moyen text-[12.5px] font-bold ${styles}`}
     >
       {p.statut === "lue" ? (
         <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#3DEFBE]">
@@ -84,7 +84,7 @@ function Lecture() {
       <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
         <h1 className="text-[20px] font-bold">Lecture des pages</h1>
         {donnees?.lot.libelle && (
-          <span className="rounded-[14px] bg-[#E3EDF6] px-3 py-[6px] text-[12.5px] font-bold text-[#5B7189]">{donnees.lot.libelle}</span>
+          <span className="galet-moyen bg-[#E3EDF6] px-3 py-[6px] text-[12.5px] font-bold text-[#5B7189]">{donnees.lot.libelle}</span>
         )}
       </div>
 
@@ -135,7 +135,7 @@ function Lecture() {
       {pages
         .filter((p) => p.statut === "erreur")
         .map((p) => (
-          <div key={p.id} className="mx-[22px] mt-[10px] rounded-[14px] border border-[#F5C9A0] bg-[#FFF5E5] px-[12px] py-[10px] text-[12.5px] text-[#6B4A14]">
+          <div key={p.id} className="mx-[22px] mt-[10px] galet-moyen border border-[#F5C9A0] bg-[#FFF5E5] px-[12px] py-[10px] text-[12.5px] text-[#6B4A14]">
             <div className="flex items-center justify-between gap-3">
               <b>La lecture de la page {p.ordre} a échoué.</b>
               <button type="button" onClick={() => void relancer(p)} className="shrink-0 font-bold text-[#1176A8] underline underline-offset-2">
@@ -149,8 +149,8 @@ function Lecture() {
 
       <div className="h-[clamp(10px,3svh,28px)]" />
 
-      <div className="relative mx-[22px] flex items-start gap-3 rounded-[18px] border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px]">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#C7EAF8]">
+      <div className="relative mx-[22px] flex items-start gap-3 galet-b border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px]">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center goutte bg-[#C7EAF8]">
           <Cloud className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
         </span>
         <p className="text-[13px] leading-normal text-[#123A63]">

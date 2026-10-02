@@ -167,7 +167,7 @@ export function CarteSpots({
         type="button"
         aria-label={fond === "ocean" ? "Passer au plan détaillé" : "Passer à la carte océan"}
         onClick={() => setFond((f) => (f === "ocean" ? "osm" : "ocean"))}
-        className="absolute right-[12px] top-[12px] z-[500] flex h-[40px] w-[40px] items-center justify-center rounded-[12px] bg-white text-[#123A63] shadow-[0_3px_10px_rgba(7,26,48,.18)]"
+        className="absolute right-[12px] top-[12px] z-[500] flex h-[40px] w-[40px] items-center justify-center goutte bg-white text-[#123A63] shadow-[0_3px_10px_rgba(7,26,48,.18)]"
       >
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="m12 3 9 5-9 5-9-5 9-5Z" />

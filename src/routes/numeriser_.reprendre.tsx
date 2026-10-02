@@ -106,7 +106,7 @@ function Reprendre() {
                 ? navigate({ to: "/numeriser/capture", search: { lot, ordre: p.ordre } })
                 : navigate({ to: "/numeriser/relecture", search: { lot } })
             }
-            className={`relative flex aspect-[3/4] items-center justify-center rounded-[16px] text-[15px] font-bold ${STYLES[e]}`}
+            className={`relative flex aspect-[3/4] items-center justify-center galet-moyen text-[15px] font-bold ${STYLES[e]}`}
           >
             p.{p.ordre}
             {e === "relue" && (
@@ -146,8 +146,8 @@ function Reprendre() {
       </div>
 
       {r.validees.length > 0 && (
-        <div className="relative mx-[22px] mt-[22px] flex items-center gap-[14px] rounded-[20px] border border-[#C9EFE3] bg-[#DCF5EF] p-[14px]">
-          <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[14px] bg-[#3DEFBE] text-[17px] font-bold text-[#0B3B63]">
+        <div className="relative mx-[22px] mt-[22px] flex items-center gap-[14px] galet-b border border-[#C9EFE3] bg-[#DCF5EF] p-[14px]">
+          <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center goutte bg-[#3DEFBE] text-[17px] font-bold text-[#0B3B63]">
             {r.validees.length}
           </span>
           <p className="text-[14px] leading-snug text-[#123A63]">
@@ -162,7 +162,7 @@ function Reprendre() {
       )}
 
       {aReprendre.map(({ p }) => (
-        <div key={p.id} className="mx-[22px] mt-[12px] flex items-center gap-3 rounded-[20px] border border-[#E4EBF1] bg-white p-[14px]">
+        <div key={p.id} className="mx-[22px] mt-[12px] flex items-center gap-3 galet-c border border-[#E4EBF1] bg-white p-[14px]">
           <CameraOff className="h-[20px] w-[20px] shrink-0 text-[#8FA9C0]" strokeWidth={1.8} aria-hidden="true" />
           <div className="flex-grow">
             <div className="text-[14px] font-bold">

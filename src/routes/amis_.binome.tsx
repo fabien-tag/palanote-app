@@ -93,7 +93,7 @@ function FicheBinome() {
             type="button"
             aria-label="Retour"
             onClick={() => navigate({ to: "/amis" })}
-            className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#E3EDF6]"
+            className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
@@ -131,7 +131,7 @@ function FicheBinome() {
             <h3 className="pb-[10px] pt-[26px] text-[17px] font-bold">Vos plongées ensemble</h3>
 
             {plongees && plongees.length === 0 && (
-              <div className="relative rounded-[18px] border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px] text-[13px] leading-normal">
+              <div className="relative galet-c border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px] text-[13px] leading-normal">
                 Aucune plongée ensemble pour l'instant. Dans une fiche de plongée, ajoute <b>{ami.prenom}</b> dans <b>Palanquée › Binômes</b> : la
                 plongée apparaîtra ici et lui sera proposée dans son carnet.
                 <Meduse className="-right-[8px] -top-[14px]" />
@@ -160,7 +160,7 @@ function FicheBinome() {
                     {ouvrable && <ChevronRight className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />}
                   </>
                 );
-                const classe = "flex w-full items-center gap-[12px] rounded-[18px] border border-[#DCE7F0] bg-white px-[15px] py-[13px] text-left shadow-[0_4px_14px_#123A6308]";
+                const classe = "flex w-full items-center gap-[12px] galet border border-[#DCE7F0] bg-white px-[15px] py-[13px] text-left shadow-[0_4px_14px_#123A6308]";
                 return (
                   <div key={p.id}>
                     {ouvrable ? (
@@ -175,7 +175,7 @@ function FicheBinome() {
                         type="button"
                         disabled={ajoutEnCours === p.id}
                         onClick={() => void ajouter(p)}
-                        className="mt-[6px] flex h-[42px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
+                        className="mt-[6px] flex h-[42px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
                       >
                         AJOUTER À MON CARNET
                       </button>

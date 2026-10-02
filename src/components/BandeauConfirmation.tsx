@@ -21,7 +21,7 @@ export function BandeauConfirmation({ texte, onFin }: { texte: string; onFin: ()
       <div
         role="status"
         aria-live="polite"
-        className={`flex w-full max-w-[398px] items-center gap-[10px] rounded-[14px] border border-[#B8E4D8] bg-white px-[16px] py-[13px] text-[14px] font-semibold text-[#123A63] shadow-[0_8px_24px_rgba(15,61,112,.28)] transition-all duration-300 ${
+        className={`flex w-full max-w-[398px] items-center gap-[10px] galet-moyen border border-[#B8E4D8] bg-white px-[16px] py-[13px] text-[14px] font-semibold text-[#123A63] shadow-[0_8px_24px_rgba(15,61,112,.28)] transition-all duration-300 ${
           visible ? "translate-y-0 opacity-100" : "-translate-y-6 opacity-0"
         }`}
       >

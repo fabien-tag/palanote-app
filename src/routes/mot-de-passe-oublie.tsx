@@ -73,7 +73,7 @@ function MotDePasseOublie() {
               type="button"
               onClick={onResend}
               disabled={countdown > 0}
-              className="mt-8 flex min-h-[52px] w-full items-center justify-center rounded-[14px] border-0 bg-blanc text-sm font-bold tracking-wide text-encre disabled:opacity-60"
+              className="mt-8 flex min-h-[52px] w-full items-center justify-center galet-moyen border-0 bg-blanc text-sm font-bold tracking-wide text-encre disabled:opacity-60"
             >
               {countdown > 0 ? `Renvoyer le lien — ${countdown} s` : "Renvoyer le lien"}
             </button>
@@ -99,13 +99,13 @@ function MotDePasseOublie() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="prenom@exemple.fr"
-                  className="mt-2 min-h-[52px] w-full rounded-[14px] border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
+                  className="mt-2 min-h-[52px] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="min-h-[52px] w-full rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
+                className="min-h-[52px] w-full galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
               >
                 ENVOYER LE LIEN
               </button>

@@ -137,7 +137,7 @@ export function ChoisirLieu({
 
         {/* Recherche */}
         <div className="relative z-[1000] shrink-0 px-[18px] pb-[12px]">
-          <div className="flex h-[48px] items-center gap-2 rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[14px]">
+          <div className="flex h-[48px] items-center gap-2 galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px]">
             <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
             <input
               value={recherche}
@@ -154,7 +154,7 @@ export function ChoisirLieu({
             )}
           </div>
           {(resultats.length > 0 || (chercheEnCours && recherche.trim().length >= 3)) && (
-            <ul className="absolute inset-x-[18px] top-[54px] overflow-hidden rounded-[14px] border border-[#E4EBF1] bg-white shadow-[0_10px_28px_rgba(7,26,48,.18)]">
+            <ul className="absolute inset-x-[18px] top-[54px] overflow-hidden galet-moyen border border-[#E4EBF1] bg-white shadow-[0_10px_28px_rgba(7,26,48,.18)]">
               {chercheEnCours && resultats.length === 0 && <li className="px-[14px] py-[12px] text-[13.5px] text-[#9DB0C0]">Recherche…</li>}
               {resultats.map((r, i) => (
                 <li key={`${r.coords.lat}-${r.coords.lng}-${i}`} className="border-t border-[#EDF2F7] first:border-t-0">
@@ -195,7 +195,7 @@ export function ChoisirLieu({
           </button>
           {!aBouge && (
             <div className="pointer-events-none absolute inset-x-0 top-[14px] z-[500] flex justify-center px-4">
-              <span className="rounded-[12px] bg-white/95 px-[12px] py-[7px] text-[12.5px] font-semibold text-[#123A63] shadow-sm">
+              <span className="galet-petit bg-white/95 px-[12px] py-[7px] text-[12.5px] font-semibold text-[#123A63] shadow-sm">
                 Déplace la carte pour placer le repère sur le spot
               </span>
             </div>
@@ -226,7 +226,7 @@ export function ChoisirLieu({
                 nom: nomChoisi,
               })
             }
-            className="flex h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] text-[14px] font-bold tracking-wide text-[#0B2A4A] disabled:opacity-50"
+            className="flex h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold tracking-wide text-[#0B2A4A] disabled:opacity-50"
           >
             VALIDER CE LIEU
           </button>

@@ -135,7 +135,7 @@ function Capture() {
             type="button"
             aria-label="Fermer"
             onClick={fermer}
-            className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-white/10"
+            className="flex h-10 w-10 items-center justify-center goutte bg-white/10"
           >
             <X className="h-[19px] w-[19px]" strokeWidth={2.2} />
           </button>
@@ -149,7 +149,7 @@ function Capture() {
               aria-label={torche.on ? "Éteindre la lampe" : "Allumer la lampe"}
               aria-pressed={torche.on}
               onClick={() => void basculerTorche()}
-              className={`flex h-10 w-10 items-center justify-center rounded-[14px] ${torche.on ? "bg-[#3DEFBE] text-[#0B3B63]" : "bg-white/10"}`}
+              className={`flex h-10 w-10 items-center justify-center goutte ${torche.on ? "bg-[#3DEFBE] text-[#0B3B63]" : "bg-white/10"}`}
             >
               <Sparkles className="h-[18px] w-[18px]" strokeWidth={2} />
             </button>
@@ -159,7 +159,7 @@ function Capture() {
         </div>
 
         {/* Viseur */}
-        <div className="relative mt-[clamp(10px,2.4svh,22px)] min-h-[180px] w-full flex-1 overflow-hidden rounded-[22px] bg-[linear-gradient(160deg,#1B3550,#11233A)]">
+        <div className="relative mt-[clamp(10px,2.4svh,22px)] min-h-[180px] w-full flex-1 overflow-hidden galet bg-[linear-gradient(160deg,#1B3550,#11233A)]">
           <video ref={video} playsInline muted className={`absolute inset-0 h-full w-full object-cover ${camera === "ok" ? "" : "hidden"}`} />
           {camera !== "ok" && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-8 text-center">
@@ -195,7 +195,7 @@ function Capture() {
           Une seule page dans le cadre, à plat, sans ombre portée. Le reste, l'app s'en occupe.
         </p>
         {message && (
-          <p role="alert" className="mt-2 shrink-0 rounded-xl bg-[#FF8A75]/20 px-3 py-2 text-[12.5px] text-[#FFD4CB]">
+          <p role="alert" className="mt-2 shrink-0 galet-petit bg-[#FF8A75]/20 px-3 py-2 text-[12.5px] text-[#FFD4CB]">
             {message}
           </p>
         )}
@@ -204,7 +204,7 @@ function Capture() {
         <div className="mt-[clamp(8px,1.6svh,16px)] flex min-h-[54px] shrink-0 items-center justify-between gap-3">
           <div className="flex gap-2 overflow-x-auto">
             {vignettes.map((v) => (
-              <div key={v.cle} className="relative flex h-[54px] w-[42px] shrink-0 items-end justify-center rounded-[10px] bg-white/10 pb-[6px] text-[12px] font-bold text-white/70">
+              <div key={v.cle} className="relative flex h-[54px] w-[42px] shrink-0 items-end justify-center galet-petit bg-white/10 pb-[6px] text-[12px] font-bold text-white/70">
                 {v.ordre}
                 <span
                   className={`absolute right-[4px] top-[4px] flex h-[14px] w-[14px] items-center justify-center rounded-full ${
@@ -238,7 +238,7 @@ function Capture() {
             type="button"
             aria-label="Choisir dans mes photos"
             onClick={() => navigate({ to: "/numeriser/choisir", search: lotId ? { lot: lotId } : {} })}
-            className="flex h-[52px] w-[52px] items-center justify-center rounded-[16px] bg-white/10"
+            className="flex h-[52px] w-[52px] items-center justify-center goutte bg-white/10"
           >
             <ImageIcon className="h-[21px] w-[21px]" strokeWidth={1.9} />
           </button>
@@ -254,7 +254,7 @@ function Capture() {
             type="button"
             onClick={fermer}
             disabled={!lotId}
-            className="flex h-[52px] min-w-[78px] items-center justify-center rounded-[16px] bg-white/10 px-3 text-[14px] font-bold disabled:opacity-40"
+            className="flex h-[52px] min-w-[78px] items-center justify-center galet-moyen bg-white/10 px-3 text-[14px] font-bold disabled:opacity-40"
           >
             Terminer
           </button>

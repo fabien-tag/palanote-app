@@ -258,7 +258,7 @@ function Champ({
   return (
     <div className="flex min-w-0 flex-grow basis-0 flex-col gap-[7px]">
       <Label>{label}</Label>
-      <div className="flex min-h-[50px] items-center gap-1.5 rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[15px]">
+      <div className="flex min-h-[50px] items-center gap-1.5 galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[15px]">
         {edition && choix ? (
           <select
             value={valeur}
@@ -672,7 +672,7 @@ function NouvellePlongee() {
         {message && (
           <div
             role={message.type === "erreur" ? "alert" : "status"}
-            className={`mx-[22px] mt-4 rounded-[14px] px-[15px] py-3 text-[13.5px] font-medium ${
+            className={`mx-[22px] mt-4 galet-moyen px-[15px] py-3 text-[13.5px] font-medium ${
               message.type === "erreur" ? "bg-[#FFE4DE] text-[#8A2A1A]" : "bg-[#E1F3FB] text-[#0F3D70]"
             }`}
           >
@@ -690,14 +690,14 @@ function NouvellePlongee() {
 
             <div className="flex flex-col gap-[7px]">
               <Label>Site</Label>
-              <div className="overflow-hidden rounded-[14px] border-[1.5px] border-[#57D4F5]/75 bg-white">
+              <div className="overflow-hidden galet-moyen border-[1.5px] border-[#57D4F5]/75 bg-white">
                 <div className="flex gap-[13px] p-[14px]">
                   <button
                     type="button"
                     aria-label={coordsSite ? "Voir ou changer le lieu sur la carte" : "Choisir le lieu sur la carte"}
                     disabled={!edition && !coordsSite}
                     onClick={() => (edition ? setChoixLieu({ geolocaliser: false }) : undefined)}
-                    className="relative isolate h-[82px] w-[82px] shrink-0 overflow-hidden rounded-[14px] bg-gradient-to-br from-[#BFEBFA] via-[#7FD3F0] to-[#2E9FCB]"
+                    className="relative isolate h-[82px] w-[82px] shrink-0 overflow-hidden galet-moyen bg-gradient-to-br from-[#BFEBFA] via-[#7FD3F0] to-[#2E9FCB]"
                   >
                     {coordsSite && (
                       <Carte
@@ -789,7 +789,7 @@ function NouvellePlongee() {
 
             <div className="flex flex-col gap-[7px]">
               <Label>Paliers</Label>
-              <div className="flex flex-col gap-[10px] rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[14px] py-3">
+              <div className="flex flex-col gap-[10px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px] py-3">
                 {plongee.paliers.length === 0 && !edition && (
                   <div className="text-[14.5px] text-[#9AAAB9]">—</div>
                 )}
@@ -979,7 +979,7 @@ function NouvellePlongee() {
                   </button>
                 )}
                 {edition && ajoutBinome && amis.some((a) => !identifies.includes(a.id)) && (
-                  <div className="flex w-full flex-col gap-[7px] rounded-[16px] border-[1.5px] border-[#E4EBF1] bg-white p-[10px]">
+                  <div className="flex w-full flex-col gap-[7px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white p-[10px]">
                     <span className="text-[11.5px] font-semibold text-[#5B7189]">Tes binômes Palanote</span>
                     <div className="flex flex-wrap gap-[7px]">
                       {amis
@@ -1077,7 +1077,7 @@ function NouvellePlongee() {
                 )}
               </div>
 
-              <div className="rounded-2xl border-[1.5px] border-[#E4EBF1] bg-white px-[15px] py-1">
+              <div className="galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[15px] py-1">
                 <div className="pb-1 pt-3 text-[12px] font-bold tracking-[0.06em] text-[#9DB0C0]">
                   LE DÉTAIL — FACULTATIF
                 </div>
@@ -1111,10 +1111,10 @@ function NouvellePlongee() {
                   onChange={(e) => set("commentaire", e.target.value)}
                   placeholder="Ce que tu as vu, ce que tu retiens…"
                   rows={4}
-                  className="min-h-[100px] w-full resize-y rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[15px] py-[14px] text-[14.5px] leading-relaxed text-[#123A63] outline-none placeholder:text-[#9AAAB9]"
+                  className="min-h-[100px] w-full resize-y galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[15px] py-[14px] text-[14.5px] leading-relaxed text-[#123A63] outline-none placeholder:text-[#9AAAB9]"
                 />
               ) : (
-                <div className="min-h-[100px] rounded-[14px] border-[1.5px] border-[#E4EBF1] bg-white px-[15px] py-[14px] text-[14.5px] leading-relaxed text-[#123A63]">
+                <div className="min-h-[100px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[15px] py-[14px] text-[14.5px] leading-relaxed text-[#123A63]">
                   {plongee.commentaire || <span className="text-[#9AAAB9]">—</span>}
                 </div>
               )}
@@ -1189,7 +1189,7 @@ function NouvellePlongee() {
           <Section titre="PHOTOS">
             <div className="grid grid-cols-4 gap-2">
               {photos.map((photo, i) => (
-                <div key={photo.id ?? photo.url} className="relative h-[82px] overflow-hidden rounded-[14px]">
+                <div key={photo.id ?? photo.url} className="relative h-[82px] overflow-hidden galet-moyen">
                   <img src={photo.url} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
                   {i === 0 && (
                     <span className="absolute inset-x-0 bottom-0 bg-[#0A2A50]/70 py-[2px] text-center text-[9.5px] font-bold uppercase tracking-[.06em] text-white">
@@ -1216,7 +1216,7 @@ function NouvellePlongee() {
                   type="button"
                   onClick={() => fichierPhotos.current?.click()}
                   aria-label="Ajouter une photo"
-                  className="flex h-[82px] items-center justify-center rounded-[14px] border-[1.5px] border-dashed border-[#FF8A75] bg-white"
+                  className="flex h-[82px] items-center justify-center galet-moyen border-[1.5px] border-dashed border-[#FF8A75] bg-white"
                 >
                   <Camera className="h-5 w-5 text-[#FF8A75]" strokeWidth={2} aria-hidden="true" />
                 </button>
@@ -1255,7 +1255,7 @@ function NouvellePlongee() {
                 type="button"
                 onClick={() => void enregistrer()}
                 disabled={enCours || chargement}
-                className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-[#3DEFBE] disabled:opacity-50 text-sm font-bold tracking-wide text-[#0B2A4A]"
+                className="flex min-h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] disabled:opacity-50 text-sm font-bold tracking-wide text-[#0B2A4A]"
               >
                 {enCours ? (envoiPhotos ? "ENVOI DES PHOTOS…" : "ENREGISTREMENT…") : "ENREGISTRER LA PLONGÉE"}
               </button>
@@ -1276,7 +1276,7 @@ function NouvellePlongee() {
               <button
                 type="button"
                 onClick={() => setEdition(true)}
-                className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] border-2 border-[#1176A8] text-sm font-bold tracking-wide text-[#1176A8]"
+                className="flex min-h-[52px] w-full items-center justify-center galet-moyen border-2 border-[#1176A8] text-sm font-bold tracking-wide text-[#1176A8]"
               >
                 MODIFIER CETTE PLONGÉE
               </button>
@@ -1326,7 +1326,7 @@ function NouvellePlongee() {
             aria-labelledby="titre-suppression"
             aria-describedby="texte-suppression"
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[398px] rounded-[22px] bg-white p-[22px] shadow-[0_12px_40px_rgba(7,26,48,.35)]"
+            className="w-full max-w-[398px] galet-c bg-white p-[22px] shadow-[0_12px_40px_rgba(7,26,48,.35)]"
           >
             <h2 id="titre-suppression" className="text-[18px] font-bold text-[#123A63]">
               Supprimer cette plongée ?
@@ -1340,7 +1340,7 @@ function NouvellePlongee() {
                 autoFocus
                 disabled={suppressionEnCours}
                 onClick={() => void supprimer()}
-                className="flex min-h-[50px] w-full items-center justify-center rounded-[14px] bg-[#D6402A] text-sm font-bold tracking-wide text-white disabled:opacity-60"
+                className="flex min-h-[50px] w-full items-center justify-center galet-moyen bg-[#D6402A] text-sm font-bold tracking-wide text-white disabled:opacity-60"
               >
                 {suppressionEnCours ? "Suppression…" : "SUPPRIMER"}
               </button>
@@ -1348,7 +1348,7 @@ function NouvellePlongee() {
                 type="button"
                 disabled={suppressionEnCours}
                 onClick={() => setConfirmerSuppression(false)}
-                className="flex min-h-[50px] w-full items-center justify-center rounded-[14px] border border-[#D8E5EE] text-sm font-bold tracking-wide text-[#123A63]"
+                className="flex min-h-[50px] w-full items-center justify-center galet-moyen border border-[#D8E5EE] text-sm font-bold tracking-wide text-[#123A63]"
               >
                 ANNULER
               </button>

@@ -66,7 +66,7 @@ function Recif() {
           </div>
           <div className="flex-grow" />
           <div className="relative px-[24px] pb-[24px]">
-            <span className="flex h-[52px] w-[52px] items-center justify-center rounded-[16px] border border-white/30 bg-[#1C8C8C]/70 p-[10px]">
+            <span className="flex h-[52px] w-[52px] items-center justify-center goutte border border-white/30 bg-[#1C8C8C]/70 p-[10px]">
               <img src={logoCorail} alt="" className="h-full w-auto" />
             </span>
             <h1 className="pt-[14px] text-[27px] font-bold leading-tight text-white">Rejoins le Récif</h1>
@@ -80,7 +80,7 @@ function Recif() {
 
         <div className="flex flex-col gap-[14px] px-[22px] pt-[20px]">
           {/* Ce que ça paye */}
-          <div className="relative rounded-[22px] border border-[#DCE7F0] bg-white p-[16px] shadow-[0_4px_14px_#123A6308]">
+          <div className="relative galet border border-[#DCE7F0] bg-white p-[16px] shadow-[0_4px_14px_#123A6308]">
             <h2 className="pb-[10px] text-[14px] font-bold">Ce que ça paye, en vrai</h2>
             {COUTS_RECIF.map(([quoi, combien]) => (
               <div key={quoi} className="flex items-center justify-between py-[6px] text-[13.5px]">
@@ -108,7 +108,7 @@ function Recif() {
                     setChoix(f.id);
                     setInfo(null);
                   }}
-                  className={`flex items-center gap-[14px] rounded-[20px] border-[1.5px] px-[16px] py-[14px] text-left transition-colors ${
+                  className={`flex items-center gap-[14px] galet-b border-[1.5px] px-[16px] py-[14px] text-left transition-colors ${
                     actif ? "border-[#3DEFBE] bg-[#E2F8EF]" : "border-[#DCE7F0] bg-white"
                   }`}
                 >
@@ -130,7 +130,7 @@ function Recif() {
           </div>
 
           {/* Ce que tu reçois */}
-          <div className="rounded-[22px] border border-[#DCE7F0] bg-white p-[16px] shadow-[0_4px_14px_#123A6308]">
+          <div className="galet-c border border-[#DCE7F0] bg-white p-[16px] shadow-[0_4px_14px_#123A6308]">
             <h2 className="pb-[12px] text-[14px] font-bold">Ce que tu reçois</h2>
             <div className="flex flex-col gap-[14px]">
               {RECU.map(([titre, texte]) => (
@@ -148,7 +148,7 @@ function Recif() {
           </div>
 
           {/* Ce que tu ne reçois pas */}
-          <div className="rounded-[22px] border border-[#BFE3F4] bg-[#E3F2FB] p-[16px] text-[13px] leading-normal text-[#3F5B76]">
+          <div className="galet border border-[#BFE3F4] bg-[#E3F2FB] p-[16px] text-[13px] leading-normal text-[#3F5B76]">
             <h2 className="pb-[8px] text-[14px] font-bold text-[#123A63]">Ce que tu ne reçois pas</h2>
             <p>
               Aucune fonctionnalité. Le carnet, la numérisation des vieux carnets, l'identification des espèces, la carte, les statistiques, l'export :{" "}
@@ -157,11 +157,11 @@ function Recif() {
             <p className="pt-[8px]">Il n'y a rien de caché derrière ce bouton. C'est bien pour ça qu'il faut le dire avant, et pas après.</p>
           </div>
 
-          {info && <p className="rounded-[14px] bg-[#FFF3E6] px-[14px] py-[10px] text-center text-[13px] font-semibold text-[#C2570C]">{info}</p>}
+          {info && <p className="galet-moyen bg-[#FFF3E6] px-[14px] py-[10px] text-center text-[13px] font-semibold text-[#C2570C]">{info}</p>}
           <button
             type="button"
             onClick={rejoindre}
-            className="mt-[4px] flex h-[56px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
+            className="mt-[4px] flex h-[56px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
           >
             REJOINDRE LE RÉCIF — {formule.montant} €
           </button>

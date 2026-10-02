@@ -135,7 +135,7 @@ function PageInvitation() {
 
         {etatProbleme ? (
           <div className="px-[24px] pt-[26px]">
-            <div className="relative rounded-[18px] border border-[#FFD3C8] bg-[#FFF3EF] p-[16px]">
+            <div className="relative galet-c border border-[#FFD3C8] bg-[#FFF3EF] p-[16px]">
               <p className="text-[15px] font-bold">{etatProbleme.titre}</p>
               <p className="pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">{etatProbleme.texte}</p>
             </div>
@@ -144,7 +144,7 @@ function PageInvitation() {
           <div className="flex flex-col gap-[17px] px-[24px] pt-[24px]">
             {AVANTAGES.map(({ icone: Icone, fond, couleur, titre, texte }) => (
               <div key={titre} className="flex items-start gap-[13px]">
-                <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[14px]" style={{ background: fond }}>
+                <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center goutte" style={{ background: fond }}>
                   <Icone className="h-[20px] w-[20px]" style={{ color: couleur }} strokeWidth={2.2} aria-hidden="true" />
                 </span>
                 <span className="min-w-0">
@@ -158,7 +158,7 @@ function PageInvitation() {
 
         {valide && connecte === false && (
           <div className="px-[24px] pt-[22px]">
-            <div className="relative flex items-center gap-[12px] rounded-[18px] border border-[#3DEFBE]/60 bg-[#3DEFBE]/10 p-[15px]">
+            <div className="relative flex items-center gap-[12px] galet border border-[#3DEFBE]/60 bg-[#3DEFBE]/10 p-[15px]">
               <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-[#3DEFBE]">
                 <Check className="h-[17px] w-[17px] text-[#0B3B63]" strokeWidth={3} aria-hidden="true" />
               </span>
@@ -179,7 +179,7 @@ function PageInvitation() {
               <button
                 type="button"
                 onClick={() => rejoindre("/creer-un-compte")}
-                className="flex h-[54px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
+                className="flex h-[54px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
               >
                 REJOINDRE PALANOTE
               </button>
@@ -197,7 +197,7 @@ function PageInvitation() {
               type="button"
               disabled={envoi}
               onClick={() => void devenirBinomes()}
-              className="flex h-[54px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-60"
+              className="flex h-[54px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-60"
             >
               {envoi ? "UN INSTANT…" : `DEVENIR BINÔMES AVEC ${prenom.toUpperCase()}`}
             </button>
@@ -206,7 +206,7 @@ function PageInvitation() {
             <button
               type="button"
               onClick={() => navigate({ to: connecte ? "/amis" : "/" })}
-              className="flex h-[52px] items-center justify-center rounded-2xl border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+              className="flex h-[52px] items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
             >
               {connecte ? "ALLER À MES AMIS" : "DÉCOUVRIR PALANOTE"}
             </button>

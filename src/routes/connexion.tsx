@@ -90,7 +90,7 @@ function Connexion() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="prenom@exemple.fr"
-              className="mt-[clamp(4px,0.9svh,8px)] min-h-[clamp(46px,6.6svh,52px)] w-full rounded-[14px] border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
+              className="mt-[clamp(4px,0.9svh,8px)] min-h-[clamp(46px,6.6svh,52px)] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
             />
           </div>
           <div>
@@ -126,7 +126,7 @@ function Connexion() {
           <button
             type="submit"
             disabled={loading}
-            className="min-h-[clamp(46px,6.6svh,52px)] w-full rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
+            className="min-h-[clamp(46px,6.6svh,52px)] w-full galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss disabled:opacity-60"
           >
             SE CONNECTER
           </button>
@@ -141,7 +141,7 @@ function Connexion() {
         <button
           type="button"
           onClick={onGoogle}
-          className="flex min-h-[clamp(46px,6.6svh,52px)] w-full items-center justify-center gap-3 rounded-[14px] border-0 bg-blanc text-sm font-bold tracking-wide text-encre"
+          className="flex min-h-[clamp(46px,6.6svh,52px)] w-full items-center justify-center gap-3 galet-moyen border-0 bg-blanc text-sm font-bold tracking-wide text-encre"
         >
           <LogoGoogle />
           CONTINUER AVEC GOOGLE

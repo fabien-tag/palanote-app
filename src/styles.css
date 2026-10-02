@@ -223,3 +223,24 @@
   right: auto;
   left: 0;
 }
+
+/* Palanote — formes organiques : coins asymétriques, comme des galets.
+   Grand (cartes, blocs), moyen (boutons, champs), petit (petits boutons), goutte (pastilles d'icône). */
+@utility galet {
+  border-radius: 34px 18px 30px 16px / 26px 22px 34px 18px;
+}
+@utility galet-b {
+  border-radius: 18px 36px 20px 30px / 24px 30px 18px 34px;
+}
+@utility galet-c {
+  border-radius: 28px 22px 38px 18px / 20px 32px 26px 30px;
+}
+@utility galet-moyen {
+  border-radius: 22px 13px 21px 12px / 16px 19px 13px 20px;
+}
+@utility galet-petit {
+  border-radius: 15px 9px 14px 8px / 11px 13px 9px 14px;
+}
+@utility goutte {
+  border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
+}

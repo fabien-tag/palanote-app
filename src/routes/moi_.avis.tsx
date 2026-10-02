@@ -55,7 +55,7 @@ function DonnerMonAvis() {
             type="button"
             aria-label="Retour"
             onClick={() => navigate({ to: "/moi" })}
-            className="flex h-10 w-10 items-center justify-center rounded-[13px] bg-[#E3EDF6]"
+            className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
@@ -73,7 +73,7 @@ function DonnerMonAvis() {
             <button
               type="button"
               onClick={() => navigate({ to: "/carnet" })}
-              className="mt-[10px] flex h-[54px] w-full items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+              className="mt-[10px] flex h-[54px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
             >
               REVENIR À MON CARNET
             </button>
@@ -81,7 +81,7 @@ function DonnerMonAvis() {
         ) : (
           <>
             <div className="mt-[20px] flex items-start gap-[13px]">
-              <span className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[15px] bg-[#FFE4DE]">
+              <span className="flex h-[48px] w-[48px] shrink-0 items-center justify-center goutte bg-[#FFE4DE]">
                 <MessageCircle className="h-[22px] w-[22px] text-[#D9573F]" strokeWidth={2} aria-hidden="true" />
               </span>
               <p className="text-[13.5px] leading-normal text-[#5B7189]">
@@ -110,7 +110,7 @@ function DonnerMonAvis() {
             </div>
 
             <h2 className="pb-[10px] pt-[20px] text-[13px] font-bold">En quelques mots</h2>
-            <div className="rounded-[18px] border border-[#DCE7F0] bg-white p-[14px]">
+            <div className="galet-b border border-[#DCE7F0] bg-white p-[14px]">
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value.slice(0, MAX))}
@@ -124,12 +124,12 @@ function DonnerMonAvis() {
             </div>
 
             {connecte && (
-              <div className="mt-[14px] rounded-[18px] border border-[#DCE7F0] bg-white px-[14px]">
+              <div className="mt-[14px] galet-c border border-[#DCE7F0] bg-white px-[14px]">
                 <Interrupteur titre="Joindre mon adresse" texte="Pour qu'il puisse te répondre. Facultatif." actif={joindre} onChange={setJoindre} />
               </div>
             )}
 
-            <div className="mt-[14px] rounded-[18px] border border-[#DCE7F0] bg-white p-[14px]">
+            <div className="mt-[14px] galet border border-[#DCE7F0] bg-white p-[14px]">
               <div className="text-[13px] font-bold">Ce qui part avec ton message</div>
               <div className="flex flex-wrap gap-[6px] pt-[10px]">
                 {[`Version ${VERSION_APP}`, appareil.appareil, appareil.systeme].filter(Boolean).map((t) => (
@@ -147,7 +147,7 @@ function DonnerMonAvis() {
               type="button"
               disabled={enCours}
               onClick={() => void envoyer()}
-              className="flex h-[56px] items-center justify-center rounded-2xl bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_6px_16px_rgba(61,239,190,.32)] disabled:opacity-60"
+              className="flex h-[56px] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_6px_16px_rgba(61,239,190,.32)] disabled:opacity-60"
             >
               {enCours ? "ENVOI…" : "ENVOYER À L'AUTEUR"}
             </button>

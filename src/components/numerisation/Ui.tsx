@@ -53,7 +53,7 @@ export function BoutonPrincipal({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex h-14 w-full items-center justify-center rounded-2xl bg-[#3DEFBE] px-4 text-center text-[14px] font-bold uppercase text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-50"
+      className="flex h-14 w-full items-center justify-center galet-moyen bg-[#3DEFBE] px-4 text-center text-[14px] font-bold uppercase text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-50"
     >
       {children}
     </button>
@@ -65,7 +65,7 @@ export function BoutonSecondaire({ children, onClick }: { children: ReactNode; o
     <button
       type="button"
       onClick={onClick}
-      className="flex h-[52px] w-full items-center justify-center rounded-2xl border border-[#57D4F5] bg-white px-4 text-[14px] font-bold uppercase text-[#1176A8]"
+      className="flex h-[52px] w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white px-4 text-[14px] font-bold uppercase text-[#1176A8]"
     >
       {children}
     </button>
@@ -90,7 +90,7 @@ export function BoutonRetourCarre({ onClick, label = "Retour" }: { onClick: () =
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#E3EDF6]"
+      className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
     >
       <ChevronLeft className="h-[18px] w-[18px] text-[#123A63]" strokeWidth={2.4} />
     </button>

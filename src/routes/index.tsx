@@ -144,13 +144,13 @@ function Splash() {
         <div className="shrink-0 space-y-3 pt-[clamp(10px,2svh,16px)]">
           <Link
             to="/connexion"
-            className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] border border-ciel/40 text-sm font-bold tracking-wide text-white"
+            className="flex min-h-[52px] w-full items-center justify-center galet-moyen border border-ciel/40 text-sm font-bold tracking-wide text-white"
           >
             SE CONNECTER
           </Link>
           <Link
             to="/creer-un-compte"
-            className="flex min-h-[52px] w-full items-center justify-center rounded-[14px] bg-menthe text-sm font-bold tracking-wide text-abyss"
+            className="flex min-h-[52px] w-full items-center justify-center galet-moyen bg-menthe text-sm font-bold tracking-wide text-abyss"
           >
             CRÉER UN COMPTE
           </Link>

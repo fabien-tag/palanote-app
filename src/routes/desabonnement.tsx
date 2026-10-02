@@ -40,7 +40,7 @@ function Desabonnement() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F1F6FC] px-[24px] text-center text-[#123A63]">
       <div className="w-full max-w-[400px]">
-        <span className="mx-auto flex h-[52px] w-[52px] items-center justify-center rounded-[16px] bg-[#0F3D70] p-[10px]">
+        <span className="mx-auto flex h-[52px] w-[52px] items-center justify-center goutte bg-[#0F3D70] p-[10px]">
           <img src={logoCorail} alt="Palanote" className="h-full w-auto" />
         </span>
         <h1 className="pt-[18px] text-[24px] font-bold">{textes[0]}</h1>
