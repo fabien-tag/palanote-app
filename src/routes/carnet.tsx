@@ -19,7 +19,7 @@ import { LigneDePlongee } from "@/components/LigneDePlongee";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
-import { accepterInvitationGardee, mesBinomes } from "@/lib/amis";
+import { accepterInvitationGardee } from "@/lib/amis";
 import {
   BandeauCarnetsPapier,
   EnTeteStatistiques,
@@ -89,11 +89,6 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
-  // Nombre de binômes Palanote (deuxième ligne de statistiques)
-  const [nbBinomes, setNbBinomes] = useState<number | undefined>(undefined);
-  useEffect(() => {
-    void utilisateurConnecte().then((u) => (u ? mesBinomes().then((l) => setNbBinomes(l.length)) : undefined)).catch(() => undefined);
-  }, []);
   // En faisant défiler, le bouton « + Plongée » se réduit à un simple « + » pour moins masquer les cartes.
   const [boutonCompact, setBoutonCompact] = useState(false);
   useEffect(() => {
@@ -270,7 +265,7 @@ function Carnet() {
       </div>
         </>
       ) : (
-        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} nbBinomes={nbBinomes} />
+        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} />
       )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
