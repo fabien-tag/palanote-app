@@ -190,7 +190,7 @@ function Carnet() {
   if (chargement)
     return (
       <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
-        <div className="mx-[12px] h-[230px] shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
+        <div className="h-[230px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
         <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
           <div className="flex flex-col gap-[12px] p-[22px]">
             {[0, 1, 2].map((i) => (
@@ -209,7 +209,7 @@ function Carnet() {
       {vide ? (
         <>
       {/* Haut : vidéo marine, pleine largeur de l'écran */}
-      <div className="relative mx-[12px] flex h-[382px] shrink-0 flex-col overflow-hidden rounded-b-[34px]">
+      <div className="relative flex h-[382px] w-full shrink-0 flex-col overflow-hidden rounded-b-[34px]">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           src={fondMarin}

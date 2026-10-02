@@ -50,7 +50,7 @@ export function EnTeteStatistiques({
   const stats = statistiques(plongees, numeroDepart);
   const sousTitre = derniereplongeeTexte(plongees);
   return (
-    <div className="relative mx-[12px] h-[230px] shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
+    <div className="relative h-[230px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={fondMarin}
