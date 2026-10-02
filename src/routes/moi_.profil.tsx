@@ -12,6 +12,11 @@ export const Route = createFileRoute("/moi_/profil")({
 });
 
 const NIVEAUX = ["N1 / Open Water", "N2 / Advanced", "N3 / Rescue", "N4 / Divemaster", "Encadrant"];
+// Certifications de gaz : la valeur enregistrée, et ce qui s'affiche
+const CERTIFICATIONS = [
+  { valeur: "Nitrox", label: "Nitrox Diver" },
+  { valeur: "Trimix", label: "Trimix Diver" },
+];
 
 function Champ({
   label,
@@ -38,6 +43,8 @@ function ModifierProfil() {
   const [club, setClub] = useState("");
   const [premiereAnnee, setPremiereAnnee] = useState("");
   const [plongeesAvant, setPlongeesAvant] = useState("");
+  const [certifications, setCertifications] = useState<string[]>([]);
+  const [certifsOrigine, setCertifsOrigine] = useState<string[]>([]);
   const [charge, setCharge] = useState(false);
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -51,6 +58,8 @@ function ModifierProfil() {
         setClub(p.club);
         setPremiereAnnee(p.premiereAnnee);
         setPlongeesAvant(p.plongeesAvant);
+        setCertifications(p.certifications);
+        setCertifsOrigine(p.certifications);
       }
       setCharge(true);
     });
@@ -64,7 +73,8 @@ function ModifierProfil() {
     setEnCours(true);
     setErreur(null);
     try {
-      await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant });
+      const certifsChangees = [...certifications].sort().join() !== [...certifsOrigine].sort().join();
+      await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant, ...(certifsChangees ? { certifications } : {}) });
       annoncerSurAccueil("Ton profil a bien été mis à jour");
       navigate({ to: "/moi" });
     } catch (e) {
@@ -106,6 +116,28 @@ function ModifierProfil() {
               {niveau && !NIVEAUX.includes(niveau) && <p className="pt-[8px] text-[12.5px] text-[#5B7189]">Niveau actuel : {niveau}</p>}
             </div>
             <Champ label="Club" value={club} onChange={(e) => setClub(e.target.value)} placeholder="CIP Lavandou" />
+            <div>
+              <span className="block pb-[8px] text-[13px] font-semibold text-[#5B7189]">Certifications</span>
+              <div className="flex flex-wrap gap-[8px]">
+                {CERTIFICATIONS.map((c) => {
+                  const actif = certifications.includes(c.valeur);
+                  return (
+                    <button
+                      key={c.valeur}
+                      type="button"
+                      aria-pressed={actif}
+                      onClick={() => setCertifications((l) => (actif ? l.filter((x) => x !== c.valeur) : [...l, c.valeur]))}
+                      className={`h-[40px] rounded-full border-[1.5px] px-[14px] text-[13.5px] font-semibold ${
+                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#5B7189]"
+                      }`}
+                    >
+                      {c.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="pt-[6px] text-[12px] text-[#9DB0C0]">Affichées en haut de ton carnet, à côté de ton niveau.</p>
+            </div>
           </div>
 
           <TitreSection>Pour des statistiques justes</TitreSection>

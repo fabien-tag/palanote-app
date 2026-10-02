@@ -9,6 +9,7 @@ import type { LignePlongee } from "@/lib/plongees";
 export type Profil = {
   prenom: string;
   niveau: string;
+  certifications: string[]; // « Nitrox », « Trimix »
   club: string;
   premiereAnnee: string; // « 1987 »
   plongeesAvant: string; // plongées faites avant Palanote (numéro de départ)
@@ -57,6 +58,7 @@ export async function chargerProfil(): Promise<Profil | null> {
   return {
     prenom,
     niveau: texte(p["niveau"]),
+    certifications: Array.isArray(p["certifications"]) ? (p["certifications"] as string[]) : [],
     club: texte(p["club"]),
     premiereAnnee: premiere ? premiere.slice(0, 4) : "",
     plongeesAvant: typeof depart === "number" && depart > 0 ? String(depart) : "",
@@ -80,7 +82,7 @@ async function majProfil(champs: Record<string, unknown>) {
   }
 }
 
-export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" | "premiereAnnee" | "plongeesAvant">) {
+export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" | "premiereAnnee" | "plongeesAvant"> & { certifications?: string[] }) {
   const annee = p.premiereAnnee.trim();
   const avant = p.plongeesAvant.trim();
   await majProfil({
@@ -89,7 +91,13 @@ export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" 
     club: p.club.trim() || null,
     premiere_plongee_le: /^\d{4}$/.test(annee) ? `${annee}-01-01` : null,
     numero_depart: /^\d+$/.test(avant) ? Number(avant) : null,
+    ...(p.certifications ? { certifications: p.certifications } : {}),
   });
+  try {
+    sessionStorage.removeItem("palanote-entete"); // l'en-tête du carnet se mettra à jour
+  } catch {
+    /* stockage indisponible */
+  }
   // Le prénom sert aussi dans les e-mails et pour les binômes.
   await supabase.auth.updateUser({ data: { first_name: p.prenom.trim() } });
 }

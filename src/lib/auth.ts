@@ -71,5 +71,10 @@ export async function updatePassword(newPassword: string) {
 
 export async function signOut() {
   viderCacheCarnet();
+  try {
+    sessionStorage.removeItem("palanote-entete");
+  } catch {
+    /* stockage indisponible */
+  }
   await supabase.auth.signOut();
 }
