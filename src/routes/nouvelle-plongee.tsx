@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
+import { CarrouselPhotos } from "@/components/CarrouselPhotos";
 import { chargerPhotosPlongee, enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
 import { MapPin, LocateFixed, Plus, X, Star, Camera, Check } from "lucide-react";
@@ -669,6 +670,9 @@ function NouvellePlongee() {
             {edition ? (enCours ? (envoiPhotos ? "Photos…" : "Enregistrement…") : "Enregistrer") : "Modifier"}
           </button>
         </div>
+
+        {/* Fiche d'une plongée enregistrée : toutes ses photos en haut, sans passer par « Modifier » */}
+        {existante && !edition && <CarrouselPhotos photos={photos} />}
 
         {message && (
           <div
