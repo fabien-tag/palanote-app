@@ -1,5 +1,6 @@
 import { CameraOff, Star } from "lucide-react";
 import { minutesEnTexte, type CartePlongee } from "@/lib/plongees";
+import { GOUTTE } from "@/lib/formes";
 
 const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 
@@ -13,10 +14,10 @@ export function LigneDePlongee({ p, numero }: { p: CartePlongee; numero: number 
     p.melange && p.melange.toLowerCase(),
   ].filter(Boolean);
   return (
-    <div className="flex items-center gap-[11px] rounded-[16px] border border-[#DCE7F0] bg-white p-[9px] shadow-[0_4px_14px_#123A6308]">
+    <div style={{ borderRadius: "22px 14px 24px 12px / 16px 20px 14px 22px" }} className="flex items-center gap-[11px] border border-[#DCE7F0] bg-white p-[9px] shadow-[0_4px_14px_#123A6308]">
       <div
-        className="flex h-[58px] w-[58px] shrink-0 items-center justify-center overflow-hidden rounded-[12px] bg-cover bg-center"
-        style={p.photo ? { backgroundImage: `url(${p.photo})` } : { background: "#E8F4FB" }}
+        className="flex h-[58px] w-[58px] shrink-0 items-center justify-center overflow-hidden bg-cover bg-center"
+        style={{ borderRadius: GOUTTE, ...(p.photo ? { backgroundImage: `url(${p.photo})` } : { background: "#E8F4FB" }) }}
       >
         {!p.photo && <CameraOff className="h-[20px] w-[20px] text-[#8FBAD4]" strokeWidth={1.8} aria-label="Pas de photo" />}
       </div>

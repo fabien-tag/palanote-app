@@ -29,6 +29,7 @@ import {
   IconeVueCartes,
   IconeVueListe,
   RaccourcisAccueil,
+  VagueBas,
 } from "@/components/AccueilCarnet";
 
 type Vue = "cartes" | "liste";
@@ -221,7 +222,9 @@ function Carnet() {
   if (chargement)
     return (
       <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
-        <div className="h-[300px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
+        <div className="relative h-[330px] w-full shrink-0 bg-[#0E3D72]">
+          <VagueBas />
+        </div>
         <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
           <div className="flex flex-col gap-[12px] p-[22px]">
             {[0, 1, 2].map((i) => (
@@ -380,7 +383,7 @@ function Carnet() {
                       type="button"
                       aria-label={`Voir la plongée Nº ${numero}${p.siteNom ? ` — ${p.siteNom}` : ""}`}
                       onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: p.id } })}
-                      className="block w-full rounded-[22px] text-left transition active:scale-[0.99]"
+                      className="block w-full rounded-[28px] text-left transition active:scale-[0.99]"
                     >
                       {vue === "liste" ? <LigneDePlongee p={p} numero={numero} /> : <CarteDePlongee p={p} />}
                     </button>
@@ -389,7 +392,8 @@ function Carnet() {
                     <button
                       type="button"
                       onClick={() => setAnneesDepliees((a) => [...a, g.annee])}
-                      className={`flex w-full items-center justify-center gap-[8px] rounded-[22px] border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] shadow-[0_4px_14px_#123A6308] ${
+                      style={{ borderRadius: "30px 18px 32px 16px / 20px 28px 18px 30px" }}
+                      className={`flex w-full items-center justify-center gap-[8px] border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] shadow-[0_4px_14px_#123A6308] ${
                         vue === "liste" ? "h-[56px]" : "h-[64px]"
                       }`}
                     >

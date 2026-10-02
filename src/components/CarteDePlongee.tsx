@@ -1,5 +1,6 @@
 import { MapPin, Star, CameraOff } from "lucide-react";
 import { minutesEnTexte, type CartePlongee } from "@/lib/plongees";
+import { GALETS, GALETS_INTERIEURS, indiceForme } from "@/lib/formes";
 
 const MOIS = ["JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DÉCEMBRE"];
 const AVATARS = ["#3DEFBE", "#FF8A75", "#57D4F5", "#FFC65C"];
@@ -17,14 +18,15 @@ export function CarteDePlongee({ p }: { p: CartePlongee }) {
     p.tempFond && `${p.tempFond} °C`,
     p.melange && p.melange.toLowerCase(),
   ].filter(Boolean);
+  const forme = indiceForme(p.id);
   const visibles = p.binomes.slice(0, 2);
   const reste = p.binomes.length - visibles.length;
 
   return (
-    <div className="rounded-[22px] border border-[#DCE7F0] bg-white p-[7px] shadow-[0_4px_14px_#123A6308]">
+    <div style={{ borderRadius: GALETS[forme] }} className="border border-[#DCE7F0] bg-white p-[7px] shadow-[0_4px_14px_#123A6308]">
       <div
-        className="relative flex h-[182px] flex-col justify-between overflow-hidden rounded-[17px] bg-cover bg-center px-[15px] py-[14px]"
-        style={p.photo ? { backgroundImage: `url(${p.photo})` } : { background: "linear-gradient(150deg,#3E7BA8,#16385C)" }}
+        className="relative flex h-[182px] flex-col justify-between overflow-hidden bg-cover bg-center px-[15px] py-[14px]"
+        style={{ borderRadius: GALETS_INTERIEURS[forme], ...(p.photo ? { backgroundImage: `url(${p.photo})` } : { background: "linear-gradient(150deg,#3E7BA8,#16385C)" }) }}
       >
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,30,60,.34)_0%,rgba(6,26,52,.06)_42%,rgba(5,22,46,.80)_100%)]" />
         <div className="relative z-[2] flex items-start justify-between">

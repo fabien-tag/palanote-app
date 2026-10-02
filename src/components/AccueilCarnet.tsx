@@ -3,6 +3,7 @@ import { Bell, Camera, ChevronRight, Fish, Star, Users } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 import { dureeEnMinutes, type CartePlongee } from "@/lib/plongees";
+import { GALETS, GOUTTE } from "@/lib/formes";
 
 // Éléments de l'écran d'accueil une fois la première plongée enregistrée
 // (maquette « Palanote-MainListe »).
@@ -38,6 +39,15 @@ function statistiques(plongees: CartePlongee[], numeroDepart: number, profMaxAva
   };
 }
 
+// Bord bas en vague (test formes organiques) : la couleur de la page « mord » le bas de l'en-tête.
+export function VagueBas({ couleur = "#F5F9FC" }: { couleur?: string }) {
+  return (
+    <svg viewBox="0 0 390 30" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 bottom-[-1px] h-[42px] w-full" aria-hidden="true">
+      <path d="M0 17C70 29 140 33 215 19S335 -1 390 7V31H0Z" fill={couleur} />
+    </svg>
+  );
+}
+
 export function EnTeteStatistiques({
   plongees,
   numeroDepart,
@@ -56,7 +66,7 @@ export function EnTeteStatistiques({
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);
   return (
-    <div className="relative h-[300px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
+    <div className="relative h-[330px] w-full shrink-0 overflow-hidden bg-[#0E3D72]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={fondMarin}
@@ -70,6 +80,7 @@ export function EnTeteStatistiques({
         className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,28,58,.60)_0%,rgba(6,26,54,.30)_38%,rgba(7,30,60,.50)_70%,rgba(7,32,64,.88)_100%)]"
         aria-hidden="true"
       />
+      <VagueBas />
       <div className="relative mx-auto flex h-full w-full max-w-[430px] flex-col">
         <div className="flex items-center justify-between px-[22px] pt-[18px]">
           <img src={logoCorail} alt="Palanote" className="h-[30px] w-auto" />
@@ -94,7 +105,7 @@ export function EnTeteStatistiques({
           <h1 className="text-[24px] font-bold leading-[1.2] text-white">Mes plongées</h1>
           {sousTitre && <p className="pt-1 text-[14px] leading-normal text-white/90">{sousTitre}</p>}
         </div>
-        <div className="px-[22px] pb-[6px]">
+        <div className="px-[22px] pb-[34px]">
           <div className="flex border-t border-white/20">
             {[
               { valeur: niveauCourt, label: "niveau" },
@@ -191,9 +202,10 @@ export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
       <button
         type="button"
         onClick={onClick}
-        className="relative flex w-full items-center gap-3 rounded-[20px] border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left shadow-[0_4px_14px_#123A6309]"
+        style={{ borderRadius: GALETS[1] }}
+        className="relative flex w-full items-center gap-3 border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left shadow-[0_4px_14px_#123A6309]"
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[13px] bg-white/55">
+        <span style={{ borderRadius: GOUTTE }} className="flex h-10 w-10 shrink-0 items-center justify-center bg-white/55">
           <Camera className="h-[21px] w-[21px] text-[#123A63]" strokeWidth={2.1} aria-hidden="true" />
         </span>
         <span className="flex min-w-0 flex-grow flex-col gap-px">
@@ -237,16 +249,17 @@ export function RaccourcisAccueil() {
   ];
   return (
     <div className="grid grid-cols-2 gap-[14px] px-[22px] pt-[16px]">
-      {raccourcis.map(({ titre, texte, Icone, fond, ouvrir }) => (
+      {raccourcis.map(({ titre, texte, Icone, fond, ouvrir }, i) => (
         <button
           key={titre}
           type="button"
           onClick={ouvrir}
           aria-disabled={ouvrir ? undefined : "true"}
           aria-label={ouvrir ? titre : `${titre} — bientôt disponible`}
-          className={`relative flex h-[150px] ${ouvrir ? "" : "cursor-default"} flex-col items-start gap-[10px] rounded-[20px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
+          style={{ borderRadius: GALETS[i === 0 ? 0 : 2] }}
+          className={`relative flex h-[150px] ${ouvrir ? "" : "cursor-default"} flex-col items-start gap-[10px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
         >
-          <span className="flex h-[35px] w-[35px] shrink-0 items-center justify-center rounded-[12px] bg-[#DCEEF8]">
+          <span style={{ borderRadius: GOUTTE }} className="flex h-[35px] w-[35px] shrink-0 items-center justify-center bg-[#DCEEF8]">
             <Icone className="h-[21px] w-[21px] text-[#5B7189]" strokeWidth={1.7} aria-hidden="true" />
           </span>
           <span className="min-w-0">
