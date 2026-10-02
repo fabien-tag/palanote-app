@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AmisRouteImport } from './routes/amis'
 import { Route as CarnetRouteImport } from './routes/carnet'
 import { Route as CarteRouteImport } from './routes/carte'
@@ -27,6 +28,7 @@ import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
+import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
 import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
 import { Route as MoiReglagesRouteImport } from './routes/moi_.reglages'
@@ -40,6 +42,11 @@ import { Route as NumeriserReprendreRouteImport } from './routes/numeriser_.repr
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AmisRoute = AmisRouteImport.update({
@@ -127,6 +134,11 @@ const AmisBinomeRoute = AmisBinomeRouteImport.update({
   path: '/amis/binome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MoiAvisRoute = MoiAvisRouteImport.update({
+  id: '/moi_/avis',
+  path: '/moi/avis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoiConfidentialiteRoute = MoiConfidentialiteRouteImport.update({
   id: '/moi_/confidentialite',
   path: '/moi/confidentialite',
@@ -175,6 +187,7 @@ const NumeriserReprendreRoute = NumeriserReprendreRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
@@ -192,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
   '/moi/reglages': typeof MoiReglagesRoute
@@ -204,6 +218,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
@@ -221,6 +236,7 @@ export interface FileRoutesByTo {
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
   '/moi/reglages': typeof MoiReglagesRoute
@@ -234,6 +250,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
@@ -251,6 +268,7 @@ export interface FileRoutesById {
   '/site': typeof SiteRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
+  '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
   '/moi_/profil': typeof MoiProfilRoute
   '/moi_/reglages': typeof MoiReglagesRoute
@@ -265,6 +283,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/amis'
     | '/carnet'
     | '/carte'
@@ -282,6 +301,7 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
     | '/moi/reglages'
@@ -294,6 +314,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/amis'
     | '/carnet'
     | '/carte'
@@ -311,6 +332,7 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
     | '/moi/reglages'
@@ -323,6 +345,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/amis'
     | '/carnet'
     | '/carte'
@@ -340,6 +363,7 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis_/ajouter'
     | '/amis_/binome'
+    | '/moi_/avis'
     | '/moi_/confidentialite'
     | '/moi_/profil'
     | '/moi_/reglages'
@@ -353,6 +377,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AmisRoute: typeof AmisRoute
   CarnetRoute: typeof CarnetRoute
   CarteRoute: typeof CarteRoute
@@ -370,6 +395,7 @@ export interface RootRouteChildren {
   SiteRoute: typeof SiteRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
+  MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
   MoiProfilRoute: typeof MoiProfilRoute
   MoiReglagesRoute: typeof MoiReglagesRoute
@@ -388,6 +414,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/amis': {
@@ -509,6 +542,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisBinomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/moi_/avis': {
+      id: '/moi_/avis'
+      path: '/moi/avis'
+      fullPath: '/moi/avis'
+      preLoaderRoute: typeof MoiAvisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/moi_/confidentialite': {
       id: '/moi_/confidentialite'
       path: '/moi/confidentialite'
@@ -577,6 +617,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AmisRoute: AmisRoute,
   CarnetRoute: CarnetRoute,
   CarteRoute: CarteRoute,
@@ -594,6 +635,7 @@ const rootRouteChildren: RootRouteChildren = {
   SiteRoute: SiteRoute,
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
+  MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,
   MoiProfilRoute: MoiProfilRoute,
   MoiReglagesRoute: MoiReglagesRoute,
