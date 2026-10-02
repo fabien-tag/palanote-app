@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { installerSuivi } from "../lib/suivi";
 
 function NotFoundComponent() {
   return (
@@ -124,6 +125,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Présence et erreurs pour le tableau de bord du développeur.
+  useEffect(() => installerSuivi(), []);
 
   return (
     <QueryClientProvider client={queryClient}>
