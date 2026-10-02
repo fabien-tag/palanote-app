@@ -89,6 +89,14 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
+  // En faisant défiler, le bouton « + Plongée » se réduit à un simple « + » pour moins masquer les cartes.
+  const [boutonCompact, setBoutonCompact] = useState(false);
+  useEffect(() => {
+    const suivre = () => setBoutonCompact(window.scrollY > 160);
+    suivre();
+    window.addEventListener("scroll", suivre, { passive: true });
+    return () => window.removeEventListener("scroll", suivre);
+  }, []);
   // Au plus 5 plongées par année ; « Voir plus » déplie l'année entière.
   const [anneesDepliees, setAnneesDepliees] = useState<string[]>([]);
   const vide = !chargement && plongees.length === 0;
@@ -190,7 +198,7 @@ function Carnet() {
   if (chargement)
     return (
       <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
-        <div className="h-[230px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
+        <div className="h-[300px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
         <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
           <div className="flex flex-col gap-[12px] p-[22px]">
             {[0, 1, 2].map((i) => (
@@ -309,7 +317,7 @@ function Carnet() {
           <div className="flex shrink-0 flex-col px-[22px] pb-[22px]">
             {groupes.map((g, gi) => (
               <div key={g.annee} className="flex flex-col">
-                <div className="flex items-center justify-between gap-3 pb-3 pt-[18px]">
+                <div className="flex items-center justify-between gap-3 pb-4 pt-[34px]">
                   <div className="flex min-w-0 items-baseline gap-2">
                     <span className="text-[15px] font-bold text-[#123A63]">{g.annee}</span>
                     <span className="text-[12px] text-[#9DB0C0]">
@@ -342,7 +350,7 @@ function Carnet() {
                 </div>
                 {/* Filtres : sous le titre des plongées, juste avant les cartes */}
                 {gi === 0 && filtresListe}
-                <div className={`flex flex-col ${vue === "liste" ? "gap-2" : "gap-[13px]"}`}>
+                <div className={`flex flex-col ${vue === "liste" ? "gap-[10px]" : "gap-[18px]"}`}>
                   {(anneesDepliees.includes(g.annee) ? g.plongees : g.plongees.slice(0, PAR_ANNEE)).map(({ p, numero }) => (
                     <button
                       key={p.id}
@@ -373,7 +381,7 @@ function Carnet() {
             {groupes.length === 0 && (
               <p className="pt-8 text-center text-[13px] text-[#5B7189]">Aucune plongée pour ce filtre.</p>
             )}
-            <div className="h-[70px]" aria-hidden="true" />
+            <div className="h-[120px]" aria-hidden="true" />
           </div>
         </>
       )}
@@ -382,10 +390,13 @@ function Carnet() {
         <button
           type="button"
           onClick={() => navigate({ to: "/nouvelle-plongee" })}
-          className="fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-[max(24px,calc(50vw-215px+24px))] z-20 flex h-[52px] items-center gap-[9px] rounded-[26px] bg-[#3DEFBE] px-[19px] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322]"
+          aria-label="Nouvelle plongée"
+          className={`fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-[max(20px,calc(50vw-215px+20px))] z-20 flex h-[52px] items-center justify-center overflow-hidden rounded-[26px] bg-[#3DEFBE] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322] transition-all duration-300 ${
+            boutonCompact ? "w-[52px] gap-0 px-0" : "w-[128px] gap-[9px] px-[19px]"
+          }`}
         >
-          <Plus className="h-[20px] w-[20px]" strokeWidth={2} aria-hidden="true" />
-          Plongée
+          <Plus className="h-[20px] w-[20px] shrink-0" strokeWidth={2} aria-hidden="true" />
+          <span className={`whitespace-nowrap transition-all duration-300 ${boutonCompact ? "w-0 opacity-0" : "opacity-100"}`}>Plongée</span>
         </button>
 
         <div className="flex-grow" />

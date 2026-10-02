@@ -50,7 +50,7 @@ export function EnTeteStatistiques({
   const stats = statistiques(plongees, numeroDepart);
   const sousTitre = derniereplongeeTexte(plongees);
   return (
-    <div className="relative h-[230px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
+    <div className="relative h-[300px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={fondMarin}
@@ -171,7 +171,7 @@ export function FiltresPlongees({
 
 export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
   return (
-    <div className="px-[22px] pt-4">
+    <div className="px-[22px] pt-[26px]">
       <button
         type="button"
         onClick={onClick}
@@ -220,7 +220,7 @@ export function RaccourcisAccueil() {
     },
   ];
   return (
-    <div className="grid grid-cols-2 gap-3 px-[22px] pt-[18px]">
+    <div className="grid grid-cols-2 gap-[14px] px-[22px] pt-[16px]">
       {raccourcis.map(({ titre, texte, Icone, fond, ouvrir }) => (
         <button
           key={titre}
