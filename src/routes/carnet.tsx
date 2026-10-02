@@ -29,7 +29,7 @@ import {
   IconeVueCartes,
   IconeVueListe,
   RaccourcisAccueil,
-  VagueBas,
+  ARRONDI_ENTETE,
 } from "@/components/AccueilCarnet";
 
 type Vue = "cartes" | "liste";
@@ -222,9 +222,7 @@ function Carnet() {
   if (chargement)
     return (
       <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
-        <div className="relative h-[330px] w-full shrink-0 bg-[#0E3D72]">
-          <VagueBas />
-        </div>
+        <div style={{ borderRadius: ARRONDI_ENTETE }} className="h-[300px] w-full shrink-0 bg-[#0E3D72]" />
         <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
           <div className="flex flex-col gap-[12px] p-[22px]">
             {[0, 1, 2].map((i) => (

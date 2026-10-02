@@ -39,14 +39,8 @@ function statistiques(plongees: CartePlongee[], numeroDepart: number, profMaxAva
   };
 }
 
-// Bord bas en vague (test formes organiques) : la couleur de la page « mord » le bas de l'en-tête.
-export function VagueBas({ couleur = "#F5F9FC" }: { couleur?: string }) {
-  return (
-    <svg viewBox="0 0 390 30" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 bottom-[-1px] h-[42px] w-full" aria-hidden="true">
-      <path d="M0 17C70 29 140 33 215 19S335 -1 390 7V31H0Z" fill={couleur} />
-    </svg>
-  );
-}
+// Bas de l'en-tête : coins arrondis différents à gauche et à droite (test formes organiques).
+export const ARRONDI_ENTETE = "0 0 24px 52px / 0 0 22px 40px";
 
 export function EnTeteStatistiques({
   plongees,
@@ -66,7 +60,7 @@ export function EnTeteStatistiques({
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);
   return (
-    <div className="relative h-[330px] w-full shrink-0 overflow-hidden bg-[#0E3D72]">
+    <div style={{ borderRadius: ARRONDI_ENTETE }} className="relative h-[300px] w-full shrink-0 overflow-hidden bg-[#0E3D72]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={fondMarin}
@@ -80,7 +74,6 @@ export function EnTeteStatistiques({
         className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,28,58,.60)_0%,rgba(6,26,54,.30)_38%,rgba(7,30,60,.50)_70%,rgba(7,32,64,.88)_100%)]"
         aria-hidden="true"
       />
-      <VagueBas />
       <div className="relative mx-auto flex h-full w-full max-w-[430px] flex-col">
         <div className="flex items-center justify-between px-[22px] pt-[18px]">
           <img src={logoCorail} alt="Palanote" className="h-[30px] w-auto" />
@@ -105,7 +98,7 @@ export function EnTeteStatistiques({
           <h1 className="text-[24px] font-bold leading-[1.2] text-white">Mes plongées</h1>
           {sousTitre && <p className="pt-1 text-[14px] leading-normal text-white/90">{sousTitre}</p>}
         </div>
-        <div className="px-[22px] pb-[34px]">
+        <div className="px-[22px] pb-[6px]">
           <div className="flex border-t border-white/20">
             {[
               { valeur: niveauCourt, label: "niveau" },
