@@ -43,11 +43,16 @@ function statistiques(plongees: CartePlongee[], numeroDepart: number) {
 export function EnTeteStatistiques({
   plongees,
   numeroDepart,
+  nbBinomes,
 }: {
   plongees: CartePlongee[];
   numeroDepart: number;
+  nbBinomes?: number | undefined;
 }) {
   const stats = statistiques(plongees, numeroDepart);
+  const annee = new Date().getFullYear();
+  const cetteAnnee = plongees.filter((p) => p.date.startsWith(String(annee))).length;
+  const sites = new Set(plongees.map((p) => p.siteNom.trim().toLowerCase()).filter(Boolean)).size;
   const sousTitre = derniereplongeeTexte(plongees);
   return (
     <div className="relative h-[300px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
@@ -86,9 +91,22 @@ export function EnTeteStatistiques({
               { valeur: stats.profMax, label: "profondeur max" },
               { valeur: stats.sousLEau, label: "sous l'eau" },
             ].map((s) => (
-              <div key={s.label} className="flex flex-1 flex-col items-center gap-[2px] px-[6px] py-[30px]">
+              <div key={s.label} className="flex flex-1 flex-col items-center gap-[2px] px-[6px] pb-[8px] pt-[12px]">
                 <div className="text-[23px] font-semibold leading-tight text-white">{s.valeur}</div>
                 <div className="text-[10px] text-white/70">{s.label}</div>
+              </div>
+            ))}
+          </div>
+          {/* Deuxième ligne : cette année, sites, binômes */}
+          <div className="mb-[8px] flex rounded-[14px] bg-white/10">
+            {[
+              { valeur: cetteAnnee, label: `en ${annee}` },
+              { valeur: sites, label: sites > 1 ? "sites" : "site" },
+              { valeur: nbBinomes ?? 0, label: (nbBinomes ?? 0) > 1 ? "binômes" : "binôme" },
+            ].map((s, i) => (
+              <div key={s.label} className={`flex flex-1 items-baseline justify-center gap-[5px] py-[8px] ${i ? "border-l border-white/15" : ""}`}>
+                <span className="text-[16px] font-semibold text-white">{s.valeur}</span>
+                <span className="text-[11px] text-white/70">{s.label}</span>
               </div>
             ))}
           </div>
