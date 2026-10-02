@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Camera, ChevronRight, Download, HelpCircle, Lock, Pencil, SlidersHorizontal, Upload } from "lucide-react";
+import { BarChart3, Camera, ChevronRight, Download, HelpCircle, Lock, MessageCircle, Pencil, SlidersHorizontal, Upload } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { Bloc, Ligne, TitreSection } from "@/components/moi/Ui";
 import { initiales, mesBinomes } from "@/lib/amis";
+import { estAdmin } from "@/lib/suivi";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { chargerProfil, exporterUDDF, type Profil } from "@/lib/moi";
 import { chargerNumeroDepart, chargerPlongees, dureeEnMinutes, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
@@ -39,6 +40,7 @@ function Moi() {
   const [profil, setProfil] = useState<Profil | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
   const [mesPlongees, setMesPlongees] = useState<CartePlongee[]>([]);
+  const [admin, setAdmin] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [exportEnCours, setExportEnCours] = useState(false);
@@ -65,6 +67,7 @@ function Moi() {
       setProfil(p);
       setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? ""));
       setMesPlongees(liste);
+      void estAdmin().then((a) => actif && setAdmin(a));
     })();
     return () => {
       actif = false;
@@ -192,8 +195,17 @@ function Moi() {
               <Bloc>
                 <Ligne icone={SlidersHorizontal} label="Réglages" onClick={() => navigate({ to: "/moi/reglages" })} />
                 <Ligne icone={Lock} label="Confidentialité" onClick={() => navigate({ to: "/moi/confidentialite" })} />
+                <Ligne icone={MessageCircle} label="Dis-moi ce qui manque" onClick={() => navigate({ to: "/moi/avis" })} />
                 <Ligne icone={HelpCircle} label="Aide et à propos" bientot />
               </Bloc>
+              {admin && (
+                <>
+                  <TitreSection>Développeur</TitreSection>
+                  <Bloc>
+                    <Ligne icone={BarChart3} label="Tableau de bord" onClick={() => navigate({ to: "/admin" })} />
+                  </Bloc>
+                </>
+              )}
             </>
           )}
         </div>
