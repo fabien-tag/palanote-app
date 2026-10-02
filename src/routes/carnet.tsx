@@ -20,6 +20,7 @@ import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { accepterInvitationGardee } from "@/lib/amis";
+import { chargerProfil } from "@/lib/moi";
 import {
   BandeauCarnetsPapier,
   EnTeteStatistiques,
@@ -89,6 +90,28 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
+  // Niveau et certifications du plongeur, affichés dans l'en-tête (gardés pour la session).
+  const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[] } | null>(null);
+  useEffect(() => {
+    try {
+      const t = sessionStorage.getItem("palanote-entete");
+      if (t) setProfilEntete(JSON.parse(t));
+    } catch {
+      /* stockage indisponible */
+    }
+    void chargerProfil()
+      .then((p) => {
+        if (!p) return;
+        const e = { niveau: p.niveau, certifications: p.certifications };
+        setProfilEntete(e);
+        try {
+          sessionStorage.setItem("palanote-entete", JSON.stringify(e));
+        } catch {
+          /* stockage indisponible */
+        }
+      })
+      .catch(() => undefined);
+  }, []);
   // En faisant défiler, le bouton « + Plongée » se réduit à un simple « + » pour moins masquer les cartes.
   const [boutonCompact, setBoutonCompact] = useState(false);
   useEffect(() => {
@@ -265,7 +288,7 @@ function Carnet() {
       </div>
         </>
       ) : (
-        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} />
+        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} />
       )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">

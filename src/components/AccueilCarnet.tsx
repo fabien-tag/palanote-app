@@ -43,11 +43,17 @@ function statistiques(plongees: CartePlongee[], numeroDepart: number) {
 export function EnTeteStatistiques({
   plongees,
   numeroDepart,
+  niveau,
+  certifications = [],
 }: {
   plongees: CartePlongee[];
   numeroDepart: number;
+  niveau?: string | undefined;
+  certifications?: string[] | undefined;
 }) {
   const stats = statistiques(plongees, numeroDepart);
+  // « N2 / Advanced » → « N2 » ; « Encadrant » reste tel quel
+  const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);
   return (
     <div className="relative h-[300px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
@@ -76,18 +82,28 @@ export function EnTeteStatistiques({
           </button>
         </div>
         <div className="mt-auto px-[22px] pb-[16px]">
+          {certifications.length > 0 && (
+            <div className="flex flex-wrap gap-[6px] pb-[10px]">
+              {certifications.map((c) => (
+                <span key={c} className="rounded-full bg-[#3DEFBE] px-[10px] py-[3px] text-[11px] font-bold tracking-[.02em] text-[#0B3B63]">
+                  {c} Diver
+                </span>
+              ))}
+            </div>
+          )}
           <h1 className="text-[24px] font-bold leading-[1.2] text-white">Mes plongées</h1>
           {sousTitre && <p className="pt-1 text-[14px] leading-normal text-white/90">{sousTitre}</p>}
         </div>
         <div className="px-[22px] pb-[6px]">
           <div className="flex border-t border-white/20">
             {[
+              { valeur: niveauCourt, label: "niveau" },
               { valeur: stats.total, label: stats.total > 1 ? "plongées" : "plongée" },
               { valeur: stats.profMax, label: "profondeur max" },
               { valeur: stats.sousLEau, label: "sous l'eau" },
             ].map((s) => (
               <div key={s.label} className="flex flex-1 flex-col items-center gap-[2px] px-[6px] pb-[8px] pt-[12px]">
-                <div className="text-[23px] font-semibold leading-tight text-white">{s.valeur}</div>
+                <div className={`font-semibold leading-tight text-white ${String(s.valeur).length > 5 ? "pt-[5px] text-[16px]" : "text-[23px]"}`}>{s.valeur}</div>
                 <div className="text-[10px] text-white/70">{s.label}</div>
               </div>
             ))}
