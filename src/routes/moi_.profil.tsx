@@ -5,13 +5,13 @@ import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { signOut } from "@/lib/auth";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { chargerProfil, sauverProfil } from "@/lib/moi";
+import { AIDE_ROLE, NIVEAUX, ROLES } from "@/lib/profil-plongeur";
 
 export const Route = createFileRoute("/moi_/profil")({
   head: () => ({ meta: [{ title: "Palanote — Mon profil" }] }),
   component: ModifierProfil,
 });
 
-const NIVEAUX = ["N1 / Open Water", "N2 / Advanced", "N3 / Rescue", "N4 / Divemaster", "Encadrant"];
 // Certifications de gaz : la valeur enregistrée, et ce qui s'affiche
 const CERTIFICATIONS = [
   { valeur: "Nitrox", label: "Nitrox Diver" },
@@ -43,6 +43,10 @@ function ModifierProfil() {
   const [club, setClub] = useState("");
   const [premiereAnnee, setPremiereAnnee] = useState("");
   const [plongeesAvant, setPlongeesAvant] = useState("");
+  const [profMaxAvant, setProfMaxAvant] = useState("");
+  const [profOrigine, setProfOrigine] = useState("");
+  const [role, setRole] = useState("");
+  const [roleOrigine, setRoleOrigine] = useState("");
   const [certifications, setCertifications] = useState<string[]>([]);
   const [certifsOrigine, setCertifsOrigine] = useState<string[]>([]);
   const [charge, setCharge] = useState(false);
@@ -58,6 +62,10 @@ function ModifierProfil() {
         setClub(p.club);
         setPremiereAnnee(p.premiereAnnee);
         setPlongeesAvant(p.plongeesAvant);
+        setProfMaxAvant(p.profMaxAvant);
+        setProfOrigine(p.profMaxAvant);
+        setRole(p.role);
+        setRoleOrigine(p.role);
         setCertifications(p.certifications);
         setCertifsOrigine(p.certifications);
       }
@@ -69,12 +77,14 @@ function ModifierProfil() {
 
   const enregistrer = async () => {
     if (!prenom.trim()) return setErreur("Ton prénom est nécessaire : c'est lui que voient tes binômes.");
+    const prof = Number(profMaxAvant.replace(",", "."));
+    if (profMaxAvant && (!Number.isFinite(prof) || prof <= 0 || prof > 350)) return setErreur("La profondeur max doit être un nombre de mètres, par exemple 40.");
     if (!anneeValide) return setErreur("L'année de ta première plongée doit ressembler à 1987.");
     setEnCours(true);
     setErreur(null);
     try {
       const certifsChangees = [...certifications].sort().join() !== [...certifsOrigine].sort().join();
-      await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant, ...(certifsChangees ? { certifications } : {}) });
+      await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant, ...(certifsChangees ? { certifications } : {}), ...(role !== roleOrigine ? { role } : {}), ...(profMaxAvant !== profOrigine ? { profMaxAvant } : {}) });
       annoncerSurAccueil("Ton profil a bien été mis à jour");
       navigate({ to: "/moi" });
     } catch (e) {
@@ -114,6 +124,28 @@ function ModifierProfil() {
                 })}
               </div>
               {niveau && !NIVEAUX.includes(niveau) && <p className="pt-[8px] text-[12.5px] text-[#5B7189]">Niveau actuel : {niveau}</p>}
+            </div>
+            <div>
+              <span className="block pb-[8px] text-[13px] font-semibold text-[#5B7189]">Ton rôle</span>
+              <div className="flex flex-wrap gap-[8px]">
+                {ROLES.map((r) => {
+                  const actif = role === r.valeur;
+                  return (
+                    <button
+                      key={r.valeur}
+                      type="button"
+                      aria-pressed={actif}
+                      onClick={() => setRole(actif ? "" : r.valeur)}
+                      className={`h-[40px] rounded-full border-[1.5px] px-[14px] text-[13.5px] font-semibold ${
+                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#5B7189]"
+                      }`}
+                    >
+                      {r.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="pt-[6px] text-[12px] text-[#9DB0C0]">{AIDE_ROLE}</p>
             </div>
             <Champ label="Club" value={club} onChange={(e) => setClub(e.target.value)} placeholder="CIP Lavandou" />
             <div>
@@ -156,6 +188,14 @@ function ModifierProfil() {
               onChange={(e) => setPlongeesAvant(e.target.value.replace(/\D/g, "").slice(0, 5))}
               inputMode="numeric"
               placeholder="0"
+            />
+            <Champ
+              label="Profondeur max avant Palanote (en mètres)"
+              aide="Comptée dans ta profondeur max, en haut de ton carnet et dans Moi."
+              value={profMaxAvant}
+              onChange={(e) => setProfMaxAvant(e.target.value.replace(/[^\d,.]/g, "").slice(0, 5))}
+              inputMode="decimal"
+              placeholder="40"
             />
           </div>
 

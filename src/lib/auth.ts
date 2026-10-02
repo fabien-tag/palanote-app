@@ -12,6 +12,7 @@ export type ProfilInscription = {
   club?: string;
   premiere_plongee_le?: string;
   numero_depart?: number;
+  role_plongee?: string;
 };
 
 export async function signUpWithEmail(
@@ -42,7 +43,12 @@ async function appliquerProfilEnAttente(
   const profil = user?.user_metadata?.["profil_en_attente"] as ProfilInscription | undefined;
   if (!user || !profil) return;
   if (Object.keys(profil).length > 0) {
-    await supabase.from("profiles").update(profil).eq("id", user.id);
+    const { error } = await supabase.from("profiles").update(profil).eq("id", user.id);
+    // Colonne « role_plongee » pas encore créée (script SQL non lancé) : on garde le reste.
+    if (error && profil.role_plongee) {
+      const { role_plongee: _ignore, ...reste } = profil;
+      if (Object.keys(reste).length > 0) await supabase.from("profiles").update(reste).eq("id", user.id);
+    }
   }
   await supabase.auth.updateUser({ data: { profil_en_attente: null } });
 }

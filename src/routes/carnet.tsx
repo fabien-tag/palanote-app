@@ -91,7 +91,7 @@ function Carnet() {
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
   // Niveau et certifications du plongeur, affichés dans l'en-tête (gardés pour la session).
-  const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[] } | null>(null);
+  const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[]; profMaxAvant?: string } | null>(null);
   useEffect(() => {
     try {
       const t = sessionStorage.getItem("palanote-entete");
@@ -102,7 +102,7 @@ function Carnet() {
     void chargerProfil()
       .then((p) => {
         if (!p) return;
-        const e = { niveau: p.niveau, certifications: p.certifications };
+        const e = { niveau: p.niveau, certifications: p.certifications, profMaxAvant: p.profMaxAvant };
         setProfilEntete(e);
         try {
           sessionStorage.setItem("palanote-entete", JSON.stringify(e));
@@ -288,7 +288,7 @@ function Carnet() {
       </div>
         </>
       ) : (
-        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} />
+        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} profMaxAvant={Number((profilEntete?.profMaxAvant ?? "").replace(",", ".")) || 0} />
       )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">

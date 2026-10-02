@@ -28,10 +28,8 @@ function derniereplongeeTexte(plongees: CartePlongee[]) {
   return `dernière plongée il y a ${ans} an${ans > 1 ? "s" : ""}`;
 }
 
-function statistiques(plongees: CartePlongee[], numeroDepart: number) {
-  const profondeurs = plongees
-    .map((p) => Number(p.profMax.replace(",", ".")))
-    .filter((n) => Number.isFinite(n) && n > 0);
+function statistiques(plongees: CartePlongee[], numeroDepart: number, profMaxAvant: number) {
+  const profondeurs = [...plongees.map((p) => Number(p.profMax.replace(",", "."))), profMaxAvant].filter((n) => Number.isFinite(n) && n > 0);
   const minutes = plongees.reduce((t, p) => t + (dureeEnMinutes(p.duree) ?? 0), 0);
   return {
     total: numeroDepart + plongees.length,
@@ -45,13 +43,15 @@ export function EnTeteStatistiques({
   numeroDepart,
   niveau,
   certifications = [],
+  profMaxAvant = 0,
 }: {
   plongees: CartePlongee[];
   numeroDepart: number;
   niveau?: string | undefined;
   certifications?: string[] | undefined;
+  profMaxAvant?: number | undefined;
 }) {
-  const stats = statistiques(plongees, numeroDepart);
+  const stats = statistiques(plongees, numeroDepart, profMaxAvant);
   // « N2 / Advanced » → « N2 » ; « Encadrant » reste tel quel
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);

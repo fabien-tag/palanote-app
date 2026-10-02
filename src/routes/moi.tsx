@@ -5,6 +5,7 @@ import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { Bloc, Ligne, TitreSection } from "@/components/moi/Ui";
+import { libelleRole } from "@/lib/profil-plongeur";
 import { initiales, mesBinomes } from "@/lib/amis";
 import { estAdmin } from "@/lib/suivi";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
@@ -18,8 +19,8 @@ export const Route = createFileRoute("/moi")({
 
 type Stats = { plongees: string; heures: string; profondeur: string; sites: string; binomes: string; depuis: string };
 
-function calculerStats(liste: CartePlongee[], depart: number, nbBinomes: number, premiereAnnee: string): Stats {
-  const profondeurs = liste.map((p) => Number(p.profMax.replace(",", "."))).filter((n) => Number.isFinite(n) && n > 0);
+function calculerStats(liste: CartePlongee[], depart: number, nbBinomes: number, premiereAnnee: string, profMaxAvant: string): Stats {
+  const profondeurs = [...liste.map((p) => Number(p.profMax.replace(",", "."))), Number(profMaxAvant.replace(",", "."))].filter((n) => Number.isFinite(n) && n > 0);
   const minutes = liste.reduce((t, p) => t + (dureeEnMinutes(p.duree) ?? 0), 0);
   const sites = new Set(liste.map((p) => p.siteNom.trim().toLowerCase()).filter(Boolean));
   const annees = liste.map((p) => Number(p.date.slice(0, 4))).filter((a) => a > 1900);
@@ -65,7 +66,7 @@ function Moi() {
       ]);
       if (!actif) return;
       setProfil(p);
-      setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? ""));
+      setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? "", p?.profMaxAvant ?? ""));
       setMesPlongees(liste);
       void estAdmin().then((a) => actif && setAdmin(a));
     })();
@@ -144,7 +145,7 @@ function Moi() {
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[20px] font-bold leading-tight">{profil?.prenom ?? " "}</span>
                   <span className="block truncate text-[13.5px] text-[#5B7189]">
-                    {profil && (profil.niveau || profil.club) ? [profil.niveau, profil.club].filter(Boolean).join(" · ") : "Ajoute ton niveau et ton club"}
+                    {profil && (profil.niveau || profil.club || profil.role) ? [profil.niveau, libelleRole(profil.role), profil.club].filter(Boolean).join(" · ") : "Ajoute ton niveau et ton club"}
                   </span>
                 </span>
               </button>

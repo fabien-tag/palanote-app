@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Globe, KeyRound, Mail, Ruler, Thermometer } from "lucide-react";
+import { Anchor, Award, Globe, KeyRound, Mail, Ruler, Thermometer, UserRound } from "lucide-react";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { Bloc, Interrupteur, Ligne, ModaleSuppressionCompte, Note, PageMoi, TitreSection } from "@/components/moi/Ui";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { signOut } from "@/lib/auth";
-import { changerEmail, changerMotDePasse, chargerProfil, compteConnecte, sauverReglage, supprimerMonCompte, type Compte } from "@/lib/moi";
+import { changerEmail, changerMotDePasse, chargerProfil, compteConnecte, sauverReglage, supprimerMonCompte, type Compte, type Profil } from "@/lib/moi";
+import { libelleRole } from "@/lib/profil-plongeur";
 
 export const Route = createFileRoute("/moi_/reglages")({
   head: () => ({ meta: [{ title: "Palanote — Réglages" }] }),
@@ -20,6 +21,7 @@ function Reglages() {
   const navigate = useNavigate();
   const { pret, ecran } = useConnexionRequise();
   const [compte, setCompte] = useState<Compte | null>(null);
+  const [profil, setProfil] = useState<Profil | null>(null);
   const [notifLecture, setNotifLecture] = useState(true);
   const [notifBinome, setNotifBinome] = useState(true);
   const [ouvert, setOuvert] = useState<null | "email" | "mdp">(null);
@@ -38,6 +40,7 @@ function Reglages() {
     void compteConnecte().then(setCompte);
     void chargerProfil().then((p) => {
       if (!p) return;
+      setProfil(p);
       setNotifLecture(p.notifLecture);
       setNotifBinome(p.notifBinome);
     });
@@ -129,6 +132,13 @@ function Reglages() {
   return (
     <PageMoi titre="Réglages">
       {message && <BandeauConfirmation texte={message} onFin={finMessage} />}
+
+      <TitreSection>Mon profil de plongeur</TitreSection>
+      <Bloc>
+        <Ligne icone={Award} label="Niveau" valeur={profil?.niveau || "À renseigner"} onClick={() => navigate({ to: "/moi/profil" })} />
+        <Ligne icone={UserRound} label="Rôle" valeur={libelleRole(profil?.role) || "À renseigner"} onClick={() => navigate({ to: "/moi/profil" })} />
+        <Ligne icone={Anchor} label="Club ou centre" valeur={profil?.club || "À renseigner"} onClick={() => navigate({ to: "/moi/profil" })} />
+      </Bloc>
 
       <TitreSection>Unités</TitreSection>
       <Bloc>

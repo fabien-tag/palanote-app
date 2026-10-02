@@ -6,6 +6,7 @@ import { getEtape1, clearEtape1 } from "@/lib/inscription";
 import { Stepper } from "@/components/Stepper";
 import { BoutonRetour } from "@/components/BoutonRetour";
 import { FondAuth } from "@/components/FondAuth";
+import { AIDE_ROLE, NIVEAUX, ROLES } from "@/lib/profil-plongeur";
 
 export const Route = createFileRoute("/profil-plongeur")({
   head: () => ({
@@ -21,17 +22,12 @@ export const Route = createFileRoute("/profil-plongeur")({
   component: ProfilPlongeur,
 });
 
-const LEVELS = [
-  "N1 / Open Water",
-  "N2 / Advanced",
-  "N3 / Rescue",
-  "N4 / Divemaster",
-  "Encadrant",
-];
+const LEVELS = NIVEAUX;
 
 function ProfilPlongeur() {
   const navigate = useNavigate();
   const [level, setLevel] = useState("");
+  const [role, setRole] = useState("");
   const [club, setClub] = useState("");
   const [firstDiveYear, setFirstDiveYear] = useState("");
   const [diveCount, setDiveCount] = useState("");
@@ -47,6 +43,7 @@ function ProfilPlongeur() {
     const profil: ProfilInscription = {};
     if (avecProfil) {
       if (level) profil.niveau = level;
+      if (role) profil.role_plongee = role;
       if (club) profil.club = club;
       if (firstDiveYear) profil.premiere_plongee_le = `${firstDiveYear}-01-01`;
       if (diveCount) profil.numero_depart = Number(diveCount);
@@ -115,6 +112,31 @@ function ProfilPlongeur() {
                 );
               })}
             </div>
+          </div>
+
+          <div>
+            <div className="text-sm font-medium text-blanc">Ton rôle</div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {ROLES.map((r) => {
+                const actif = role === r.valeur;
+                return (
+                  <button
+                    key={r.valeur}
+                    type="button"
+                    aria-pressed={actif}
+                    onClick={() => setRole(actif ? "" : r.valeur)}
+                    className={`flex min-h-[42px] items-center rounded-full px-[17px] text-sm transition-colors ${
+                      actif
+                        ? "bg-menthe font-bold text-abyss"
+                        : "border-[1.5px] border-blanc/30 bg-blanc/15 text-blanc"
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-[11.5px] leading-snug text-blanc/70">{AIDE_ROLE}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
