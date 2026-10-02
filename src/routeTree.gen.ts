@@ -17,6 +17,7 @@ import { Route as CarteRouteImport } from './routes/carte'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
+import { Route as DesabonnementRouteImport } from './routes/desabonnement'
 import { Route as InvitationRouteImport } from './routes/invitation'
 import { Route as MoiRouteImport } from './routes/moi'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
@@ -77,6 +78,11 @@ const ConnexionRoute = ConnexionRouteImport.update({
 const CreerUnCompteRoute = CreerUnCompteRouteImport.update({
   id: '/creer-un-compte',
   path: '/creer-un-compte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesabonnementRoute = DesabonnementRouteImport.update({
+  id: '/desabonnement',
+  path: '/desabonnement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvitationRoute = InvitationRouteImport.update({
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/desabonnement': typeof DesabonnementRoute
   '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
@@ -225,6 +232,7 @@ export interface FileRoutesByTo {
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/desabonnement': typeof DesabonnementRoute
   '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
@@ -257,6 +265,7 @@ export interface FileRoutesById {
   '/compte-cree': typeof CompteCreeRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
+  '/desabonnement': typeof DesabonnementRoute
   '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/desabonnement'
     | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
@@ -321,6 +331,7 @@ export interface FileRouteTypes {
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/desabonnement'
     | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/compte-cree'
     | '/connexion'
     | '/creer-un-compte'
+    | '/desabonnement'
     | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
@@ -384,6 +396,7 @@ export interface RootRouteChildren {
   CompteCreeRoute: typeof CompteCreeRoute
   ConnexionRoute: typeof ConnexionRoute
   CreerUnCompteRoute: typeof CreerUnCompteRoute
+  DesabonnementRoute: typeof DesabonnementRoute
   InvitationRoute: typeof InvitationRoute
   MoiRoute: typeof MoiRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
@@ -463,6 +476,13 @@ declare module '@tanstack/react-router' {
       path: '/creer-un-compte'
       fullPath: '/creer-un-compte'
       preLoaderRoute: typeof CreerUnCompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/desabonnement': {
+      id: '/desabonnement'
+      path: '/desabonnement'
+      fullPath: '/desabonnement'
+      preLoaderRoute: typeof DesabonnementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invitation': {
@@ -624,6 +644,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompteCreeRoute: CompteCreeRoute,
   ConnexionRoute: ConnexionRoute,
   CreerUnCompteRoute: CreerUnCompteRoute,
+  DesabonnementRoute: DesabonnementRoute,
   InvitationRoute: InvitationRoute,
   MoiRoute: MoiRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
