@@ -130,9 +130,18 @@ function Connexion() {
               onChange={setPassword}
               placeholder="Mot de passe"
             />
+            {/* Rattaché au champ mot de passe, pour ne pas le confondre avec « Se souvenir de moi » */}
+            <div className="flex justify-end">
+              <Link
+                to="/mot-de-passe-oublie"
+                className="-mb-[6px] inline-flex min-h-[36px] items-center text-[13px] font-medium text-blanc/80 underline-offset-4 hover:underline"
+              >
+                Mot de passe oublié ?
+              </Link>
+            </div>
           </div>
 
-          <div className="-my-[clamp(0px,0.6svh,4px)] flex items-center justify-between gap-3">
+          <div className="-my-[clamp(0px,0.6svh,4px)] flex items-center">
             <label className="inline-flex min-h-[clamp(34px,5.5svh,44px)] cursor-pointer items-center gap-[10px] text-sm font-medium text-blanc">
               <input type="checkbox" checked={souvenir} onChange={(e) => setSouvenir(e.target.checked)} className="peer sr-only" />
               <span
@@ -145,12 +154,6 @@ function Connexion() {
               </span>
               Se souvenir de moi
             </label>
-            <Link
-              to="/mot-de-passe-oublie"
-              className="inline-flex min-h-[clamp(34px,5.5svh,44px)] items-center text-sm font-medium text-blanc"
-            >
-              Mot de passe oublié ?
-            </Link>
           </div>
 
           {error && (
