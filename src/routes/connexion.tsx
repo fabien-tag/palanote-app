@@ -1,5 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { Check } from "lucide-react";
+import { choisirSeSouvenir, seSouvenirDeMoi } from "@/lib/supabase";
 import { signInWithEmail, signInWithGoogle } from "@/lib/auth";
 import { BoutonRetour } from "@/components/BoutonRetour";
 import { FondAuth } from "@/components/FondAuth";
@@ -22,9 +24,29 @@ export const Route = createFileRoute("/connexion")({
   component: Connexion,
 });
 
+const CLE_EMAIL = "palanote-email-memorise";
+
+function memoriserChoix(souvenir: boolean, email: string) {
+  choisirSeSouvenir(souvenir);
+  try {
+    if (souvenir && email.trim()) localStorage.setItem(CLE_EMAIL, email.trim());
+    else localStorage.removeItem(CLE_EMAIL);
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
 function Connexion() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  // « Se souvenir de moi » : garde la session et préremplit l'adresse e-mail la prochaine fois.
+  const [souvenir, setSouvenir] = useState(() => seSouvenirDeMoi());
+  const [email, setEmail] = useState(() => {
+    try {
+      return (seSouvenirDeMoi() && localStorage.getItem(CLE_EMAIL)) || "";
+    } catch {
+      return "";
+    }
+  });
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +56,7 @@ function Connexion() {
     setError(null);
     setLoading(true);
     try {
+      memoriserChoix(souvenir, email);
       await signInWithEmail(email, password);
       navigate({ to: "/carnet" });
     } catch (err) {
@@ -51,6 +74,7 @@ function Connexion() {
   async function onGoogle() {
     setError(null);
     try {
+      memoriserChoix(souvenir, "");
       await signInWithGoogle();
     } catch {
       setError("La connexion avec Google n'a pas abouti. Réessaie.");
@@ -108,7 +132,19 @@ function Connexion() {
             />
           </div>
 
-          <div className="-my-[clamp(0px,0.6svh,4px)] text-right">
+          <div className="-my-[clamp(0px,0.6svh,4px)] flex items-center justify-between gap-3">
+            <label className="inline-flex min-h-[clamp(34px,5.5svh,44px)] cursor-pointer items-center gap-[10px] text-sm font-medium text-blanc">
+              <input type="checkbox" checked={souvenir} onChange={(e) => setSouvenir(e.target.checked)} className="peer sr-only" />
+              <span
+                aria-hidden="true"
+                className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[7px] border-[1.5px] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-lagon ${
+                  souvenir ? "border-menthe bg-menthe" : "border-blanc/50 bg-blanc/10"
+                }`}
+              >
+                {souvenir && <Check className="h-[15px] w-[15px] text-abyss" strokeWidth={3} />}
+              </span>
+              Se souvenir de moi
+            </label>
             <Link
               to="/mot-de-passe-oublie"
               className="inline-flex min-h-[clamp(34px,5.5svh,44px)] items-center text-sm font-medium text-blanc"
