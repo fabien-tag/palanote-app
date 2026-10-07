@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BarChart3, Camera, ChevronRight, Download, HelpCircle, Lock, MessageCircle, Pencil, SlidersHorizontal, Upload } from "lucide-react";
+import { BarChart3, Camera, ChevronRight, Download, FileText, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
@@ -198,6 +198,13 @@ function Moi() {
                 <Ligne icone={Lock} label="Confidentialité" onClick={() => navigate({ to: "/moi/confidentialite" })} />
                 <Ligne icone={MessageCircle} label="Dis-moi ce qui manque" onClick={() => navigate({ to: "/moi/avis" })} />
                 <Ligne icone={HelpCircle} label="Aide et à propos" bientot />
+              </Bloc>
+
+              <TitreSection>Informations légales</TitreSection>
+              <Bloc>
+                <Ligne icone={FileText} label="Conditions d'utilisation" onClick={() => navigate({ to: "/conditions-utilisation" })} />
+                <Ligne icone={ShieldCheck} label="Politique de confidentialité" onClick={() => navigate({ to: "/politique-de-confidentialite" })} />
+                <Ligne icone={Scale} label="Mentions légales" onClick={() => navigate({ to: "/mentions-legales" })} />
               </Bloc>
               {admin && (
                 <>

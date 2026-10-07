@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { installerSuivi } from "../lib/suivi";
+import { FeuilleConditions } from "../components/legal/FeuilleConditions";
 
 function NotFoundComponent() {
   return (
@@ -132,6 +133,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      {/* Accord aux conditions d'utilisation, demandé une fois par version */}
+      <FeuilleConditions />
     </QueryClientProvider>
   );
 }

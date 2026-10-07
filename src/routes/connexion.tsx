@@ -187,8 +187,15 @@ function Connexion() {
         </button>
 
         <p className="mt-[clamp(8px,2.2svh,24px)] text-xs leading-relaxed text-blanc/70">
-          En continuant, tu acceptes nos conditions d'utilisation et notre
-          politique de confidentialité.
+          En continuant, tu acceptes nos{" "}
+          <Link to="/conditions-utilisation" className="underline underline-offset-2">
+            conditions d'utilisation
+          </Link>{" "}
+          et notre{" "}
+          <Link to="/politique-de-confidentialite" className="underline underline-offset-2">
+            politique de confidentialité
+          </Link>
+          .
         </p>
 
         <p className="mt-auto pt-[clamp(8px,2.4svh,32px)] text-center text-sm text-blanc/70">

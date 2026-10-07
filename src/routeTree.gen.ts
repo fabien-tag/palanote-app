@@ -15,18 +15,21 @@ import { Route as AmisRouteImport } from './routes/amis'
 import { Route as CarnetRouteImport } from './routes/carnet'
 import { Route as CarteRouteImport } from './routes/carte'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
+import { Route as ConditionsUtilisationRouteImport } from './routes/conditions-utilisation'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
 import { Route as DesabonnementRouteImport } from './routes/desabonnement'
 import { Route as EspeceRouteImport } from './routes/espece'
 import { Route as EspecesRouteImport } from './routes/especes'
 import { Route as InvitationRouteImport } from './routes/invitation'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as MoiRouteImport } from './routes/moi'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
 import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
 import { Route as PlongeeExpressRouteImport } from './routes/plongee-express'
+import { Route as PolitiqueDeConfidentialiteRouteImport } from './routes/politique-de-confidentialite'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
@@ -77,6 +80,11 @@ const CompteCreeRoute = CompteCreeRouteImport.update({
   path: '/compte-cree',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConditionsUtilisationRoute = ConditionsUtilisationRouteImport.update({
+  id: '/conditions-utilisation',
+  path: '/conditions-utilisation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConnexionRoute = ConnexionRouteImport.update({
   id: '/connexion',
   path: '/connexion',
@@ -105,6 +113,11 @@ const EspecesRoute = EspecesRouteImport.update({
 const InvitationRoute = InvitationRouteImport.update({
   id: '/invitation',
   path: '/invitation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoiRoute = MoiRouteImport.update({
@@ -137,6 +150,12 @@ const PlongeeExpressRoute = PlongeeExpressRouteImport.update({
   path: '/plongee-express',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PolitiqueDeConfidentialiteRoute =
+  PolitiqueDeConfidentialiteRouteImport.update({
+    id: '/politique-de-confidentialite',
+    path: '/politique-de-confidentialite',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
   id: '/profil-plongeur',
   path: '/profil-plongeur',
@@ -240,18 +259,21 @@ export interface FileRoutesByFullPath {
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
+  '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/desabonnement': typeof DesabonnementRoute
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
   '/invitation': typeof InvitationRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/plongee-express': typeof PlongeeExpressRoute
+  '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
@@ -279,18 +301,21 @@ export interface FileRoutesByTo {
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
+  '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/desabonnement': typeof DesabonnementRoute
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
   '/invitation': typeof InvitationRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/plongee-express': typeof PlongeeExpressRoute
+  '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
@@ -319,18 +344,21 @@ export interface FileRoutesById {
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
   '/compte-cree': typeof CompteCreeRoute
+  '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/desabonnement': typeof DesabonnementRoute
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
   '/invitation': typeof InvitationRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
   '/plongee-express': typeof PlongeeExpressRoute
+  '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
@@ -360,18 +388,21 @@ export interface FileRouteTypes {
     | '/carnet'
     | '/carte'
     | '/compte-cree'
+    | '/conditions-utilisation'
     | '/connexion'
     | '/creer-un-compte'
     | '/desabonnement'
     | '/espece'
     | '/especes'
     | '/invitation'
+    | '/mentions-legales'
     | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/plongee-express'
+    | '/politique-de-confidentialite'
     | '/profil-plongeur'
     | '/recif'
     | '/site'
@@ -399,18 +430,21 @@ export interface FileRouteTypes {
     | '/carnet'
     | '/carte'
     | '/compte-cree'
+    | '/conditions-utilisation'
     | '/connexion'
     | '/creer-un-compte'
     | '/desabonnement'
     | '/espece'
     | '/especes'
     | '/invitation'
+    | '/mentions-legales'
     | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/plongee-express'
+    | '/politique-de-confidentialite'
     | '/profil-plongeur'
     | '/recif'
     | '/site'
@@ -438,18 +472,21 @@ export interface FileRouteTypes {
     | '/carnet'
     | '/carte'
     | '/compte-cree'
+    | '/conditions-utilisation'
     | '/connexion'
     | '/creer-un-compte'
     | '/desabonnement'
     | '/espece'
     | '/especes'
     | '/invitation'
+    | '/mentions-legales'
     | '/moi'
     | '/mot-de-passe-oublie'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
     | '/plongee-express'
+    | '/politique-de-confidentialite'
     | '/profil-plongeur'
     | '/recif'
     | '/site'
@@ -478,18 +515,21 @@ export interface RootRouteChildren {
   CarnetRoute: typeof CarnetRoute
   CarteRoute: typeof CarteRoute
   CompteCreeRoute: typeof CompteCreeRoute
+  ConditionsUtilisationRoute: typeof ConditionsUtilisationRoute
   ConnexionRoute: typeof ConnexionRoute
   CreerUnCompteRoute: typeof CreerUnCompteRoute
   DesabonnementRoute: typeof DesabonnementRoute
   EspeceRoute: typeof EspeceRoute
   EspecesRoute: typeof EspecesRoute
   InvitationRoute: typeof InvitationRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
   MoiRoute: typeof MoiRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
   NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
   NumeriserRoute: typeof NumeriserRoute
   PlongeeExpressRoute: typeof PlongeeExpressRoute
+  PolitiqueDeConfidentialiteRoute: typeof PolitiqueDeConfidentialiteRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   RecifRoute: typeof RecifRoute
   SiteRoute: typeof SiteRoute
@@ -555,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompteCreeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/conditions-utilisation': {
+      id: '/conditions-utilisation'
+      path: '/conditions-utilisation'
+      fullPath: '/conditions-utilisation'
+      preLoaderRoute: typeof ConditionsUtilisationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/connexion': {
       id: '/connexion'
       path: '/connexion'
@@ -597,6 +644,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvitationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/moi': {
       id: '/moi'
       path: '/moi'
@@ -637,6 +691,13 @@ declare module '@tanstack/react-router' {
       path: '/plongee-express'
       fullPath: '/plongee-express'
       preLoaderRoute: typeof PlongeeExpressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politique-de-confidentialite': {
+      id: '/politique-de-confidentialite'
+      path: '/politique-de-confidentialite'
+      fullPath: '/politique-de-confidentialite'
+      preLoaderRoute: typeof PolitiqueDeConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profil-plongeur': {
@@ -782,18 +843,21 @@ const rootRouteChildren: RootRouteChildren = {
   CarnetRoute: CarnetRoute,
   CarteRoute: CarteRoute,
   CompteCreeRoute: CompteCreeRoute,
+  ConditionsUtilisationRoute: ConditionsUtilisationRoute,
   ConnexionRoute: ConnexionRoute,
   CreerUnCompteRoute: CreerUnCompteRoute,
   DesabonnementRoute: DesabonnementRoute,
   EspeceRoute: EspeceRoute,
   EspecesRoute: EspecesRoute,
   InvitationRoute: InvitationRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
   MoiRoute: MoiRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
   NouveauMotDePasseRoute: NouveauMotDePasseRoute,
   NouvellePlongeeRoute: NouvellePlongeeRoute,
   NumeriserRoute: NumeriserRoute,
   PlongeeExpressRoute: PlongeeExpressRoute,
+  PolitiqueDeConfidentialiteRoute: PolitiqueDeConfidentialiteRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   RecifRoute: RecifRoute,
   SiteRoute: SiteRoute,

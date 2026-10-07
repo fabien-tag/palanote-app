@@ -1,5 +1,5 @@
 // Données de l'étape 1, gardées en mémoire uniquement (jamais stockées dans le navigateur).
-type Etape1 = { firstName: string; email: string; password: string };
+type Etape1 = { firstName: string; email: string; password: string; conditions?: boolean };
 
 let brouillon: Etape1 | null = null;
 

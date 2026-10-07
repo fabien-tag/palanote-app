@@ -7,6 +7,8 @@ import { FondAuth } from "@/components/FondAuth";
 import { ChampMotDePasse } from "@/components/ChampMotDePasse";
 import { Stepper } from "@/components/Stepper";
 import { LogoGoogle } from "@/components/LogoGoogle";
+import { CaseConditions } from "@/components/legal/CaseConditions";
+import { memoriserCaseCochee } from "@/lib/legal";
 
 export const Route = createFileRoute("/creer-un-compte")({
   head: () => ({
@@ -30,6 +32,9 @@ function CreerUnCompte() {
   const [error, setError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  // Case non cochée par défaut : l'accord doit être un geste du plongeur
+  const [conditions, setConditions] = useState(() => getEtape1()?.conditions ?? false);
+  const [conditionsError, setConditionsError] = useState(false);
 
   const passwordOk = password.length >= 8 && password.length <= 72;
   const [prenomError, setPrenomError] = useState<string | null>(null);
@@ -50,11 +55,15 @@ function CreerUnCompte() {
       setEmailError("Cette adresse e-mail n'est pas valide.");
       ok = false;
     }
+    if (!conditions) {
+      setConditionsError(true);
+      ok = false;
+    }
     if (!passwordOk || !ok) return;
     setLoading(true);
     try {
       // Le compte est créé à la fin de l'étape 2.
-      setEtape1({ firstName: prenom, email: mail, password });
+      setEtape1({ firstName: prenom, email: mail, password, conditions: true });
       navigate({ to: "/profil-plongeur" });
     } catch (err) {
       const code = (err as { code?: string })?.code;
@@ -76,6 +85,11 @@ function CreerUnCompte() {
 
   async function onGoogle() {
     setError(null);
+    if (!conditions) {
+      setConditionsError(true);
+      return;
+    }
+    memoriserCaseCochee();
     try {
       await signInWithGoogle();
     } catch {
@@ -160,6 +174,17 @@ function CreerUnCompte() {
             </p>
           </div>
 
+          <CaseConditions
+            cochee={conditions}
+            onChange={(v) => {
+              setConditions(v);
+              setConditionsError(false);
+            }}
+            erreur={conditionsError}
+            // On garde la saisie en mémoire le temps de lire les conditions
+            avantLien={() => setEtape1({ firstName, email, password, conditions })}
+          />
+
           {error && (
             <p role="alert" className="text-sm font-medium text-corail">
               {error}
@@ -190,9 +215,10 @@ function CreerUnCompte() {
           CONTINUER AVEC GOOGLE
         </button>
 
-        <p className="mt-6 text-xs leading-relaxed text-blanc/70">
-          En créant ton compte, tu acceptes nos conditions d'utilisation et
-          notre politique de confidentialité.
+        <p className="mt-6 text-center text-xs leading-relaxed text-blanc/60">
+          <Link to="/mentions-legales" className="underline underline-offset-2">
+            Mentions légales
+          </Link>
         </p>
 
         <p className="mt-auto pt-8 text-center text-sm text-blanc/70">

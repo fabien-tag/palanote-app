@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { viderCacheCarnet } from "@/lib/plongees";
+import { VERSION_CONDITIONS } from "@/lib/legal";
 
 export async function signInWithEmail(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -26,7 +27,8 @@ export async function signUpWithEmail(
     password,
     options: {
       emailRedirectTo: `${window.location.origin}/connexion`,
-      data: { first_name: firstName, profil_en_attente: profil },
+      // Case cochée à l'étape 1 : enregistrée dans consents à la première connexion
+      data: { first_name: firstName, profil_en_attente: profil, conditions_acceptees: VERSION_CONDITIONS },
     },
   });
   if (error) throw error;

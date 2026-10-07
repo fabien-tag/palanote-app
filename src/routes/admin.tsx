@@ -17,6 +17,7 @@ import { utilisateurConnecte } from "@/lib/plongees";
 import { supabase } from "@/lib/supabase";
 import { SectionFinances } from "@/components/admin/Finances";
 import { SectionLettre } from "@/components/admin/Lettre";
+import { AVANT_MISE_EN_LIGNE } from "@/lib/legal";
 
 // Tableau de bord du développeur : clair, en blocs (bento), pensé pour l'ordinateur.
 // Des voyants de couleur signalent ce qui demande de l'attention.
@@ -354,6 +355,20 @@ function Apercu({ d, aller }: { d: Donnees; aller: (s: Section) => void }) {
           </span>
         </div>
       </Bloc>
+
+      {AVANT_MISE_EN_LIGNE.some((t) => !t.fait) && (
+        <Bloc titre="Avant la mise en ligne" voyant="orange" fond="bg-[linear-gradient(160deg,#FFFBEF_0%,#FCEBC2_100%)]" className="md:col-span-2">
+          <ul className="mt-[10px] flex flex-col gap-[7px] text-[13px] text-[#123A63]">
+            {AVANT_MISE_EN_LIGNE.map((t) => (
+              <li key={t.tache} className={`flex items-start gap-[9px] ${t.fait ? "text-[#123A63]/40 line-through" : ""}`}>
+                <span className="pt-[5px]"><Voyant couleur={t.fait ? "vert" : "orange"} /></span>
+                <span>{t.tache}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="pt-[10px] text-[12px] text-[#123A63]/55">La liste complète : docs/mise-en-ligne.md</p>
+        </Bloc>
+      )}
 
       <Bloc titre="Derniers inscrits" fond="bg-white border border-[#E9EEF3]" onOuvrir={() => aller("utilisateurs")}>
         <div className="mt-[12px] flex flex-col gap-[9px]">
