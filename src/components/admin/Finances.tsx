@@ -17,6 +17,7 @@ import {
   type DonneesFinances,
 } from "@/lib/finances";
 import type { StatsAdmin } from "@/lib/suivi";
+import { SectionForfaits } from "@/components/admin/Forfaits";
 
 // Section « Finances » du tableau de bord : ce que coûte l'app, ce que rapporte le Récif.
 
@@ -409,6 +410,8 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
           </table>
         )}
       </div>
+
+      <SectionForfaits />
     </div>
   );
 }

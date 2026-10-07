@@ -12,7 +12,7 @@ export const Route = createFileRoute("/recif")({
   head: () => ({
     meta: [
       { title: "Palanote — Rejoins le Récif" },
-      { name: "description", content: "L'app restera gratuite pour tout le monde. Le Récif, c'est ceux qui la font tenir." },
+      { name: "description", content: "Le carnet restera gratuit pour tout le monde. Le Récif, c'est ceux qui le font tenir." },
     ],
   }),
   component: Recif,
@@ -71,9 +71,9 @@ function Recif() {
             </span>
             <h1 className="pt-[14px] text-[27px] font-bold leading-tight text-white">Rejoins le Récif</h1>
             <p className="pt-[6px] text-[14px] leading-normal text-white/85">
-              L'app restera gratuite pour tout le monde.
+              Le carnet restera gratuit pour tout le monde.
               <br />
-              Le Récif, c'est ceux qui la font tenir.
+              Le Récif, c'est ceux qui le font tenir.
             </p>
           </div>
         </div>
@@ -151,8 +151,8 @@ function Recif() {
           <div className="galet border border-[#BFE3F4] bg-[#E3F2FB] p-[16px] text-[13px] leading-normal text-[#3F5B76]">
             <h2 className="pb-[8px] text-[14px] font-bold text-[#123A63]">Ce que tu ne reçois pas</h2>
             <p>
-              Aucune fonctionnalité. Le carnet, la numérisation des vieux carnets, l'identification des espèces, la carte, les statistiques, l'export :{" "}
-              <b className="text-[#123A63]">tout est gratuit, pour tout le monde, et le restera.</b>
+              Aucune fonctionnalité. Le carnet, l'identification des espèces, la carte, les statistiques, l'export :{" "}
+              <b className="text-[#123A63]">c'est gratuit, pour tout le monde, et ça le restera.</b> Seule la lecture des carnets papier par l'IA a un forfait au-delà des 50 premières pages, parce qu'elle coûte à chaque page.
             </p>
             <p className="pt-[8px]">Il n'y a rien de caché derrière ce bouton. C'est bien pour ça qu'il faut le dire avant, et pas après.</p>
           </div>

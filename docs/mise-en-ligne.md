@@ -6,7 +6,8 @@ Les 5 premières tâches s'affichent aussi dans le tableau de bord (Moi › Tabl
 - [ ] **E-mail de contact** : le remplir dans `src/lib/legal.ts` → `EDITEUR.email: "contact@…"`. Il apparaît alors dans les mentions légales, la politique de confidentialité et les CGU (aujourd'hui : « adresse e-mail bientôt disponible »).
 - [ ] **Hébergeur** : vérifier dans `src/lib/legal.ts` → `HEBERGEURS` que c'est bien Lovable qui héberge la version publique (sinon mettre le bon nom, l'adresse et le site).
 - [ ] Relire les 3 pages : /mentions-legales, /politique-de-confidentialite, /conditions-utilisation.
-- [ ] Si une partie devient payante (Récif, abonnement) : vérifier l'activité déclarée de la micro-entreprise, ajouter des conditions de vente et un médiateur de la consommation.
+- [ ] **Forfaits payants** (pack « Numériser mes carnets » 4,99 €, Palanote+ 19 €/an) : brancher Stripe, vérifier l'activité déclarée de la micro-entreprise, ajouter des conditions de vente (prix, rétractation) et un médiateur de la consommation, ajouter Stripe dans la politique de confidentialité.
+- [ ] Ajuster `pages_offertes` (50) dans `admin_reglages` si besoin, et suivre les « Ça m'intéresse » dans les retours (sujet « Forfait »).
 - [ ] Si les conditions changent : modifier `VERSION_CONDITIONS` et `DATE_CONDITIONS` dans `src/lib/legal.ts` → chacun devra les accepter à nouveau.
 
 ## Connexion

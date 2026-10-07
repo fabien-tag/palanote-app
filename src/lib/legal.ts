@@ -6,8 +6,11 @@ import { supabase } from "@/lib/supabase";
 // ============================================================
 
 // Changer cette date oblige chaque plongeur à accepter à nouveau les conditions.
-export const VERSION_CONDITIONS = "2026-10-07";
+export const VERSION_CONDITIONS = "2026-10-07-forfaits";
 export const DATE_CONDITIONS = "7 octobre 2026";
+
+// Pages de carnet papier lues gratuitement par l'IA (le serveur fait foi : admin_reglages.pages_offertes)
+export const PAGES_OFFERTES = 50;
 
 export const EDITEUR = {
   nom: "Fabien Tagliareni",
@@ -41,6 +44,7 @@ export const AVANT_MISE_EN_LIGNE: { tache: string; fait: boolean }[] = [
   { tache: "Retirer « Se souvenir de moi » de la page Connexion", fait: false },
   { tache: "Configurer la connexion Google (Google Cloud + Supabase)", fait: false },
   { tache: "Ajouter le domaine final dans Supabase › Authentication › URL Configuration", fait: false },
+  { tache: "Brancher le paiement des forfaits (Stripe), avec conditions de vente et médiateur de la consommation", fait: false },
 ];
 
 // ---------- Acceptation des conditions ----------

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Bloc, Contact, PageLegale, Puces } from "@/components/legal/PageLegale";
-import { EDITEUR } from "@/lib/legal";
+import { EDITEUR, PAGES_OFFERTES } from "@/lib/legal";
+import { OFFRES } from "@/lib/forfait";
 
 export const Route = createFileRoute("/conditions-utilisation")({
   head: () => ({ meta: [{ title: "Palanote — Conditions d'utilisation" }] }),
@@ -13,7 +14,7 @@ function ConditionsUtilisation() {
       <Bloc titre="1. Le service">
         <p>
           Palanote est un carnet de plongée en ligne, édité par {EDITEUR.nom} ({EDITEUR.enseigne}). Il te permet de noter tes plongées,
-          de numériser tes anciens carnets, de retrouver tes binômes et de garder tes photos. L'app est gratuite.
+          de numériser tes anciens carnets, de retrouver tes binômes et de garder tes photos. Le carnet est gratuit ; seule la lecture des carnets papier par l'IA a des forfaits au-delà des pages offertes (article 7).
         </p>
       </Bloc>
 
@@ -70,14 +71,31 @@ function ConditionsUtilisation() {
         </p>
       </Bloc>
 
-      <Bloc titre="7. Le Récif">
+      <Bloc titre="7. Version gratuite et forfaits">
+        <Puces
+          items={[
+            <>
+              <b>Gratuit pour tous</b> : le carnet sans limite de plongées, les binômes, la carte, les photos, l'identification des espèces et l'export. Plus 
+              {PAGES_OFFERTES} pages de carnet papier lues par l'IA.
+            </>,
+            <>
+              <b>Au-delà</b>, la lecture des carnets papier demande un forfait : le pack « Numériser mes carnets » ({OFFRES.pack.pages} pages de plus, sans
+              abonnement, sans date limite) ou Palanote+ (pages sans limite pendant un an).
+            </>,
+            <>Tes plongées déjà enregistrées restent toujours à toi, accessibles et exportables, forfait ou pas.</>,
+          ]}
+        />
+        <p>Le paiement en ligne n'est pas encore ouvert. Ses conditions (prix, paiement, rétractation) seront précisées avant son ouverture.</p>
+      </Bloc>
+
+      <Bloc titre="8. Le Récif">
         <p>
-          Le Récif permet de soutenir Palanote par une contribution libre. Elle est facultative, ne donne aucun avantage obligatoire et
-          ne change rien à l'accès à l'app.
+          Le Récif permet de soutenir Palanote par une contribution libre. Elle est facultative et ne donne accès à aucune fonction : elle
+          ne change rien à ton forfait.
         </p>
       </Bloc>
 
-      <Bloc titre="8. Droit applicable">
+      <Bloc titre="9. Droit applicable">
         <p>
           Ces conditions sont soumises au droit français. En cas de désaccord, écris-nous d'abord : <Contact />. On cherchera une
           solution à l'amiable avant toute autre démarche.

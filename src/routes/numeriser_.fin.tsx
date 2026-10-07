@@ -105,7 +105,7 @@ function Fin() {
           <ChevronRight className="h-[17px] w-[17px] text-[#8FA9C0]" strokeWidth={2.4} aria-hidden="true" />
         </button>
         <p className="px-1 pt-[14px] text-[13px] leading-normal text-[#5B7189]">
-          <b className="text-[#123A63]">Cette app est gratuite, et le restera.</b> Elle est faite par un plongeur, sur son temps libre. Si elle t'a fait gagner une
+          <b className="text-[#123A63]">Ton carnet est gratuit, et le restera.</b> Elle est faite par un plongeur, sur son temps libre. Si elle t'a fait gagner une
           soirée, tu pourras bientôt <b className="text-[#1176A8]">rejoindre le Récif</b>.
         </p>
       </div>

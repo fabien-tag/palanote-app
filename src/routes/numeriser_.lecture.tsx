@@ -137,12 +137,21 @@ function Lecture() {
         .map((p) => (
           <div key={p.id} className="mx-[22px] mt-[10px] galet-moyen border border-[#F5C9A0] bg-[#FFF5E5] px-[12px] py-[10px] text-[12.5px] text-[#6B4A14]">
             <div className="flex items-center justify-between gap-3">
-              <b>La lecture de la page {p.ordre} a échoué.</b>
+              <b>{p.erreur === "quota_atteint" ? `Page ${p.ordre} en attente : tes pages lues par l'IA sont épuisées.` : `La lecture de la page ${p.ordre} a échoué.`}</b>
               <button type="button" onClick={() => void relancer(p)} className="shrink-0 font-bold text-[#1176A8] underline underline-offset-2">
                 Relancer
               </button>
             </div>
-            {p.erreur && <p className="pt-1 break-words text-[11.5px] text-[#8A6A3A]">Détail : {p.erreur}</p>}
+            {p.erreur === "quota_atteint" ? (
+              <p className="pt-1 text-[12px] text-[#8A6A3A]">
+                La photo est gardée : elle sera lue dès que tu as un forfait. Touche « Relancer » ensuite.{" "}
+                <button type="button" onClick={() => navigate({ to: "/forfait" })} className="font-bold text-[#1176A8] underline underline-offset-2">
+                  Voir les forfaits
+                </button>
+              </p>
+            ) : (
+              p.erreur && <p className="pt-1 break-words text-[11.5px] text-[#8A6A3A]">Détail : {p.erreur}</p>
+            )}
           </div>
         ))}
       {erreur && <p className="px-[22px] pt-3 text-[13px] text-[#8A2A1A]">{erreur}</p>}

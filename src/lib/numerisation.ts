@@ -183,6 +183,9 @@ export async function envoyerPage(lotId: string, photo: Blob, ordre: number): Pr
 // Demande au serveur de lire la page (il répond tout de suite, la lecture continue sans nous).
 export async function lancerLecture(pageId: string) {
   const { error } = await supabase.functions.invoke("lire-page", { body: { page_id: pageId } });
+  // Quota atteint (402) : le serveur a déjà noté « quota_atteint » sur la page.
+  const statut = (error as { context?: { status?: number } } | null)?.context?.status;
+  if (error && statut === 402) return;
   if (error) {
     await supabase.from("ocr_pages").update({ statut: "erreur", erreur: String(error.message) }).eq("id", pageId);
   }

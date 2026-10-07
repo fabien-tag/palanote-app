@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BarChart3, Camera, ChevronRight, Download, FileText, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
+import { BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
@@ -8,6 +8,7 @@ import { Bloc, Ligne, TitreSection } from "@/components/moi/Ui";
 import { libelleRole } from "@/lib/profil-plongeur";
 import { initiales, mesBinomes } from "@/lib/amis";
 import { estAdmin } from "@/lib/suivi";
+import { chargerForfait, resumeForfait, type Forfait } from "@/lib/forfait";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { chargerProfil, exporterUDDF, type Profil } from "@/lib/moi";
 import { chargerNumeroDepart, chargerPlongees, dureeEnMinutes, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
@@ -42,6 +43,7 @@ function Moi() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [mesPlongees, setMesPlongees] = useState<CartePlongee[]>([]);
   const [admin, setAdmin] = useState(false);
+  const [forfait, setForfait] = useState<Forfait | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [exportEnCours, setExportEnCours] = useState(false);
@@ -69,6 +71,7 @@ function Moi() {
       setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? "", p?.profMaxAvant ?? ""));
       setMesPlongees(liste);
       void estAdmin().then((a) => actif && setAdmin(a));
+      void chargerForfait().then((f) => actif && setForfait(f));
     })();
     return () => {
       actif = false;
@@ -174,7 +177,7 @@ function Moi() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[14.5px] font-bold">Rejoins le Récif</span>
-                  <span className="block pt-[1px] text-[12.5px] leading-snug text-[#3F5B76]">L'app reste gratuite. Le Récif, c'est ceux qui la font tenir.</span>
+                  <span className="block pt-[1px] text-[12.5px] leading-snug text-[#3F5B76]">Le carnet reste gratuit. Le Récif, c'est ceux qui le font tenir.</span>
                 </span>
                 <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#3F5B76]" aria-hidden="true" />
               </button>
@@ -189,6 +192,7 @@ function Moi() {
                 />
                 <Ligne icone={Upload} label="Importer un fichier" bientot />
                 <Ligne icone={Camera} label="Numériser un carnet papier" onClick={() => navigate({ to: "/numeriser" })} />
+                <Ligne icone={Gem} label="Mon forfait" valeur={forfait ? resumeForfait(forfait) : "Gratuit"} onClick={() => navigate({ to: "/forfait" })} />
               </Bloc>
               {erreur && <p className="pt-[10px] text-[13px] text-[#8A2A1A]">{erreur}</p>}
 

@@ -21,6 +21,7 @@ import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
 import { Route as DesabonnementRouteImport } from './routes/desabonnement'
 import { Route as EspeceRouteImport } from './routes/espece'
 import { Route as EspecesRouteImport } from './routes/especes'
+import { Route as ForfaitRouteImport } from './routes/forfait'
 import { Route as InvitationRouteImport } from './routes/invitation'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as MoiRouteImport } from './routes/moi'
@@ -108,6 +109,11 @@ const EspeceRoute = EspeceRouteImport.update({
 const EspecesRoute = EspecesRouteImport.update({
   id: '/especes',
   path: '/especes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForfaitRoute = ForfaitRouteImport.update({
+  id: '/forfait',
+  path: '/forfait',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvitationRoute = InvitationRouteImport.update({
@@ -265,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/desabonnement': typeof DesabonnementRoute
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
+  '/forfait': typeof ForfaitRoute
   '/invitation': typeof InvitationRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
@@ -307,6 +314,7 @@ export interface FileRoutesByTo {
   '/desabonnement': typeof DesabonnementRoute
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
+  '/forfait': typeof ForfaitRoute
   '/invitation': typeof InvitationRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
@@ -350,6 +358,7 @@ export interface FileRoutesById {
   '/desabonnement': typeof DesabonnementRoute
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
+  '/forfait': typeof ForfaitRoute
   '/invitation': typeof InvitationRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
@@ -394,6 +403,7 @@ export interface FileRouteTypes {
     | '/desabonnement'
     | '/espece'
     | '/especes'
+    | '/forfait'
     | '/invitation'
     | '/mentions-legales'
     | '/moi'
@@ -436,6 +446,7 @@ export interface FileRouteTypes {
     | '/desabonnement'
     | '/espece'
     | '/especes'
+    | '/forfait'
     | '/invitation'
     | '/mentions-legales'
     | '/moi'
@@ -478,6 +489,7 @@ export interface FileRouteTypes {
     | '/desabonnement'
     | '/espece'
     | '/especes'
+    | '/forfait'
     | '/invitation'
     | '/mentions-legales'
     | '/moi'
@@ -521,6 +533,7 @@ export interface RootRouteChildren {
   DesabonnementRoute: typeof DesabonnementRoute
   EspeceRoute: typeof EspeceRoute
   EspecesRoute: typeof EspecesRoute
+  ForfaitRoute: typeof ForfaitRoute
   InvitationRoute: typeof InvitationRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MoiRoute: typeof MoiRoute
@@ -635,6 +648,13 @@ declare module '@tanstack/react-router' {
       path: '/especes'
       fullPath: '/especes'
       preLoaderRoute: typeof EspecesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forfait': {
+      id: '/forfait'
+      path: '/forfait'
+      fullPath: '/forfait'
+      preLoaderRoute: typeof ForfaitRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invitation': {
@@ -849,6 +869,7 @@ const rootRouteChildren: RootRouteChildren = {
   DesabonnementRoute: DesabonnementRoute,
   EspeceRoute: EspeceRoute,
   EspecesRoute: EspecesRoute,
+  ForfaitRoute: ForfaitRoute,
   InvitationRoute: InvitationRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MoiRoute: MoiRoute,

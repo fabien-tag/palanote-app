@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Camera, Image as ImageIcon } from "lucide-re
 import fondOcr from "@/assets/ocr-fond.jpg";
 import { lotEnCours, type Lot } from "@/lib/numerisation";
 import { deposerPhotosEnAttente } from "@/lib/photos-en-attente";
+import { chargerForfait, type Forfait } from "@/lib/forfait";
 
 export const Route = createFileRoute("/numeriser")({
   head: () => ({
@@ -53,11 +54,15 @@ function Numeriser() {
   const navigate = useNavigate();
   const galerieRef = useRef<HTMLInputElement>(null);
   const [enCours, setEnCours] = useState<Lot | null>(null);
+  const [forfait, setForfait] = useState<Forfait | null>(null);
 
   // Un carnet commencé et pas terminé : on propose de le reprendre.
   useEffect(() => {
     void lotEnCours().then(setEnCours);
+    void chargerForfait().then(setForfait);
   }, []);
+  // Plus aucune page offerte ni achetée : on propose un forfait au lieu de photographier.
+  const epuise = forfait !== null && !forfait.plus && forfait.restantes === 0;
 
   return (
     // Hauteur calée sur la partie visible de l'écran (dvh) : promesse, 3 étapes et boutons
@@ -122,6 +127,22 @@ function Numeriser() {
             ))}
           </ol>
 
+          {forfait && (
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/forfait" })}
+              style={d(retards.etapes + 3 * PAS)}
+              className="apparition mx-auto mt-[clamp(10px,2.2svh,20px)] flex items-center gap-[6px] rounded-full bg-white/[0.14] px-[13px] py-[6px] text-[12.5px] font-semibold text-white backdrop-blur-sm"
+            >
+              {forfait.plus
+                ? "Palanote+ : pages sans limite"
+                : epuise
+                  ? `Tes ${forfait.offertes + forfait.achetees} pages sont utilisées`
+                  : `Il te reste ${forfait.restantes} page${(forfait.restantes ?? 0) > 1 ? "s" : ""} ${forfait.achetees ? "" : "offertes"}`.trim()}
+              <ChevronRight className="h-[14px] w-[14px]" strokeWidth={2.4} aria-hidden="true" />
+            </button>
+          )}
+
           <div className="min-h-2 flex-grow" />
         </div>
 
@@ -160,12 +181,13 @@ function Numeriser() {
         <div className="flex shrink-0 flex-col gap-[clamp(8px,1.4svh,11px)] px-[22px] pb-[max(clamp(12px,2.8svh,26px),env(safe-area-inset-bottom))] pt-[clamp(8px,1.6svh,14px)]">
           <button
             type="button"
-            onClick={() => navigate({ to: "/numeriser/capture" })}
+            onClick={() => navigate({ to: epuise ? "/forfait" : "/numeriser/capture" })}
             style={d(retards.boutonPrincipal)}
             className="apparition flex h-[clamp(48px,7svh,56px)] items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_rgba(18,58,99,.05)]"
           >
-            PHOTOGRAPHIER UNE PAGE
+            {epuise ? "CONTINUER AVEC UN FORFAIT" : "PHOTOGRAPHIER UNE PAGE"}
           </button>
+          {!epuise && (
           <button
             type="button"
             onClick={() => galerieRef.current?.click()}
@@ -175,6 +197,7 @@ function Numeriser() {
             <ImageIcon className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
             CHOISIR DANS MES PHOTOS
           </button>
+          )}
           <p style={d(retards.import)} className="apparition text-center text-[13px] leading-[1.45] text-white/70">
             Tes plongées sont déjà dans une autre app&nbsp;?
             <br />
