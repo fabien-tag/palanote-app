@@ -1,0 +1,477 @@
+// ============================================================
+// Palanote — schéma de la base de données (Supabase / Postgres)
+// Format DBML, à coller dans https://dbdiagram.io (Create diagram)
+// Généré depuis la base réelle le 7 octobre 2026 : 20 tables du schéma public
+// + la table des comptes auth.users gérée par Supabase.
+// ============================================================
+
+Project Palanote {
+  database_type: 'PostgreSQL'
+  Note: 'Carnet de plongée numérique. Base Supabase « Palanote ». Chaque table a la sécurité ligne par ligne (RLS) activée.'
+}
+
+// ---------- Comptes (géré par Supabase Auth) ----------
+
+Table auth.users {
+  id uuid [pk]
+  email text
+  Note: 'Table des comptes, gérée par Supabase Auth (e-mail + mot de passe, Google). Toutes les données de l’app y sont rattachées.'
+}
+
+// ---------- Listes de choix (enums) ----------
+
+Enum consent_type {
+  cgu
+  confidentialite
+  bilan_annuel
+  photos_partagees
+}
+
+Enum friend_status {
+  en_attente
+  acceptee
+  bloquee
+}
+
+Enum ocr_batch_status {
+  en_attente
+  en_cours
+  a_relire
+  termine
+  erreur
+}
+
+Enum ocr_page_status {
+  en_attente
+  en_cours
+  lue
+  illisible
+  erreur
+}
+
+Enum ocr_extraction_status {
+  a_relire
+  validee
+  rejetee
+  doublon
+}
+
+Enum profil_visibilite {
+  amis
+  palanquee
+  personne
+}
+
+Enum recif_tier {
+  cafe
+  coup_de_main
+  a_vie
+}
+
+Enum unites {
+  metrique
+  imperial
+}
+
+// ---------- Profil du plongeur ----------
+
+Table profiles {
+  id uuid [pk, note: 'même identifiant que le compte']
+  prenom text
+  nom text
+  first_name text [note: 'prénom affiché aux binômes']
+  avatar_url text
+  niveau text [note: 'N1 / Open Water … Encadrant']
+  certifications "text[]" [not null, default: '{}', note: 'Nitrox, Trimix']
+  role_plongee text [note: 'plongeur | encadrant | directeur | centre']
+  club text
+  premiere_plongee_le date
+  numero_depart integer [not null, default: 0, note: 'plongées faites avant Palanote']
+  prof_max_avant numeric [note: 'profondeur max avant Palanote (m)']
+  recif_tier recif_tier
+  recif_badge_visible boolean [not null, default: true]
+  quota_photos_mo integer [not null, default: 1000]
+  notif_lecture boolean [not null, default: true]
+  notif_binome boolean [not null, default: true]
+  lettre_annuelle boolean [not null, default: false]
+  lettre_annuelle_le timestamptz
+  jeton_lettre uuid [not null, default: `gen_random_uuid()`, note: 'lien de désabonnement']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table user_settings {
+  user_id uuid [pk]
+  unites unites [not null, default: 'metrique']
+  push_ocr_termine boolean [not null, default: true]
+  push_proposition boolean [not null, default: true]
+  mail_bilan_annuel boolean [not null, default: false]
+  profil_visible_par profil_visibilite [not null, default: 'amis']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table consents {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  type consent_type [not null]
+  version text [not null]
+  accepte_le timestamptz [not null, default: `now()`]
+  revoque_le timestamptz
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ---------- Carnet de plongée ----------
+
+Table dives {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  source text [not null, default: 'manuelle', note: 'manuelle | ocr | binome']
+  // Essentiel
+  dive_date date
+  start_time time
+  site_name text
+  site_location text
+  site_coords text [note: 'position floutée de 100 à 150 m']
+  // Profil
+  max_depth_m numeric
+  avg_depth_m numeric
+  duration_min integer
+  end_time time
+  total_time_min integer
+  surface_interval_min integer
+  stops jsonb [default: '[]', note: 'paliers : [{profondeur, duree}]']
+  method text
+  computer text
+  // Gaz et équipement
+  gas_mix text [note: 'Air | Nitrox | Trimix']
+  o2_pct integer
+  he_pct integer
+  tank_config text
+  tank_volume_l numeric
+  weight_kg numeric
+  pressure_start_bar integer
+  pressure_end_bar integer
+  suit_type text
+  suit_thickness_mm integer
+  // Conditions
+  temp_surface_c numeric
+  temp_bottom_c numeric
+  temp_air_c numeric
+  visibility_m integer
+  current_strength text
+  sea_state text
+  weather text
+  // Palanquée
+  buddies "text[]" [default: '{}', note: 'noms saisis à la main']
+  guide_name text
+  dive_leader text
+  club_name text
+  boat_name text
+  signed boolean
+  stamped boolean
+  // Contexte et ressenti
+  dive_type text
+  environment text
+  entry_type text
+  rating smallint [note: '0 à 5']
+  rating_place smallint
+  rating_conditions smallint
+  rating_wildlife smallint
+  comment text
+  wildlife "text[]" [default: '{}']
+  visibility text [not null, default: 'private', note: 'private | friends | public']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz [note: 'suppression douce']
+
+  Indexes {
+    (user_id, dive_date) [name: 'dives_user_date_idx']
+  }
+}
+
+Table media {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  dive_id uuid [note: 'photo d’une plongée (la première = couverture)']
+  bucket text [not null, default: 'photos']
+  chemin text [not null, unique, note: '<compte>/… dans le stockage']
+  octets bigint
+  largeur integer
+  hauteur integer
+  prise_le timestamptz
+  hash text
+  deleted_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+// ---------- Numérisation des carnets papier (agent IA) ----------
+
+Table ocr_batches {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  numero integer
+  libelle text
+  nb_pages integer [not null, default: 0]
+  statut ocr_batch_status [not null, default: 'en_attente']
+  termine_le timestamptz
+  deleted_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  Note: 'Un carnet papier en cours de numérisation'
+}
+
+Table ocr_pages {
+  id uuid [pk, default: `gen_random_uuid()`]
+  batch_id uuid [not null]
+  media_id uuid [note: 'la photo de la page']
+  ordre integer [not null, default: 0]
+  statut ocr_page_status [not null, default: 'en_attente']
+  relue boolean [not null, default: false]
+  texte_brut text
+  reponse_modele jsonb [note: 'réponse brute de Claude']
+  modele text
+  erreur text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  Indexes {
+    (batch_id, ordre) [unique]
+  }
+}
+
+Table ocr_extractions {
+  id uuid [pk, default: `gen_random_uuid()`]
+  page_id uuid [not null]
+  ordre integer [not null, default: 0]
+  champs jsonb [not null, default: '{}', note: 'valeurs lues (date, site, profondeur…)']
+  confiances jsonb [not null, default: '{}', note: 'sur | a_verifier | non_lu par champ']
+  lectures jsonb [not null, default: '{}', note: 'texte réellement écrit sur la page']
+  statut ocr_extraction_status [not null, default: 'a_relire']
+  dive_id uuid [note: 'plongée créée à la validation']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  Note: 'Une plongée lue par l’agent IA sur une page'
+}
+
+// ---------- Binômes ----------
+
+Table friendships {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_a uuid [not null]
+  user_b uuid [not null]
+  demande_par uuid [not null]
+  statut friend_status [not null, default: 'en_attente']
+  accepte_le timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  Indexes {
+    (user_a, user_b) [unique]
+  }
+}
+
+Table friend_invites {
+  id uuid [pk, default: `gen_random_uuid()`]
+  emis_par uuid [not null]
+  token text [not null, unique, note: 'contenu du QR code']
+  expire_le timestamptz [not null, note: 'valable 10 minutes']
+  utilise_par uuid
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table dive_buddies {
+  id uuid [pk, default: `gen_random_uuid()`]
+  dive_id uuid [not null, note: 'plongée de celui qui identifie']
+  buddy_user_id uuid [note: 'binôme Palanote identifié']
+  buddy_nom text
+  identifie_par uuid
+  statut text [not null, default: 'a_confirmer', note: 'a_confirmer | ajoutee | refusee']
+  copie_dive_id uuid [note: 'copie créée dans le carnet du binôme']
+  repondu_le timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+// ---------- Tableau de bord développeur ----------
+
+Table app_admins {
+  user_id uuid [pk]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table feedback {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [default: `auth.uid()`]
+  raison text
+  message text [not null]
+  email text
+  page text
+  version text
+  appareil text
+  systeme text
+  statut text [not null, default: 'nouveau']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table app_errors {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [default: `auth.uid()`]
+  message text [not null]
+  details text
+  page text
+  version text
+  appareil text
+  systeme text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table user_activity {
+  user_id uuid [pk]
+  premiere_visite timestamptz [not null, default: `now()`]
+  derniere_visite timestamptz [not null, default: `now()`]
+  appareil text
+  version text
+}
+
+Table daily_activity {
+  user_id uuid
+  jour date [default: `CURRENT_DATE`]
+
+  Indexes {
+    (user_id, jour) [pk]
+  }
+}
+
+// ---------- Finances, Récif et lettre annuelle ----------
+
+Table admin_charges {
+  id uuid [pk, default: `gen_random_uuid()`]
+  libelle text [not null]
+  categorie text
+  montant numeric [not null]
+  periodicite text [not null, default: 'mois']
+  depuis date [not null]
+  jusqu_a date
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table admin_reglages {
+  id boolean [pk, default: true, note: 'une seule ligne']
+  cout_page_ia numeric [not null, default: 0.02]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table recif_dons {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid
+  email text
+  prenom text
+  montant numeric [not null]
+  formule text
+  source text [not null, default: 'manuel']
+  reference text [unique]
+  recu_le timestamptz [not null, default: `now()`]
+  note text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table lettres {
+  id uuid [pk, default: `gen_random_uuid()`]
+  sujet text [not null]
+  contenu text [not null]
+  annee integer
+  test boolean [not null, default: false]
+  nb_destinataires integer [not null, default: 0]
+  nb_envoyes integer [not null, default: 0]
+  erreur text
+  envoyee_par uuid
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ---------- Liens entre les tables ----------
+// « - » = un pour un, « > » = plusieurs vers un
+
+// Profil et réglages : un par compte
+Ref: profiles.id - auth.users.id [delete: cascade]
+Ref: user_settings.user_id - auth.users.id [delete: cascade]
+Ref: consents.user_id > auth.users.id [delete: cascade]
+
+// Carnet
+Ref: dives.user_id > auth.users.id [delete: cascade]
+Ref: media.user_id > auth.users.id [delete: cascade]
+Ref: media.dive_id > dives.id [delete: set null]
+
+// Numérisation
+Ref: ocr_batches.user_id > auth.users.id [delete: cascade]
+Ref: ocr_pages.batch_id > ocr_batches.id [delete: cascade]
+Ref: ocr_pages.media_id > media.id [delete: set null]
+Ref: ocr_extractions.page_id > ocr_pages.id [delete: cascade]
+Ref: ocr_extractions.dive_id > dives.id [delete: set null]
+
+// Binômes
+Ref: friendships.user_a > auth.users.id [delete: cascade]
+Ref: friendships.user_b > auth.users.id [delete: cascade]
+Ref: friendships.demande_par > auth.users.id [delete: cascade]
+Ref: friend_invites.emis_par > auth.users.id [delete: cascade]
+Ref: friend_invites.utilise_par > auth.users.id [delete: set null]
+Ref: dive_buddies.dive_id > dives.id [delete: cascade]
+Ref: dive_buddies.copie_dive_id > dives.id [delete: set null]
+Ref: dive_buddies.buddy_user_id > auth.users.id [delete: cascade]
+Ref: dive_buddies.identifie_par > auth.users.id [delete: cascade]
+
+// Tableau de bord
+Ref: app_admins.user_id - auth.users.id [delete: cascade]
+Ref: feedback.user_id > auth.users.id [delete: set null]
+Ref: app_errors.user_id > auth.users.id [delete: set null]
+Ref: user_activity.user_id - auth.users.id [delete: cascade]
+Ref: daily_activity.user_id > auth.users.id [delete: cascade]
+
+// Finances et lettre
+Ref: recif_dons.user_id > auth.users.id [delete: set null]
+Ref: lettres.envoyee_par > auth.users.id [delete: set null]
+
+// ---------- Regroupements (couleurs dans dbdiagram) ----------
+
+TableGroup Compte_et_profil [color: #57D4F5] {
+  auth.users
+  profiles
+  user_settings
+  consents
+}
+
+TableGroup Carnet [color: #3DEFBE] {
+  dives
+  media
+}
+
+TableGroup Numerisation_IA [color: #FFC65C] {
+  ocr_batches
+  ocr_pages
+  ocr_extractions
+}
+
+TableGroup Binomes [color: #FF8A75] {
+  friendships
+  friend_invites
+  dive_buddies
+}
+
+TableGroup Tableau_de_bord [color: #9DB0C0] {
+  app_admins
+  feedback
+  app_errors
+  user_activity
+  daily_activity
+}
+
+TableGroup Finances_et_lettre [color: #0F3D70] {
+  admin_charges
+  admin_reglages
+  recif_dons
+  lettres
+}
