@@ -23,7 +23,7 @@ export const Route = createFileRoute("/numeriser")({
 const etapes = [
   {
     titre: "Tu photographies",
-    texte: "Une page à la fois — ou tu choisis des photos déjà prises. Ça marche sans réseau : tout part quand tu en as.",
+    texte: "Une page à la fois — ou tu choisis des photos déjà prises. Il faut du réseau pour les envoyer : fais-le au calme, pas sur le bateau.",
   },
   {
     titre: "L’app lit et propose",

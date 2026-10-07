@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { utilisateurConnecte } from "@/lib/plongees";
+import { coordsVersTexte, flouterPosition, rechercherLieux } from "@/lib/carte";
 
 // ============================================================
 // Numérisation des carnets papier
@@ -228,15 +229,42 @@ export async function validerExtraction(e: Extraction, champs: Record<string, st
     stamped: ouiNon(champs["tamponnee"]),
     comment: garderCommentaire ? texte(champs["commentaire"]) : null,
   };
+  // Placer la plongée sur la carte : on cherche le site (et le lieu) par leur nom,
+  // puis on floute la position de 100 à 150 m, comme pour une saisie à la main.
+  const position = await localiserSite(ligne.site_name, ligne.site_location);
+  const complete = position
+    ? { ...ligne, site_coords: position.coords, site_location: ligne.site_location ?? position.lieu }
+    : ligne;
   const dive = e.dive_id
-    ? await supabase.from("dives").update(ligne).eq("id", e.dive_id).select("id").single()
-    : await supabase.from("dives").insert(ligne).select("id").single();
+    ? await supabase.from("dives").update(complete).eq("id", e.dive_id).select("id").single()
+    : await supabase.from("dives").insert(complete).select("id").single();
   if (dive.error) throw dive.error;
   const maj = await supabase
     .from("ocr_extractions")
     .update({ statut: "validee", dive_id: dive.data.id, champs })
     .eq("id", e.id);
   if (maj.error) throw maj.error;
+}
+
+// Cherche la position d'un site lu sur un carnet : « site + lieu », puis le lieu seul,
+// puis le site seul. 4 secondes au plus : sans réseau ou sans résultat, la plongée
+// est enregistrée sans position (on peut la placer ensuite depuis sa fiche).
+async function localiserSite(site: string | null, lieu: string | null): Promise<{ coords: string; lieu: string } | null> {
+  const essais = [site && lieu ? `${site}, ${lieu}` : null, lieu, site].filter((q): q is string => Boolean(q && q.trim().length >= 3));
+  const arret = new AbortController();
+  const minuterie = setTimeout(() => arret.abort(), 4000);
+  try {
+    for (const q of [...new Set(essais)]) {
+      const trouves = await rechercherLieux(q, arret.signal);
+      const premier = trouves[0];
+      if (premier) return { coords: coordsVersTexte(flouterPosition(premier.coords)), lieu: premier.lieu };
+    }
+  } catch {
+    /* pas de réseau ou service indisponible */
+  } finally {
+    clearTimeout(minuterie);
+  }
+  return null;
 }
 
 export async function rejeterExtraction(e: Extraction) {

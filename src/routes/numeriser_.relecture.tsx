@@ -42,7 +42,9 @@ const SECONDAIRES: Def[] = [
   { cle: "club", label: "Club" },
 ];
 
-function Badge({ c, modifie }: { c: Confiance; modifie: boolean }) {
+function Badge({ c, modifie, confirme = false }: { c: Confiance; modifie: boolean; confirme?: boolean }) {
+  if (confirme && !modifie)
+    return <span className="rounded-[10px] bg-[#3DEFBE] px-[9px] py-[3px] text-[11.5px] font-bold text-[#0B3B63]">Vérifié</span>;
   if (modifie) return <span className="rounded-[10px] bg-[#DCEEF8] px-[9px] py-[3px] text-[11.5px] font-bold text-[#1176A8]">Corrigé</span>;
   if (c === "sur") return <span className="rounded-[10px] bg-[#3DEFBE] px-[9px] py-[3px] text-[11.5px] font-bold text-[#0B3B63]">Sûr</span>;
   if (c === "a_verifier")
@@ -56,16 +58,20 @@ function Champ({
   confiance,
   lu,
   modifie,
+  confirme,
   onChange,
+  onConfirmer,
 }: {
   def: Def;
   valeur: string;
   confiance: Confiance;
   lu: string | null;
   modifie: boolean;
+  confirme: boolean;
   onChange: (v: string) => void;
+  onConfirmer: () => void;
 }) {
-  const verifier = confiance === "a_verifier" && !modifie;
+  const verifier = confiance === "a_verifier" && !modifie && !confirme;
   const vide = confiance === "non_lu" && !valeur;
   return (
     <div className="flex flex-col gap-[7px]">
@@ -73,7 +79,7 @@ function Champ({
         <label htmlFor={`champ-${def.cle}`} className={`text-[13.5px] font-bold ${verifier ? "text-[#8A5A10]" : "text-[#5B7189]"}`}>
           {def.label}
         </label>
-        <Badge c={confiance} modifie={modifie} />
+        <Badge c={confiance} modifie={modifie} confirme={confirme} />
       </div>
       <div
         className={`flex min-h-[56px] items-center gap-2 galet-c px-[18px] ${
@@ -94,7 +100,19 @@ function Champ({
           className="w-full min-w-0 bg-transparent text-[19px] font-bold text-[#123A63] outline-none placeholder:font-normal placeholder:text-[#9AAAB9]"
         />
         {def.unite && <span className="shrink-0 text-[15px] text-[#9DB0C0]">{def.unite}</span>}
-        {verifier && lu && <span className="shrink-0 pl-2 text-[12.5px] font-bold text-[#6B4A14]">lu : « {lu} »</span>}
+        {verifier && lu && lu !== valeur && <span className="shrink-0 pl-2 text-[12.5px] font-bold text-[#6B4A14]">lu : « {lu} »</span>}
+        {/* La valeur lue est bonne : un geste pour la valider, sans la retaper */}
+        {verifier && valeur.trim() !== "" && (
+          <button
+            type="button"
+            onClick={onConfirmer}
+            aria-label={`${def.label} : la valeur est bonne`}
+            className="-mr-[8px] flex h-[38px] shrink-0 items-center gap-[5px] rounded-full bg-[#3DEFBE] px-[13px] text-[13px] font-bold text-[#0B3B63]"
+          >
+            <Check className="h-[15px] w-[15px]" strokeWidth={3} aria-hidden="true" />
+            OK
+          </button>
+        )}
       </div>
     </div>
   );
@@ -107,6 +125,7 @@ function Relecture() {
   const { donnees, recharger } = useLot(lot);
   const [valeurs, setValeurs] = useState<Record<string, string>>({});
   const [modifies, setModifies] = useState<Set<string>>(new Set());
+  const [confirmes, setConfirmes] = useState<Set<string>>(new Set());
   const [garderCommentaire, setGarderCommentaire] = useState<boolean | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
   const [agrandie, setAgrandie] = useState(false);
@@ -132,6 +151,7 @@ function Relecture() {
     for (const [k, x] of Object.entries(courante.champs)) v[k] = x ?? "";
     setValeurs(v);
     setModifies(new Set());
+    setConfirmes(new Set());
     setGarderCommentaire(null);
     setErreur(null);
     window.scrollTo(0, 0);
@@ -155,7 +175,7 @@ function Relecture() {
   const confiance = (cle: string) => (courante.confiances[cle] ?? "non_lu") as Confiance;
   const secondairesLus = SECONDAIRES.filter((d) => (courante.champs[d.cle] ?? "") !== "" || confiance(d.cle) !== "non_lu");
   const affiches = [...PRINCIPAUX, ...secondairesLus];
-  const aVerifier = affiches.filter((d) => confiance(d.cle) === "a_verifier" && !modifies.has(d.cle)).length;
+  const aVerifier = affiches.filter((d) => confiance(d.cle) === "a_verifier" && !modifies.has(d.cle) && !confirmes.has(d.cle)).length;
   const commentaire = (courante.champs["commentaire"] ?? "").trim();
   const signee = valeurs["signee"] === "oui";
   const tamponnee = valeurs["tamponnee"] === "oui";
@@ -278,7 +298,7 @@ function Relecture() {
               <b>
                 {aVerifier} champ{aVerifier > 1 ? "s" : ""} à vérifier
               </b>{" "}
-              — l'app a lu quelque chose, mais elle n'en est pas sûre.
+              — l'app a lu quelque chose, mais elle n'en est pas sûre. Touche OK si c'est bon, sinon corrige le champ.
             </p>
           </div>
         )}
@@ -291,7 +311,9 @@ function Relecture() {
             confiance={confiance(d.cle)}
             lu={courante.lectures[d.cle] ?? null}
             modifie={modifies.has(d.cle)}
+            confirme={confirmes.has(d.cle)}
             onChange={(v) => changer(d.cle, v)}
+            onConfirmer={() => setConfirmes((c) => new Set(c).add(d.cle))}
           />
         ))}
 
