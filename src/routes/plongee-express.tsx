@@ -237,19 +237,17 @@ function SaisieExpress() {
 
   return (
     <div className="min-h-screen bg-[#F1F6FC] text-[#123A63]">
-      {/* En-tête */}
-      <div className="rounded-b-[34px] bg-[linear-gradient(170deg,#0E3D72_0%,#0B2F58_100%)] text-white">
-        <div className="mx-auto w-full max-w-[430px] px-[22px] pb-[20px] pt-[clamp(14px,2.6svh,22px)]">
-          <div className="flex items-center justify-between">
-            <button type="button" aria-label="Retour" onClick={() => navigate({ to: "/carnet" })} className="flex h-10 w-10 items-center justify-center goutte bg-white/15">
-              <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
-            </button>
-            <button type="button" onClick={() => navigate({ to: "/carnet" })} className="px-[4px] py-[8px] text-[15px] font-semibold text-white/90">
-              Annuler
-            </button>
-          </div>
-          <h1 className="pt-[14px] text-[24px] font-bold">Nouvelle plongée</h1>
+      {/* En-tête des pages internes : pas de bandeau, comme les autres écrans */}
+      <div className="mx-auto w-full max-w-[430px] px-[22px] pt-[clamp(14px,2.6svh,22px)]">
+        <div className="flex items-center justify-between">
+          <button type="button" aria-label="Retour" onClick={() => navigate({ to: "/carnet" })} className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]">
+            <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
+          </button>
+          <button type="button" onClick={() => navigate({ to: "/carnet" })} className="px-[4px] py-[8px] text-[15px] font-medium text-[#5B7189]">
+            Annuler
+          </button>
         </div>
+        <h1 className="pt-[12px] text-[26px] font-bold leading-tight">Nouvelle plongée</h1>
       </div>
 
       <div className="cascade mx-auto flex w-full max-w-[430px] flex-col px-[22px] pb-[max(24px,env(safe-area-inset-bottom))]">
