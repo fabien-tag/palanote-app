@@ -279,6 +279,7 @@ export function RaccourcisAccueil() {
       texte: "L’IA t’aide à identifier les espèces sur vos photos.",
       Icone: Fish,
       fond: "bg-[#E5F3FC]",
+      ouvrir: () => navigate({ to: "/especes" }),
     },
   ];
   return (

@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { reprendreBrouillon } from "@/lib/brouillon-plongee";
 import { CarrouselPhotos } from "@/components/CarrouselPhotos";
+import { BandeAnalyse } from "@/components/especes/BandeAnalyse";
 import { chargerPhotosPlongee, enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
-import { MapPin, LocateFixed, Plus, X, Star, Camera, Check } from "lucide-react";
+import { MapPin, LocateFixed, Plus, X, Star, Camera, Check, ChevronRight, Images } from "lucide-react";
 import { Carte } from "@/components/carte/Carte";
 import { ChoisirLieu } from "@/components/carte/ChoisirLieu";
 import { coordsLisibles, coordsVersTexte, texteVersCoords } from "@/lib/carte";
@@ -690,6 +691,21 @@ function NouvellePlongee() {
 
         {/* Fiche d'une plongée enregistrée : toutes ses photos en haut, sans passer par « Modifier » */}
         {existante && !edition && <CarrouselPhotos photos={photos} />}
+        {existante && !edition && !chargement && (
+          <div className="px-[22px]">
+            {/* Bande d'analyse des espèces (écran 57) et galerie commune de la palanquée (écran 42) */}
+            <BandeAnalyse diveId={idPlongee} nbPhotos={photos.length} />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/plongee/photos", search: { id: idPlongee } })}
+              className="mt-[10px] flex w-full items-center gap-[10px] galet-moyen border border-[#DCE7F0] bg-white px-[14px] py-[11px] text-left"
+            >
+              <Images className="h-[17px] w-[17px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+              <span className="flex-1 text-[14px] font-semibold">Les photos de la palanquée</span>
+              <ChevronRight className="h-[16px] w-[16px] text-[#9DB0C0]" aria-hidden="true" />
+            </button>
+          </div>
+        )}
 
         {message && (
           <div

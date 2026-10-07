@@ -4,6 +4,7 @@ import { Download, Trash2 } from "lucide-react";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { Bloc, Interrupteur, Ligne, ModaleSuppressionCompte, Note, PageMoi, TitreSection } from "@/components/moi/Ui";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
+import { accordAnalyse, changerAccordAnalyse } from "@/lib/especes";
 import { chargerProfil, dateLongue, exporterToutesMesDonnees, sauverLettreAnnuelle, supprimerMonCompte } from "@/lib/moi";
 
 export const Route = createFileRoute("/moi_/confidentialite")({
@@ -47,7 +48,22 @@ function Confidentialite() {
       setLettre(p.lettreAnnuelle);
       setLettreLe(p.lettreAnnuelleLe);
     });
+    void accordAnalyse()
+      .then(setAnalyse)
+      .catch(() => undefined);
   }, [pret]);
+
+  const [analyse, setAnalyse] = useState(false);
+  const basculerAnalyse = async (v: boolean) => {
+    setAnalyse(v);
+    try {
+      await changerAccordAnalyse(v);
+    } catch (e) {
+      console.error(e);
+      setAnalyse(!v);
+      setErreur("Ton choix n'a pas pu être enregistré. Lance le script palanote-photos-especes.sql, ou vérifie ta connexion.");
+    }
+  };
 
   const basculerLettre = async (v: boolean) => {
     const avant = { lettre, lettreLe };
@@ -109,6 +125,16 @@ function Confidentialite() {
         Ton carnet est privé au départ, et le reste tant que tu ne partages rien. Personne ne peut le demander. Les positions de tes plongées sont
         en plus décalées de 100 à 150 mètres, pour ne jamais donner le point exact d'un site.
       </Note>
+
+      <TitreSection>Les espèces sur tes photos</TitreSection>
+      <Bloc>
+        <Interrupteur
+          titre="Analyser mes photos avec l'IA"
+          texte="Tes photos d'une plongée sont envoyées à l'IA (Claude) quand tu demandes d'identifier les espèces. Elle propose, tu valides."
+          actif={analyse}
+          onChange={(v) => void basculerAnalyse(v)}
+        />
+      </Bloc>
 
       <TitreSection>La lettre annuelle</TitreSection>
       <Bloc>

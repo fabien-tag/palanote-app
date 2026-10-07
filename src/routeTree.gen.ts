@@ -18,6 +18,8 @@ import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CreerUnCompteRouteImport } from './routes/creer-un-compte'
 import { Route as DesabonnementRouteImport } from './routes/desabonnement'
+import { Route as EspeceRouteImport } from './routes/espece'
+import { Route as EspecesRouteImport } from './routes/especes'
 import { Route as InvitationRouteImport } from './routes/invitation'
 import { Route as MoiRouteImport } from './routes/moi'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
@@ -41,6 +43,9 @@ import { Route as NumeriserFinRouteImport } from './routes/numeriser_.fin'
 import { Route as NumeriserLectureRouteImport } from './routes/numeriser_.lecture'
 import { Route as NumeriserRelectureRouteImport } from './routes/numeriser_.relecture'
 import { Route as NumeriserReprendreRouteImport } from './routes/numeriser_.reprendre'
+import { Route as PlongeeEspecesRouteImport } from './routes/plongee.especes'
+import { Route as PlongeePartageRouteImport } from './routes/plongee.partage'
+import { Route as PlongeePhotosRouteImport } from './routes/plongee.photos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -85,6 +90,16 @@ const CreerUnCompteRoute = CreerUnCompteRouteImport.update({
 const DesabonnementRoute = DesabonnementRouteImport.update({
   id: '/desabonnement',
   path: '/desabonnement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspeceRoute = EspeceRouteImport.update({
+  id: '/espece',
+  path: '/espece',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspecesRoute = EspecesRouteImport.update({
+  id: '/especes',
+  path: '/especes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvitationRoute = InvitationRouteImport.update({
@@ -202,6 +217,21 @@ const NumeriserReprendreRoute = NumeriserReprendreRouteImport.update({
   path: '/numeriser/reprendre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlongeeEspecesRoute = PlongeeEspecesRouteImport.update({
+  id: '/plongee/especes',
+  path: '/plongee/especes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlongeePartageRoute = PlongeePartageRouteImport.update({
+  id: '/plongee/partage',
+  path: '/plongee/partage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlongeePhotosRoute = PlongeePhotosRouteImport.update({
+  id: '/plongee/photos',
+  path: '/plongee/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -213,6 +243,8 @@ export interface FileRoutesByFullPath {
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/desabonnement': typeof DesabonnementRoute
+  '/espece': typeof EspeceRoute
+  '/especes': typeof EspecesRoute
   '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
@@ -236,6 +268,9 @@ export interface FileRoutesByFullPath {
   '/numeriser/lecture': typeof NumeriserLectureRoute
   '/numeriser/relecture': typeof NumeriserRelectureRoute
   '/numeriser/reprendre': typeof NumeriserReprendreRoute
+  '/plongee/especes': typeof PlongeeEspecesRoute
+  '/plongee/partage': typeof PlongeePartageRoute
+  '/plongee/photos': typeof PlongeePhotosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -247,6 +282,8 @@ export interface FileRoutesByTo {
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/desabonnement': typeof DesabonnementRoute
+  '/espece': typeof EspeceRoute
+  '/especes': typeof EspecesRoute
   '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
@@ -270,6 +307,9 @@ export interface FileRoutesByTo {
   '/numeriser/lecture': typeof NumeriserLectureRoute
   '/numeriser/relecture': typeof NumeriserRelectureRoute
   '/numeriser/reprendre': typeof NumeriserReprendreRoute
+  '/plongee/especes': typeof PlongeeEspecesRoute
+  '/plongee/partage': typeof PlongeePartageRoute
+  '/plongee/photos': typeof PlongeePhotosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -282,6 +322,8 @@ export interface FileRoutesById {
   '/connexion': typeof ConnexionRoute
   '/creer-un-compte': typeof CreerUnCompteRoute
   '/desabonnement': typeof DesabonnementRoute
+  '/espece': typeof EspeceRoute
+  '/especes': typeof EspecesRoute
   '/invitation': typeof InvitationRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
@@ -305,6 +347,9 @@ export interface FileRoutesById {
   '/numeriser_/lecture': typeof NumeriserLectureRoute
   '/numeriser_/relecture': typeof NumeriserRelectureRoute
   '/numeriser_/reprendre': typeof NumeriserReprendreRoute
+  '/plongee/especes': typeof PlongeeEspecesRoute
+  '/plongee/partage': typeof PlongeePartageRoute
+  '/plongee/photos': typeof PlongeePhotosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -318,6 +363,8 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/creer-un-compte'
     | '/desabonnement'
+    | '/espece'
+    | '/especes'
     | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
@@ -341,6 +388,9 @@ export interface FileRouteTypes {
     | '/numeriser/lecture'
     | '/numeriser/relecture'
     | '/numeriser/reprendre'
+    | '/plongee/especes'
+    | '/plongee/partage'
+    | '/plongee/photos'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -352,6 +402,8 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/creer-un-compte'
     | '/desabonnement'
+    | '/espece'
+    | '/especes'
     | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
@@ -375,6 +427,9 @@ export interface FileRouteTypes {
     | '/numeriser/lecture'
     | '/numeriser/relecture'
     | '/numeriser/reprendre'
+    | '/plongee/especes'
+    | '/plongee/partage'
+    | '/plongee/photos'
   id:
     | '__root__'
     | '/'
@@ -386,6 +441,8 @@ export interface FileRouteTypes {
     | '/connexion'
     | '/creer-un-compte'
     | '/desabonnement'
+    | '/espece'
+    | '/especes'
     | '/invitation'
     | '/moi'
     | '/mot-de-passe-oublie'
@@ -409,6 +466,9 @@ export interface FileRouteTypes {
     | '/numeriser_/lecture'
     | '/numeriser_/relecture'
     | '/numeriser_/reprendre'
+    | '/plongee/especes'
+    | '/plongee/partage'
+    | '/plongee/photos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -421,6 +481,8 @@ export interface RootRouteChildren {
   ConnexionRoute: typeof ConnexionRoute
   CreerUnCompteRoute: typeof CreerUnCompteRoute
   DesabonnementRoute: typeof DesabonnementRoute
+  EspeceRoute: typeof EspeceRoute
+  EspecesRoute: typeof EspecesRoute
   InvitationRoute: typeof InvitationRoute
   MoiRoute: typeof MoiRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
@@ -444,6 +506,9 @@ export interface RootRouteChildren {
   NumeriserLectureRoute: typeof NumeriserLectureRoute
   NumeriserRelectureRoute: typeof NumeriserRelectureRoute
   NumeriserReprendreRoute: typeof NumeriserReprendreRoute
+  PlongeeEspecesRoute: typeof PlongeeEspecesRoute
+  PlongeePartageRoute: typeof PlongeePartageRoute
+  PlongeePhotosRoute: typeof PlongeePhotosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -509,6 +574,20 @@ declare module '@tanstack/react-router' {
       path: '/desabonnement'
       fullPath: '/desabonnement'
       preLoaderRoute: typeof DesabonnementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espece': {
+      id: '/espece'
+      path: '/espece'
+      fullPath: '/espece'
+      preLoaderRoute: typeof EspeceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/especes': {
+      id: '/especes'
+      path: '/especes'
+      fullPath: '/especes'
+      preLoaderRoute: typeof EspecesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invitation': {
@@ -672,6 +751,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NumeriserReprendreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/plongee/especes': {
+      id: '/plongee/especes'
+      path: '/plongee/especes'
+      fullPath: '/plongee/especes'
+      preLoaderRoute: typeof PlongeeEspecesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plongee/partage': {
+      id: '/plongee/partage'
+      path: '/plongee/partage'
+      fullPath: '/plongee/partage'
+      preLoaderRoute: typeof PlongeePartageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plongee/photos': {
+      id: '/plongee/photos'
+      path: '/plongee/photos'
+      fullPath: '/plongee/photos'
+      preLoaderRoute: typeof PlongeePhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -685,6 +785,8 @@ const rootRouteChildren: RootRouteChildren = {
   ConnexionRoute: ConnexionRoute,
   CreerUnCompteRoute: CreerUnCompteRoute,
   DesabonnementRoute: DesabonnementRoute,
+  EspeceRoute: EspeceRoute,
+  EspecesRoute: EspecesRoute,
   InvitationRoute: InvitationRoute,
   MoiRoute: MoiRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
@@ -708,6 +810,9 @@ const rootRouteChildren: RootRouteChildren = {
   NumeriserLectureRoute: NumeriserLectureRoute,
   NumeriserRelectureRoute: NumeriserRelectureRoute,
   NumeriserReprendreRoute: NumeriserReprendreRoute,
+  PlongeeEspecesRoute: PlongeeEspecesRoute,
+  PlongeePartageRoute: PlongeePartageRoute,
+  PlongeePhotosRoute: PlongeePhotosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
