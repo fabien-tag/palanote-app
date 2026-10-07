@@ -363,6 +363,27 @@ Table admin_charges {
 Table admin_reglages {
   id boolean [pk, default: true, note: 'une seule ligne']
   cout_page_ia numeric [not null, default: 0.02]
+  pages_offertes integer [not null, default: 50, note: 'pages lues par l\'IA offertes à chaque compte']
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table forfaits {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  type text [not null, note: 'pack | plus']
+  pages integer [note: 'pack : 200 pages']
+  debut timestamptz [not null, default: `now()`]
+  fin timestamptz [note: 'plus : un an']
+  montant numeric
+  source text [not null, default: 'manuel', note: 'manuel | stripe | offert']
+  reference text
+  note text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table quota_ia {
+  user_id uuid [pk, note: 'écrit seulement par le serveur']
+  pages_lues integer [not null, default: 0]
   updated_at timestamptz [not null, default: `now()`]
 }
 
@@ -433,6 +454,8 @@ Ref: daily_activity.user_id > auth.users.id [delete: cascade]
 
 // Finances et lettre
 Ref: recif_dons.user_id > auth.users.id [delete: set null]
+Ref: forfaits.user_id > auth.users.id [delete: cascade]
+Ref: quota_ia.user_id - auth.users.id [delete: cascade]
 Ref: lettres.envoyee_par > auth.users.id [delete: set null]
 
 // ---------- Regroupements (couleurs dans dbdiagram) ----------
@@ -473,5 +496,7 @@ TableGroup Finances_et_lettre [color: #0F3D70] {
   admin_charges
   admin_reglages
   recif_dons
+  forfaits
+  quota_ia
   lettres
 }
