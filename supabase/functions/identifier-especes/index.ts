@@ -8,7 +8,8 @@
 // Répond tout de suite (202) puis travaille en arrière-plan.
 //
 // Secret requis (Supabase → Edge Functions → Secrets) : ANTHROPIC_API_KEY (le même que lire-page)
-// Optionnel : ANTHROPIC_MODEL (par défaut claude-sonnet-5-5)
+// Optionnel : ANTHROPIC_MODEL_ESPECES (par défaut claude-haiku-4-5-20251001, plusieurs fois moins cher :
+// l'analyse des espèces est gratuite et illimitée pour tous les plongeurs)
 // Ne regarde que les photos de la personne connectée, et seulement si elle a donné
 // son accord (profiles.analyse_especes_le).
 // ============================================================
@@ -20,7 +21,7 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const MODELE = Deno.env.get("ANTHROPIC_MODEL") ?? "claude-sonnet-5-5";
+const MODELE = Deno.env.get("ANTHROPIC_MODEL_ESPECES") ?? "claude-haiku-4-5-20251001";
 const PHOTOS_MAX = 12;
 
 function encodeBase64(octets: Uint8Array) {

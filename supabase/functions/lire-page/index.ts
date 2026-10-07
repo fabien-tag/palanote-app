@@ -8,6 +8,8 @@
 //
 // Secret requis (Supabase → Edge Functions → Secrets) : ANTHROPIC_API_KEY
 // Optionnel : ANTHROPIC_MODEL (par défaut claude-sonnet-5-5)
+// Quota : chaque page lue est prise sur le forfait du plongeur (palanote-forfaits.sql).
+// Quota atteint → 402 { erreur: "quota_atteint" } et la page passe en erreur « quota_atteint ».
 // SUPABASE_URL et la clé secrète du projet sont fournis automatiquement par
 // Supabase (nouvelles clés SUPABASE_SECRET_KEYS ou ancienne SUPABASE_SERVICE_ROLE_KEY).
 // La personne connectée est vérifiée ici même : l'option « Verify JWT with legacy
@@ -272,11 +274,25 @@ Deno.serve(async (req) => {
     .maybeSingle();
   if (!possedee) return json({ erreur: "page introuvable" }, 404);
 
+  // Version gratuite : une page lue = une page prise sur le quota (50 offertes, plus les forfaits).
+  // Si le script palanote-forfaits.sql n'est pas encore lancé, on laisse passer.
+  const userId = auth.user.id;
+  const quota = await admin.rpc("consommer_page_ia", { p_user: userId });
+  if (quota.error) console.error("quota indisponible", quota.error.message);
+  else if (quota.data === false) {
+    await admin.from("ocr_pages").update({ statut: "erreur", erreur: "quota_atteint" }).eq("id", pageId);
+    await majLot(admin, possedee.batch_id);
+    return json({ erreur: "quota_atteint" }, 402);
+  }
+  const quotaPris = !quota.error;
+
   await admin.from("ocr_pages").update({ statut: "en_cours", erreur: null }).eq("id", pageId);
   await admin.from("ocr_batches").update({ statut: "en_cours" }).eq("id", possedee.batch_id);
 
   const travail = lirePage(admin, pageId).catch(async (e) => {
     console.error(e);
+    // La lecture a échoué : la page est rendue au quota.
+    if (quotaPris) await admin.rpc("rendre_page_ia", { p_user: userId });
     await admin
       .from("ocr_pages")
       .update({ statut: "erreur", erreur: String(e?.message ?? e).slice(0, 500) })
