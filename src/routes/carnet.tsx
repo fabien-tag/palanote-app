@@ -19,6 +19,7 @@ import { LigneDePlongee } from "@/components/LigneDePlongee";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
+import { QuestionSatisfaction } from "@/components/QuestionSatisfaction";
 import { accepterInvitationGardee, plongeesAConfirmer, type PlongeeAConfirmer } from "@/lib/amis";
 import { chargerProfil } from "@/lib/moi";
 import {
@@ -343,6 +344,7 @@ function Carnet() {
         /* Dès la première plongée : statistiques, filtres, raccourcis et liste */
         <>
           <BandeauProposition propositions={propositions} />
+          <QuestionSatisfaction nbPlongees={plongees.length} />
           <BandeauCarnetsPapier onClick={() => navigate({ to: "/numeriser" })} />
           <RaccourcisAccueil />
 
