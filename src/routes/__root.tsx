@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { installerSuivi } from "../lib/suivi";
+import { installerHorsLigne } from "../lib/hors-ligne";
 import { FeuilleConditions } from "../components/legal/FeuilleConditions";
 
 function NotFoundComponent() {
@@ -95,8 +96,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      // Installable sur l'écran d'accueil, utilisable sans réseau
+      { name: "theme-color", content: "#0F3D70" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "Palanote" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
     ],
     links: [
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -128,6 +137,16 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   // Présence et erreurs pour le tableau de bord du développeur.
   useEffect(() => installerSuivi(), []);
+  // Hors ligne : envoi des plongées en attente, service worker, écrans gardés d'avance.
+  const router = useRouter();
+  useEffect(() => {
+    installerHorsLigne();
+    const prechauffer = () => {
+      for (const to of ["/carnet", "/plongee-express", "/nouvelle-plongee"] as const) void router.preloadRoute({ to }).catch(() => undefined);
+    };
+    window.addEventListener("palanote-prechauffer", prechauffer);
+    return () => window.removeEventListener("palanote-prechauffer", prechauffer);
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>

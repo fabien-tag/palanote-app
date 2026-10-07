@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
+import { estErreurReseau, estHorsLigne, garderPourPlusTard, MESSAGE_EN_ATTENTE } from "@/lib/hors-ligne";
 import { reprendreBrouillon } from "@/lib/brouillon-plongee";
 import { CarrouselPhotos } from "@/components/CarrouselPhotos";
 import { BandeAnalyse } from "@/components/especes/BandeAnalyse";
@@ -597,13 +598,28 @@ function NouvellePlongee() {
       if (await utilisateurConnecte()) {
         const ligne = versLigne(plongee);
         // Les binômes Palanote apparaissent aussi dans la liste des noms (carte du carnet).
-        await sauverPlongee({ ...ligne, buddies: [...identifies.map(prenomAmi), ...ligne.buddies] });
+        const complete = { ...ligne, buddies: [...identifies.map(prenomAmi), ...ligne.buddies] };
+        // Sans réseau : la plongée attend sur le téléphone et partira toute seule.
+        const plusTard = async () => {
+          if (photosRetirees.length > 0) throw new Error("il faut du réseau pour retirer des photos");
+          await garderPourPlusTard(complete, identifies, photos.map((p) => p.fichier).filter((f): f is File => Boolean(f)));
+          annoncerSurAccueil(MESSAGE_EN_ATTENTE);
+          navigate({ to: "/carnet" });
+        };
+        if (estHorsLigne()) return await plusTard();
+        try {
+          await sauverPlongee(complete);
+        } catch (e) {
+          if (estErreurReseau(e)) return await plusTard();
+          throw e;
+        }
         if (photos.some((p) => p.fichier) || photosRetirees.length > 0) {
           setEnvoiPhotos(true);
           try {
             await enregistrerPhotosPlongee(idPlongee, photos, photosRetirees);
           } catch (e) {
             console.error(e);
+            if (estErreurReseau(e) && photosRetirees.length === 0) return await plusTard();
             throw Object.assign(new Error(`ta plongée est enregistrée, mais les photos n'ont pas pu être envoyées${e && typeof e === "object" && "message" in e ? ` : ${String(e.message)}` : ""}`), { photos: true });
           } finally {
             setEnvoiPhotos(false);

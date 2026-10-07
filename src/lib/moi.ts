@@ -106,7 +106,7 @@ export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" 
     ...(p.role !== undefined ? { role_plongee: p.role || null } : {}),
   });
   try {
-    sessionStorage.removeItem("palanote-entete"); // l'en-tête du carnet se mettra à jour
+    localStorage.removeItem("palanote-entete"); // l'en-tête du carnet se mettra à jour
   } catch {
     /* stockage indisponible */
   }

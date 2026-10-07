@@ -125,8 +125,9 @@ function PolitiqueConfidentialite() {
       <Bloc titre="Cookies">
         <p>
           Palanote n'utilise ni cookies publicitaires ni outils de mesure d'audience tiers. Ton navigateur garde seulement ce qui est
-          nécessaire au fonctionnement : ta session de connexion et quelques préférences. C'est pour ça qu'on ne te demande rien à
-          l'ouverture.
+          nécessaire au fonctionnement : ta session de connexion, quelques préférences, et une copie de ton carnet pour l'ouvrir sans
+          réseau (avec les plongées notées hors ligne, en attente d'envoi). Cette copie reste sur ton téléphone et s'efface quand tu te
+          déconnectes. C'est pour ça qu'on ne te demande rien à l'ouverture.
         </p>
       </Bloc>
 

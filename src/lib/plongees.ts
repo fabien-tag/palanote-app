@@ -122,7 +122,25 @@ export const VISIBILITE_VERS_BASE: Record<string, LignePlongee["visibility"]> = 
 
 export async function utilisateurConnecte() {
   const { data } = await supabase.auth.getSession();
-  return data.session?.user ?? null;
+  if (data.session?.user) return data.session.user;
+  return utilisateurGardeHorsLigne();
+}
+
+// Sans réseau, la session ne peut pas être renouvelée : on garde le compte
+// enregistré sur le téléphone, pour consulter et remplir le carnet hors ligne.
+// (Avec du réseau, seule la vraie session compte.)
+function utilisateurGardeHorsLigne(): { id: string; email?: string } | null {
+  if (typeof window === "undefined" || navigator.onLine !== false) return null;
+  for (const store of [localStorage, sessionStorage]) {
+    try {
+      const t = store.getItem("sb-imjbtxvhanvewopafmxk-auth-token");
+      const u = t ? (JSON.parse(t) as { user?: { id: string; email?: string } }).user : null;
+      if (u?.id) return u;
+    } catch {
+      /* stockage indisponible */
+    }
+  }
+  return null;
 }
 
 // Crée la plongée, ou la met à jour si elle existe déjà (même id).
@@ -254,6 +272,8 @@ export async function supprimerPlongee(id: string) {
 // ---------- Copie du carnet gardée pendant la session ----------
 // Revenir sur l'accueil affiche tout de suite les plongées déjà chargées,
 // puis la liste se met à jour en arrière-plan (plus d'accueil vide qui clignote).
+// Gardée sur le téléphone (localStorage) : le carnet se consulte aussi sans réseau.
+// Effacée à la déconnexion. Les liens des photos (temporaires) ne sont pas gardés.
 
 export type CacheCarnet = { plongees: CartePlongee[]; depart: number };
 const CLE_CACHE = "palanote-cache-carnet";
@@ -268,7 +288,7 @@ export function lireCacheCarnet(): CacheCarnet | null {
   if (typeof window === "undefined") return null;
   if (cacheCarnet) return cacheCarnet;
   try {
-    const t = sessionStorage.getItem(CLE_CACHE);
+    const t = localStorage.getItem(CLE_CACHE);
     if (t) cacheCarnet = JSON.parse(t) as CacheCarnet;
   } catch {
     /* stockage indisponible */
@@ -280,7 +300,7 @@ export function ecrireCacheCarnet(c: CacheCarnet) {
   if (typeof window === "undefined") return;
   cacheCarnet = c;
   try {
-    sessionStorage.setItem(CLE_CACHE, JSON.stringify(c));
+    localStorage.setItem(CLE_CACHE, JSON.stringify({ ...c, plongees: c.plongees.map(({ photo: _p, ...r }) => r) }));
   } catch {
     /* stockage indisponible */
   }
@@ -289,6 +309,7 @@ export function ecrireCacheCarnet(c: CacheCarnet) {
 export function viderCacheCarnet() {
   cacheCarnet = null;
   try {
+    localStorage.removeItem(CLE_CACHE);
     sessionStorage.removeItem(CLE_CACHE);
   } catch {
     /* stockage indisponible */

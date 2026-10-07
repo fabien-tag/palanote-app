@@ -5,6 +5,7 @@ import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
 import { compterPlongeesEnsemble, couleurAvatar, identifierBinomes, initiales, mesBinomes, type Plongeur } from "@/lib/amis";
 import { garderBrouillon } from "@/lib/brouillon-plongee";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
+import { estErreurReseau, estHorsLigne, garderPourPlusTard, MESSAGE_EN_ATTENTE } from "@/lib/hors-ligne";
 import { enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { cacheCarnetEnMemoire, chargerPlongees, minutesEnTexte, nombre, sauverPlongee, type CartePlongee, type LignePlongee } from "@/lib/plongees";
 
@@ -213,14 +214,27 @@ function SaisieExpress() {
       wildlife: [],
       visibility: "private",
     };
+    // Sans réseau : la plongée attend sur le téléphone et partira toute seule.
+    const plusTard = async () => {
+      await garderPourPlusTard(ligne, identifies, photos.map((p) => p.fichier).filter((f): f is File => Boolean(f)));
+      annoncerSurAccueil(MESSAGE_EN_ATTENTE);
+      navigate({ to: "/carnet" });
+    };
     try {
-      await sauverPlongee(ligne);
+      if (estHorsLigne()) return await plusTard();
+      try {
+        await sauverPlongee(ligne);
+      } catch (e) {
+        if (estErreurReseau(e)) return await plusTard();
+        throw e;
+      }
       if (identifies.length > 0) await identifierBinomes(idPlongee, identifies).catch((e) => console.error("Identification des binômes impossible", e));
       if (photos.length > 0) {
         try {
           await enregistrerPhotosPlongee(idPlongee, photos, []);
         } catch (e) {
           console.error(e);
+          if (estErreurReseau(e)) return await plusTard(); // les photos partiront au retour du réseau
           annoncerSurAccueil("Plongée enregistrée, mais les photos n'ont pas pu être envoyées");
           navigate({ to: "/carnet" });
           return;

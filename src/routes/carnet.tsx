@@ -17,6 +17,8 @@ import {
 import { CarteDePlongee } from "@/components/CarteDePlongee";
 import { LigneDePlongee } from "@/components/LigneDePlongee";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
+import { BandeauHorsLigne } from "@/components/BandeauHorsLigne";
+import { EVENEMENT_ATTENTE } from "@/lib/hors-ligne";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { QuestionSatisfaction } from "@/components/QuestionSatisfaction";
@@ -103,7 +105,7 @@ function Carnet() {
   const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[]; profMaxAvant?: string } | null>(null);
   useEffect(() => {
     try {
-      const t = sessionStorage.getItem("palanote-entete");
+      const t = localStorage.getItem("palanote-entete");
       if (t) setProfilEntete(JSON.parse(t));
     } catch {
       /* stockage indisponible */
@@ -114,7 +116,7 @@ function Carnet() {
         const e = { niveau: p.niveau, certifications: p.certifications, profMaxAvant: p.profMaxAvant };
         setProfilEntete(e);
         try {
-          sessionStorage.setItem("palanote-entete", JSON.stringify(e));
+          localStorage.setItem("palanote-entete", JSON.stringify(e));
         } catch {
           /* stockage indisponible */
         }
@@ -198,7 +200,7 @@ function Carnet() {
 
   useEffect(() => {
     let actif = true;
-    (async () => {
+    const charger = async () => {
       // Connecté : plongées du compte (Supabase). Sinon : celles gardées sur l'appareil.
       // Copie de la session (après un rechargement de page) : affichée tout de suite.
       const copie = lireCacheCarnet();
@@ -218,11 +220,19 @@ function Carnet() {
         ecrireCacheCarnet({ plongees: liste, depart });
       } catch (e) {
         console.error(e);
-        if (actif) setPlongees([...lirePlongees()]);
+        // Sans réseau : on garde la dernière copie du carnet gardée sur le téléphone.
+        if (actif) setPlongees((p) => p ?? copie?.plongees ?? [...lirePlongees()]);
       }
-    })();
+    };
+    void charger();
+    // Des plongées en attente viennent de partir : on recharge le carnet.
+    const apresEnvoi = () => {
+      if (navigator.onLine !== false) void charger();
+    };
+    window.addEventListener(EVENEMENT_ATTENTE, apresEnvoi);
     return () => {
       actif = false;
+      window.removeEventListener(EVENEMENT_ATTENTE, apresEnvoi);
     };
   }, []);
 
@@ -301,6 +311,7 @@ function Carnet() {
       )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
+      <BandeauHorsLigne />
       {vide ? (
         /* Avant la première plongée : écran d'accueil d'origine */
         <div className="flex shrink-0 flex-col gap-[13px] p-[22px]">

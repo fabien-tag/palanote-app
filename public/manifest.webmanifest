@@ -1,0 +1,17 @@
+{
+  "name": "Palanote — Ton carnet de plongée",
+  "short_name": "Palanote",
+  "description": "Ton carnet de plongée dans la poche, même sans réseau.",
+  "lang": "fr",
+  "start_url": "/carnet",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F1F6FC",
+  "theme_color": "#0F3D70",
+  "icons": [
+    { "src": "/icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icone-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
