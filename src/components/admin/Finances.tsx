@@ -26,20 +26,22 @@ const libelleMois = (m: string) => NOMS_MOIS[Number(m.slice(5, 7)) - 1] ?? m;
 const champ = "h-[38px] rounded-[10px] border border-[#DCE7F0] bg-white px-[10px] text-[13.5px] outline-none focus:border-[#57D4F5]";
 
 function GraphiqueMois({ bilans }: { bilans: ReturnType<typeof bilanParMois> }) {
-  const max = Math.max(1, ...bilans.flatMap((b) => [b.depenses, b.dons]));
+  const max = Math.max(1, ...bilans.flatMap((b) => [b.depenses, b.recettes]));
   return (
     <>
       <div className="mt-auto flex h-[170px] items-end gap-[10px] pt-[18px]">
         {bilans.map((b) => (
           <div key={b.mois} className="group relative flex h-full flex-1 items-end justify-center gap-[3px]">
             <div className="w-[42%] max-w-[16px] rounded-full bg-[#F2A48F]" style={{ height: b.depenses ? `${Math.max(3, (b.depenses / max) * 100)}%` : 3 }} />
-            <div className="w-[42%] max-w-[16px] rounded-full bg-[#3DCFA3]" style={{ height: b.dons ? `${Math.max(3, (b.dons / max) * 100)}%` : 3 }} />
+            <div className="w-[42%] max-w-[16px] rounded-full bg-[#3DCFA3]" style={{ height: b.recettes ? `${Math.max(3, (b.recettes / max) * 100)}%` : 3 }} />
             <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-[8px] hidden -translate-x-1/2 whitespace-nowrap rounded-[10px] bg-[#0F2A4A] px-[10px] py-[7px] text-[11.5px] leading-snug text-white shadow-lg group-hover:block">
               <b>{libelleMois(b.mois)} {b.mois.slice(0, 4)}</b>
               <br />
               Dépenses {euros(b.depenses, 2)} (dont IA {euros(b.ia, 2)})
               <br />
-              Dons {euros(b.dons, 2)} · solde {euros(b.solde, 2)}
+              Dons {euros(b.dons, 2)} · forfaits {euros(b.forfaits, 2)}
+              <br />
+              Solde {euros(b.solde, 2)}
             </div>
           </div>
         ))}
@@ -186,8 +188,11 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
 
   const bilans = bilanParMois(f);
   const ceMois = bilans.at(-1)!;
-  const total = bilans.reduce((t, b) => ({ depenses: t.depenses + b.depenses, dons: t.dons + b.dons }), { depenses: 0, dons: 0 });
-  const couverture = total.depenses ? total.dons / total.depenses : 0;
+  const total = bilans.reduce(
+    (t, b) => ({ depenses: t.depenses + b.depenses, dons: t.dons + b.dons, forfaits: t.forfaits + b.forfaits, recettes: t.recettes + b.recettes }),
+    { depenses: 0, dons: 0, forfaits: 0, recettes: 0 },
+  );
+  const couverture = total.depenses ? total.recettes / total.depenses : 0;
   const membres = membresRecif(f.dons);
   const nouveauxMembres = membresRecif(f.dons.filter((d) => d.recu_le.slice(0, 7) === ceMois.mois));
   const donMoyen = f.dons.length ? f.dons.reduce((t, d) => t + d.montant, 0) / f.dons.length : 15;
@@ -196,6 +201,9 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
   const iaMoyenne = bilans.slice(-3).reduce((t, b) => t + b.ia, 0) / 3;
   const coutAnnuel = (chargesMensuelles + iaMoyenne) * 12;
   const membresNecessaires = Math.ceil(coutAnnuel / donMoyen);
+  // Le même objectif, en abonnés Palanote+ (19 € par an)
+  const abonnesNecessaires = Math.ceil(coutAnnuel / 19);
+  const equilibre = total.recettes >= coutAnnuel && coutAnnuel > 0;
   const soldeCouleur = ceMois.solde >= 0 ? "vert" : "rouge";
 
   return (
@@ -207,10 +215,11 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
             {euros(ceMois.charges)} d'abonnements · {euros(ceMois.ia, 2)} d'IA ({ceMois.pages} pages)
           </p>
         </Bloc>
-        <Bloc titre="Dons ce mois-ci" fond="bg-[linear-gradient(160deg,#F2FBF7_0%,#D3F4E7_100%)]">
-          <div className="mt-auto text-[44px] font-light leading-none tracking-[-0.02em] text-[#0F2A4A]">{euros(ceMois.dons)}</div>
+        <Bloc titre="Recettes ce mois-ci" fond="bg-[linear-gradient(160deg,#F2FBF7_0%,#D3F4E7_100%)]">
+          <div className="mt-auto text-[44px] font-light leading-none tracking-[-0.02em] text-[#0F2A4A]">{euros(ceMois.recettes)}</div>
           <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
-            {nouveauxMembres} nouveau{nouveauxMembres > 1 ? "x" : ""} membre{nouveauxMembres > 1 ? "s" : ""} du Récif
+            {euros(ceMois.forfaits)} de forfaits · {euros(ceMois.dons)} de dons ({nouveauxMembres} nouveau{nouveauxMembres > 1 ? "x" : ""} membre
+            {nouveauxMembres > 1 ? "s" : ""} du Récif)
           </p>
         </Bloc>
         <Bloc titre={ceMois.solde >= 0 ? "Gain du mois" : "Perte du mois"} voyant={soldeCouleur} fond="bg-white border border-[#E9EEF3]">
@@ -219,8 +228,8 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
             {euros(ceMois.solde)}
           </div>
           <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
-            Sur 12 mois : {total.dons - total.depenses >= 0 ? "+" : ""}
-            {euros(total.dons - total.depenses)}
+            Sur 12 mois : {total.recettes - total.depenses >= 0 ? "+" : ""}
+            {euros(total.recettes - total.depenses)}
           </p>
         </Bloc>
         <Bloc titre="Couverture sur 12 mois" fond="bg-[linear-gradient(160deg,#F7F5FD_0%,#E1DAF7_100%)]">
@@ -229,19 +238,19 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
           </div>
           <div className="mt-auto text-[44px] font-light leading-none tracking-[-0.02em] text-[#0F2A4A]">{Math.round(couverture * 100)} %</div>
           <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
-            des dépenses payées par les dons ({euros(total.dons)} / {euros(total.depenses)})
+            des dépenses payées par les forfaits et les dons ({euros(total.recettes)} / {euros(total.depenses)})
           </p>
         </Bloc>
       </div>
 
       <div className="grid grid-cols-1 items-start gap-[12px] xl:grid-cols-[minmax(0,1fr)_360px]">
-        <Bloc titre="Dépenses et dons, 12 derniers mois" fond="bg-white border border-[#E9EEF3]">
+        <Bloc titre="Dépenses et recettes, 12 derniers mois" fond="bg-white border border-[#E9EEF3]">
           <div className="mt-[6px] flex gap-[16px] text-[12px] text-[#7D93A8]">
             <span className="flex items-center gap-[6px]">
               <span className="h-[9px] w-[9px] rounded-full bg-[#F2A48F]" /> dépenses (abonnements + IA)
             </span>
             <span className="flex items-center gap-[6px]">
-              <span className="h-[9px] w-[9px] rounded-full bg-[#3DCFA3]" /> dons du Récif
+              <span className="h-[9px] w-[9px] rounded-full bg-[#3DCFA3]" /> recettes (forfaits + dons du Récif)
             </span>
           </div>
           <GraphiqueMois bilans={bilans} />
@@ -261,14 +270,14 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
               ))}
             </div>
           </Bloc>
-          <Bloc titre="Le Récif" voyant={membres >= membresNecessaires ? "vert" : "orange"} fond="bg-white border border-[#E9EEF3]">
+          <Bloc titre="L'équilibre" voyant={equilibre ? "vert" : "orange"} fond="bg-white border border-[#E9EEF3]">
             <div className="mt-auto flex items-baseline gap-[8px] text-[#0F2A4A]">
-              <span className="text-[44px] font-light leading-none tracking-[-0.02em]">{membres}</span>
-              <span className="text-[13px] text-[#123A63]/60">membre{membres > 1 ? "s" : ""}</span>
+              <span className="text-[44px] font-light leading-none tracking-[-0.02em]">{euros(total.recettes)}</span>
+              <span className="text-[13px] text-[#123A63]/60">sur {euros(coutAnnuel)} par an</span>
             </div>
             <p className="pt-[6px] text-[12.5px] leading-snug text-[#123A63]/65">
-              Il en faudrait environ <b className="text-[#0F2A4A]">{membresNecessaires}</b> par an, à {euros(donMoyen)} en moyenne, pour couvrir {euros(coutAnnuel)} de
-              dépenses.
+              Pour couvrir {euros(coutAnnuel)} de dépenses par an, il faudrait environ <b className="text-[#0F2A4A]">{abonnesNecessaires} abonnés Palanote+</b> à 19 €,
+              ou <b className="text-[#0F2A4A]">{membresNecessaires} membres du Récif</b> à {euros(donMoyen)}. Aujourd'hui : {membres} membre{membres > 1 ? "s" : ""} du Récif.
             </p>
           </Bloc>
         </div>

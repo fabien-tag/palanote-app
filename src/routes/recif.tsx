@@ -21,7 +21,6 @@ export const Route = createFileRoute("/recif")({
 const RECU = [
   ["Un petit corail à côté de ton prénom", "Sur ton profil et dans les palanquées. Masquable en un geste — personne n'a à savoir."],
   ["Ton prénom sur « Ceux qui font le récif »", "Si tu le veux. Le prénom seul, jamais le nom."],
-  ["20 Go de photos au lieu de 1 Go", "Les photos sont la seule chose qui coûte vraiment cher à héberger."],
 ];
 
 function Recif() {

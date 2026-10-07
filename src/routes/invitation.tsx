@@ -214,7 +214,7 @@ function PageInvitation() {
         </div>
 
         <p className="px-[24px] pb-[max(28px,env(safe-area-inset-bottom))] pt-[22px] text-center text-[11.5px] leading-normal text-[#9DB0C0]">
-          Gratuite, sans publicité. Ce lien expire au bout de 10 minutes et ne donne accès à rien d'autre qu'à cette invitation.
+          Carnet gratuit, sans publicité. Ce lien expire au bout de 10 minutes et ne donne accès à rien d'autre qu'à cette invitation.
         </p>
       </div>
     </div>

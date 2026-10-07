@@ -40,14 +40,17 @@ export type DonneesFinances = {
   dons: Don[];
   pagesParMois: { mois: string; pages: number }[];
   coutPageIa: number;
+  // Forfaits vendus (pack, Palanote+) : date et montant. Vide si le script forfaits n'est pas lancé.
+  forfaits: { date: string; montant: number }[];
 };
 
 export async function chargerFinances(): Promise<DonneesFinances> {
-  const [charges, dons, pages, reglages] = await Promise.all([
+  const [charges, dons, pages, reglages, forfaits] = await Promise.all([
     supabase.from("admin_charges").select("*").order("created_at", { ascending: true }),
     supabase.from("recif_dons").select("*").order("recu_le", { ascending: false }),
     supabase.rpc("admin_pages_par_mois"),
     supabase.from("admin_reglages").select("cout_page_ia").maybeSingle(),
+    supabase.rpc("admin_forfaits"),
   ]);
   if (charges.error) throw charges.error;
   return {
@@ -55,6 +58,11 @@ export async function chargerFinances(): Promise<DonneesFinances> {
     dons: ((dons.data ?? []) as Don[]).map((d) => ({ ...d, montant: Number(d.montant) })),
     pagesParMois: ((pages.data ?? []) as { mois: string; pages: number }[]).map((p) => ({ mois: p.mois, pages: Number(p.pages) })),
     coutPageIa: Number((reglages.data as { cout_page_ia?: number } | null)?.cout_page_ia ?? 0.02),
+    forfaits: forfaits.error
+      ? []
+      : ((forfaits.data ?? []) as { debut: string; montant: number | null }[])
+          .filter((x) => Number(x.montant) > 0)
+          .map((x) => ({ date: x.debut, montant: Number(x.montant) })),
   };
 }
 
@@ -77,7 +85,18 @@ export function chargePourMois(c: Charge, mois: string): number {
   return mois === debut ? c.montant : 0;
 }
 
-export type BilanMois = { mois: string; charges: number; ia: number; depenses: number; dons: number; solde: number; pages: number };
+// recettes = dons du Récif + forfaits vendus
+export type BilanMois = {
+  mois: string;
+  charges: number;
+  ia: number;
+  depenses: number;
+  dons: number;
+  forfaits: number;
+  recettes: number;
+  solde: number;
+  pages: number;
+};
 
 export function bilanParMois(f: DonneesFinances): BilanMois[] {
   return douzeDerniersMois().map((mois) => {
@@ -85,7 +104,9 @@ export function bilanParMois(f: DonneesFinances): BilanMois[] {
     const pages = f.pagesParMois.find((p) => p.mois === mois)?.pages ?? 0;
     const ia = pages * f.coutPageIa;
     const dons = f.dons.filter((d) => d.recu_le.slice(0, 7) === mois).reduce((t, d) => t + d.montant, 0);
-    return { mois, charges, ia, depenses: charges + ia, dons, solde: dons - charges - ia, pages };
+    const forfaits = f.forfaits.filter((x) => x.date.slice(0, 7) === mois).reduce((t, x) => t + x.montant, 0);
+    const recettes = dons + forfaits;
+    return { mois, charges, ia, depenses: charges + ia, dons, forfaits, recettes, solde: recettes - charges - ia, pages };
   });
 }
 

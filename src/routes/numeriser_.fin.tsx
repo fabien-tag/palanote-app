@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { PAGES_OFFERTES } from "@/lib/legal";
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Check, ChevronRight } from "lucide-react";
 import { CHAMPS_RELECTURE, resumeLot, terminerLot } from "@/lib/numerisation";
@@ -105,8 +106,12 @@ function Fin() {
           <ChevronRight className="h-[17px] w-[17px] text-[#8FA9C0]" strokeWidth={2.4} aria-hidden="true" />
         </button>
         <p className="px-1 pt-[14px] text-[13px] leading-normal text-[#5B7189]">
-          <b className="text-[#123A63]">Ton carnet est gratuit, et le restera.</b> Elle est faite par un plongeur, sur son temps libre. Si elle t'a fait gagner une
-          soirée, tu pourras bientôt <b className="text-[#1176A8]">rejoindre le Récif</b>.
+          <b className="text-[#123A63]">Ton carnet est gratuit, et le restera.</b> L'app est faite par un plongeur, sur son temps libre. La lecture par l'IA, elle, coûte à
+          chaque page : les {PAGES_OFFERTES} premières sont offertes, ensuite il y a{" "}
+          <button type="button" onClick={() => navigate({ to: "/forfait" })} className="font-bold text-[#1176A8] underline underline-offset-2">
+            les forfaits
+          </button>
+          . Et si l'app t'a fait gagner une soirée, tu peux aussi <b className="text-[#1176A8]">rejoindre le Récif</b>.
         </p>
       </div>
 

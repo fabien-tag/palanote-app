@@ -35,6 +35,9 @@ function PolitiqueConfidentialite() {
               <b>Tes photos</b> : celles de tes plongées et des pages de tes carnets papier.
             </>,
             <>
+              <b>Ton forfait</b>{"\u00a0"}: le nombre de pages lues par l'IA et les forfaits que tu as pris.
+            </>,
+            <>
               <b>Tes binômes</b> : les plongeurs que tu ajoutes et les plongées partagées.
             </>,
             <>
