@@ -4,6 +4,7 @@ import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 import { dureeEnMinutes, type CartePlongee } from "@/lib/plongees";
 import { GALETS, GOUTTE } from "@/lib/formes";
+import { couleurAvatar, initiales, type PlongeeAConfirmer } from "@/lib/amis";
 
 // Éléments de l'écran d'accueil une fois la première plongée enregistrée
 // (maquette « Palanote-MainListe »).
@@ -180,6 +181,49 @@ export function FiltresPlongees({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+// ---------- Bandeau « X a noté votre plongée » (parcours 07, écran 38) ----------
+
+export function BandeauProposition({ propositions }: { propositions: PlongeeAConfirmer[] }) {
+  const navigate = useNavigate();
+  const p = propositions[0];
+  if (!p) return null;
+  const autres = propositions.length - 1;
+  const details = [
+    p.site,
+    p.duree ? `${p.duree} min` : null,
+    p.temp_fond !== null && p.temp_fond !== undefined ? `${String(Number(p.temp_fond)).replace(".", ",")} °C` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return (
+    <div className="px-[22px] pt-[22px]">
+      <button
+        type="button"
+        onClick={() => navigate({ to: "/amis/proposition", search: { id: p.id, depuis: "carnet" } })}
+        style={{ borderRadius: GALETS[0] }}
+        className="flex w-full items-center gap-3 border border-[#BFE6F5] bg-[#E3F4FC] px-[15px] py-[13px] text-left shadow-[0_4px_14px_#123A6309]"
+      >
+        <span
+          className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full text-[15px] font-bold text-[#0F3D70]"
+          style={{ background: couleurAvatar(p.de.id) }}
+        >
+          {initiales(p.de.prenom)}
+        </span>
+        <span className="flex min-w-0 flex-grow flex-col gap-px">
+          <span className="text-[14.5px] font-bold text-[#123A63]">{p.de.prenom} a noté votre plongée</span>
+          {details && <span className="truncate text-[12.5px] text-[#5B7189]">{details}</span>}
+          {autres > 0 && (
+            <span className="text-[12px] font-semibold text-[#1176A8]">
+              + {autres} autre{autres > 1 ? "s" : ""} proposition{autres > 1 ? "s" : ""} dans Amis
+            </span>
+          )}
+        </span>
+        <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
+      </button>
     </div>
   );
 }

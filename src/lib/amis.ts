@@ -133,7 +133,7 @@ export type ResumePlongee = {
   temp_fond: number | null;
   melange: string | null;
 };
-export type PlongeeAConfirmer = ResumePlongee & { id: string; de: Plongeur };
+export type PlongeeAConfirmer = ResumePlongee & { id: string; de: Plongeur; cree_le?: string; expire_le?: string };
 export type PlongeeEnsemble = ResumePlongee & {
   id: string;
   statut: "a_confirmer" | "ajoutee" | "refusee";
@@ -163,11 +163,106 @@ export async function plongeesAConfirmer(): Promise<PlongeeAConfirmer[]> {
   return (data ?? []) as PlongeeAConfirmer[];
 }
 
-export async function ajouterPlongeeIdentifiee(id: string): Promise<string> {
-  const { data, error } = await supabase.rpc("ajouter_plongee_identifiee", { p_id: id });
+// Ce que je saisis moi-même en acceptant une proposition (jamais copié du binôme).
+export type ChampsPerso = { prof_max?: string; pression_debut?: string; pression_fin?: string; lestage?: string; note?: number };
+
+export async function ajouterPlongeeIdentifiee(id: string, perso: ChampsPerso = {}): Promise<string> {
+  const nettoye = Object.fromEntries(
+    Object.entries(perso)
+      .map(([k, v]) => [k, typeof v === "string" ? v.trim().replace(",", ".") : v])
+      .filter(([, v]) => v !== "" && v !== undefined && v !== 0),
+  );
+  const { data, error } = await supabase.rpc("ajouter_plongee_identifiee", { p_id: id, p_perso: nettoye });
   if (error) throw error;
   viderCacheCarnet();
   return data as string;
+}
+
+// ---------- Parcours « Compléter les carnets ensemble » ----------
+
+export type Proposition = {
+  id: string;
+  statut: "a_confirmer" | "ajoutee" | "refusee";
+  de: Plongeur;
+  cree_le: string;
+  expire_le: string;
+  validee_le: string;
+  commun: {
+    date: string | null;
+    heure: string | null;
+    site: string | null;
+    lieu: string | null;
+    duree: number | null;
+    temp_fond: number | null;
+    visibilite: number | null;
+    bateau: string | null;
+    club: string | null;
+    type: string | null;
+  };
+  palanquee: Plongeur[];
+  noms_libres: string[];
+  // Ma plongée du même jour, si je l'avais déjà notée
+  deja: null | {
+    id: string;
+    saisie_le: string;
+    heure: string | null;
+    site: string | null;
+    prof_max: number | null;
+    duree: number | null;
+    temp_fond: number | null;
+    visibilite: number | null;
+    bateau: string | null;
+    club: string | null;
+    nb_binomes: number;
+  };
+};
+
+export async function chargerProposition(id: string): Promise<Proposition> {
+  const { data, error } = await supabase.rpc("proposition_plongee", { p_id: id });
+  if (error) throw error;
+  return data as Proposition;
+}
+
+// « Compléter ma plongée » : remplit seulement mes cases vides.
+export async function completerPlongeeIdentifiee(id: string, maPlongee: string): Promise<string> {
+  const { data, error } = await supabase.rpc("completer_plongee_identifiee", { p_id: id, p_dive: maPlongee });
+  if (error) throw error;
+  viderCacheCarnet();
+  return data as string;
+}
+
+// Fiche préremplie (écran 40) : j'enregistre mes champs à moi sur la plongée ajoutée.
+export async function enregistrerChampsPerso(diveId: string, perso: ChampsPerso) {
+  const n = (v?: string) => {
+    const t = (v ?? "").trim().replace(",", ".");
+    return t === "" || !Number.isFinite(Number(t)) ? null : Number(t);
+  };
+  const { error } = await supabase
+    .from("dives")
+    .update({
+      max_depth_m: n(perso.prof_max),
+      pressure_start_bar: n(perso.pression_debut),
+      pressure_end_bar: n(perso.pression_fin),
+      weight_kg: n(perso.lestage),
+      rating: perso.note && perso.note > 0 ? perso.note : null,
+    })
+    .eq("id", diveId);
+  if (error) throw error;
+  viderCacheCarnet();
+}
+
+// « disparaît dans 30 jours »
+export function joursRestants(expireLe: string | undefined) {
+  if (!expireLe) return null;
+  const j = Math.ceil((new Date(expireLe).getTime() - Date.now()) / 86400000);
+  return Number.isFinite(j) ? Math.max(0, j) : null;
+}
+
+export function heureCourte(iso: string | null | undefined) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return `${d.getHours()} h ${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
 export async function refuserIdentification(id: string) {

@@ -19,7 +19,7 @@ import { LigneDePlongee } from "@/components/LigneDePlongee";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
-import { accepterInvitationGardee } from "@/lib/amis";
+import { accepterInvitationGardee, plongeesAConfirmer, type PlongeeAConfirmer } from "@/lib/amis";
 import { chargerProfil } from "@/lib/moi";
 import {
   BandeauCarnetsPapier,
@@ -28,6 +28,7 @@ import {
   FiltresPlongees,
   IconeVueCartes,
   IconeVueListe,
+  BandeauProposition,
   RaccourcisAccueil,
 } from "@/components/AccueilCarnet";
 
@@ -90,6 +91,13 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
+  // Plongées notées par un binôme, à ajouter à mon carnet (parcours 07)
+  const [propositions, setPropositions] = useState<PlongeeAConfirmer[]>([]);
+  useEffect(() => {
+    void plongeesAConfirmer()
+      .then(setPropositions)
+      .catch(() => undefined); // script pas encore lancé ou hors connexion : pas de bandeau
+  }, []);
   // Niveau et certifications du plongeur, affichés dans l'en-tête (gardés pour la session).
   const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[]; profMaxAvant?: string } | null>(null);
   useEffect(() => {
@@ -334,6 +342,7 @@ function Carnet() {
       ) : (
         /* Dès la première plongée : statistiques, filtres, raccourcis et liste */
         <>
+          <BandeauProposition propositions={propositions} />
           <BandeauCarnetsPapier onClick={() => navigate({ to: "/numeriser" })} />
           <RaccourcisAccueil />
 

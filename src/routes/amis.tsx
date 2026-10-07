@@ -185,7 +185,7 @@ function PageAmis() {
                             {initiales(p.de.prenom)}
                           </span>
                           <span className="min-w-0 text-[13.5px] leading-snug text-[#5B7189]">
-                            <b className="text-[#123A63]">{p.de.prenom}</b> t'a identifié sur une plongée
+                            <b className="text-[#123A63]">{p.de.prenom}</b> a noté votre plongée
                           </span>
                         </div>
                         <div className="mt-[11px] galet-moyen bg-[#F1F6FC] px-[12px] py-[10px]">
@@ -200,10 +200,10 @@ function PageAmis() {
                           <button
                             type="button"
                             disabled={reponseEnCours === p.id}
-                            onClick={() => void repondre(p, true)}
+                            onClick={() => navigate({ to: "/amis/proposition", search: { id: p.id } })}
                             className="flex h-[42px] flex-1 items-center justify-center galet-moyen bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
                           >
-                            AJOUTER À MON CARNET
+                            VOIR ET AJOUTER
                           </button>
                           <button
                             type="button"

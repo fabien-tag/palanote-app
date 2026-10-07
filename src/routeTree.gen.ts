@@ -29,6 +29,7 @@ import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
+import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
 import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
@@ -140,6 +141,11 @@ const AmisBinomeRoute = AmisBinomeRouteImport.update({
   path: '/amis/binome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AmisPropositionRoute = AmisPropositionRouteImport.update({
+  id: '/amis_/proposition',
+  path: '/amis/proposition',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoiAvisRoute = MoiAvisRouteImport.update({
   id: '/moi_/avis',
   path: '/moi/avis',
@@ -212,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/amis/proposition': typeof AmisPropositionRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
@@ -244,6 +251,7 @@ export interface FileRoutesByTo {
   '/site': typeof SiteRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/amis/proposition': typeof AmisPropositionRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/site': typeof SiteRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
+  '/amis_/proposition': typeof AmisPropositionRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
   '/moi_/profil': typeof MoiProfilRoute
@@ -311,6 +320,7 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/amis/proposition'
     | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/amis/proposition'
     | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/site'
     | '/amis_/ajouter'
     | '/amis_/binome'
+    | '/amis_/proposition'
     | '/moi_/avis'
     | '/moi_/confidentialite'
     | '/moi_/profil'
@@ -408,6 +420,7 @@ export interface RootRouteChildren {
   SiteRoute: typeof SiteRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
+  AmisPropositionRoute: typeof AmisPropositionRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
   MoiProfilRoute: typeof MoiProfilRoute
@@ -562,6 +575,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisBinomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/amis_/proposition': {
+      id: '/amis_/proposition'
+      path: '/amis/proposition'
+      fullPath: '/amis/proposition'
+      preLoaderRoute: typeof AmisPropositionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/moi_/avis': {
       id: '/moi_/avis'
       path: '/moi/avis'
@@ -656,6 +676,7 @@ const rootRouteChildren: RootRouteChildren = {
   SiteRoute: SiteRoute,
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
+  AmisPropositionRoute: AmisPropositionRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,
   MoiProfilRoute: MoiProfilRoute,

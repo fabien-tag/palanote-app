@@ -174,7 +174,7 @@ function FicheBinome() {
                       <button
                         type="button"
                         disabled={ajoutEnCours === p.id}
-                        onClick={() => void ajouter(p)}
+                        onClick={() => navigate({ to: "/amis/proposition", search: { id: p.id } })}
                         className="mt-[6px] flex h-[42px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
                       >
                         AJOUTER À MON CARNET
