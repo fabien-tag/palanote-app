@@ -210,7 +210,7 @@ function PageSite() {
             type="button"
             onClick={() =>
               navigate({
-                to: "/nouvelle-plongee",
+                to: "/plongee-express",
                 search: { site: spot.nom === "Site sans nom" ? "" : spot.nom, lieu: spot.lieu, coords: coordsVersTexte(spot.coords) },
               })
             }

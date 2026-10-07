@@ -24,6 +24,7 @@ import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oubl
 import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
+import { Route as PlongeeExpressRouteImport } from './routes/plongee-express'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
@@ -114,6 +115,11 @@ const NouvellePlongeeRoute = NouvellePlongeeRouteImport.update({
 const NumeriserRoute = NumeriserRouteImport.update({
   id: '/numeriser',
   path: '/numeriser',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlongeeExpressRoute = PlongeeExpressRouteImport.update({
+  id: '/plongee-express',
+  path: '/plongee-express',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
+  '/plongee-express': typeof PlongeeExpressRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
+  '/plongee-express': typeof PlongeeExpressRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
+  '/plongee-express': typeof PlongeeExpressRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
@@ -315,6 +324,7 @@ export interface FileRouteTypes {
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
+    | '/plongee-express'
     | '/profil-plongeur'
     | '/recif'
     | '/site'
@@ -348,6 +358,7 @@ export interface FileRouteTypes {
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
+    | '/plongee-express'
     | '/profil-plongeur'
     | '/recif'
     | '/site'
@@ -381,6 +392,7 @@ export interface FileRouteTypes {
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
+    | '/plongee-express'
     | '/profil-plongeur'
     | '/recif'
     | '/site'
@@ -415,6 +427,7 @@ export interface RootRouteChildren {
   NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
   NumeriserRoute: typeof NumeriserRoute
+  PlongeeExpressRoute: typeof PlongeeExpressRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   RecifRoute: typeof RecifRoute
   SiteRoute: typeof SiteRoute
@@ -538,6 +551,13 @@ declare module '@tanstack/react-router' {
       path: '/numeriser'
       fullPath: '/numeriser'
       preLoaderRoute: typeof NumeriserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plongee-express': {
+      id: '/plongee-express'
+      path: '/plongee-express'
+      fullPath: '/plongee-express'
+      preLoaderRoute: typeof PlongeeExpressRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profil-plongeur': {
@@ -671,6 +691,7 @@ const rootRouteChildren: RootRouteChildren = {
   NouveauMotDePasseRoute: NouveauMotDePasseRoute,
   NouvellePlongeeRoute: NouvellePlongeeRoute,
   NumeriserRoute: NumeriserRoute,
+  PlongeeExpressRoute: PlongeeExpressRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   RecifRoute: RecifRoute,
   SiteRoute: SiteRoute,

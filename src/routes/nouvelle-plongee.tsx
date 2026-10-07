@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
+import { reprendreBrouillon } from "@/lib/brouillon-plongee";
 import { CarrouselPhotos } from "@/components/CarrouselPhotos";
 import { chargerPhotosPlongee, enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
@@ -38,9 +39,10 @@ export const Route = createFileRoute("/nouvelle-plongee")({
   }),
   // ?id=… : ouvre une plongée existante en lecture (page détail), sinon nouvelle fiche.
   // ?site=…&lieu=…&coords=… : nouvelle plongée préremplie sur un spot (depuis la carte).
-  validateSearch: (search: Record<string, unknown>): { id?: string; site?: string; lieu?: string; coords?: string } => {
-    const r: { id?: string; site?: string; lieu?: string; coords?: string } = {};
-    for (const k of ["id", "site", "lieu", "coords"] as const) {
+  // ?brouillon=1 : reprend ce qui a été saisi dans la saisie express (« Ajouter les détails »).
+  validateSearch: (search: Record<string, unknown>): { id?: string; site?: string; lieu?: string; coords?: string; brouillon?: string } => {
+    const r: { id?: string; site?: string; lieu?: string; coords?: string; brouillon?: string } = {};
+    for (const k of ["id", "site", "lieu", "coords", "brouillon"] as const) {
       const v = search[k];
       if (typeof v === "string" && v) r[k] = v;
     }
@@ -383,18 +385,33 @@ const COULEURS_BINOMES = [
 
 function NouvellePlongee() {
   const navigate = useNavigate();
-  const { id: idExistant, site: siteDepart, lieu: lieuDepart, coords: coordsDepart } = Route.useSearch();
+  const { id: idExistant, site: siteDepart, lieu: lieuDepart, coords: coordsDepart, brouillon: avecBrouillon } = Route.useSearch();
   const existante = Boolean(idExistant);
+  // Brouillon de la saisie express, repris une seule fois
+  const [brouillon] = useState(() => (!idExistant && avecBrouillon ? reprendreBrouillon() : null));
   const [plongee, setPlongee] = useState<Plongee>(() =>
     idExistant
       ? plongeeVide
-      : { ...plongeeVide, siteNom: siteDepart ?? "", siteLieu: lieuDepart ?? "", siteCoords: coordsDepart ?? "" },
+      : brouillon
+        ? {
+            ...plongeeVide,
+            siteNom: brouillon.siteNom,
+            siteLieu: brouillon.siteLieu,
+            siteCoords: brouillon.siteCoords,
+            date: brouillon.date,
+            immersion: brouillon.immersion,
+            profMax: brouillon.profMax,
+            duree: brouillon.duree,
+            note: brouillon.note,
+            binomes: brouillon.binomes,
+          }
+        : { ...plongeeVide, siteNom: siteDepart ?? "", siteLieu: lieuDepart ?? "", siteCoords: coordsDepart ?? "" },
   );
   const [edition, setEdition] = useState(!existante);
   const [chargement, setChargement] = useState(existante);
   const original = useRef<Plongee>(plongeeVide);
   // Photos de la plongée : déjà enregistrées (id) ou ajoutées à l'instant (fichier).
-  const [photos, setPhotos] = useState<PhotoPlongee[]>([]);
+  const [photos, setPhotos] = useState<PhotoPlongee[]>(() => brouillon?.photos ?? []);
   const [photosRetirees, setPhotosRetirees] = useState<PhotoPlongee[]>([]);
   const photosOriginales = useRef<PhotoPlongee[]>([]);
   const [envoiPhotos, setEnvoiPhotos] = useState(false);
@@ -402,7 +419,7 @@ function NouvellePlongee() {
   const [nomBinome, setNomBinome] = useState("");
   // Binômes Palanote identifiés sur la plongée (ids) et liste de mes binômes
   const [amis, setAmis] = useState<Plongeur[]>([]);
-  const [identifies, setIdentifies] = useState<string[]>([]);
+  const [identifies, setIdentifies] = useState<string[]>(() => brouillon?.identifies ?? []);
   const identifiesOriginaux = useRef<string[]>([]);
   const [ajoutFaune, setAjoutFaune] = useState(false);
   const [nomFaune, setNomFaune] = useState("");
