@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Camera, ChevronDown, ChevronRight, Plus, Watch, Bell } from "lucide-react";
+import { Camera, ChevronDown, ChevronRight, ChevronUp, Plus, Watch, Bell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -133,6 +133,9 @@ function Carnet() {
   }, []);
   // Au plus 5 plongées par année ; « Voir plus » déplie l'année entière.
   const [anneesDepliees, setAnneesDepliees] = useState<string[]>([]);
+  // Chaque année est une pile (comme les notifications de l'iPhone) : un toucher la déplie.
+  // null = réglage de départ : seule l'année la plus récente est dépliée.
+  const [pilesOuvertes, setPilesOuvertes] = useState<string[] | null>(null);
   const vide = !chargement && plongees.length === 0;
   const filtres = filtresDisponibles(plongees);
   const filtreActif = filtres.find((f) => f.id === filtre) ?? filtres[0]!;
@@ -360,7 +363,15 @@ function Carnet() {
           <RaccourcisAccueil />
 
           <div className="flex shrink-0 flex-col px-[22px] pb-[22px]">
-            {groupes.map((g, gi) => (
+            {groupes.map((g, gi) => {
+              const ouverte = g.plongees.length <= 1 || (pilesOuvertes === null ? gi === 0 : pilesOuvertes.includes(g.annee));
+              const basculer = (ouvrir: boolean) =>
+                setPilesOuvertes((x) => {
+                  const base = x ?? (groupes[0] ? [groupes[0].annee] : []);
+                  return ouvrir ? [...base.filter((a) => a !== g.annee), g.annee] : base.filter((a) => a !== g.annee);
+                });
+              const premiere = g.plongees[0]!;
+              return (
               <div key={g.annee} className="flex flex-col">
                 <div className="flex items-center justify-between gap-3 pb-4 pt-[34px]">
                   <div className="flex min-w-0 items-baseline gap-2">
@@ -369,6 +380,16 @@ function Carnet() {
                       {g.plongees.length} plongée{g.plongees.length > 1 ? "s" : ""}
                     </span>
                   </div>
+                  {gi !== 0 && ouverte && g.plongees.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => basculer(false)}
+                      className="flex shrink-0 items-center gap-[4px] rounded-full bg-[#E7EFF6] px-[11px] py-[5px] text-[12.5px] font-semibold text-[#5B7189]"
+                    >
+                      Réduire
+                      <ChevronUp className="h-[14px] w-[14px]" strokeWidth={2.4} aria-hidden="true" />
+                    </button>
+                  )}
                   {gi === 0 && (
                     <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
                       {(
@@ -395,14 +416,35 @@ function Carnet() {
                 </div>
                 {/* Filtres : sous le titre des plongées, juste avant les cartes */}
                 {gi === 0 && filtresListe}
+                {!ouverte ? (
+                  /* Pile repliée : la plongée la plus récente, et le bord des autres dessous */
+                  <button
+                    type="button"
+                    onClick={() => basculer(true)}
+                    aria-expanded={false}
+                    aria-label={`Déplier les ${g.plongees.length} plongées de ${g.annee}`}
+                    className="relative block w-full pb-[18px] text-left transition active:scale-[0.99]"
+                  >
+                    <span aria-hidden="true" className="absolute inset-x-[22px] bottom-0 top-[18px] galet-c border border-[#E4EBF1] bg-white/55 shadow-[0_4px_10px_#123A6306]" />
+                    <span aria-hidden="true" className="absolute inset-x-[11px] bottom-[9px] top-[9px] galet-c border border-[#E4EBF1] bg-white/80 shadow-[0_4px_10px_#123A6308]" />
+                    <span className="relative block">
+                      {vue === "liste" ? <LigneDePlongee p={premiere.p} numero={premiere.numero} /> : <CarteDePlongee p={premiere.p} />}
+                    </span>
+                    <span className="absolute bottom-[-4px] right-[30px] flex translate-y-full items-center gap-[4px] pt-[6px] text-[12px] font-semibold text-[#1176A8]">
+                      + {g.plongees.length - 1} plongée{g.plongees.length - 1 > 1 ? "s" : ""}
+                      <ChevronDown className="h-[13px] w-[13px]" strokeWidth={2.6} aria-hidden="true" />
+                    </span>
+                  </button>
+                ) : (
                 <div className={`flex flex-col ${vue === "liste" ? "gap-[10px]" : "gap-[18px]"}`}>
-                  {(anneesDepliees.includes(g.annee) ? g.plongees : g.plongees.slice(0, PAR_ANNEE)).map(({ p, numero }) => (
+                  {(anneesDepliees.includes(g.annee) ? g.plongees : g.plongees.slice(0, PAR_ANNEE)).map(({ p, numero }, i) => (
                     <button
                       key={p.id}
                       type="button"
                       aria-label={`Voir la plongée Nº ${numero}${p.siteNom ? ` — ${p.siteNom}` : ""}`}
                       onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: p.id } })}
-                      className="block w-full galet-c text-left transition active:scale-[0.99]"
+                      style={pilesOuvertes !== null ? { animationDelay: `${Math.min(i, 8) * 45}ms` } : undefined}
+                      className={`block w-full galet-c text-left transition active:scale-[0.99] ${pilesOuvertes !== null ? "sortie-de-pile" : ""}`}
                     >
                       {vue === "liste" ? <LigneDePlongee p={p} numero={numero} /> : <CarteDePlongee p={p} />}
                     </button>
@@ -421,8 +463,11 @@ function Carnet() {
                     </button>
                   )}
                 </div>
+                )}
+                {!ouverte && <div className="h-[22px]" aria-hidden="true" />}
               </div>
-            ))}
+              );
+            })}
             {groupes.length === 0 && <div className="pt-[18px]">{filtresListe}</div>}
             {groupes.length === 0 && (
               <p className="pt-8 text-center text-[13px] text-[#5B7189]">Aucune plongée pour ce filtre.</p>
