@@ -228,6 +228,21 @@ export function BandeauProposition({ propositions }: { propositions: PlongeeACon
   );
 }
 
+// Le petit poisson orange posé sur le bord des bandeaux
+export function PoissonOrange({ className = "" }: { className?: string }) {
+  return (
+    <span aria-hidden="true" className={`pointer-events-none absolute h-[25px] w-[38px] ${className}`}>
+      <svg viewBox="0 0 100 58" className="h-full w-full">
+        <path
+          fill="#FF8A75"
+          fillRule="evenodd"
+          d="M6 29C18 12 34 5 51 7C61 8 73 13 76 22L91 13Q100 31 91 47L76 37C65 49 46 53 28 47Q14 42 6 32L1 31ZM19 30C30 16 48 13 63 21L69 29L62 39C46 47 29 42 19 30ZM17 23a3 3 0 1 0 6 0a3 3 0 1 0-6 0"
+        />
+      </svg>
+    </span>
+  );
+}
+
 // ---------- Bandeau « carnets papier » ----------
 
 export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
@@ -247,15 +262,7 @@ export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
           <span className="text-[12.5px] text-[#123A63]">Photographie-les, on remplit les fiches. 50 pages offertes.</span>
         </span>
         <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
-        <span aria-hidden="true" className="pointer-events-none absolute right-3 top-[-13px] h-[25px] w-[38px]">
-          <svg viewBox="0 0 100 58" className="h-full w-full">
-            <path
-              fill="#FF8A75"
-              fillRule="evenodd"
-              d="M6 29C18 12 34 5 51 7C61 8 73 13 76 22L91 13Q100 31 91 47L76 37C65 49 46 53 28 47Q14 42 6 32L1 31ZM19 30C30 16 48 13 63 21L69 29L62 39C46 47 29 42 19 30ZM17 23a3 3 0 1 0 6 0a3 3 0 1 0-6 0"
-            />
-          </svg>
-        </span>
+        <PoissonOrange className="right-3 top-[-13px]" />
       </button>
     </div>
   );

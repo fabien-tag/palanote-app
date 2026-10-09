@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ChevronRight, Eye, Images, RefreshCw, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ChevronRight, Eye, Fish, Images, RefreshCw, ShieldCheck, Sparkles, X } from "lucide-react";
 import { Meduse } from "@/components/numerisation/Ui";
+import { PoissonOrange } from "@/components/AccueilCarnet";
 import { accordAnalyse, changerAccordAnalyse, chargerEspeces, lancerAnalyse, statutAnalyse, type EspecePlongee, type StatutAnalyse } from "@/lib/especes";
 
 // Bande d'analyse (écran 57) : une seule bande en haut de la fiche d'une plongée.
@@ -113,14 +114,15 @@ export function BandeAnalyse({ diveId, nbPhotos }: { diveId: string; nbPhotos: n
     );
   } else if (etat === "proposer") {
     contenu = (
-      <button type="button" onClick={() => (accord ? void demarrer() : setFeuille(true))} className={`${base} border-[#DCE7F0] bg-white`}>
-        <span className={`${pastille} bg-[#E3EDF6]`}>
-          <Eye className="h-[17px] w-[17px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+      <button type="button" onClick={() => (accord ? void demarrer() : setFeuille(true))} className={`${base} border-[#BFE6F5] bg-[#E3F4FC] text-[#123A63]`}>
+        <PoissonOrange className="right-[18px] -top-[13px]" />
+        <span className={`${pastille} bg-white/70`}>
+          <Fish className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
         </span>
-        <span className="flex-1 text-[14px] leading-snug">
+        <span className="flex-1 text-[14px] font-semibold leading-snug">
           Identifier les espèces sur {nbPhotos > 1 ? `ces ${nbPhotos} photos` : "cette photo"}
         </span>
-        <ChevronRight className="h-[17px] w-[17px] text-[#9DB0C0]" aria-hidden="true" />
+        <ChevronRight className="h-[17px] w-[17px] text-[#1176A8]" strokeWidth={2.4} aria-hidden="true" />
       </button>
     );
   } else if (etat === "en_cours") {
