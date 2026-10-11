@@ -88,6 +88,7 @@ Table profiles {
   premiere_plongee_le date
   numero_depart integer [not null, default: 0, note: 'plongées faites avant Palanote']
   prof_max_avant numeric [note: 'profondeur max avant Palanote (m)']
+  heures_avant numeric [note: 'heures sous l’eau avant Palanote, estimées à l’inscription']
   recif_tier recif_tier
   recif_badge_visible boolean [not null, default: true]
   quota_photos_mo integer [not null, default: 1000]

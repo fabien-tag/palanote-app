@@ -180,6 +180,11 @@ function Relecture() {
   const signee = valeurs["signee"] === "oui";
   const tamponnee = valeurs["tamponnee"] === "oui";
   const signatureLue = confiance("signee") !== "non_lu" || confiance("tamponnee") !== "non_lu";
+  // Signature et tampon : un seul geste « OK » pour les deux quand l'app hésite
+  const signatureModifiee = modifies.has("signee") || modifies.has("tamponnee");
+  const signatureAVerifier =
+    (confiance("signee") === "a_verifier" || confiance("tamponnee") === "a_verifier") && !signatureModifiee && !confirmes.has("signature");
+  const totalAVerifier = aVerifier + (signatureAVerifier ? 1 : 0);
 
   const changer = (cle: string, v: string) => {
     setValeurs((x) => ({ ...x, [cle]: v }));
@@ -291,12 +296,12 @@ function Relecture() {
           </p>
         </div>
 
-        {aVerifier > 0 && (
+        {totalAVerifier > 0 && (
           <div className="flex items-center gap-[13px] galet-b border-[1.5px] border-[#F5A524] bg-[#FFF5E5] px-[14px] py-[12px]">
-            <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[#FFC65C] text-[16px] font-bold text-[#6B4A14]">{aVerifier}</span>
+            <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[#FFC65C] text-[16px] font-bold text-[#6B4A14]">{totalAVerifier}</span>
             <p className="text-[13.5px] leading-snug text-[#6B4A14]">
               <b>
-                {aVerifier} champ{aVerifier > 1 ? "s" : ""} à vérifier
+                {totalAVerifier} champ{totalAVerifier > 1 ? "s" : ""} à vérifier
               </b>{" "}
               — l'app a lu quelque chose, mais elle n'en est pas sûre. Touche OK si c'est bon, sinon corrige le champ.
             </p>
@@ -318,12 +323,16 @@ function Relecture() {
         ))}
 
         {/* Signature et tampon */}
-        <div className="relative galet-c border border-[#E4EBF1] bg-white p-[16px]">
+        <div className={`relative galet-c p-[16px] ${signatureAVerifier ? "border-2 border-[#F5A524] bg-[#FFF5E5]" : "border border-[#E4EBF1] bg-white"}`}>
           <div className="flex items-center justify-between pb-[12px]">
-            <span className="text-[14px] font-bold text-[#5B7189]">Signature et tampon</span>
-            <Badge c={signatureLue ? (confiance("signee") === "a_verifier" || confiance("tamponnee") === "a_verifier" ? "a_verifier" : "sur") : "non_lu"} modifie={modifies.has("signee") || modifies.has("tamponnee")} />
+            <span className={`text-[14px] font-bold ${signatureAVerifier ? "text-[#8A5A10]" : "text-[#5B7189]"}`}>Signature et tampon</span>
+            <Badge
+              c={signatureLue ? (confiance("signee") === "a_verifier" || confiance("tamponnee") === "a_verifier" ? "a_verifier" : "sur") : "non_lu"}
+              modifie={signatureModifiee}
+              confirme={confirmes.has("signature")}
+            />
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {(
               [
                 ["signee", "Signée", signee],
@@ -341,6 +350,18 @@ function Relecture() {
                 {label}
               </button>
             ))}
+            {/* Ce que l'app a lu est bon : on valide d'un geste, comme les autres champs */}
+            {signatureAVerifier && (
+              <button
+                type="button"
+                onClick={() => setConfirmes((c) => new Set(c).add("signature"))}
+                aria-label="Signature et tampon : c'est bon"
+                className="ml-auto flex h-[38px] shrink-0 items-center gap-[5px] rounded-full bg-[#3DEFBE] px-[13px] text-[13px] font-bold text-[#0B3B63]"
+              >
+                <Check className="h-[15px] w-[15px]" strokeWidth={3} aria-hidden="true" />
+                OK
+              </button>
+            )}
           </div>
           <Meduse className="-right-[8px] -top-[14px]" />
         </div>

@@ -5,7 +5,7 @@ import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { signOut } from "@/lib/auth";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { chargerProfil, sauverProfil } from "@/lib/moi";
-import { AIDE_ROLE, NIVEAUX, ROLES } from "@/lib/profil-plongeur";
+import { AIDE_ROLE, NIVEAUX, ROLES, DUREE_MOYENNE_DEFAUT, heuresEstimees } from "@/lib/profil-plongeur";
 
 export const Route = createFileRoute("/moi_/profil")({
   head: () => ({ meta: [{ title: "Palanote — Mon profil" }] }),
@@ -45,6 +45,8 @@ function ModifierProfil() {
   const [plongeesAvant, setPlongeesAvant] = useState("");
   const [profMaxAvant, setProfMaxAvant] = useState("");
   const [profOrigine, setProfOrigine] = useState("");
+  const [heuresAvant, setHeuresAvant] = useState("");
+  const [heuresOrigine, setHeuresOrigine] = useState("");
   const [role, setRole] = useState("");
   const [roleOrigine, setRoleOrigine] = useState("");
   const [certifications, setCertifications] = useState<string[]>([]);
@@ -64,6 +66,8 @@ function ModifierProfil() {
         setPlongeesAvant(p.plongeesAvant);
         setProfMaxAvant(p.profMaxAvant);
         setProfOrigine(p.profMaxAvant);
+        setHeuresAvant(p.heuresAvant);
+        setHeuresOrigine(p.heuresAvant);
         setRole(p.role);
         setRoleOrigine(p.role);
         setCertifications(p.certifications);
@@ -84,7 +88,7 @@ function ModifierProfil() {
     setErreur(null);
     try {
       const certifsChangees = [...certifications].sort().join() !== [...certifsOrigine].sort().join();
-      await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant, ...(certifsChangees ? { certifications } : {}), ...(role !== roleOrigine ? { role } : {}), ...(profMaxAvant !== profOrigine ? { profMaxAvant } : {}) });
+      await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant, ...(certifsChangees ? { certifications } : {}), ...(role !== roleOrigine ? { role } : {}), ...(profMaxAvant !== profOrigine ? { profMaxAvant } : {}), ...(heuresAvant !== heuresOrigine ? { heuresAvant } : {}) });
       annoncerSurAccueil("Ton profil a bien été mis à jour");
       navigate({ to: "/moi" });
     } catch (e) {
@@ -188,6 +192,18 @@ function ModifierProfil() {
               onChange={(e) => setPlongeesAvant(e.target.value.replace(/\D/g, "").slice(0, 5))}
               inputMode="numeric"
               placeholder="0"
+            />
+            <Champ
+              label="Heures sous l'eau avant Palanote"
+              aide={
+                heuresAvant
+                  ? "Comptées dans « sous l'eau », en haut de ton carnet et dans Moi."
+                  : `Laisse vide : on compte ${DUREE_MOYENNE_DEFAUT} min par plongée${Number(plongeesAvant) > 0 ? `, soit environ ${heuresEstimees(Number(plongeesAvant))} h` : ""}.`
+              }
+              value={heuresAvant}
+              onChange={(e) => setHeuresAvant(e.target.value.replace(/[^\d,.]/g, "").slice(0, 6))}
+              inputMode="decimal"
+              placeholder={Number(plongeesAvant) > 0 ? String(heuresEstimees(Number(plongeesAvant))) : "0"}
             />
             <Champ
               label="Profondeur max avant Palanote (en mètres)"

@@ -102,7 +102,7 @@ function Carnet() {
       .catch(() => undefined); // script pas encore lancé ou hors connexion : pas de bandeau
   }, []);
   // Niveau et certifications du plongeur, affichés dans l'en-tête (gardés pour la session).
-  const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[]; profMaxAvant?: string } | null>(null);
+  const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[]; profMaxAvant?: string; heuresAvant?: string } | null>(null);
   useEffect(() => {
     try {
       const t = localStorage.getItem("palanote-entete");
@@ -113,7 +113,7 @@ function Carnet() {
     void chargerProfil()
       .then((p) => {
         if (!p) return;
-        const e = { niveau: p.niveau, certifications: p.certifications, profMaxAvant: p.profMaxAvant };
+        const e = { niveau: p.niveau, certifications: p.certifications, profMaxAvant: p.profMaxAvant, heuresAvant: p.heuresAvant };
         setProfilEntete(e);
         try {
           localStorage.setItem("palanote-entete", JSON.stringify(e));
@@ -310,7 +310,7 @@ function Carnet() {
       </div>
         </>
       ) : (
-        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} profMaxAvant={Number((profilEntete?.profMaxAvant ?? "").replace(",", ".")) || 0} />
+        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} profMaxAvant={Number((profilEntete?.profMaxAvant ?? "").replace(",", ".")) || 0} heuresAvant={profilEntete?.heuresAvant ? Number(profilEntete.heuresAvant.replace(",", ".")) : null} />
       )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">

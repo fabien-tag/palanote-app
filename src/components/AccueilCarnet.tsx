@@ -1,3 +1,4 @@
+import { minutesAvant } from "@/lib/profil-plongeur";
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, Camera, ChevronRight, Fish, Star, Users } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
@@ -30,9 +31,10 @@ function derniereplongeeTexte(plongees: CartePlongee[]) {
   return `dernière plongée il y a ${ans} an${ans > 1 ? "s" : ""}`;
 }
 
-function statistiques(plongees: CartePlongee[], numeroDepart: number, profMaxAvant: number) {
+function statistiques(plongees: CartePlongee[], numeroDepart: number, profMaxAvant: number, heuresAvant: number | null) {
   const profondeurs = [...plongees.map((p) => Number(p.profMax.replace(",", "."))), profMaxAvant].filter((n) => Number.isFinite(n) && n > 0);
-  const minutes = plongees.reduce((t, p) => t + (dureeEnMinutes(p.duree) ?? 0), 0);
+  // Les plongées du carnet + le temps passé sous l'eau avant Palanote
+  const minutes = plongees.reduce((t, p) => t + (dureeEnMinutes(p.duree) ?? 0), 0) + minutesAvant(numeroDepart, heuresAvant);
   return {
     total: numeroDepart + plongees.length,
     profMax: profondeurs.length ? `${String(Math.max(...profondeurs)).replace(".", ",")} m` : "—",
@@ -46,14 +48,16 @@ export function EnTeteStatistiques({
   niveau,
   certifications = [],
   profMaxAvant = 0,
+  heuresAvant = null,
 }: {
   plongees: CartePlongee[];
   numeroDepart: number;
   niveau?: string | undefined;
   certifications?: string[] | undefined;
   profMaxAvant?: number | undefined;
+  heuresAvant?: number | null | undefined;
 }) {
-  const stats = statistiques(plongees, numeroDepart, profMaxAvant);
+  const stats = statistiques(plongees, numeroDepart, profMaxAvant, heuresAvant ?? null);
   // « N2 / Advanced » → « N2 » ; « Encadrant » reste tel quel
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);

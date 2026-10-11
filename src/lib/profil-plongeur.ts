@@ -18,3 +18,24 @@ export function libelleRole(role: string | null | undefined): string {
 }
 
 export const AIDE_ROLE = "Bientôt, les encadrants, directeurs de plongée et centres auront un espace pour organiser les palanquées.";
+
+// Heures sous l'eau avant Palanote : estimées à partir du nombre de plongées.
+// Une plongée dure en général de 40 min à 1 h ; 50 min par défaut.
+export const DUREES_MOYENNES = [40, 50, 60] as const;
+export const DUREE_MOYENNE_DEFAUT = 50;
+
+export function heuresEstimees(nbPlongees: number, dureeMoyenne: number = DUREE_MOYENNE_DEFAUT): number {
+  if (!Number.isFinite(nbPlongees) || nbPlongees <= 0) return 0;
+  return Math.round((nbPlongees * dureeMoyenne) / 60);
+}
+
+// Minutes passées sous l'eau avant Palanote : les heures renseignées,
+// sinon une estimation à partir des plongées déjà faites.
+export function minutesAvant(numeroDepart: number, heuresAvant: number | null | undefined): number {
+  if (typeof heuresAvant === "number" && Number.isFinite(heuresAvant) && heuresAvant >= 0) return Math.round(heuresAvant * 60);
+  return numeroDepart > 0 ? numeroDepart * DUREE_MOYENNE_DEFAUT : 0;
+}
+
+export function dureeEnTexte(minutes: number): string {
+  return minutes === 0 ? "—" : minutes < 60 ? `${minutes} min` : `${Math.round(minutes / 60)} h`;
+}

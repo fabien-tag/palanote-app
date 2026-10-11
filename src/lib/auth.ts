@@ -13,6 +13,7 @@ export type ProfilInscription = {
   club?: string;
   premiere_plongee_le?: string;
   numero_depart?: number;
+  heures_avant?: number;
   role_plongee?: string;
 };
 
@@ -46,9 +47,9 @@ async function appliquerProfilEnAttente(
   if (!user || !profil) return;
   if (Object.keys(profil).length > 0) {
     const { error } = await supabase.from("profiles").update(profil).eq("id", user.id);
-    // Colonne « role_plongee » pas encore créée (script SQL non lancé) : on garde le reste.
-    if (error && profil.role_plongee) {
-      const { role_plongee: _ignore, ...reste } = profil;
+    // Colonnes récentes pas encore créées (script SQL non lancé) : on garde le reste.
+    if (error && (profil.role_plongee || profil.heures_avant !== undefined)) {
+      const { role_plongee: _ignore, heures_avant: _ignore2, ...reste } = profil;
       if (Object.keys(reste).length > 0) await supabase.from("profiles").update(reste).eq("id", user.id);
     }
   }

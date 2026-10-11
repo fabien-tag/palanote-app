@@ -902,3 +902,6 @@ create policy "exports_delete" on storage.objects for delete to authenticated
 -- Fin. Verification rapide a coller plus tard si besoin :
 --   select tablename from pg_tables where schemaname='public' order by tablename;
 -- ------------------------------------------------------------
+
+-- Heures sous l'eau avant Palanote (voir palanote-heures-avant.sql)
+alter table public.profiles add column if not exists heures_avant numeric(6,1);

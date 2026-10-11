@@ -5,7 +5,7 @@ import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { Bloc, Ligne, TitreSection } from "@/components/moi/Ui";
-import { libelleRole } from "@/lib/profil-plongeur";
+import { libelleRole, minutesAvant } from "@/lib/profil-plongeur";
 import { initiales, mesBinomes } from "@/lib/amis";
 import { estAdmin } from "@/lib/suivi";
 import { chargerForfait, resumeForfait, type Forfait } from "@/lib/forfait";
@@ -20,9 +20,10 @@ export const Route = createFileRoute("/moi")({
 
 type Stats = { plongees: string; heures: string; profondeur: string; sites: string; binomes: string; depuis: string };
 
-function calculerStats(liste: CartePlongee[], depart: number, nbBinomes: number, premiereAnnee: string, profMaxAvant: string): Stats {
+function calculerStats(liste: CartePlongee[], depart: number, nbBinomes: number, premiereAnnee: string, profMaxAvant: string, heuresAvant: string): Stats {
   const profondeurs = [...liste.map((p) => Number(p.profMax.replace(",", "."))), Number(profMaxAvant.replace(",", "."))].filter((n) => Number.isFinite(n) && n > 0);
-  const minutes = liste.reduce((t, p) => t + (dureeEnMinutes(p.duree) ?? 0), 0);
+  const minutes =
+    liste.reduce((t, p) => t + (dureeEnMinutes(p.duree) ?? 0), 0) + minutesAvant(depart, heuresAvant ? Number(heuresAvant.replace(",", ".")) : null);
   const sites = new Set(liste.map((p) => p.siteNom.trim().toLowerCase()).filter(Boolean));
   const annees = liste.map((p) => Number(p.date.slice(0, 4))).filter((a) => a > 1900);
   const depuis = premiereAnnee || (annees.length ? String(Math.min(...annees)) : "");
@@ -68,7 +69,7 @@ function Moi() {
       ]);
       if (!actif) return;
       setProfil(p);
-      setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? "", p?.profMaxAvant ?? ""));
+      setStats(calculerStats(liste, depart, binomes.length, p?.premiereAnnee ?? "", p?.profMaxAvant ?? "", p?.heuresAvant ?? ""));
       setMesPlongees(liste);
       void estAdmin().then((a) => actif && setAdmin(a));
       void chargerForfait().then((f) => actif && setForfait(f));

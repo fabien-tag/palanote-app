@@ -6,7 +6,7 @@ import { getEtape1, clearEtape1 } from "@/lib/inscription";
 import { Stepper } from "@/components/Stepper";
 import { BoutonRetour } from "@/components/BoutonRetour";
 import { FondAuth } from "@/components/FondAuth";
-import { AIDE_ROLE, NIVEAUX, ROLES } from "@/lib/profil-plongeur";
+import { AIDE_ROLE, DUREE_MOYENNE_DEFAUT, DUREES_MOYENNES, heuresEstimees, NIVEAUX, ROLES } from "@/lib/profil-plongeur";
 
 export const Route = createFileRoute("/profil-plongeur")({
   head: () => ({
@@ -31,6 +31,8 @@ function ProfilPlongeur() {
   const [club, setClub] = useState("");
   const [firstDiveYear, setFirstDiveYear] = useState("");
   const [diveCount, setDiveCount] = useState("");
+  const [dureeMoyenne, setDureeMoyenne] = useState<number>(DUREE_MOYENNE_DEFAUT);
+  const heures = heuresEstimees(Number(diveCount), dureeMoyenne);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +48,10 @@ function ProfilPlongeur() {
       if (role) profil.role_plongee = role;
       if (club) profil.club = club;
       if (firstDiveYear) profil.premiere_plongee_le = `${firstDiveYear}-01-01`;
-      if (diveCount) profil.numero_depart = Number(diveCount);
+      if (diveCount) {
+        profil.numero_depart = Number(diveCount);
+        profil.heures_avant = heures;
+      }
     }
     setError(null);
     setLoading(true);
@@ -171,8 +176,36 @@ function ProfilPlongeur() {
               />
             </div>
           </div>
+          {/* Estimation du temps passé sous l'eau : nombre de plongées × durée moyenne */}
+          {heures > 0 && (
+            <div className="galet-moyen bg-white/10 px-[14px] py-[12px]">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-[13px] text-blanc/80">Soit environ</span>
+                <span className="rounded-[12px] bg-[#3DEFBE] px-[11px] py-[4px] text-[14px] font-bold text-[#0B3B63]">
+                  {heures.toLocaleString("fr-FR")} h sous l'eau
+                </span>
+              </div>
+              <p className="pt-[10px] text-[11.5px] text-blanc/60">Une plongée dure en moyenne :</p>
+              <div className="flex gap-[6px] pt-[6px]" role="radiogroup" aria-label="Durée moyenne d'une plongée">
+                {DUREES_MOYENNES.map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    role="radio"
+                    aria-checked={dureeMoyenne === d}
+                    onClick={() => setDureeMoyenne(d)}
+                    className={`h-[32px] flex-1 whitespace-nowrap rounded-[16px] px-[10px] text-[13px] font-bold ${
+                      dureeMoyenne === d ? "bg-blanc text-[#0B3B63]" : "border border-white/25 text-blanc/80"
+                    }`}
+                  >
+                    {d === 60 ? "1 h" : `${d} min`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <p className="text-[11.5px] leading-snug text-blanc/70">
-            Ce chiffre s'ajustera tout seul quand tu importeras tes carnets.
+            Ces chiffres s'ajusteront tout seuls quand tu importeras tes carnets. Tu peux les corriger dans Moi.
           </p>
 
           <div>

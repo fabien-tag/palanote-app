@@ -15,6 +15,7 @@ export type Profil = {
   premiereAnnee: string; // « 1987 »
   plongeesAvant: string; // plongées faites avant Palanote (numéro de départ)
   profMaxAvant: string; // profondeur max atteinte avant Palanote, en mètres (« 42 »)
+  heuresAvant: string; // heures sous l'eau avant Palanote (vide = estimées)
   notifLecture: boolean;
   notifBinome: boolean;
   lettreAnnuelle: boolean;
@@ -58,6 +59,7 @@ export async function chargerProfil(): Promise<Profil | null> {
   const premiere = texte(p["premiere_plongee_le"]);
   const depart = p["numero_depart"];
   const profAvant = Number(p["prof_max_avant"]);
+  const heuresAvant = p["heures_avant"] === null || p["heures_avant"] === undefined ? NaN : Number(p["heures_avant"]);
   return {
     prenom,
     niveau: texte(p["niveau"]),
@@ -67,6 +69,7 @@ export async function chargerProfil(): Promise<Profil | null> {
     premiereAnnee: premiere ? premiere.slice(0, 4) : "",
     plongeesAvant: typeof depart === "number" && depart > 0 ? String(depart) : "",
     profMaxAvant: Number.isFinite(profAvant) && profAvant > 0 ? String(profAvant).replace(".", ",") : "",
+    heuresAvant: Number.isFinite(heuresAvant) && heuresAvant >= 0 ? String(heuresAvant).replace(".", ",") : "",
     notifLecture: p["notif_lecture"] !== false,
     notifBinome: p["notif_binome"] !== false,
     lettreAnnuelle: p["lettre_annuelle"] === true,
@@ -77,6 +80,11 @@ export async function chargerProfil(): Promise<Profil | null> {
 function profondeurOuNull(v: string) {
   const n = Number(v.trim().replace(",", "."));
   return v.trim() && Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function heuresOuNull(v: string) {
+  const n = Number(v.trim().replace(",", "."));
+  return v.trim() && Number.isFinite(n) && n >= 0 ? Math.round(n * 10) / 10 : null;
 }
 
 async function majProfil(champs: Record<string, unknown>) {
@@ -92,7 +100,7 @@ async function majProfil(champs: Record<string, unknown>) {
   }
 }
 
-export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" | "premiereAnnee" | "plongeesAvant"> & { certifications?: string[]; role?: string; profMaxAvant?: string }) {
+export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" | "premiereAnnee" | "plongeesAvant"> & { certifications?: string[]; role?: string; profMaxAvant?: string; heuresAvant?: string }) {
   const annee = p.premiereAnnee.trim();
   const avant = p.plongeesAvant.trim();
   await majProfil({
@@ -104,6 +112,7 @@ export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" 
     ...(p.certifications ? { certifications: p.certifications } : {}),
     ...(p.profMaxAvant !== undefined ? { prof_max_avant: profondeurOuNull(p.profMaxAvant) } : {}),
     ...(p.role !== undefined ? { role_plongee: p.role || null } : {}),
+    ...(p.heuresAvant !== undefined ? { heures_avant: heuresOuNull(p.heuresAvant) } : {}),
   });
   try {
     localStorage.removeItem("palanote-entete"); // l'en-tête du carnet se mettra à jour
