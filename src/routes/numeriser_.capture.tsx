@@ -24,6 +24,10 @@ function Capture() {
   const { donnees, recharger } = useLot(lotId);
   const [envois, setEnvois] = useState<Envoi[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  // La photo de chaque page reste dans sa vignette pendant toute la lecture
+  const [apercus, setApercus] = useState<Record<number, string>>({});
+  // Éclair blanc dans le viseur au déclenchement
+  const [eclair, setEclair] = useState(0);
 
   // Caméra en direct
   const video = useRef<HTMLVideoElement>(null);
@@ -82,7 +86,10 @@ function Capture() {
   const envoyer = async (photo: Blob) => {
     const ordre = prochainOrdre;
     const cle = crypto.randomUUID();
-    setEnvois((l) => [...l, { cle, ordre, url: URL.createObjectURL(photo), etat: "envoi" }]);
+    const url = URL.createObjectURL(photo);
+    setEnvois((l) => [...l, { cle, ordre, url, etat: "envoi" }]);
+    setApercus((a) => ({ ...a, [ordre]: url }));
+    setEclair((n) => n + 1);
     setMessage(null);
     try {
       let id = lotId;
@@ -173,6 +180,7 @@ function Capture() {
               </span>
             </div>
           )}
+          {eclair > 0 && <span key={eclair} aria-hidden="true" className="eclair-photo pointer-events-none absolute inset-0 bg-white" />}
           {/* Coins du cadre */}
           {[
             "left-[18px] top-[18px] border-l-[3px] border-t-[3px] rounded-tl-[10px]",
@@ -204,11 +212,27 @@ function Capture() {
         <div className="mt-[clamp(8px,1.6svh,16px)] flex min-h-[54px] shrink-0 items-center justify-between gap-3">
           <div className="flex gap-2 overflow-x-auto">
             {vignettes.map((v) => (
-              <div key={v.cle} className="relative flex h-[54px] w-[42px] shrink-0 items-end justify-center galet-petit bg-white/10 pb-[6px] text-[12px] font-bold text-white/70">
-                {v.ordre}
+              <div
+                key={v.cle}
+                aria-label={`Page ${v.ordre} : ${v.etat === "lue" ? "lue" : v.etat === "probleme" ? "à reprendre" : "en cours de lecture"}`}
+                className={`relative flex h-[54px] w-[42px] shrink-0 items-end justify-center overflow-hidden galet-petit bg-white/10 pb-[6px] text-[12px] font-bold text-white/80 ${
+                  v.etat === "cours" ? "ring-1 ring-[#3DEFBE]/60" : ""
+                }`}
+              >
+                {apercus[v.ordre] && (
+                  <img src={apercus[v.ordre]} alt="" className={`absolute inset-0 h-full w-full object-cover ${v.etat === "cours" ? "opacity-70" : "opacity-45"}`} />
+                )}
+                {/* Lecture en cours : un trait vert balaie la page, comme un scanner */}
+                {v.etat === "cours" && (
+                  <span aria-hidden="true" className="scan-page pointer-events-none absolute inset-x-0 h-[16px]">
+                    <span className="absolute inset-x-0 bottom-0 h-[2px] bg-[#3DEFBE] shadow-[0_0_8px_2px_#3DEFBE]" />
+                    <span className="absolute inset-0 bg-gradient-to-b from-transparent to-[#3DEFBE]/35" />
+                  </span>
+                )}
+                <span className="relative drop-shadow-[0_1px_2px_rgba(0,0,0,.6)]">{v.ordre}</span>
                 <span
                   className={`absolute right-[4px] top-[4px] flex h-[14px] w-[14px] items-center justify-center rounded-full ${
-                    v.etat === "lue" ? "bg-[#3DEFBE]" : v.etat === "probleme" ? "bg-[#FFC65C]" : "bg-[#57D4F5]/40"
+                    v.etat === "lue" ? "pop-lue bg-[#3DEFBE]" : v.etat === "probleme" ? "bg-[#FFC65C]" : "bg-[#0B3B63]/70"
                   }`}
                 >
                   {v.etat === "lue" ? (
@@ -216,7 +240,7 @@ function Capture() {
                   ) : v.etat === "probleme" ? (
                     <span className="text-[9px] font-bold text-[#6B4A14]">!</span>
                   ) : (
-                    <span className="h-[6px] w-[6px] animate-pulse rounded-full bg-[#57D4F5]" />
+                    <span className="h-[6px] w-[6px] animate-pulse rounded-full bg-[#3DEFBE]" />
                   )}
                 </span>
               </div>

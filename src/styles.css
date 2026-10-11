@@ -265,3 +265,16 @@
     animation: none;
   }
 }
+
+/* Numérisation : la page photographiée est « scannée » pendant sa lecture par l'IA */
+@keyframes scan-page { 0% { top: -16px; } 100% { top: 100%; } }
+.scan-page { animation: scan-page 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+@keyframes eclair-photo { from { opacity: 0.85; } to { opacity: 0; } }
+.eclair-photo { animation: eclair-photo 0.35s ease-out forwards; }
+@keyframes pop-lue { 0% { transform: scale(0.3); } 60% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.pop-lue { animation: pop-lue 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .scan-page { animation: none; top: 45%; }
+  .eclair-photo, .pop-lue { animation: none; }
+  .eclair-photo { opacity: 0; }
+}
