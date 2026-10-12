@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Camera, ChevronDown, ChevronRight, ChevronUp, Plus, Watch, Bell } from "lucide-react";
+import { Camera, ChevronDown, ChevronRight, ChevronUp, Plus, Watch } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -24,6 +24,8 @@ import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil
 import { QuestionSatisfaction } from "@/components/QuestionSatisfaction";
 import { accepterInvitationGardee, plongeesAConfirmer, type PlongeeAConfirmer } from "@/lib/amis";
 import { chargerProfil } from "@/lib/moi";
+import { mesSorties, rejoindreSortieGardee, type SortieResume } from "@/lib/club";
+import { nombreNonLues } from "@/lib/notifications";
 import {
   BandeauCarnetsPapier,
   EnTeteStatistiques,
@@ -32,6 +34,8 @@ import {
   IconeVueCartes,
   IconeVueListe,
   BandeauProposition,
+  BandeauSortie,
+  BoutonCloche,
   RaccourcisAccueil,
 } from "@/components/AccueilCarnet";
 
@@ -100,6 +104,25 @@ function Carnet() {
     void plongeesAConfirmer()
       .then(setPropositions)
       .catch(() => undefined); // script pas encore lancé ou hors connexion : pas de bandeau
+  }, []);
+  // Sorties club (parcours 15) et pastille de la cloche
+  const [sorties, setSorties] = useState<SortieResume[]>([]);
+  const [nonLues, setNonLues] = useState(0);
+  useEffect(() => {
+    let actif = true;
+    void (async () => {
+      if (!(await utilisateurConnecte())) return;
+      // Sortie scannée avant la connexion : inscription faite dès le retour sur l'accueil
+      const m = await rejoindreSortieGardee().catch(() => null);
+      if (m && actif) setConfirmation(m);
+      const [s, n] = await Promise.all([mesSorties().catch(() => []), nombreNonLues()]);
+      if (!actif) return;
+      setSorties(s);
+      setNonLues(n);
+    })();
+    return () => {
+      actif = false;
+    };
   }, []);
   // Niveau et certifications du plongeur, affichés dans l'en-tête (gardés pour la session).
   const [profilEntete, setProfilEntete] = useState<{ niveau: string; certifications: string[]; profMaxAvant?: string; heuresAvant?: string } | null>(null);
@@ -276,13 +299,7 @@ function Carnet() {
         <div className="relative mx-auto flex w-full max-w-[430px] flex-1 flex-col px-6 pt-5">
           <div className="flex items-center justify-between">
             <img src={logoCorail} alt="Palanote" className="h-[30px] w-auto" />
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15"
-            >
-              <Bell className="h-6 w-6 text-white" strokeWidth={1.7} aria-hidden="true" />
-            </button>
+            <BoutonCloche nonLues={nonLues} onClick={() => navigate({ to: "/notifications" })} className="h-11 w-11 bg-white/15" />
           </div>
           <div className="mt-auto flex flex-col items-center pb-6">
             <div className="mb-4 flex h-14 w-14 items-center justify-center goutte bg-white/15">
@@ -310,11 +327,12 @@ function Carnet() {
       </div>
         </>
       ) : (
-        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} profMaxAvant={Number((profilEntete?.profMaxAvant ?? "").replace(",", ".")) || 0} heuresAvant={profilEntete?.heuresAvant ? Number(profilEntete.heuresAvant.replace(",", ".")) : null} />
+        <EnTeteStatistiques plongees={plongees} numeroDepart={numeroDepart} niveau={profilEntete?.niveau} certifications={profilEntete?.certifications} profMaxAvant={Number((profilEntete?.profMaxAvant ?? "").replace(",", ".")) || 0} heuresAvant={profilEntete?.heuresAvant ? Number(profilEntete.heuresAvant.replace(",", ".")) : null} nonLues={nonLues} />
       )}
 
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
       <BandeauHorsLigne />
+      <BandeauSortie sorties={sorties} />
       {vide ? (
         /* Avant la première plongée : écran d'accueil d'origine */
         <div className="flex shrink-0 flex-col gap-[13px] p-[22px]">

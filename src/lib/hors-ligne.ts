@@ -116,6 +116,36 @@ export async function garderPourPlusTard(ligne: LignePlongee, identifies: string
   await mettreEnAttente({ id: ligne.id, ligne: { ...ligne, user_id: user.id }, identifies, photos });
 }
 
+// Plongée d'une sortie club notée sans réseau : rattachée à la sortie une fois envoyée.
+const CLE_LIENS_SORTIE = "palanote-liens-sortie";
+function liensSortie(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(CLE_LIENS_SORTIE) ?? "{}") as Record<string, string>;
+  } catch {
+    return {};
+  }
+}
+export function garderLienSortie(diveId: string, sortieId: string) {
+  try {
+    localStorage.setItem(CLE_LIENS_SORTIE, JSON.stringify({ ...liensSortie(), [diveId]: sortieId }));
+  } catch {
+    /* stockage indisponible */
+  }
+}
+async function lierSiSortie(diveId: string) {
+  const liens = liensSortie();
+  const sortie = liens[diveId];
+  if (!sortie) return;
+  const { error } = await supabase.rpc("lier_plongee_sortie", { p_sortie: sortie, p_dive: diveId });
+  if (error) console.error("Rattachement à la sortie impossible", error);
+  delete liens[diveId];
+  try {
+    localStorage.setItem(CLE_LIENS_SORTIE, JSON.stringify(liens));
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
 export const MESSAGE_EN_ATTENTE = "Pas de réseau : ta plongée est gardée sur ton téléphone. Elle partira toute seule au retour du réseau.";
 
 // ---------- Envoi ----------
@@ -146,6 +176,7 @@ export function envoyerEnAttente(): Promise<number> {
           await operation("readwrite", (t) => t.put({ ...p, photos: restantes }));
         }
         if (p.identifies.length > 0) await identifierBinomes(p.id, p.identifies).catch(() => undefined);
+        await lierSiSortie(p.id).catch(() => undefined);
         await retirer(p.id);
         envoyees += 1;
       } catch (e) {

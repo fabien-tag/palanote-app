@@ -17,7 +17,7 @@ export function libelleRole(role: string | null | undefined): string {
   return ROLES.find((r) => r.valeur === role)?.label ?? "";
 }
 
-export const AIDE_ROLE = "Bientôt, les encadrants, directeurs de plongée et centres auront un espace pour organiser les palanquées.";
+export const AIDE_ROLE = "Directeur de plongée ou centre : prépare tes sorties, compose les palanquées et tamponne les carnets dans Moi › Espace club.";
 
 // Heures sous l'eau avant Palanote : estimées à partir du nombre de plongées.
 // Une plongée dure en général de 40 min à 1 h ; 50 min par défaut.

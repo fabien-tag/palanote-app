@@ -127,7 +127,12 @@ Table consents {
 Table dives {
   id uuid [pk, default: `gen_random_uuid()`]
   user_id uuid [not null]
-  source text [not null, default: 'manuelle', note: 'manuelle | ocr | binome']
+  source text [not null, default: 'manuelle', note: 'manuelle | ocr | binome | club']
+  // Sortie club et tampon numérique (posé seulement par les fonctions)
+  sortie_id uuid
+  tampon_le timestamptz
+  tampon_par uuid
+  tampon_infos jsonb [note: 'DP, centre, date : figé au moment du tampon']
   // Essentiel
   dive_date date
   start_time time
@@ -419,6 +424,87 @@ Table lettres {
 // « - » = un pour un, « > » = plusieurs vers un
 
 // Profil et réglages : un par compte
+
+Table centres {
+  id uuid [pk, default: `gen_random_uuid()`]
+  nom text [not null]
+  ville text
+  site_coords text
+  cree_par uuid
+  verifie boolean [not null, default: false, note: 'vérifié par l’admin']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz
+}
+
+Table centre_membres {
+  centre_id uuid [not null]
+  user_id uuid [not null]
+  role text [not null, default: 'dp', note: 'dp | encadrant']
+  created_at timestamptz [not null, default: `now()`]
+  indexes {
+    (centre_id, user_id) [pk]
+  }
+}
+
+Table sorties {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  dp_id uuid [not null]
+  date_sortie date [not null]
+  heure time
+  site_name text [not null]
+  site_location text
+  site_coords text
+  bateau text
+  profondeur_prevue numeric
+  consignes text
+  statut text [not null, default: 'prevue', note: 'prevue | terminee | validee | annulee']
+  duree_min integer [note: 'infos communes notées après la plongée']
+  temp_fond_c numeric
+  visibilite_m integer
+  jeton text [not null, unique, note: 'QR code et lien d’invitation']
+  terminee_le timestamptz
+  validee_le timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz
+}
+
+Table sortie_palanquees {
+  id uuid [pk, default: `gen_random_uuid()`]
+  sortie_id uuid [not null]
+  numero integer [not null]
+  guide_id uuid
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table sortie_participants {
+  id uuid [pk, default: `gen_random_uuid()`]
+  sortie_id uuid [not null]
+  user_id uuid [not null]
+  palanquee_id uuid
+  ajoute_par uuid
+  via text [not null, note: 'qr | lien | recherche']
+  dive_id uuid [note: 'sa plongée, une fois complétée']
+  tamponne_le timestamptz
+  exclu_tampon boolean [not null, default: false]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table notifications {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  type text [not null, note: 'sortie_inscription | sortie_rejointe | sortie_a_completer | tampon | sortie_annulee']
+  titre text [not null]
+  texte text
+  lien text
+  donnees jsonb [not null, default: '{}']
+  lue_le timestamptz
+  created_at timestamptz [not null, default: `now()`]
+}
+
 Ref: profiles.id - auth.users.id [delete: cascade]
 Ref: user_settings.user_id - auth.users.id [delete: cascade]
 Ref: consents.user_id > auth.users.id [delete: cascade]
@@ -461,6 +547,20 @@ Ref: lettres.envoyee_par > auth.users.id [delete: set null]
 
 // ---------- Regroupements (couleurs dans dbdiagram) ----------
 
+Ref: centres.cree_par > auth.users.id [delete: set null]
+Ref: centre_membres.centre_id > centres.id [delete: cascade]
+Ref: centre_membres.user_id > auth.users.id [delete: cascade]
+Ref: sorties.centre_id > centres.id [delete: cascade]
+Ref: sorties.dp_id > auth.users.id [delete: cascade]
+Ref: sortie_palanquees.sortie_id > sorties.id [delete: cascade]
+Ref: sortie_palanquees.guide_id > auth.users.id [delete: set null]
+Ref: sortie_participants.sortie_id > sorties.id [delete: cascade]
+Ref: sortie_participants.user_id > auth.users.id [delete: cascade]
+Ref: sortie_participants.palanquee_id > sortie_palanquees.id [delete: set null]
+Ref: sortie_participants.dive_id > dives.id [delete: set null]
+Ref: dives.sortie_id > sorties.id [delete: set null]
+Ref: notifications.user_id > auth.users.id [delete: cascade]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -500,4 +600,13 @@ TableGroup Finances_et_lettre [color: #0F3D70] {
   forfaits
   quota_ia
   lettres
+}
+
+TableGroup Sorties_club [color: #FF8A75] {
+  centres
+  centre_membres
+  sorties
+  sortie_palanquees
+  sortie_participants
+  notifications
 }

@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AmisRouteImport } from './routes/amis'
 import { Route as CarnetRouteImport } from './routes/carnet'
 import { Route as CarteRouteImport } from './routes/carte'
+import { Route as ClubRouteImport } from './routes/club'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConditionsUtilisationRouteImport } from './routes/conditions-utilisation'
 import { Route as ConnexionRouteImport } from './routes/connexion'
@@ -26,6 +27,7 @@ import { Route as InvitationRouteImport } from './routes/invitation'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as MoiRouteImport } from './routes/moi'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as NouveauMotDePasseRouteImport } from './routes/nouveau-mot-de-passe'
 import { Route as NouvellePlongeeRouteImport } from './routes/nouvelle-plongee'
 import { Route as NumeriserRouteImport } from './routes/numeriser'
@@ -34,9 +36,13 @@ import { Route as PolitiqueDeConfidentialiteRouteImport } from './routes/politiq
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
+import { Route as SortieRouteImport } from './routes/sortie'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
+import { Route as ClubCentreRouteImport } from './routes/club_.centre'
+import { Route as ClubNouvelleSortieRouteImport } from './routes/club_.nouvelle-sortie'
+import { Route as ClubSortieRouteImport } from './routes/club_.sortie'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
 import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
@@ -74,6 +80,11 @@ const CarnetRoute = CarnetRouteImport.update({
 const CarteRoute = CarteRouteImport.update({
   id: '/carte',
   path: '/carte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubRoute = ClubRouteImport.update({
+  id: '/club',
+  path: '/club',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompteCreeRoute = CompteCreeRouteImport.update({
@@ -136,6 +147,11 @@ const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
   path: '/mot-de-passe-oublie',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NouveauMotDePasseRoute = NouveauMotDePasseRouteImport.update({
   id: '/nouveau-mot-de-passe',
   path: '/nouveau-mot-de-passe',
@@ -177,6 +193,11 @@ const SiteRoute = SiteRouteImport.update({
   path: '/site',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SortieRoute = SortieRouteImport.update({
+  id: '/sortie',
+  path: '/sortie',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AmisAjouterRoute = AmisAjouterRouteImport.update({
   id: '/amis_/ajouter',
   path: '/amis/ajouter',
@@ -190,6 +211,21 @@ const AmisBinomeRoute = AmisBinomeRouteImport.update({
 const AmisPropositionRoute = AmisPropositionRouteImport.update({
   id: '/amis_/proposition',
   path: '/amis/proposition',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubCentreRoute = ClubCentreRouteImport.update({
+  id: '/club_/centre',
+  path: '/club/centre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubNouvelleSortieRoute = ClubNouvelleSortieRouteImport.update({
+  id: '/club_/nouvelle-sortie',
+  path: '/club/nouvelle-sortie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubSortieRoute = ClubSortieRouteImport.update({
+  id: '/club_/sortie',
+  path: '/club/sortie',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoiAvisRoute = MoiAvisRouteImport.update({
@@ -264,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
+  '/club': typeof ClubRoute
   '/compte-cree': typeof CompteCreeRoute
   '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
@@ -276,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/notifications': typeof NotificationsRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
@@ -284,9 +322,13 @@ export interface FileRoutesByFullPath {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
+  '/sortie': typeof SortieRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
   '/amis/proposition': typeof AmisPropositionRoute
+  '/club/centre': typeof ClubCentreRoute
+  '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
+  '/club/sortie': typeof ClubSortieRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
@@ -307,6 +349,7 @@ export interface FileRoutesByTo {
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
+  '/club': typeof ClubRoute
   '/compte-cree': typeof CompteCreeRoute
   '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
@@ -319,6 +362,7 @@ export interface FileRoutesByTo {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/notifications': typeof NotificationsRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
@@ -327,9 +371,13 @@ export interface FileRoutesByTo {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
+  '/sortie': typeof SortieRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
   '/amis/proposition': typeof AmisPropositionRoute
+  '/club/centre': typeof ClubCentreRoute
+  '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
+  '/club/sortie': typeof ClubSortieRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
@@ -351,6 +399,7 @@ export interface FileRoutesById {
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
+  '/club': typeof ClubRoute
   '/compte-cree': typeof CompteCreeRoute
   '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
@@ -363,6 +412,7 @@ export interface FileRoutesById {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/notifications': typeof NotificationsRoute
   '/nouveau-mot-de-passe': typeof NouveauMotDePasseRoute
   '/nouvelle-plongee': typeof NouvellePlongeeRoute
   '/numeriser': typeof NumeriserRoute
@@ -371,9 +421,13 @@ export interface FileRoutesById {
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
+  '/sortie': typeof SortieRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
   '/amis_/proposition': typeof AmisPropositionRoute
+  '/club_/centre': typeof ClubCentreRoute
+  '/club_/nouvelle-sortie': typeof ClubNouvelleSortieRoute
+  '/club_/sortie': typeof ClubSortieRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
   '/moi_/profil': typeof MoiProfilRoute
@@ -396,6 +450,7 @@ export interface FileRouteTypes {
     | '/amis'
     | '/carnet'
     | '/carte'
+    | '/club'
     | '/compte-cree'
     | '/conditions-utilisation'
     | '/connexion'
@@ -408,6 +463,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/moi'
     | '/mot-de-passe-oublie'
+    | '/notifications'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
@@ -416,9 +472,13 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/recif'
     | '/site'
+    | '/sortie'
     | '/amis/ajouter'
     | '/amis/binome'
     | '/amis/proposition'
+    | '/club/centre'
+    | '/club/nouvelle-sortie'
+    | '/club/sortie'
     | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
@@ -439,6 +499,7 @@ export interface FileRouteTypes {
     | '/amis'
     | '/carnet'
     | '/carte'
+    | '/club'
     | '/compte-cree'
     | '/conditions-utilisation'
     | '/connexion'
@@ -451,6 +512,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/moi'
     | '/mot-de-passe-oublie'
+    | '/notifications'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
@@ -459,9 +521,13 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/recif'
     | '/site'
+    | '/sortie'
     | '/amis/ajouter'
     | '/amis/binome'
     | '/amis/proposition'
+    | '/club/centre'
+    | '/club/nouvelle-sortie'
+    | '/club/sortie'
     | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
@@ -482,6 +548,7 @@ export interface FileRouteTypes {
     | '/amis'
     | '/carnet'
     | '/carte'
+    | '/club'
     | '/compte-cree'
     | '/conditions-utilisation'
     | '/connexion'
@@ -494,6 +561,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/moi'
     | '/mot-de-passe-oublie'
+    | '/notifications'
     | '/nouveau-mot-de-passe'
     | '/nouvelle-plongee'
     | '/numeriser'
@@ -502,9 +570,13 @@ export interface FileRouteTypes {
     | '/profil-plongeur'
     | '/recif'
     | '/site'
+    | '/sortie'
     | '/amis_/ajouter'
     | '/amis_/binome'
     | '/amis_/proposition'
+    | '/club_/centre'
+    | '/club_/nouvelle-sortie'
+    | '/club_/sortie'
     | '/moi_/avis'
     | '/moi_/confidentialite'
     | '/moi_/profil'
@@ -526,6 +598,7 @@ export interface RootRouteChildren {
   AmisRoute: typeof AmisRoute
   CarnetRoute: typeof CarnetRoute
   CarteRoute: typeof CarteRoute
+  ClubRoute: typeof ClubRoute
   CompteCreeRoute: typeof CompteCreeRoute
   ConditionsUtilisationRoute: typeof ConditionsUtilisationRoute
   ConnexionRoute: typeof ConnexionRoute
@@ -538,6 +611,7 @@ export interface RootRouteChildren {
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MoiRoute: typeof MoiRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
+  NotificationsRoute: typeof NotificationsRoute
   NouveauMotDePasseRoute: typeof NouveauMotDePasseRoute
   NouvellePlongeeRoute: typeof NouvellePlongeeRoute
   NumeriserRoute: typeof NumeriserRoute
@@ -546,9 +620,13 @@ export interface RootRouteChildren {
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   RecifRoute: typeof RecifRoute
   SiteRoute: typeof SiteRoute
+  SortieRoute: typeof SortieRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
   AmisPropositionRoute: typeof AmisPropositionRoute
+  ClubCentreRoute: typeof ClubCentreRoute
+  ClubNouvelleSortieRoute: typeof ClubNouvelleSortieRoute
+  ClubSortieRoute: typeof ClubSortieRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
   MoiProfilRoute: typeof MoiProfilRoute
@@ -599,6 +677,13 @@ declare module '@tanstack/react-router' {
       path: '/carte'
       fullPath: '/carte'
       preLoaderRoute: typeof CarteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club': {
+      id: '/club'
+      path: '/club'
+      fullPath: '/club'
+      preLoaderRoute: typeof ClubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compte-cree': {
@@ -685,6 +770,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MotDePasseOublieRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nouveau-mot-de-passe': {
       id: '/nouveau-mot-de-passe'
       path: '/nouveau-mot-de-passe'
@@ -741,6 +833,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sortie': {
+      id: '/sortie'
+      path: '/sortie'
+      fullPath: '/sortie'
+      preLoaderRoute: typeof SortieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/amis_/ajouter': {
       id: '/amis_/ajouter'
       path: '/amis/ajouter'
@@ -760,6 +859,27 @@ declare module '@tanstack/react-router' {
       path: '/amis/proposition'
       fullPath: '/amis/proposition'
       preLoaderRoute: typeof AmisPropositionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club_/centre': {
+      id: '/club_/centre'
+      path: '/club/centre'
+      fullPath: '/club/centre'
+      preLoaderRoute: typeof ClubCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club_/nouvelle-sortie': {
+      id: '/club_/nouvelle-sortie'
+      path: '/club/nouvelle-sortie'
+      fullPath: '/club/nouvelle-sortie'
+      preLoaderRoute: typeof ClubNouvelleSortieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club_/sortie': {
+      id: '/club_/sortie'
+      path: '/club/sortie'
+      fullPath: '/club/sortie'
+      preLoaderRoute: typeof ClubSortieRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/moi_/avis': {
@@ -862,6 +982,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmisRoute: AmisRoute,
   CarnetRoute: CarnetRoute,
   CarteRoute: CarteRoute,
+  ClubRoute: ClubRoute,
   CompteCreeRoute: CompteCreeRoute,
   ConditionsUtilisationRoute: ConditionsUtilisationRoute,
   ConnexionRoute: ConnexionRoute,
@@ -874,6 +995,7 @@ const rootRouteChildren: RootRouteChildren = {
   MentionsLegalesRoute: MentionsLegalesRoute,
   MoiRoute: MoiRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
+  NotificationsRoute: NotificationsRoute,
   NouveauMotDePasseRoute: NouveauMotDePasseRoute,
   NouvellePlongeeRoute: NouvellePlongeeRoute,
   NumeriserRoute: NumeriserRoute,
@@ -882,9 +1004,13 @@ const rootRouteChildren: RootRouteChildren = {
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   RecifRoute: RecifRoute,
   SiteRoute: SiteRoute,
+  SortieRoute: SortieRoute,
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
   AmisPropositionRoute: AmisPropositionRoute,
+  ClubCentreRoute: ClubCentreRoute,
+  ClubNouvelleSortieRoute: ClubNouvelleSortieRoute,
+  ClubSortieRoute: ClubSortieRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,
   MoiProfilRoute: MoiProfilRoute,

@@ -249,7 +249,7 @@ export async function validerExtraction(e: Extraction, champs: Record<string, st
 // Cherche la position d'un site lu sur un carnet : « site + lieu », puis le lieu seul,
 // puis le site seul. 4 secondes au plus : sans réseau ou sans résultat, la plongée
 // est enregistrée sans position (on peut la placer ensuite depuis sa fiche).
-async function localiserSite(site: string | null, lieu: string | null): Promise<{ coords: string; lieu: string } | null> {
+export async function localiserSite(site: string | null, lieu: string | null): Promise<{ coords: string; lieu: string } | null> {
   const essais = [site && lieu ? `${site}, ${lieu}` : null, lieu, site].filter((q): q is string => Boolean(q && q.trim().length >= 3));
   const arret = new AbortController();
   const minuterie = setTimeout(() => arret.abort(), 4000);

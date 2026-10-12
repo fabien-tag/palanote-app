@@ -1,6 +1,7 @@
 import { minutesAvant } from "@/lib/profil-plongeur";
 import { useNavigate } from "@tanstack/react-router";
-import { Bell, Camera, ChevronRight, Fish, Star, Users } from "lucide-react";
+import { Anchor, Bell, Camera, ChevronRight, Fish, PenLine, Star, Users } from "lucide-react";
+import { heureCourte, type SortieResume } from "@/lib/club";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
 import { dureeEnMinutes, type CartePlongee } from "@/lib/plongees";
@@ -49,6 +50,7 @@ export function EnTeteStatistiques({
   certifications = [],
   profMaxAvant = 0,
   heuresAvant = null,
+  nonLues = 0,
 }: {
   plongees: CartePlongee[];
   numeroDepart: number;
@@ -56,7 +58,9 @@ export function EnTeteStatistiques({
   certifications?: string[] | undefined;
   profMaxAvant?: number | undefined;
   heuresAvant?: number | null | undefined;
+  nonLues?: number;
 }) {
+  const navigate = useNavigate();
   const stats = statistiques(plongees, numeroDepart, profMaxAvant, heuresAvant ?? null);
   // « N2 / Advanced » → « N2 » ; « Encadrant » reste tel quel
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
@@ -79,13 +83,7 @@ export function EnTeteStatistiques({
       <div className="relative mx-auto flex h-full w-full max-w-[430px] flex-col">
         <div className="flex items-center justify-between px-[22px] pt-[18px]">
           <img src={logoCorail} alt="Palanote" className="h-[30px] w-auto" />
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="-mr-[9px] flex h-10 w-10 items-center justify-center rounded-full"
-          >
-            <Bell className="h-[21px] w-[21px] text-white" strokeWidth={2} aria-hidden="true" />
-          </button>
+          <BoutonCloche nonLues={nonLues} onClick={() => navigate({ to: "/notifications" })} className="-mr-[9px] h-10 w-10" />
         </div>
         <div className="mt-auto px-[22px] pb-[16px]">
           {certifications.length > 0 && (
@@ -225,6 +223,62 @@ export function BandeauProposition({ propositions }: { propositions: PlongeeACon
               + {autres} autre{autres > 1 ? "s" : ""} proposition{autres > 1 ? "s" : ""} dans Amis
             </span>
           )}
+        </span>
+        <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+// La cloche : une pastille corail quand il y a du nouveau (sorties, fiches à compléter, tampons)
+export function BoutonCloche({ nonLues, onClick, className = "" }: { nonLues: number; onClick: () => void; className?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={nonLues > 0 ? `Notifications : ${nonLues} nouvelle${nonLues > 1 ? "s" : ""}` : "Notifications"}
+      className={`relative flex items-center justify-center rounded-full ${className}`}
+    >
+      <Bell className="h-[21px] w-[21px] text-white" strokeWidth={2} aria-hidden="true" />
+      {nonLues > 0 && (
+        <span className="absolute right-[3px] top-[3px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-[#0E3D72] bg-[#FF8A75] px-[3px] text-[10px] font-bold leading-none text-white">
+          {nonLues > 9 ? "9+" : nonLues}
+        </span>
+      )}
+    </button>
+  );
+}
+
+// Sortie club : la prochaine, ou celle dont la fiche attend d'être complétée
+export function BandeauSortie({ sorties }: { sorties: SortieResume[] }) {
+  const navigate = useNavigate();
+  const s = sorties.find((x) => x.a_completer) ?? sorties.find((x) => x.statut === "prevue");
+  if (!s) return null;
+  const aCompleter = Boolean(s.a_completer);
+  return (
+    <div className="px-[22px] pt-[22px]">
+      <button
+        type="button"
+        onClick={() =>
+          aCompleter ? navigate({ to: "/nouvelle-plongee", search: { sortie: s.id } }) : navigate({ to: "/sortie", search: { id: s.id } })
+        }
+        style={{ borderRadius: GALETS[2] }}
+        className={`relative flex w-full items-center gap-3 border px-[15px] py-[13px] text-left shadow-[0_4px_14px_#123A6309] ${
+          aCompleter ? "border-[#B8E4D8] bg-[#E2F8EF]" : "border-[#BFE6F5] bg-[#E3F4FC]"
+        }`}
+      >
+        <span style={{ borderRadius: GOUTTE }} className="flex h-[44px] w-[44px] shrink-0 items-center justify-center bg-[#0F3D70]">
+          {aCompleter ? (
+            <PenLine className="h-[20px] w-[20px] text-white" strokeWidth={2.2} aria-hidden="true" />
+          ) : (
+            <Anchor className="h-[20px] w-[20px] text-white" strokeWidth={2.2} aria-hidden="true" />
+          )}
+        </span>
+        <span className="flex min-w-0 flex-grow flex-col gap-px">
+          <span className="text-[14.5px] font-bold text-[#123A63]">{aCompleter ? "Ta plongée est prête à compléter" : `Sortie ${s.date_texte ?? ""}`}</span>
+          <span className="truncate text-[12.5px] text-[#3F5B76]">
+            {[aCompleter ? s.date_texte : heureCourte(s.heure), s.site, s.centre].filter(Boolean).join(" · ")}
+          </span>
         </span>
         <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
       </button>

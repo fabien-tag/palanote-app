@@ -1,3 +1,6 @@
+import { lierPlongeeSortie, preremplirSortie, type Preremplissage, type TamponInfos } from "@/lib/club";
+import { TamponNumerique } from "@/components/club/Ui";
+import { garderLienSortie } from "@/lib/hors-ligne";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
@@ -42,9 +45,10 @@ export const Route = createFileRoute("/nouvelle-plongee")({
   // ?id=… : ouvre une plongée existante en lecture (page détail), sinon nouvelle fiche.
   // ?site=…&lieu=…&coords=… : nouvelle plongée préremplie sur un spot (depuis la carte).
   // ?brouillon=1 : reprend ce qui a été saisi dans la saisie express (« Ajouter les détails »).
-  validateSearch: (search: Record<string, unknown>): { id?: string; site?: string; lieu?: string; coords?: string; brouillon?: string } => {
-    const r: { id?: string; site?: string; lieu?: string; coords?: string; brouillon?: string } = {};
-    for (const k of ["id", "site", "lieu", "coords", "brouillon"] as const) {
+  // ?sortie=… : plongée d'une sortie club, préremplie par le directeur de plongée (parcours 15).
+  validateSearch: (search: Record<string, unknown>): { id?: string; site?: string; lieu?: string; coords?: string; brouillon?: string; sortie?: string } => {
+    const r: { id?: string; site?: string; lieu?: string; coords?: string; brouillon?: string; sortie?: string } = {};
+    for (const k of ["id", "site", "lieu", "coords", "brouillon", "sortie"] as const) {
       const v = search[k];
       if (typeof v === "string" && v) r[k] = v;
     }
@@ -387,7 +391,7 @@ const COULEURS_BINOMES = [
 
 function NouvellePlongee() {
   const navigate = useNavigate();
-  const { id: idExistant, site: siteDepart, lieu: lieuDepart, coords: coordsDepart, brouillon: avecBrouillon } = Route.useSearch();
+  const { id: idExistant, site: siteDepart, lieu: lieuDepart, coords: coordsDepart, brouillon: avecBrouillon, sortie: idSortie } = Route.useSearch();
   const existante = Boolean(idExistant);
   // Brouillon de la saisie express, repris une seule fois
   const [brouillon] = useState(() => (!idExistant && avecBrouillon ? reprendreBrouillon() : null));
@@ -432,6 +436,48 @@ function NouvellePlongee() {
 
   const [idPlongee] = useState(() => idExistant ?? crypto.randomUUID());
 
+  // Sortie club : ce que le DP a déjà rempli (site, date, durée, eau, bateau, palanquée)
+  const [sortieClub, setSortieClub] = useState<Preremplissage | null>(null);
+  // Tampon numérique posé par le DP (ou retiré si la plongée a été modifiée)
+  const [tampon, setTampon] = useState<{ le: string | null; infos: TamponInfos | null } | null>(null);
+  useEffect(() => {
+    if (!idSortie || idExistant) return;
+    let actif = true;
+    void preremplirSortie(idSortie)
+      .then((pr) => {
+        if (!actif) return;
+        // Déjà complétée : on ouvre la fiche existante
+        if (pr.dive_id) {
+          void navigate({ to: "/nouvelle-plongee", search: { id: pr.dive_id }, replace: true });
+          return;
+        }
+        setSortieClub(pr);
+        setPlongee((p) => ({
+          ...p,
+          date: pr.dive_date ?? p.date,
+          immersion: pr.start_time ? pr.start_time.slice(0, 5) : p.immersion,
+          siteNom: pr.site_name ?? p.siteNom,
+          siteLieu: pr.site_location ?? p.siteLieu,
+          siteCoords: pr.site_coords ?? p.siteCoords,
+          duree: pr.duration_min ? minutesEnTexte(pr.duration_min) : p.duree,
+          tempFond: pr.temp_bottom_c !== null && pr.temp_bottom_c !== undefined ? String(pr.temp_bottom_c) : p.tempFond,
+          visibilite: pr.visibility_m ? String(pr.visibility_m) : p.visibilite,
+          club: pr.club_name ?? p.club,
+          bateau: pr.boat_name ?? p.bateau,
+          directeur: pr.dive_leader ?? p.directeur,
+          encadrant: pr.guide_name ?? p.encadrant,
+          binomes: pr.buddies.length > 0 ? pr.buddies : p.binomes,
+        }));
+      })
+      .catch((e) => {
+        console.error(e);
+        if (actif) setMessage({ type: "erreur", texte: "La sortie n'a pas pu être chargée : remplis ta plongée à la main." });
+      });
+    return () => {
+      actif = false;
+    };
+  }, [idSortie, idExistant]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Page détail : charge la plongée enregistrée.
   useEffect(() => {
     if (!idExistant) return;
@@ -442,6 +488,10 @@ function NouvellePlongee() {
         if (await utilisateurConnecte()) {
           const ligne = await chargerPlongee(idExistant);
           if (ligne) fiche = depuisLigne(ligne);
+          if (ligne && actif) {
+            const t = ligne as LignePlongee & { tampon_le?: string | null; tampon_infos?: TamponInfos | null };
+            setTampon(t.tampon_le || t.tampon_infos ? { le: t.tampon_le ?? null, infos: t.tampon_infos ?? null } : null);
+          }
           if (fiche) {
             // Binômes Palanote déjà identifiés : on les retire des noms saisis pour ne pas les afficher deux fois.
             const [ids, liste] = await Promise.all([binomesIdentifies(idExistant).catch(() => []), mesBinomes().catch(() => [])]);
@@ -603,6 +653,7 @@ function NouvellePlongee() {
         const plusTard = async () => {
           if (photosRetirees.length > 0) throw new Error("il faut du réseau pour retirer des photos");
           await garderPourPlusTard(complete, identifies, photos.map((p) => p.fichier).filter((f): f is File => Boolean(f)));
+          if (idSortie) garderLienSortie(idPlongee, idSortie);
           annoncerSurAccueil(MESSAGE_EN_ATTENTE);
           navigate({ to: "/carnet" });
         };
@@ -630,6 +681,17 @@ function NouvellePlongee() {
             await identifierBinomes(idPlongee, identifies);
           } catch (e) {
             console.error("Identification des binômes impossible", e);
+          }
+        }
+        // Plongée d'une sortie club : rattachée à la sortie (et tamponnée si le DP l'a déjà fait)
+        if (idSortie && !existante) {
+          try {
+            const r = await lierPlongeeSortie(idSortie, idPlongee);
+            annoncerSurAccueil(r.tamponnee ? "Ta plongée est enregistrée et tamponnée par ton club" : "Ta plongée est enregistrée : le DP va poser le tampon");
+            navigate({ to: "/carnet" });
+            return;
+          } catch (e) {
+            console.error("Rattachement à la sortie impossible", e);
           }
         }
       } else {
@@ -720,6 +782,42 @@ function NouvellePlongee() {
               <span className="flex-1 text-[14px] font-semibold">Les photos de la palanquée</span>
               <ChevronRight className="h-[16px] w-[16px] text-[#9DB0C0]" aria-hidden="true" />
             </button>
+          </div>
+        )}
+
+        {/* Tampon numérique du club */}
+        {existante && !chargement && tampon?.le && tampon.infos && (
+          <div className="mx-[22px] mt-[12px] flex items-center gap-[14px] galet border border-[#FFD3C8] bg-[#FFF3EF] p-[14px]">
+            <TamponNumerique
+              centre={tampon.infos.centre ?? "Club"}
+              ville={tampon.infos.ville}
+              dp={tampon.infos.dp}
+              niveau={tampon.infos.dp_niveau}
+              date={tampon.infos.date_sortie ?? tampon.le}
+              verifie={tampon.infos.centre_verifie}
+              taille={92}
+            />
+            <p className="text-[13.5px] leading-snug text-[#123A63]">
+              <b>Plongée validée</b> par {tampon.infos.dp ?? "le directeur de plongée"}
+              {tampon.infos.dp_niveau ? ` (${tampon.infos.dp_niveau})` : ""}, {tampon.infos.centre}.
+              {edition && (
+                <span className="block pt-[4px] text-[12.5px] text-[#8A5A10]">
+                  Changer la date, le site, la profondeur ou la durée retire le tampon.
+                </span>
+              )}
+            </p>
+          </div>
+        )}
+        {existante && !edition && !chargement && !tampon?.le && tampon?.infos?.retire_le && (
+          <p className="mx-[22px] mt-[12px] galet-petit bg-[#EEF2F6] px-[13px] py-[9px] text-[12.5px] text-[#5B7189]">
+            Tampon de {tampon.infos.centre} retiré : la plongée a été modifiée après sa validation.
+          </p>
+        )}
+        {sortieClub && !existante && (
+          <div className="relative mx-[22px] mt-[12px] galet-b border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[13px] text-[13.5px] leading-snug text-[#123A63]">
+            <b>Préremplie par ta sortie</b> avec {sortieClub.club_name ?? "ton club"}
+            {sortieClub.palanquee ? ` (palanquée ${sortieClub.palanquee})` : ""}. Ajoute ta profondeur, ton air et ta note
+            {sortieClub.statut === "validee" ? " : le tampon du DP s'y posera tout seul." : "."}
           </div>
         )}
 

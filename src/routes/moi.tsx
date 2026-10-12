@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
+import { Anchor, BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
@@ -9,6 +9,7 @@ import { libelleRole, minutesAvant } from "@/lib/profil-plongeur";
 import { initiales, mesBinomes } from "@/lib/amis";
 import { estAdmin } from "@/lib/suivi";
 import { chargerForfait, resumeForfait, type Forfait } from "@/lib/forfait";
+import { mesCentres } from "@/lib/club";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { chargerProfil, exporterUDDF, type Profil } from "@/lib/moi";
 import { chargerNumeroDepart, chargerPlongees, dureeEnMinutes, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
@@ -45,6 +46,7 @@ function Moi() {
   const [mesPlongees, setMesPlongees] = useState<CartePlongee[]>([]);
   const [admin, setAdmin] = useState(false);
   const [forfait, setForfait] = useState<Forfait | null>(null);
+  const [monCentre, setMonCentre] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [exportEnCours, setExportEnCours] = useState(false);
@@ -73,6 +75,9 @@ function Moi() {
       setMesPlongees(liste);
       void estAdmin().then((a) => actif && setAdmin(a));
       void chargerForfait().then((f) => actif && setForfait(f));
+      void mesCentres()
+        .then((c) => actif && setMonCentre(c[0]?.nom ?? null))
+        .catch(() => undefined);
     })();
     return () => {
       actif = false;
@@ -182,6 +187,16 @@ function Moi() {
                 </span>
                 <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#3F5B76]" aria-hidden="true" />
               </button>
+
+              <TitreSection>Club</TitreSection>
+              <Bloc>
+                <Ligne
+                  icone={Anchor}
+                  label="Espace club"
+                  valeur={monCentre ?? (["encadrant", "directeur", "centre"].includes(profil?.role ?? "") ? "Mes sorties" : "Je suis DP")}
+                  onClick={() => navigate({ to: "/club" })}
+                />
+              </Bloc>
 
               <TitreSection>Mon carnet</TitreSection>
               <Bloc>
