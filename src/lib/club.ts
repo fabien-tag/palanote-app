@@ -24,6 +24,7 @@ export type SortieResume = {
   centre: string;
   centre_id?: string;
   nb_inscrits?: number;
+  nb_prevus?: number;
   nb_completees?: number;
   dp?: string;
   dive_id?: string | null;
@@ -32,8 +33,10 @@ export type SortieResume = {
 };
 
 export type Participant = {
-  id: string;
+  id: string | null; // vide = prénom noté à l'avance par le DP, pas encore rattaché à un compte
   prenom: string;
+  prevu?: boolean;
+  nom_prevu?: string | null;
   niveau: string | null;
   club: string | null;
   participant_id: string;
@@ -68,7 +71,11 @@ export type DetailSortie = {
   moi: { participant_id: string; dive_id: string | null; palanquee_id: string | null; tamponne_le: string | null; exclu_tampon: boolean } | null;
   palanquees: { id: string; numero: number; guide_id: string | null }[];
   participants: Participant[];
+  noms_libres?: NomLibre[] | null;
 };
+
+// Un prénom préparé par le DP, que le plongeur peut prendre en scannant le QR
+export type NomLibre = { id: string; nom: string; palanquee: number | null; le_mien?: boolean };
 
 export type ApercuSortie = {
   etat: "ouverte" | "validee" | "annulee" | "introuvable";
@@ -86,6 +93,7 @@ export type ApercuSortie = {
   dp?: string;
   nb_inscrits?: number;
   deja_inscrit?: boolean;
+  noms_libres?: NomLibre[] | null;
 };
 
 export type Preremplissage = {
@@ -201,6 +209,9 @@ export const terminerSortie = (id: string, duree: number, temp: number | null, v
   rpc<null>("terminer_sortie", { p_id: id, p_duree: duree, p_temp: temp, p_visibilite: visibilite });
 export const poserTampon = (id: string, exclus: string[]) => rpc<{ tamponnes: number }>("poser_tampon", { p_id: id, p_exclus: exclus });
 export const annulerSortie = (id: string) => rpc<null>("annuler_sortie", { p_id: id });
+// Prénoms préparés à l'avance : [["Léa","Paul"],["Sophie"]] = palanquée 1, palanquée 2
+export const ajouterNomsPrevus = (sortie: string, noms: string[][]) => rpc<number>("ajouter_noms_prevus", { p_sortie: sortie, p_noms: noms });
+export const ajouterNomPrevu = (palanquee: string, nom: string) => rpc<string>("ajouter_nom_prevu", { p_palanquee: palanquee, p_nom: nom });
 
 // Le QR code et le lien envoyé mènent au même endroit ; « via » sert juste à savoir comment chacun s'est inscrit.
 export function lienSortie(jeton: string, via?: "lien") {
@@ -209,7 +220,8 @@ export function lienSortie(jeton: string, via?: "lien") {
 
 // ---------- Côté plongeur ----------
 export const voirSortie = (jeton: string) => rpc<ApercuSortie>("voir_sortie", { p_jeton: jeton });
-export const rejoindreSortie = (jeton: string, via: "qr" | "lien" = "qr") => rpc<{ id: string; rejoint: boolean }>("rejoindre_sortie", { p_jeton: jeton, p_via: via });
+export const rejoindreSortie = (jeton: string, via: "qr" | "lien" = "qr", place: string | null = null) =>
+  rpc<{ id: string; rejoint: boolean; nom_prevu: string | null; palanquee: number | null }>("rejoindre_sortie", { p_jeton: jeton, p_via: via, p_place: place });
 export const preremplirSortie = (id: string) => rpc<Preremplissage>("preremplir_sortie", { p_id: id });
 export const lierPlongeeSortie = (sortie: string, dive: string) => rpc<{ tamponnee: boolean }>("lier_plongee_sortie", { p_sortie: sortie, p_dive: dive });
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ChampTexte, detailErreur, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
-import { creerSortie } from "@/lib/club";
+import { ajouterNomsPrevus, creerSortie } from "@/lib/club";
 import { localiserSite } from "@/lib/numerisation";
 
 // Préparer une sortie (parcours 15, écran 3)
@@ -31,6 +31,23 @@ function NouvelleSortie() {
   const [profondeur, setProfondeur] = useState("");
   const [consignes, setConsignes] = useState("");
   const [palanquees, setPalanquees] = useState(2);
+  // Prénoms préparés pour chaque palanquée (facultatif) : rattachés au plongeur quand il scanne le QR
+  const [noms, setNoms] = useState<string[][]>([[], []]);
+  const [saisie, setSaisie] = useState<string[]>(["", ""]);
+  const changerNombre = (n: number) => {
+    setPalanquees(n);
+    setNoms((l) => Array.from({ length: n }, (_, i) => l[i] ?? []));
+    setSaisie((l) => Array.from({ length: n }, (_, i) => l[i] ?? ""));
+  };
+  const ajouterPrenoms = (i: number) => {
+    const nouveaux = (saisie[i] ?? "")
+      .split(/[,;\n]/)
+      .map((x) => x.trim())
+      .filter((x) => x.length > 0 && x.length <= 60);
+    if (nouveaux.length === 0) return;
+    setNoms((l) => l.map((x, j) => (j === i ? [...x, ...nouveaux] : x)));
+    setSaisie((l) => l.map((x, j) => (j === i ? "" : x)));
+  };
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
 
@@ -57,6 +74,9 @@ function NouvelleSortie() {
         consignes,
         palanquees,
       });
+      // Prénoms en cours de frappe : ajoutés aussi
+      const complets = noms.map((l, i) => [...l, ...(saisie[i] ?? "").split(/[,;\n]/).map((x) => x.trim()).filter(Boolean)]);
+      if (complets.some((l) => l.length > 0)) await ajouterNomsPrevus(r.id, complets);
       navigate({ to: "/club/sortie", search: { id: r.id }, replace: true });
     } catch (e) {
       console.error(e);
@@ -111,7 +131,7 @@ function NouvelleSortie() {
           <button
             type="button"
             aria-label="Une palanquée de moins"
-            onClick={() => setPalanquees((n) => Math.max(1, n - 1))}
+            onClick={() => changerNombre(Math.max(1, palanquees - 1))}
             className="flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#E3EDF6]"
           >
             <Minus className="h-[16px] w-[16px]" strokeWidth={2.6} />
@@ -119,12 +139,52 @@ function NouvelleSortie() {
           <button
             type="button"
             aria-label="Une palanquée de plus"
-            onClick={() => setPalanquees((n) => Math.min(12, n + 1))}
+            onClick={() => changerNombre(Math.min(12, palanquees + 1))}
             className="flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#E3EDF6]"
           >
             <Plus className="h-[16px] w-[16px]" strokeWidth={2.6} />
           </button>
         </span>
+      </div>
+
+      <p className="pt-[12px] text-[12.5px] leading-snug text-[#5B7189]">
+        Tu connais déjà ton monde ? Note les prénoms : en scannant le QR, chacun retrouve sa place et sa palanquée. Facultatif.
+      </p>
+      <div className="flex flex-col gap-[8px] pt-[10px]">
+        {noms.map((liste, i) => (
+          <div key={i} className="galet-b border border-[#E4EBF1] bg-white px-[12px] py-[10px]">
+            <p className="pb-[6px] text-[13px] font-bold">Palanquée {i + 1}</p>
+            <div className="flex flex-wrap items-center gap-[6px]">
+              {liste.map((nom, k) => (
+                <span key={`${nom}-${k}`} className="flex h-[30px] items-center gap-[4px] rounded-[15px] bg-[#E3F2FB] pl-[11px] pr-[6px] text-[13px] font-semibold text-[#123A63]">
+                  {nom}
+                  <button
+                    type="button"
+                    aria-label={`Retirer ${nom}`}
+                    onClick={() => setNoms((l) => l.map((x, j) => (j === i ? x.filter((_, m) => m !== k) : x)))}
+                    className="flex h-[20px] w-[20px] items-center justify-center rounded-full text-[#5B7189]"
+                  >
+                    <X className="h-[12px] w-[12px]" strokeWidth={2.6} />
+                  </button>
+                </span>
+              ))}
+              <input
+                value={saisie[i] ?? ""}
+                onChange={(e) => setSaisie((l) => l.map((x, j) => (j === i ? e.target.value : x)))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === ",") {
+                    e.preventDefault();
+                    ajouterPrenoms(i);
+                  }
+                }}
+                onBlur={() => ajouterPrenoms(i)}
+                placeholder={liste.length ? "+ prénom" : "Léa, Paul…"}
+                aria-label={`Prénoms de la palanquée ${i + 1}`}
+                className="h-[30px] min-w-[90px] flex-1 bg-transparent text-[14px] outline-none placeholder:text-[#B5C4D1]"
+              />
+            </div>
+          </div>
+        ))}
       </div>
 
       <Titre>Consignes</Titre>

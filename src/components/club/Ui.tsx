@@ -48,11 +48,12 @@ export function Titre({ children, aide }: { children: ReactNode; aide?: ReactNod
   );
 }
 
-export function Avatar({ id, prenom, taille = 38 }: { id: string; prenom: string; taille?: number }) {
+// prevu : prénom noté par le DP, pas encore rattaché à un compte (avatar en pointillés)
+export function Avatar({ id, prenom, taille = 38, prevu = false }: { id: string | null; prenom: string; taille?: number; prevu?: boolean | undefined }) {
   return (
     <span
-      className="flex shrink-0 items-center justify-center rounded-full font-bold text-[#0F3D70]"
-      style={{ background: couleurAvatar(id), width: taille, height: taille, fontSize: Math.round(taille * 0.36) }}
+      className={`flex shrink-0 items-center justify-center rounded-full font-bold ${prevu ? "border-[1.5px] border-dashed border-[#9DB0C0] text-[#7D93A8]" : "text-[#0F3D70]"}`}
+      style={{ background: prevu ? "#F4F8FB" : couleurAvatar(id ?? prenom), width: taille, height: taille, fontSize: Math.round(taille * 0.36) }}
       aria-hidden="true"
     >
       {initiales(prenom)}
@@ -86,7 +87,7 @@ export function BlocDate({ date }: { date: string }) {
 
 export function LigneSortie({ s, onClick, pourDp = true }: { s: SortieResume; onClick: () => void; pourDp?: boolean }) {
   const details = pourDp
-    ? `${s.nb_inscrits ?? 0} plongeur${(s.nb_inscrits ?? 0) > 1 ? "s" : ""}${s.statut !== "prevue" && s.nb_inscrits ? ` · ${s.nb_completees ?? 0} fiche${(s.nb_completees ?? 0) > 1 ? "s" : ""} complétée${(s.nb_completees ?? 0) > 1 ? "s" : ""}` : ""}`
+    ? `${s.nb_inscrits ?? 0} plongeur${(s.nb_inscrits ?? 0) > 1 ? "s" : ""}${s.statut === "prevue" && s.nb_prevus ? ` · ${s.nb_prevus} prénom${s.nb_prevus > 1 ? "s" : ""} en attente` : ""}${s.statut !== "prevue" && s.nb_inscrits ? ` · ${s.nb_completees ?? 0} fiche${(s.nb_completees ?? 0) > 1 ? "s" : ""} complétée${(s.nb_completees ?? 0) > 1 ? "s" : ""}` : ""}`
     : [s.centre, s.dp ? `DP ${s.dp}` : null].filter(Boolean).join(" · ");
   return (
     <button

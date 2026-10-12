@@ -6,6 +6,7 @@ import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
 import { Avatar, ChampTexte, detailErreur, Etapes, Feuille, MessageErreur, PageClub, PastilleStatut, TamponNumerique, Titre } from "@/components/club/Ui";
 import {
+  ajouterNomPrevu,
   ajouterPalanquee,
   ajouterParticipant,
   annulerSortie,
@@ -50,6 +51,8 @@ function SortieDp() {
   const [vientDeTamponner, setVientDeTamponner] = useState(false);
   const [partage, setPartage] = useState<string | null>(null);
   const [annuler, setAnnuler] = useState(false);
+  // Prénom en cours de saisie dans une palanquée (préparer la palanquée à l'avance)
+  const [nouveauNom, setNouveauNom] = useState<{ palanquee: string; nom: string } | null>(null);
 
   const charger = useCallback(async () => {
     if (!id) return;
@@ -121,6 +124,16 @@ function SortieDp() {
   const sansPalanquee = participants.filter((p) => !p.palanquee_id || !s?.palanquees.some((x) => x.id === p.palanquee_id));
   const aTamponner = participants.filter((p) => !exclus.includes(p.participant_id)).length;
   const completes = participants.filter((p) => p.complete).length;
+  const inscrits = participants.filter((p) => !p.prevu).length;
+  const prevus = participants.length - inscrits;
+  const ajouterNom = (palanquee: string) => {
+    const nom = nouveauNom?.palanquee === palanquee ? nouveauNom.nom.trim() : "";
+    if (!nom) return setNouveauNom(null);
+    void agir(async () => {
+      await ajouterNomPrevu(palanquee, nom);
+      setNouveauNom({ palanquee, nom: "" });
+    }, "Le prénom n'a pas pu être ajouté.");
+  };
 
   const bas =
     s && s.statut === "prevue" ? (
@@ -178,7 +191,7 @@ function SortieDp() {
           {/* 1. Inscrire */}
           {s.statut === "prevue" && (
             <>
-              <Titre aide={`${participants.length} inscrit${participants.length > 1 ? "s" : ""}`}>Ajouter des plongeurs</Titre>
+              <Titre aide={`${inscrits} inscrit${inscrits > 1 ? "s" : ""}${prevus > 0 ? ` · ${prevus} prénom${prevus > 1 ? "s" : ""} en attente` : ""}`}>Ajouter des plongeurs</Titre>
               <div className="grid grid-cols-2 gap-[10px]">
                 <button
                   type="button"
@@ -230,7 +243,7 @@ function SortieDp() {
                           disabled={enCours}
                           onClick={() =>
                             void agir(async () => {
-                              await ajouterParticipant(s.id, t.id);
+                              await ajouterParticipant(s.id, t.id!);
                               setQ("");
                             }, "Ce plongeur n'a pas pu être ajouté.")
                           }
@@ -251,7 +264,10 @@ function SortieDp() {
               )}
 
               {/* Palanquées */}
-              <Titre aide="touche un nom pour le changer de palanquée">Palanquées</Titre>
+              <Titre aide="prépare-les à l'avance">Palanquées</Titre>
+              <p className="-mt-[4px] pb-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+                Note les prénoms dès maintenant : quand un plongeur scanne le QR, il retrouve sa place et rejoint sa palanquée.
+              </p>
               <div className="flex flex-col gap-[10px]">
                 {s.palanquees.map((pal) => {
                   const membres = participants.filter((p) => p.palanquee_id === pal.id);
@@ -265,8 +281,42 @@ function SortieDp() {
                         {membres.map((p) => (
                           <LigneParticipant key={p.participant_id} p={p} s={s} onAgir={agir} desactive={enCours} />
                         ))}
-                        {membres.length === 0 && <p className="text-[12.5px] text-[#B5C4D1]">Personne pour l'instant</p>}
+                        {membres.length === 0 && nouveauNom?.palanquee !== pal.id && <p className="text-[12.5px] text-[#B5C4D1]">Personne pour l'instant</p>}
                       </div>
+                      {nouveauNom?.palanquee === pal.id ? (
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            ajouterNom(pal.id);
+                          }}
+                          className="mt-[8px] flex items-center gap-[8px]"
+                        >
+                          <input
+                            autoFocus
+                            value={nouveauNom.nom}
+                            onChange={(e) => setNouveauNom({ palanquee: pal.id, nom: e.target.value })}
+                            placeholder="Prénom"
+                            aria-label={`Prénom à ajouter à la palanquée ${pal.numero}`}
+                            maxLength={60}
+                            className="h-[38px] min-w-0 flex-1 rounded-[12px] border-[1.5px] border-[#E4EBF1] bg-[#F7FBFE] px-[12px] text-[14px] outline-none focus:border-[#57D4F5]"
+                          />
+                          <button type="submit" disabled={enCours} className="h-[38px] rounded-[19px] bg-[#3DEFBE] px-[14px] text-[12.5px] font-bold text-[#0B3B63] disabled:opacity-60">
+                            Ajouter
+                          </button>
+                          <button type="button" aria-label="Fermer" onClick={() => setNouveauNom(null)} className="text-[#9DB0C0]">
+                            <X className="h-[16px] w-[16px]" />
+                          </button>
+                        </form>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setNouveauNom({ palanquee: pal.id, nom: "" })}
+                          className="mt-[6px] flex items-center gap-[5px] py-[4px] text-[12.5px] font-bold text-[#1176A8]"
+                        >
+                          <Plus className="h-[13px] w-[13px]" strokeWidth={2.8} aria-hidden="true" />
+                          Ajouter un prénom
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -309,11 +359,11 @@ function SortieDp() {
                       onClick={() => setExclus((x) => (coche ? [...x, p.participant_id] : x.filter((y) => y !== p.participant_id)))}
                       className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px] text-left"
                     >
-                      <Avatar id={p.id} prenom={p.prenom} taille={34} />
+                      <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[14.5px] font-bold">{p.prenom}</span>
                         <span className={`block truncate text-[12px] ${p.complete ? "text-[#14805F]" : "text-[#9DB0C0]"}`}>
-                          {p.complete ? "Fiche complétée" : "Fiche pas encore complétée"}
+                          {p.complete ? "Fiche complétée" : p.prevu ? "Pas encore sur Palanote : le tampon l'attendra" : "Fiche pas encore complétée"}
                         </span>
                       </span>
                       <span className={`flex h-[26px] w-[26px] items-center justify-center rounded-[8px] ${coche ? "bg-[#FF8A75]" : "border-2 border-[#D5E1EC] bg-white"}`}>
@@ -350,10 +400,10 @@ function SortieDp() {
               <div className="flex flex-col gap-[6px]">
                 {participants.map((p) => (
                   <div key={p.participant_id} className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px]">
-                    <Avatar id={p.id} prenom={p.prenom} taille={34} />
+                    <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
                     <span className="min-w-0 flex-1 truncate text-[14.5px] font-bold">{p.prenom}</span>
                     <span className={`text-[12px] font-semibold ${p.exclu_tampon ? "text-[#9DB0C0]" : p.complete ? "text-[#D9573F]" : "text-[#8A5A10]"}`}>
-                      {p.exclu_tampon ? "Sans tampon" : p.complete ? "Tamponnée" : "En attente de sa fiche"}
+                      {p.exclu_tampon ? "Sans tampon" : p.complete ? "Tamponnée" : p.prevu ? "Pas encore sur Palanote" : "En attente de sa fiche"}
                     </span>
                   </div>
                 ))}
@@ -399,14 +449,19 @@ function SortieDp() {
           </div>
           <div className="mt-[18px] flex max-w-[360px] flex-wrap justify-center gap-[6px]" aria-live="polite">
             {participants.map((p) => (
-              <span key={p.participant_id} className="flex h-[32px] items-center gap-[6px] rounded-[16px] bg-white pl-[4px] pr-[11px] text-[13px] font-semibold shadow-sm">
-                <Avatar id={p.id} prenom={p.prenom} taille={24} />
+              <span
+                key={p.participant_id}
+                className={`flex h-[32px] items-center gap-[6px] rounded-[16px] pl-[4px] pr-[11px] text-[13px] font-semibold ${p.prevu ? "border border-dashed border-[#BFD7E8] text-[#9DB0C0]" : "bg-white shadow-sm"}`}
+              >
+                <Avatar id={p.id} prenom={p.prenom} taille={24} prevu={p.prevu} />
                 {p.prenom}
+                {!p.prevu && p.nom_prevu && <Check className="h-[13px] w-[13px] text-[#14805F]" strokeWidth={3} aria-label="a pris sa place" />}
               </span>
             ))}
           </div>
           <p className="pt-[12px] text-[13px] font-bold text-[#14805F]">
-            {participants.length} inscrit{participants.length > 1 ? "s" : ""}
+            {inscrits} inscrit{inscrits > 1 ? "s" : ""}
+            {prevus > 0 && <span className="font-semibold text-[#9DB0C0]"> · {prevus} en attente</span>}
           </p>
           <div className="flex-grow" />
           <p className="max-w-[340px] text-center text-[12px] leading-snug text-[#9DB0C0]">
@@ -493,11 +548,15 @@ function LigneParticipant({
 }) {
   return (
     <div className="flex items-center gap-[10px]">
-      <Avatar id={p.id} prenom={p.prenom} taille={32} />
+      <Avatar id={p.id} prenom={p.prenom} taille={32} prevu={p.prevu} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[14px] font-bold">{p.prenom}</span>
+        <span className={`block truncate text-[14px] font-bold ${p.prevu ? "text-[#7D93A8]" : ""}`}>{p.prenom}</span>
         <span className="block truncate text-[11.5px] text-[#9DB0C0]">
-          {[p.niveau, p.via === "qr" ? "QR code" : p.via === "lien" ? "par le lien" : "ajouté par toi"].filter(Boolean).join(" · ")}
+          {p.prevu
+            ? "en attente de son scan"
+            : [p.niveau, p.via === "qr" ? (p.nom_prevu ? "a pris sa place (QR)" : "QR code") : p.via === "lien" ? (p.nom_prevu ? "a pris sa place (lien)" : "par le lien") : "ajouté par toi"]
+                .filter(Boolean)
+                .join(" · ")}
         </span>
       </span>
       <select

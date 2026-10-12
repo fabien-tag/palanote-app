@@ -39,6 +39,8 @@ function PageSortie() {
   const [detail, setDetail] = useState<DetailSortie | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);
+  // « Qui es-tu ? » : la place préparée par le DP (null = je ne suis pas dans la liste)
+  const [place, setPlace] = useState<string | null | undefined>(undefined);
 
   const chargerDetail = async (idSortie: string) => {
     try {
@@ -62,6 +64,9 @@ function PageSortie() {
         // Déjà inscrit : on montre directement sa sortie
         if (a.deja_inscrit && a.id) return void chargerDetail(a.id);
         setApercu(a);
+        // Le prénom du compte correspond à une place préparée : présélectionnée
+        const mien = (a.noms_libres ?? []).filter((n) => n.le_mien);
+        if (mien.length === 1) setPlace(mien[0]!.id);
       } catch (e) {
         if (actif) setErreur(detailErreur(e, "La sortie n'a pas pu être chargée."));
       }
@@ -76,7 +81,7 @@ function PageSortie() {
     setEnCours(true);
     setErreur(null);
     try {
-      const r = await rejoindreSortie(code, via === "lien" ? "lien" : "qr");
+      const r = await rejoindreSortie(code, via === "lien" ? "lien" : "qr", place ?? null);
       await chargerDetail(r.id);
       setApercu(null);
     } catch (e) {
@@ -94,11 +99,14 @@ function PageSortie() {
   // ---------- Invitation (QR ou lien) ----------
   if (!detail) {
     const a = apercu;
-    const ouverte = a?.etat === "ouverte";
+    const libres = a?.noms_libres ?? [];
+    // Sortie déjà tamponnée : on peut encore prendre la place que le DP avait préparée
+    const ouverte = a?.etat === "ouverte" || (a?.etat === "validee" && libres.length > 0);
+    const choixRequis = libres.length > 0 && place === undefined;
     return (
       <PageClub titre="Sortie de plongée" onRetour={() => navigate({ to: connecte ? "/carnet" : "/" })}>
         <MessageErreur texte={erreur} />
-        {a && a.etat !== "ouverte" && (
+        {a && !ouverte && (
           <div className="mt-[16px] galet-c border border-[#FFD3C8] bg-[#FFF3EF] p-[16px]">
             <p className="text-[15px] font-bold">
               {a.etat === "annulee" ? "Cette sortie est annulée" : a.etat === "validee" ? "Cette sortie est terminée" : "Sortie introuvable"}
@@ -137,6 +145,44 @@ function PageSortie() {
               <Meduse className="-right-[6px] -top-[14px]" />
             </div>
 
+            {/* Qui es-tu ? Les prénoms préparés par le DP */}
+            {connecte && libres.length > 0 && (
+              <div className="pt-[20px]">
+                <p className="text-[16px] font-bold">Qui es-tu ?</p>
+                <p className="pb-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+                  {a.dp ?? "Le DP"} a déjà préparé les palanquées. Choisis ton prénom : tu rejoins directement la tienne.
+                </p>
+                <div className="flex flex-wrap gap-[8px]" role="radiogroup" aria-label="Ton prénom dans les palanquées">
+                  {libres.map((n) => (
+                    <button
+                      key={n.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={place === n.id}
+                      onClick={() => setPlace(n.id)}
+                      className={`flex h-[40px] items-center gap-[7px] rounded-[20px] px-[14px] text-[14px] font-bold ${
+                        place === n.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#123A63]"
+                      }`}
+                    >
+                      {n.nom}
+                      {n.palanquee && <span className={`text-[11.5px] font-semibold ${place === n.id ? "text-white/70" : "text-[#9DB0C0]"}`}>P{n.palanquee}</span>}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={place === null}
+                    onClick={() => setPlace(null)}
+                    className={`flex h-[40px] items-center rounded-[20px] px-[14px] text-[13px] font-semibold ${
+                      place === null ? "bg-[#0F3D70] text-white" : "border border-dashed border-[#BFD7E8] text-[#5B7189]"
+                    }`}
+                  >
+                    Je ne suis pas dans la liste
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col gap-[13px] pt-[22px]">
               {[
                 { Icone: Users, t: "Ta palanquée dans l'app", x: "Tu vois avec qui tu plonges, et les consignes du DP." },
@@ -158,11 +204,17 @@ function PageSortie() {
             {connecte ? (
               <button
                 type="button"
-                disabled={enCours}
+                disabled={enCours || choixRequis}
                 onClick={() => void participer()}
-                className="flex h-14 w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] disabled:opacity-60"
+                className="flex h-14 w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] disabled:opacity-50"
               >
-                {enCours ? "UN INSTANT…" : "JE PARTICIPE"}
+                {enCours
+                  ? "UN INSTANT…"
+                  : choixRequis
+                    ? "CHOISIS TON PRÉNOM"
+                    : place
+                      ? `JE SUIS ${(libres.find((n) => n.id === place)?.nom ?? "").toUpperCase()}`
+                      : "JE PARTICIPE"}
               </button>
             ) : connecte === false ? (
               <>
@@ -256,12 +308,12 @@ function PageSortie() {
         <div className="flex flex-col gap-[6px]">
           {coequipiers.map((p) => (
             <div key={p.participant_id} className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px]">
-              <Avatar id={p.id} prenom={p.prenom} taille={34} />
+              <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[14.5px] font-bold">{p.prenom}</span>
-                <span className="block truncate text-[12px] text-[#5B7189]">{p.niveau ?? "Plongeur"}</span>
+                <span className="block truncate text-[12px] text-[#5B7189]">{p.prevu ? "pas encore sur Palanote" : (p.niveau ?? "Plongeur")}</span>
               </span>
-              {maPalanquee.guide_id === p.id && <span className="text-[12px] font-bold text-[#1176A8]">Guide</span>}
+              {p.id && maPalanquee.guide_id === p.id && <span className="text-[12px] font-bold text-[#1176A8]">Guide</span>}
             </div>
           ))}
         </div>

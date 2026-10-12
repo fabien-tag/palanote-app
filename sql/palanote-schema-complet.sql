@@ -1021,7 +1021,8 @@ create table if not exists public.sortie_palanquees (
 create table if not exists public.sortie_participants (
   id uuid primary key default gen_random_uuid(),
   sortie_id uuid not null references public.sorties(id) on delete cascade,
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade, -- vide = prénom noté à l'avance par le DP
+  nom_prevu text,
   palanquee_id uuid references public.sortie_palanquees(id) on delete set null,
   ajoute_par uuid references auth.users(id) on delete set null,
   via text not null default 'recherche',
@@ -1031,9 +1032,30 @@ create table if not exists public.sortie_participants (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint sortie_participants_unique unique (sortie_id, user_id),
-  constraint sortie_participants_via_check check (via in ('qr', 'lien', 'recherche'))
+  constraint sortie_participants_via_check check (via in ('qr', 'lien', 'recherche', 'prevu'))
 );
 create index if not exists sortie_participants_user_idx on public.sortie_participants (user_id);
+
+-- Palanquées préparées à l'avance : le DP note des prénoms, rattachés au plongeur quand il scanne le QR.
+-- (pour une base où la table existait déjà avant cette évolution)
+alter table public.sortie_participants add column if not exists nom_prevu text;
+alter table public.sortie_participants alter column user_id drop not null;
+alter table public.sortie_participants drop constraint if exists sortie_participants_via_check;
+alter table public.sortie_participants add constraint sortie_participants_via_check check (via in ('qr', 'lien', 'recherche', 'prevu'));
+do $$ begin
+  alter table public.sortie_participants add constraint sortie_participants_qui_check
+    check (user_id is not null or char_length(btrim(coalesce(nom_prevu, ''))) between 1 and 60);
+exception when duplicate_object then null; end $$;
+
+-- Pour comparer des prénoms sans tenir compte des accents ni des majuscules (« Léa » = « lea »)
+create or replace function public.prenom_simple(p text)
+returns text
+language sql
+immutable
+set search_path = public
+as $$
+  select translate(lower(split_part(btrim(coalesce(p, '')), ' ', 1)), 'àâäáãéèêëíìîïóòôöõúùûüçñ', 'aaaaaeeeeiiiiooooouuuucn');
+$$;
 
 grant select on public.sorties, public.sortie_palanquees, public.sortie_participants to authenticated;
 grant all on public.sorties, public.sortie_palanquees, public.sortie_participants to service_role;
@@ -1394,7 +1416,8 @@ as $$
   select jsonb_build_object(
     'id', s.id, 'date', s.date_sortie, 'heure', s.heure, 'site', s.site_name, 'lieu', s.site_location,
     'statut', s.statut, 'centre', c.nom, 'centre_id', c.id,
-    'nb_inscrits', (select count(*) from public.sortie_participants p where p.sortie_id = s.id),
+    'nb_inscrits', (select count(*) from public.sortie_participants p where p.sortie_id = s.id and p.user_id is not null),
+    'nb_prevus', (select count(*) from public.sortie_participants p where p.sortie_id = s.id and p.user_id is null),
     'nb_completees', (select count(*) from public.sortie_participants p where p.sortie_id = s.id and p.dive_id is not null))
   from public.sorties s
   join public.centres c on c.id = s.centre_id
@@ -1443,14 +1466,21 @@ begin
       from public.sortie_palanquees q where q.sortie_id = s.id), '[]'::jsonb),
     -- Le DP voit tout le monde ; un plongeur voit sa palanquée
     'participants', coalesce((
-      select jsonb_agg(public.infos_plongeur(p.user_id) || jsonb_build_object(
+      select jsonb_agg(
+               coalesce(public.infos_plongeur(p.user_id), jsonb_build_object('id', null, 'prenom', p.nom_prevu, 'niveau', null, 'club', null))
+               || jsonb_build_object(
                'participant_id', p.id, 'palanquee_id', p.palanquee_id, 'via', p.via,
+               'nom_prevu', p.nom_prevu, 'prevu', p.user_id is null,
                'complete', p.dive_id is not null, 'tamponne_le', p.tamponne_le, 'exclu_tampon', p.exclu_tampon,
-               'moi', p.user_id = auth.uid())
+               'moi', p.user_id is not distinct from auth.uid() and p.user_id is not null)
              order by p.created_at)
       from public.sortie_participants p
       where p.sortie_id = s.id
-        and (v_dp or p.user_id = auth.uid() or (v_moi.palanquee_id is not null and p.palanquee_id = v_moi.palanquee_id))), '[]'::jsonb)
+        and (v_dp or p.user_id = auth.uid() or (v_moi.palanquee_id is not null and p.palanquee_id = v_moi.palanquee_id))), '[]'::jsonb),
+    'noms_libres', case when v_dp then null else coalesce((
+      select jsonb_agg(jsonb_build_object('id', p.id, 'nom', p.nom_prevu, 'palanquee', q.numero) order by q.numero nulls last, p.nom_prevu)
+      from public.sortie_participants p left join public.sortie_palanquees q on q.id = p.palanquee_id
+      where p.sortie_id = s.id and p.user_id is null), '[]'::jsonb) end
   );
 end;
 $$;
@@ -1512,6 +1542,51 @@ as $$
 $$;
 revoke all on function public.texte_sortie(uuid) from public, anon, authenticated;
 
+-- Inscrit un plongeur à une sortie. S'il prend une place préparée par le DP (choisie, ou
+-- un seul prénom libre identique au sien), il hérite de sa palanquée (et de son tampon s'il est déjà posé).
+create or replace function public.inscrire_a_la_sortie(p_sortie uuid, p_user uuid, p_via text, p_ajoute_par uuid, p_place uuid default null)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = public
+as $$
+declare
+  v_existant public.sortie_participants;
+  v_place public.sortie_participants;
+  v_prenom text := public.infos_plongeur(p_user) ->> 'prenom';
+  v_nb integer;
+  v_id uuid;
+begin
+  select * into v_existant from public.sortie_participants where sortie_id = p_sortie and user_id = p_user;
+  if found then return jsonb_build_object('id', v_existant.id, 'nouveau', false, 'nom_prevu', v_existant.nom_prevu); end if;
+
+  -- La place choisie par le plongeur (« Qui es-tu ? »)
+  if p_place is not null then
+    select * into v_place from public.sortie_participants where id = p_place and sortie_id = p_sortie and user_id is null for update;
+  end if;
+  -- Sinon : un seul prénom libre qui correspond au sien
+  if v_place.id is null then
+    select count(*) into v_nb from public.sortie_participants
+      where sortie_id = p_sortie and user_id is null and public.prenom_simple(nom_prevu) = public.prenom_simple(v_prenom);
+    if v_nb = 1 then
+      select * into v_place from public.sortie_participants
+        where sortie_id = p_sortie and user_id is null and public.prenom_simple(nom_prevu) = public.prenom_simple(v_prenom) for update;
+    end if;
+  end if;
+
+  if v_place.id is not null then
+    update public.sortie_participants set user_id = p_user, via = p_via, ajoute_par = p_ajoute_par where id = v_place.id;
+    return jsonb_build_object('id', v_place.id, 'nouveau', true, 'nom_prevu', v_place.nom_prevu,
+      'palanquee', (select numero from public.sortie_palanquees where id = v_place.palanquee_id));
+  end if;
+  insert into public.sortie_participants (sortie_id, user_id, ajoute_par, via)
+    values (p_sortie, p_user, p_ajoute_par, p_via) returning id into v_id;
+  return jsonb_build_object('id', v_id, 'nouveau', true, 'nom_prevu', null, 'palanquee', null);
+end;
+$$;
+revoke all on function public.inscrire_a_la_sortie(uuid, uuid, text, uuid, uuid) from public, anon, authenticated;
+
 create or replace function public.ajouter_participant(p_sortie uuid, p_user uuid)
 returns jsonb
 language plpgsql
@@ -1521,27 +1596,84 @@ set search_path = public
 as $$
 declare
   s public.sorties;
-  v_id uuid;
+  r jsonb;
 begin
   if not public.est_dp_sortie(p_sortie) then raise exception 'réservé au directeur de plongée'; end if;
   select * into s from public.sorties where id = p_sortie;
   if s.statut in ('validee', 'annulee') then raise exception 'sortie fermée'; end if;
   if not exists (select 1 from auth.users where id = p_user) then raise exception 'plongeur introuvable'; end if;
-  insert into public.sortie_participants (sortie_id, user_id, ajoute_par, via)
-    values (p_sortie, p_user, auth.uid(), 'recherche')
-    on conflict (sortie_id, user_id) do nothing
-    returning id into v_id;
-  if v_id is not null then
+  r := public.inscrire_a_la_sortie(p_sortie, p_user, 'recherche', auth.uid(), null);
+  if (r ->> 'nouveau')::boolean then
     perform public.notifier(p_user, 'sortie_inscription',
       'Tu es inscrit à une sortie',
-      public.texte_sortie(p_sortie) || '. Inscrit par ' || (public.infos_plongeur(auth.uid()) ->> 'prenom') || '.',
+      public.texte_sortie(p_sortie) || coalesce(' · palanquée ' || (r ->> 'palanquee'), '') || '. Inscrit par ' || (public.infos_plongeur(auth.uid()) ->> 'prenom') || '.',
       '/sortie?id=' || p_sortie, jsonb_build_object('sortie_id', p_sortie));
   end if;
-  return jsonb_build_object('ajoute', v_id is not null);
+  return jsonb_build_object('ajoute', (r ->> 'nouveau')::boolean, 'nom_prevu', r ->> 'nom_prevu');
 end;
 $$;
 revoke all on function public.ajouter_participant(uuid, uuid) from public, anon;
 grant execute on function public.ajouter_participant(uuid, uuid) to authenticated;
+
+-- Le DP note des prénoms à l'avance : [["Léa","Paul"],["Sophie"]] = palanquée 1, palanquée 2
+create or replace function public.ajouter_noms_prevus(p_sortie uuid, p_noms jsonb)
+returns integer
+language plpgsql
+volatile
+security definer
+set search_path = public
+as $$
+declare
+  v_num integer := 0;
+  v_pal jsonb;
+  v_nom text;
+  v_id uuid;
+  v_nb integer := 0;
+begin
+  if not public.est_dp_sortie(p_sortie) then raise exception 'réservé au directeur de plongée'; end if;
+  for v_pal in select * from jsonb_array_elements(coalesce(p_noms, '[]'::jsonb)) loop
+    v_num := v_num + 1;
+    select id into v_id from public.sortie_palanquees where sortie_id = p_sortie and numero = v_num;
+    if v_id is null then
+      insert into public.sortie_palanquees (sortie_id, numero) values (p_sortie, v_num) returning id into v_id;
+    end if;
+    for v_nom in select btrim(x) from jsonb_array_elements_text(v_pal) x loop
+      if char_length(v_nom) between 1 and 60 then
+        insert into public.sortie_participants (sortie_id, user_id, nom_prevu, palanquee_id, ajoute_par, via)
+          values (p_sortie, null, v_nom, v_id, auth.uid(), 'prevu');
+        v_nb := v_nb + 1;
+      end if;
+    end loop;
+    v_id := null;
+  end loop;
+  return v_nb;
+end;
+$$;
+revoke all on function public.ajouter_noms_prevus(uuid, jsonb) from public, anon;
+grant execute on function public.ajouter_noms_prevus(uuid, jsonb) to authenticated;
+
+-- Un prénom de plus dans une palanquée, depuis l'écran de la sortie
+create or replace function public.ajouter_nom_prevu(p_palanquee uuid, p_nom text)
+returns uuid
+language plpgsql
+volatile
+security definer
+set search_path = public
+as $$
+declare
+  q public.sortie_palanquees;
+  v_id uuid;
+begin
+  select * into q from public.sortie_palanquees where id = p_palanquee;
+  if not found or not public.est_dp_sortie(q.sortie_id) then raise exception 'non autorisé'; end if;
+  if char_length(btrim(coalesce(p_nom, ''))) not between 1 and 60 then raise exception 'prénom invalide'; end if;
+  insert into public.sortie_participants (sortie_id, user_id, nom_prevu, palanquee_id, ajoute_par, via)
+    values (q.sortie_id, null, btrim(p_nom), p_palanquee, auth.uid(), 'prevu') returning id into v_id;
+  return v_id;
+end;
+$$;
+revoke all on function public.ajouter_nom_prevu(uuid, text) from public, anon;
+grant execute on function public.ajouter_nom_prevu(uuid, text) to authenticated;
 
 create or replace function public.retirer_participant(p_participant uuid)
 returns void
@@ -1556,7 +1688,12 @@ begin
   select * into p from public.sortie_participants where id = p_participant;
   if not found then return; end if;
   if not (public.est_dp_sortie(p.sortie_id) or p.user_id = auth.uid()) then raise exception 'non autorisé'; end if;
-  if p.tamponne_le is not null then raise exception 'plongée déjà tamponnée'; end if;
+  if p.tamponne_le is not null and p.user_id is not null then raise exception 'plongée déjà tamponnée'; end if;
+  -- Le plongeur se retire d'une place préparée par le DP : le prénom reste, la place redevient libre
+  if p.nom_prevu is not null and p.user_id = auth.uid() and not public.est_dp_sortie(p.sortie_id) then
+    update public.sortie_participants set user_id = null, via = 'prevu', dive_id = null where id = p_participant;
+    return;
+  end if;
   delete from public.sortie_participants where id = p_participant;
 end;
 $$;
@@ -1641,7 +1778,7 @@ begin
     terminee_le = coalesce(terminee_le, now())
   where id = p_id;
   if s.statut = 'prevue' then
-    for p in select user_id from public.sortie_participants where sortie_id = p_id and dive_id is null loop
+    for p in select user_id from public.sortie_participants where sortie_id = p_id and dive_id is null and user_id is not null loop
       perform public.notifier(p.user_id, 'sortie_a_completer',
         'Ta plongée est prête à compléter',
         public.date_fr(s.date_sortie) || ' · ' || s.site_name || '. Site, date et durée sont déjà remplis : ajoute ta profondeur et ton air.',
@@ -1681,7 +1818,7 @@ begin
     if p.dive_id is not null then
       perform public.appliquer_tampon(p.dive_id, p_id, auth.uid());
     end if;
-    if p.tamponne_le is null then
+    if p.tamponne_le is null and p.user_id is not null then
       perform public.notifier(p.user_id, 'tampon',
         'Ta plongée est validée',
         public.date_fr(s.date_sortie) || ' · ' || s.site_name || '. Tamponnée par ' || (v_dp ->> 'prenom')
@@ -1712,7 +1849,7 @@ begin
   select * into s from public.sorties where id = p_id;
   if s.statut = 'validee' then raise exception 'sortie déjà validée'; end if;
   update public.sorties set statut = 'annulee' where id = p_id;
-  for p in select user_id from public.sortie_participants where sortie_id = p_id loop
+  for p in select user_id from public.sortie_participants where sortie_id = p_id and user_id is not null loop
     perform public.notifier(p.user_id, 'sortie_annulee', 'Sortie annulée',
       public.texte_sortie(p_id) || '.', '/sortie?id=' || p_id, jsonb_build_object('sortie_id', p_id));
   end loop;
@@ -1745,7 +1882,14 @@ begin
     'site', s.site_name, 'lieu', s.site_location, 'bateau', s.bateau, 'profondeur_prevue', s.profondeur_prevue,
     'centre', c.nom, 'ville', c.ville, 'centre_verifie', c.verifie,
     'dp', public.infos_plongeur(s.dp_id) ->> 'prenom',
-    'nb_inscrits', (select count(*) from public.sortie_participants p where p.sortie_id = s.id),
+    'nb_inscrits', (select count(*) from public.sortie_participants p where p.sortie_id = s.id and p.user_id is not null),
+    -- Les prénoms préparés par le DP, seulement pour un plongeur connecté (« Qui es-tu ? »)
+    'noms_libres', case when auth.uid() is null then null else coalesce((
+      select jsonb_agg(jsonb_build_object('id', p.id, 'nom', p.nom_prevu, 'palanquee', q.numero,
+               'le_mien', public.prenom_simple(p.nom_prevu) = public.prenom_simple(public.infos_plongeur(auth.uid()) ->> 'prenom'))
+             order by q.numero nulls last, p.nom_prevu)
+      from public.sortie_participants p left join public.sortie_palanquees q on q.id = p.palanquee_id
+      where p.sortie_id = s.id and p.user_id is null), '[]'::jsonb) end,
     'deja_inscrit', auth.uid() is not null and exists (select 1 from public.sortie_participants p where p.sortie_id = s.id and p.user_id = auth.uid())
   );
 end;
@@ -1753,7 +1897,8 @@ $$;
 revoke all on function public.voir_sortie(text) from public;
 grant execute on function public.voir_sortie(text) to anon, authenticated;
 
-create or replace function public.rejoindre_sortie(p_jeton text, p_via text default 'qr')
+drop function if exists public.rejoindre_sortie(text, text);
+create or replace function public.rejoindre_sortie(p_jeton text, p_via text default 'qr', p_place uuid default null)
 returns jsonb
 language plpgsql
 volatile
@@ -1762,26 +1907,32 @@ set search_path = public
 as $$
 declare
   s public.sorties;
-  v_id uuid;
+  r jsonb;
 begin
   if auth.uid() is null then raise exception 'connexion requise'; end if;
   select * into s from public.sorties where jeton = p_jeton and deleted_at is null;
   if not found then raise exception 'sortie introuvable'; end if;
-  if s.statut in ('validee', 'annulee') then raise exception 'sortie fermée'; end if;
-  insert into public.sortie_participants (sortie_id, user_id, ajoute_par, via)
-    values (s.id, auth.uid(), auth.uid(), case when p_via = 'lien' then 'lien' else 'qr' end)
-    on conflict (sortie_id, user_id) do nothing
-    returning id into v_id;
-  if v_id is not null and s.dp_id <> auth.uid() then
+  if s.statut = 'annulee' then raise exception 'sortie fermée'; end if;
+  -- Sortie déjà tamponnée : on peut encore venir prendre la place que le DP avait préparée
+  -- (le tampon suit), mais plus s'inscrire de zéro.
+  if s.statut = 'validee' and not exists (
+       select 1 from public.sortie_participants
+       where sortie_id = s.id and user_id is null
+         and (id = p_place or (p_place is null and public.prenom_simple(nom_prevu) = public.prenom_simple(public.infos_plongeur(auth.uid()) ->> 'prenom'))))
+     and not exists (select 1 from public.sortie_participants where sortie_id = s.id and user_id = auth.uid()) then
+    raise exception 'sortie fermée';
+  end if;
+  r := public.inscrire_a_la_sortie(s.id, auth.uid(), case when p_via = 'lien' then 'lien' else 'qr' end, auth.uid(), p_place);
+  if (r ->> 'nouveau')::boolean and s.dp_id <> auth.uid() then
     perform public.notifier(s.dp_id, 'sortie_rejointe',
-      (public.infos_plongeur(auth.uid()) ->> 'prenom') || ' a rejoint ta sortie',
+      (public.infos_plongeur(auth.uid()) ->> 'prenom') || ' a rejoint ta sortie' || coalesce(' (P' || (r ->> 'palanquee') || ')', ''),
       public.texte_sortie(s.id) || '.', '/club/sortie?id=' || s.id, jsonb_build_object('sortie_id', s.id));
   end if;
-  return jsonb_build_object('id', s.id, 'rejoint', v_id is not null);
+  return jsonb_build_object('id', s.id, 'rejoint', (r ->> 'nouveau')::boolean, 'nom_prevu', r ->> 'nom_prevu', 'palanquee', r -> 'palanquee');
 end;
 $$;
-revoke all on function public.rejoindre_sortie(text, text) from public, anon;
-grant execute on function public.rejoindre_sortie(text, text) to authenticated;
+revoke all on function public.rejoindre_sortie(text, text, uuid) from public, anon;
+grant execute on function public.rejoindre_sortie(text, text, uuid) to authenticated;
 
 -- Mes sorties à venir et à compléter (accueil du carnet)
 create or replace function public.mes_sorties()
@@ -1836,9 +1987,9 @@ begin
     'dive_leader', public.infos_plongeur(s.dp_id) ->> 'prenom',
     'guide_name', case when q.guide_id is not null and q.guide_id <> auth.uid() then public.infos_plongeur(q.guide_id) ->> 'prenom' end,
     'buddies', coalesce((
-      select jsonb_agg(public.infos_plongeur(x.user_id) ->> 'prenom' order by x.created_at)
+      select jsonb_agg(coalesce(public.infos_plongeur(x.user_id) ->> 'prenom', x.nom_prevu) order by x.created_at)
       from public.sortie_participants x
-      where p.palanquee_id is not null and x.palanquee_id = p.palanquee_id and x.user_id <> auth.uid()), '[]'::jsonb),
+      where p.palanquee_id is not null and x.palanquee_id = p.palanquee_id and x.id <> p.id), '[]'::jsonb),
     'palanquee', q.numero
   );
 end;

@@ -482,10 +482,11 @@ Table sortie_palanquees {
 Table sortie_participants {
   id uuid [pk, default: `gen_random_uuid()`]
   sortie_id uuid [not null]
-  user_id uuid [not null]
+  user_id uuid [note: 'vide = prénom noté à l’avance par le DP']
+  nom_prevu text [note: 'prénom préparé dans la palanquée, rattaché au scan du QR']
   palanquee_id uuid
   ajoute_par uuid
-  via text [not null, note: 'qr | lien | recherche']
+  via text [not null, note: 'qr | lien | recherche | prevu']
   dive_id uuid [note: 'sa plongée, une fois complétée']
   tamponne_le timestamptz
   exclu_tampon boolean [not null, default: false]
