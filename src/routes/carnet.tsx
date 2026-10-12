@@ -18,6 +18,7 @@ import { CarteDePlongee } from "@/components/CarteDePlongee";
 import { LigneDePlongee } from "@/components/LigneDePlongee";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import { BandeauHorsLigne } from "@/components/BandeauHorsLigne";
+import { BandeauHistoriqueClub } from "@/components/club/BandeauHistoriqueClub";
 import { EVENEMENT_ATTENTE } from "@/lib/hors-ligne";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
@@ -333,6 +334,7 @@ function Carnet() {
       <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
       <BandeauHorsLigne />
       <BandeauSortie sorties={sorties} />
+      <BandeauHistoriqueClub onAjoute={() => window.location.reload()} />
       {vide ? (
         /* Avant la première plongée : écran d'accueil d'origine */
         <div className="flex shrink-0 flex-col gap-[13px] p-[22px]">

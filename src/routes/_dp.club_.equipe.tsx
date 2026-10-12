@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, Pencil, Phone, Plus, UserCheck } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileSpreadsheet, Pencil, Phone, Plus, UserCheck } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { Avatar, ChampTexte, Feuille, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
+import { ImportTableur } from "@/components/club/ImportTableur";
+import { IMPORT_EQUIPE } from "@/components/club/importsClub";
 import { heureCourte } from "@/lib/club";
 import {
   ajouterJours,
@@ -44,6 +46,7 @@ function PageEquipe() {
   const [semaine, setSemaine] = useState(() => lundi(aujourdhui()));
   const [fiche, setFiche] = useState<Brouillon | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [importer, setImporter] = useState(false);
 
   const charger = useCallback(async () => {
     if (!centre) return;
@@ -102,6 +105,15 @@ function PageEquipe() {
       onRetour={() => navigate({ to: "/club" })}
       droite={
         centre ? (
+          <span className="flex items-center gap-[8px]">
+          <button
+            type="button"
+            onClick={() => setImporter(true)}
+            className="flex h-[42px] items-center gap-2 rounded-[12px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#14805F] lg:px-[16px]"
+          >
+            <FileSpreadsheet className="h-[17px] w-[17px]" aria-hidden="true" />
+            <span className="hidden sm:inline">IMPORTER (EXCEL)</span>
+          </button>
           <button
             type="button"
             onClick={() => setFiche({ ...VIDE })}
@@ -110,6 +122,7 @@ function PageEquipe() {
             <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
             <span className="hidden sm:inline">AJOUTER</span>
           </button>
+          </span>
         ) : null
       }
     >
@@ -234,6 +247,21 @@ function PageEquipe() {
             </>
           )}
         </>
+      )}
+
+      {importer && centre && (
+        <ImportTableur
+          titre={IMPORT_EQUIPE.titre}
+          description={IMPORT_EQUIPE.description}
+          champs={IMPORT_EQUIPE.champs}
+          modele={IMPORT_EQUIPE.modele}
+          transformer={IMPORT_EQUIPE.transformer}
+          onImporter={(lignes) => IMPORT_EQUIPE.importer(centre.id, lignes)}
+          onFermer={(fait) => {
+            setImporter(false);
+            if (fait) void charger();
+          }}
+        />
       )}
 
       {fiche && (

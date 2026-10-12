@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Check, ChevronRight, Clock, FileText, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
+import { Check, ChevronRight, Clock, FileSpreadsheet, FileText, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
+import { ImportTableur } from "@/components/club/ImportTableur";
+import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import QRCode from "qrcode";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
@@ -43,6 +45,7 @@ function SortieDp() {
   const [erreur, setErreur] = useState<string | null>(null);
   const [qr, setQr] = useState<string | null>(null);
   const [voirQr, setVoirQr] = useState(Boolean(qrDemande)); // ouvert d'emblée depuis l'accueil DP
+  const [importer, setImporter] = useState(false);
   const [q, setQ] = useState("");
   const [trouves, setTrouves] = useState<(Participant & { deja_inscrit: boolean })[]>([]);
   const [finie, setFinie] = useState(false);
@@ -233,6 +236,11 @@ function SortieDp() {
                 </button>
               </div>
               {partage && <p className="pt-[8px] text-[12.5px] text-[#14805F]">{partage}</p>}
+              {!s.entre_amis && (
+                <button type="button" onClick={() => setImporter(true)} className="mt-[10px] flex items-center gap-[6px] text-[13px] font-bold text-[#14805F]">
+                  <FileSpreadsheet className="h-[15px] w-[15px]" /> Importer une liste de plongeurs (Excel)
+                </button>
+              )}
               <label className="mt-[10px] flex h-[50px] items-center gap-[10px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] focus-within:border-[#57D4F5]">
                 <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
                 <input
@@ -477,6 +485,21 @@ function SortieDp() {
             </button>
           )}
         </>
+      )}
+
+      {importer && s && (
+        <ImportTableur
+          titre={IMPORT_SORTIE.titre}
+          description={IMPORT_SORTIE.description}
+          champs={IMPORT_SORTIE.champs}
+          modele={IMPORT_SORTIE.modele}
+          transformer={IMPORT_SORTIE.transformer}
+          onImporter={(lignes) => IMPORT_SORTIE.importer(s.id, lignes)}
+          onFermer={(fait) => {
+            setImporter(false);
+            if (fait) void charger();
+          }}
+        />
       )}
 
       {/* QR code plein écran, à montrer sur le bateau */}

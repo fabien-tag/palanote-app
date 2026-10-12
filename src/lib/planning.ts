@@ -238,3 +238,46 @@ export type ParametresCentre = {
 export const parametresCentre = (centre: string) => rpc<ParametresCentre>("parametres_centre", { p_centre: centre });
 export const modifierCentre = (centre: string, nom: string, ville: string) =>
   rpc<null>("modifier_centre", { p_centre: centre, p_nom: nom, p_ville: ville });
+
+// ---------- Import Excel du club (sql/palanote-import-excel.sql) ----------
+type Lignes = Record<string, string | number | null>[];
+export const importerAdherents = (centre: string, lignes: Lignes) =>
+  rpc<{ ajoutes: number; mis_a_jour: number; ignorees: number }>("importer_adherents", { p_centre: centre, p_lignes: lignes });
+export const importerHistorique = (centre: string, lignes: Lignes) =>
+  rpc<{ plongees: number; nouveaux_adherents: number; doublons: number; ignorees: number }>("importer_historique", { p_centre: centre, p_lignes: lignes });
+export const importerEquipe = (centre: string, lignes: Lignes) => rpc<{ ajoutes: number; mis_a_jour: number }>("importer_equipe", { p_centre: centre, p_lignes: lignes });
+export const importerMateriel = (centre: string, lignes: Lignes) => rpc<{ ajoutes: number; mis_a_jour: number }>("importer_materiel", { p_centre: centre, p_lignes: lignes });
+
+export type Adherent = {
+  id: string;
+  prenom: string;
+  nom: string | null;
+  email: string | null;
+  telephone: string | null;
+  niveau: string | null;
+  licence: string | null;
+  certificat_fin: string | null;
+  adhesion: string | null;
+  note: string | null;
+  sur_palanote: boolean;
+  plongees: number;
+  derniere: string | null;
+  prof_max: number | null;
+  recuperees: number;
+  sorties: number;
+};
+export const adherentsCentre = (centre: string) => rpc<Adherent[]>("adherents_centre", { p_centre: centre }).then((l) => l ?? []);
+export const supprimerAdherent = (id: string) => rpc<null>("supprimer_adherent", { p_id: id });
+
+// Côté plongeur : ses plongées gardées par un club, à ajouter à son carnet
+export type HistoriqueClub = {
+  centre_id: string;
+  centre: string;
+  ville: string | null;
+  plongees: { id: string; date: string; heure: string | null; site: string | null; lieu: string | null; profondeur: number | null; duree: number | null; palanquee: string | null; role: string | null; note: string | null }[];
+};
+export const monHistoriqueClub = () => rpc<HistoriqueClub[]>("mon_historique_club").then((l) => l ?? []);
+export const marquerHistoriqueClub = (centre: string) => rpc<number>("marquer_historique_club", { p_centre: centre });
+
+// Certificat médical : expiré, ou qui expire dans le mois
+export const certificatProche = controleProche;

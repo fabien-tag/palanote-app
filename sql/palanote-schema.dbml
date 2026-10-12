@@ -556,6 +556,41 @@ Table sortie_materiel {
   }
 }
 
+Table centre_adherents {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  prenom text [not null]
+  nom text
+  email text [note: 'relie l’adhérent à son compte Palanote']
+  telephone text
+  niveau text
+  licence text
+  certificat_fin date [note: 'fin de validité du certificat médical']
+  adhesion date
+  note text
+  user_id uuid [note: 'son compte, retrouvé par l’e-mail']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table adherent_plongees {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  adherent_id uuid [not null]
+  date_plongee date [not null]
+  heure time
+  site text
+  lieu text
+  profondeur numeric
+  duree integer
+  palanquee text
+  role text
+  note text
+  dive_id uuid [note: 'une fois ajoutée au carnet']
+  recuperee_le timestamptz [note: 'ajoutée au carnet ou écartée par le plongeur']
+  created_at timestamptz [not null, default: `now()`]
+}
+
 Ref: profiles.id - auth.users.id [delete: cascade]
 Ref: user_settings.user_id - auth.users.id [delete: cascade]
 Ref: consents.user_id > auth.users.id [delete: cascade]
@@ -619,6 +654,11 @@ Ref: materiel.centre_id > centres.id [delete: cascade]
 Ref: sortie_materiel.sortie_id > sorties.id [delete: cascade]
 Ref: sortie_materiel.materiel_id > materiel.id [delete: cascade]
 Ref: sorties.bateau_id > materiel.id [delete: set null]
+Ref: centre_adherents.centre_id > centres.id [delete: cascade]
+Ref: centre_adherents.user_id > auth.users.id [delete: set null]
+Ref: adherent_plongees.centre_id > centres.id [delete: cascade]
+Ref: adherent_plongees.adherent_id > centre_adherents.id [delete: cascade]
+Ref: adherent_plongees.dive_id > dives.id [delete: set null]
 
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
@@ -672,4 +712,6 @@ TableGroup Sorties_club [color: #FF8A75] {
   sortie_equipe
   materiel
   sortie_materiel
+  centre_adherents
+  adherent_plongees
 }

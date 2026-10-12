@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState, type DragEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, ExternalLink, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
+import { AlertTriangle, ExternalLink, FileSpreadsheet, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
+import { ImportTableur } from "@/components/club/ImportTableur";
+import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import { Avatar, detailErreur, MessageErreur, PastilleStatut } from "@/components/club/Ui";
 import { ajouterPalanquee, definirGuide, detailSortie, heureCourte, placerParticipant, type DetailSortie, type Participant } from "@/lib/club";
 import {
@@ -26,6 +28,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
   const [jour, setJour] = useState<Planning | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [survol, setSurvol] = useState<string | null>(null);
+  const [importer, setImporter] = useState(false);
 
   const charger = useCallback(async () => {
     try {
@@ -194,6 +197,11 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                 {s.participants.length === 0 && (
                   <p className="pt-[6px] text-[13px] text-[#5B7189]">Personne n'est encore inscrit : montre le QR code ou ouvre la sortie pour ajouter des plongeurs.</p>
                 )}
+                {s.statut === "prevue" && (
+                  <button type="button" onClick={() => setImporter(true)} className="mt-[8px] flex items-center gap-[6px] text-[12.5px] font-bold text-[#14805F]">
+                    <FileSpreadsheet className="h-[15px] w-[15px]" /> Importer une liste de plongeurs (Excel)
+                  </button>
+                )}
               </Section>
 
               {/* Bateau */}
@@ -351,6 +359,23 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
           )}
         </div>
       </div>
+      {importer && (
+        <ImportTableur
+          titre={IMPORT_SORTIE.titre}
+          description={IMPORT_SORTIE.description}
+          champs={IMPORT_SORTIE.champs}
+          modele={IMPORT_SORTIE.modele}
+          transformer={IMPORT_SORTIE.transformer}
+          onImporter={(lignes) => IMPORT_SORTIE.importer(id, lignes)}
+          onFermer={(fait) => {
+            setImporter(false);
+            if (fait) {
+              void charger();
+              onChange();
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

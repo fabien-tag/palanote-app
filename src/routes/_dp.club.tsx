@@ -41,7 +41,7 @@ import {
   type SortieResume,
 } from "@/lib/club";
 import { monProfil } from "@/lib/amis";
-import { ajouterJours, alertesSortie, aujourdhui, controleProche, depuisIso, lundi, planningCentre, type Planning } from "@/lib/planning";
+import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProche, depuisIso, lundi, planningCentre, type Planning } from "@/lib/planning";
 
 // Onglet « Sorties » : l'accueil du directeur de plongée (parcours 15).
 // Le jour J (prochaine sortie), ce qu'il reste à faire, sa saison et les gens du centre.
@@ -62,6 +62,7 @@ function EspaceClub() {
   const [toutVoir, setToutVoir] = useState(false);
   const [plan, setPlan] = useState<Planning | null>(null); // 2 semaines à partir de lundi : frise et voyants
   const [prenom, setPrenom] = useState<string | null>(null);
+  const [certificats, setCertificats] = useState({ expires: 0, proches: 0 });
 
   useEffect(() => {
     if (!pret) return;
@@ -96,6 +97,13 @@ function EspaceClub() {
         if (!scriptManquant(e)) console.error(e);
       });
     void monProfil().then((m) => actif && setPrenom(m?.prenom ?? null));
+    adherentsCentre(id)
+      .then((l) => {
+        if (!actif) return;
+        const etats = l.map((a) => controleProche(a.certificat_fin));
+        setCertificats({ expires: etats.filter((e) => e === "depasse").length, proches: etats.filter((e) => e === "proche").length });
+      })
+      .catch(() => undefined);
     return () => {
       actif = false;
     };
@@ -311,7 +319,7 @@ function EspaceClub() {
             {/* Colonne de droite sur ordinateur : la saison et les gens */}
             {accueil && (
               <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-                {plan && <PointsAttention plan={plan} accueil={accueil} />}
+                {plan && <PointsAttention plan={plan} accueil={accueil} certificats={certificats} />}
                 <div className="lg:hidden">
                 <Titre>Ta saison {accueil.stats.annee}</Titre>
                 <div className="grid grid-cols-2 gap-[10px]">
@@ -648,7 +656,7 @@ function FriseSemaine({ plan, onOuvrir, onPlanning }: { plan: Planning; onOuvrir
 
 // Points d'attention : les voyants du centre (sorties à risque, matériel à contrôler, tampons)
 type Voyant = { niveau: "rouge" | "orange" | "bleu"; titre: string; sous: string; aller: () => void };
-function PointsAttention({ plan, accueil }: { plan: Planning; accueil: AccueilDp }) {
+function PointsAttention({ plan, accueil, certificats }: { plan: Planning; accueil: AccueilDp; certificats: { expires: number; proches: number } }) {
   const navigate = useNavigate();
   const auj = aujourdhui();
   const jour = (d: string) => depuisIso(d).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" });
@@ -673,6 +681,20 @@ function PointsAttention({ plan, accueil }: { plan: Planning; accueil: AccueilDp
         aller: () => navigate({ to: "/club/materiel" }),
       });
   }
+  if (certificats.expires > 0)
+    voyants.push({
+      niveau: "rouge",
+      titre: `${certificats.expires} certificat${certificats.expires > 1 ? "s" : ""} médica${certificats.expires > 1 ? "ux" : "l"} expiré${certificats.expires > 1 ? "s" : ""}`,
+      sous: "Adhérents à relancer avant leur prochaine plongée",
+      aller: () => navigate({ to: "/club/membres" }),
+    });
+  if (certificats.proches > 0)
+    voyants.push({
+      niveau: "orange",
+      titre: `${certificats.proches} certificat${certificats.proches > 1 ? "s" : ""} à renouveler`,
+      sous: "Expire dans les 30 jours",
+      aller: () => navigate({ to: "/club/membres" }),
+    });
   for (const a of accueil.a_faire.filter((x) => x.type === "tampon"))
     voyants.push({ niveau: "bleu", titre: `${a.site.trim().charAt(0).toUpperCase()}${a.site.trim().slice(1)} à tamponner`, sous: `${a.date_texte} · ${a.nb}/${a.total ?? 0} fiches`, aller: () => navigate({ to: "/club/sortie", search: { id: a.sortie_id } }) });
   const ordre = { rouge: 0, orange: 1, bleu: 2 };

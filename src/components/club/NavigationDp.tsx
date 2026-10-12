@@ -3,7 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { CalendarDays, LayoutDashboard, LifeBuoy, Map as IconeCarte, Settings, UsersRound, Waves } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
 import { accueilDp, centreChoisi, mesCentres, type Centre } from "@/lib/club";
-import { ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre } from "@/lib/planning";
+import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre } from "@/lib/planning";
 
 // Colonne de navigation du directeur de plongée sur ordinateur.
 // Elle reste en place quand on change d'écran (seul le contenu change) et porte des voyants :
@@ -11,16 +11,16 @@ import { ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre
 
 type Cible = "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" | "/club/carte" | "/club/membres" | "/club/parametres";
 
-const ENTREES: { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" }[] = [
+const ENTREES: { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" }[] = [
   { to: "/club", label: "Tableau de bord", Icone: LayoutDashboard, voyant: "faire" },
   { to: "/club/planning", label: "Planning", Icone: CalendarDays, voyant: "planning" },
   { to: "/club/equipe", label: "Équipe", Icone: UsersRound },
   { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
   { to: "/club/carte", label: "Carte du club", Icone: IconeCarte },
-  { to: "/club/membres", label: "Membres du club", Icone: Waves },
+  { to: "/club/membres", label: "Membres du club", Icone: Waves, voyant: "membres" },
 ];
 
-export type Voyants = { faire: number; planning: number; materiel: number; materielDepasse: boolean };
+export type Voyants = { faire: number; planning: number; materiel: number; materielDepasse: boolean; membres: number; membresDepasse: boolean };
 
 // Les voyants du centre, recalculés à chaque changement d'écran
 export function useVoyants(centre: string | null, cle: string) {
@@ -29,16 +29,19 @@ export function useVoyants(centre: string | null, cle: string) {
     if (!centre) return;
     let actif = true;
     const auj = aujourdhui();
-    void Promise.allSettled([planningCentre(centre, auj, ajouterJours(auj, 13)), accueilDp(centre)]).then(([p, a]) => {
+    void Promise.allSettled([planningCentre(centre, auj, ajouterJours(auj, 13)), accueilDp(centre), adherentsCentre(centre)]).then(([p, a, m]) => {
       if (!actif) return;
       const plan = p.status === "fulfilled" ? p.value : null;
       const acc = a.status === "fulfilled" ? a.value : null;
       const controles = (plan?.materiel ?? []).map((m) => controleProche(m.prochain_controle)).filter(Boolean);
+      const certificats = (m.status === "fulfilled" ? m.value : []).map((x) => controleProche(x.certificat_fin)).filter(Boolean);
       setV({
         faire: acc?.a_faire.length ?? 0,
         planning: plan ? plan.sorties.reduce((t, s) => t + alertesSortie(s, plan.sorties, plan.materiel).length, 0) : 0,
         materiel: controles.length,
         materielDepasse: controles.includes("depasse"),
+        membres: certificats.length,
+        membresDepasse: certificats.includes("depasse"),
       });
     });
     return () => {
@@ -60,9 +63,9 @@ export function NavigationDp() {
   const voyants = useVoyants(centre?.id ?? null, chemin);
   const actif = (to: Cible) => (to === "/club" ? chemin === "/club" || chemin === "/club/" : chemin.startsWith(to));
 
-  const entree = (to: Cible, label: string, Icone: typeof LayoutDashboard, voyant?: "faire" | "planning" | "materiel") => {
+  const entree = (to: Cible, label: string, Icone: typeof LayoutDashboard, voyant?: "faire" | "planning" | "materiel" | "membres") => {
     const nb = voyant && voyants ? voyants[voyant] : 0;
-    const rouge = voyant === "planning" || (voyant === "materiel" && voyants?.materielDepasse);
+    const rouge = voyant === "planning" || (voyant === "materiel" && voyants?.materielDepasse) || (voyant === "membres" && voyants?.membresDepasse);
     return (
       <Link
         key={to}
@@ -77,7 +80,7 @@ export function NavigationDp() {
         {nb > 0 && (
           <span
             className={`min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold ${
-              rouge ? "bg-[#FF8A75] text-white" : voyant === "materiel" ? "bg-[#F5B544] text-[#4A3000]" : "bg-[#0F3D70] text-white"
+              rouge ? "bg-[#FF8A75] text-white" : voyant === "materiel" || voyant === "membres" ? "bg-[#F5B544] text-[#4A3000]" : "bg-[#0F3D70] text-white"
             }`}
             aria-label={`${nb} point${nb > 1 ? "s" : ""} à voir`}
           >

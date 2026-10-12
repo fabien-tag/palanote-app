@@ -6,9 +6,12 @@ import { BarreNavigation } from "@/components/BarreNavigation";
 import { Avatar, MessageErreur, PageClub } from "@/components/club/Ui";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { ajouterJours, aujourdhui, depuisIso, membresCentre, type MembreClub } from "@/lib/planning";
+import { OngletAdherents } from "@/components/club/OngletAdherents";
 
-// Membres du club : les plongeurs venus avec le centre, leurs sorties, leurs fiches,
-// leurs tampons et leur prochaine sortie.
+// Membres du club, en deux onglets :
+//   · Adhérents : la liste du club (importée d'Excel), niveaux, certificats, historique des plongées,
+//     et qui est déjà sur Palanote ;
+//   · Venus en sortie : les plongeurs venus avec le centre, leurs fiches, tampons, prochaine sortie.
 export const Route = createFileRoute("/_dp/club_/membres")({
   head: () => ({ meta: [{ title: "Palanote — Membres du club" }] }),
   component: PageMembres,
@@ -27,6 +30,7 @@ function PageMembres() {
   const [q, setQ] = useState("");
   const [tri, setTri] = useState<Tri>("recents");
   const [erreur, setErreur] = useState<string | null>(null);
+  const [onglet, setOnglet] = useState<"adherents" | "sorties">("adherents");
 
   useEffect(() => {
     if (!centre) return;
@@ -55,7 +59,27 @@ function PageMembres() {
   return (
     <PageClub titre="Membres du club" large navigation={<BarreNavigation actif="club" cote />} onRetour={() => navigate({ to: "/club" })}>
       <MessageErreur texte={erreurCentre ?? erreur} />
-      {membres && (
+      <div className="flex w-fit rounded-[12px] bg-[#E3EDF6] p-[3px]" role="tablist" aria-label="Membres">
+        {(
+          [
+            ["adherents", "Adhérents du club"],
+            ["sorties", "Venus en sortie"],
+          ] as const
+        ).map(([id, l]) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={onglet === id}
+            onClick={() => setOnglet(id)}
+            className={`h-[36px] rounded-[10px] px-[14px] text-[13px] font-bold ${onglet === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+          >
+            {l}
+          </button>
+        ))}
+      </div>
+      {onglet === "adherents" && centre && <OngletAdherents centre={centre} />}
+      {onglet === "sorties" && membres && (
         <>
           <div className="grid grid-cols-2 gap-[10px] pt-[6px] lg:grid-cols-4">
             {[
