@@ -117,9 +117,10 @@ export function LigneSortie({ s, onClick, pourDp = true }: { s: SortieResume; on
 }
 
 // Les 3 temps d'une sortie, pour que le DP sache toujours où il en est
-export function Etapes({ statut }: { statut: StatutSortie }) {
-  const actuelle = statut === "prevue" ? 0 : statut === "terminee" ? 2 : 3;
-  const noms = ["Inscrire", "Après la plongée", "Tamponner"];
+export function Etapes({ statut, entreAmis = false }: { statut: StatutSortie; entreAmis?: boolean | undefined }) {
+  // Entre amis : pas de tampon, la sortie s'arrête aux fiches envoyées
+  const actuelle = statut === "prevue" ? 0 : entreAmis ? 2 : statut === "terminee" ? 2 : 3;
+  const noms = entreAmis ? ["Inviter", "Après la plongée"] : ["Inscrire", "Après la plongée", "Tamponner"];
   return (
     <ol className="flex items-center gap-[6px] pt-[14px]" aria-label="Étapes de la sortie">
       {noms.map((n, i) => {

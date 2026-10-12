@@ -40,6 +40,7 @@ import { Route as SiteRouteImport } from './routes/site'
 import { Route as SortieRouteImport } from './routes/sortie'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
+import { Route as AmisOrganiserRouteImport } from './routes/amis_.organiser'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
 import { Route as ClubCentreRouteImport } from './routes/club_.centre'
@@ -216,6 +217,11 @@ const AmisBinomeRoute = AmisBinomeRouteImport.update({
   path: '/amis/binome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AmisOrganiserRoute = AmisOrganiserRouteImport.update({
+  id: '/amis_/organiser',
+  path: '/amis/organiser',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AmisPropositionRoute = AmisPropositionRouteImport.update({
   id: '/amis_/proposition',
   path: '/amis/proposition',
@@ -344,6 +350,7 @@ export interface FileRoutesByFullPath {
   '/sortie': typeof SortieRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/amis/organiser': typeof AmisOrganiserRoute
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
@@ -396,6 +403,7 @@ export interface FileRoutesByTo {
   '/sortie': typeof SortieRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
+  '/amis/organiser': typeof AmisOrganiserRoute
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
@@ -449,6 +457,7 @@ export interface FileRoutesById {
   '/sortie': typeof SortieRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
+  '/amis_/organiser': typeof AmisOrganiserRoute
   '/amis_/proposition': typeof AmisPropositionRoute
   '/amis_/rechercher': typeof AmisRechercherRoute
   '/club_/centre': typeof ClubCentreRoute
@@ -503,6 +512,7 @@ export interface FileRouteTypes {
     | '/sortie'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/amis/organiser'
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/centre'
@@ -555,6 +565,7 @@ export interface FileRouteTypes {
     | '/sortie'
     | '/amis/ajouter'
     | '/amis/binome'
+    | '/amis/organiser'
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/centre'
@@ -607,6 +618,7 @@ export interface FileRouteTypes {
     | '/sortie'
     | '/amis_/ajouter'
     | '/amis_/binome'
+    | '/amis_/organiser'
     | '/amis_/proposition'
     | '/amis_/rechercher'
     | '/club_/centre'
@@ -660,6 +672,7 @@ export interface RootRouteChildren {
   SortieRoute: typeof SortieRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
+  AmisOrganiserRoute: typeof AmisOrganiserRoute
   AmisPropositionRoute: typeof AmisPropositionRoute
   AmisRechercherRoute: typeof AmisRechercherRoute
   ClubCentreRoute: typeof ClubCentreRoute
@@ -900,6 +913,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisBinomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/amis_/organiser': {
+      id: '/amis_/organiser'
+      path: '/amis/organiser'
+      fullPath: '/amis/organiser'
+      preLoaderRoute: typeof AmisOrganiserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/amis_/proposition': {
       id: '/amis_/proposition'
       path: '/amis/proposition'
@@ -1068,6 +1088,7 @@ const rootRouteChildren: RootRouteChildren = {
   SortieRoute: SortieRoute,
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
+  AmisOrganiserRoute: AmisOrganiserRoute,
   AmisPropositionRoute: AmisPropositionRoute,
   AmisRechercherRoute: AmisRechercherRoute,
   ClubCentreRoute: ClubCentreRoute,

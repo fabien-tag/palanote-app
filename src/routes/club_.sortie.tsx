@@ -148,7 +148,7 @@ function SortieDp() {
       >
         LA PLONGÉE EST FINIE
       </button>
-    ) : s && s.statut === "terminee" ? (
+    ) : s && s.statut === "terminee" && !s.entre_amis ? (
       <button
         type="button"
         disabled={enCours || aTamponner === 0}
@@ -165,7 +165,12 @@ function SortieDp() {
     ) : null;
 
   return (
-    <PageClub titre="Sortie" onRetour={() => navigate({ to: "/club" })} droite={s ? <PastilleStatut statut={s.statut} /> : null} bas={bas}>
+    <PageClub
+      titre={s?.entre_amis ? "Sortie entre amis" : "Sortie"}
+      onRetour={() => navigate({ to: s?.entre_amis ? "/amis" : "/club" })}
+      droite={s ? (s.entre_amis && s.statut === "terminee" ? <span className="shrink-0 rounded-[10px] bg-[#3DEFBE] px-[9px] py-[3px] text-[11.5px] font-bold text-[#0B3B63]">Fiches envoyées</span> : <PastilleStatut statut={s.statut} />) : null}
+      bas={bas}
+    >
       <MessageErreur texte={erreur} />
       {s && (
         <>
@@ -176,7 +181,7 @@ function SortieDp() {
               {s.heure ? ` · ${heureCourte(s.heure)}` : ""}
             </p>
             <h2 className="pt-[3px] text-[23px] font-bold leading-tight">{s.site}</h2>
-            <p className="text-[13.5px] text-[#5B7189]">{[s.lieu, s.centre.nom].filter(Boolean).join(" · ")}</p>
+            <p className="text-[13.5px] text-[#5B7189]">{[s.lieu, s.entre_amis ? `entre amis · organisée par ${s.est_dp ? "toi" : s.dp.prenom}` : s.centre.nom].filter(Boolean).join(" · ")}</p>
             <div className="flex flex-wrap gap-[6px] pt-[10px]">
               {s.bateau && <Info Icone={Ship} texte={s.bateau} />}
               {s.profondeur_prevue && <Info Icone={Waves} texte={`${String(s.profondeur_prevue).replace(".", ",")} m prévus`} />}
@@ -184,7 +189,7 @@ function SortieDp() {
               {s.temp_fond_c !== null && <Info Icone={Thermometer} texte={`${String(s.temp_fond_c).replace(".", ",")} °C`} />}
             </div>
             {s.consignes && <p className="pt-[10px] text-[13px] italic leading-snug text-[#5B7189]">« {s.consignes} »</p>}
-            <Etapes statut={s.statut} />
+            <Etapes statut={s.statut} entreAmis={s.entre_amis} />
             <Meduse className="-right-[6px] -top-[14px]" />
           </div>
 
@@ -216,7 +221,7 @@ function SortieDp() {
                 <input
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  placeholder="Prénom ou e-mail exact"
+                  placeholder={s.entre_amis ? "Prénom d'un binôme" : "Prénom ou e-mail exact"}
                   aria-label="Chercher un plongeur"
                   className="min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-[#B5C4D1]"
                 />
@@ -259,7 +264,9 @@ function SortieDp() {
               )}
               {q.trim().length >= 2 && trouves.length === 0 && (
                 <p className="pt-[8px] text-[12.5px] leading-snug text-[#9DB0C0]">
-                  Personne de ce nom parmi tes binômes et les habitués du centre. Essaie son e-mail exact, ou montre-lui le QR code.
+                  {s.entre_amis
+                    ? "Personne de ce nom parmi tes binômes. Montre-lui le QR code, ou ajoute-le d'abord comme binôme dans Amis."
+                    : "Personne de ce nom parmi tes binômes et les habitués du centre. Essaie son e-mail exact, ou montre-lui le QR code."}
                 </p>
               )}
 
@@ -343,8 +350,38 @@ function SortieDp() {
             </>
           )}
 
+          {/* Entre amis : pas de tampon, on suit les fiches */}
+          {s.statut === "terminee" && s.entre_amis && (
+            <>
+              <Titre aide={`${completes}/${inscrits} fiches complétées`}>Les fiches</Titre>
+              <div className="flex flex-col gap-[6px]">
+                {participants.map((p) => (
+                  <div key={p.participant_id} className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px]">
+                    <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
+                    <span className="min-w-0 flex-1 truncate text-[14.5px] font-bold">{p.moi ? `${p.prenom} (toi)` : p.prenom}</span>
+                    <span className={`text-[12px] font-semibold ${p.complete ? "text-[#14805F]" : "text-[#9DB0C0]"}`}>
+                      {p.complete ? "Complétée" : p.prevu ? "Pas encore sur Palanote" : "Pas encore complétée"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="pt-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+                Chacun a reçu sa fiche préremplie. Une sortie entre amis n'a pas de tampon : seul un directeur de plongée d'un centre peut en poser un.
+              </p>
+              {participants.find((p) => p.moi && !p.complete) && (
+                <button
+                  type="button"
+                  onClick={() => navigate({ to: "/nouvelle-plongee", search: { sortie: s.id } })}
+                  className="mt-[14px] flex h-[52px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+                >
+                  COMPLÉTER MA PLONGÉE
+                </button>
+              )}
+            </>
+          )}
+
           {/* 3. Tamponner */}
-          {s.statut === "terminee" && (
+          {s.statut === "terminee" && !s.entre_amis && (
             <>
               <Titre aide={`${completes}/${participants.length} fiches complétées`}>Qui reçoit le tampon</Titre>
               <div className="flex flex-col gap-[6px]">
@@ -384,12 +421,12 @@ function SortieDp() {
             <>
               <div className="flex flex-col items-center pt-[22px] text-center">
                 <TamponNumerique
-                  centre={s.centre.nom}
+                  centre={s.centre.nom ?? "Club"}
                   ville={s.centre.ville}
                   dp={s.dp.prenom}
                   niveau={s.dp.niveau}
                   date={s.date}
-                  verifie={s.centre.verifie}
+                  verifie={Boolean(s.centre.verifie)}
                   taille={150}
                   anime={vientDeTamponner}
                 />
@@ -413,7 +450,7 @@ function SortieDp() {
 
           {s.statut === "annulee" && <p className="pt-[22px] text-center text-[14px] text-[#5B7189]">Cette sortie est annulée. Les plongeurs ont été prévenus.</p>}
 
-          {(s.statut === "prevue" || s.statut === "terminee") && (
+          {(s.statut === "prevue" || (s.statut === "terminee" && !s.entre_amis)) && (
             <button
               type="button"
               onClick={() => setAnnuler(true)}

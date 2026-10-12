@@ -21,8 +21,9 @@ export type SortieResume = {
   site: string;
   lieu: string | null;
   statut: StatutSortie;
-  centre: string;
-  centre_id?: string;
+  centre: string | null;
+  centre_id?: string | null;
+  entre_amis?: boolean;
   nb_inscrits?: number;
   nb_prevus?: number;
   nb_completees?: number;
@@ -65,7 +66,8 @@ export type DetailSortie = {
   visibilite_m: number | null;
   validee_le: string | null;
   jeton: string | null;
-  centre: { id: string; nom: string; ville: string | null; verifie: boolean };
+  centre: { id: string | null; nom: string | null; ville: string | null; verifie: boolean | null };
+  entre_amis?: boolean; // sortie organisée par un plongeur avec ses binômes : pas de centre, pas de tampon
   dp: { id: string; prenom: string; niveau: string | null };
   est_dp: boolean;
   moi: { participant_id: string; dive_id: string | null; palanquee_id: string | null; tamponne_le: string | null; exclu_tampon: boolean } | null;
@@ -208,6 +210,21 @@ export const definirGuide = (palanquee: string, user: string | null) => rpc<null
 export const terminerSortie = (id: string, duree: number, temp: number | null, visibilite: number | null) =>
   rpc<null>("terminer_sortie", { p_id: id, p_duree: duree, p_temp: temp, p_visibilite: visibilite });
 export const poserTampon = (id: string, exclus: string[]) => rpc<{ tamponnes: number }>("poser_tampon", { p_id: id, p_exclus: exclus });
+// Sortie entre amis : palanquées = listes d'identifiants de binômes ("moi" = l'organisateur)
+export function creerSortieAmis(s: Omit<NouvelleSortie, "centre" | "bateau" | "palanquees">, palanquees: string[][]) {
+  const prof = Number(s.profondeur.replace(",", "."));
+  return rpc<{ id: string; jeton: string }>("creer_sortie_amis", {
+    p_date: s.date,
+    p_heure: s.heure || null,
+    p_site: s.site,
+    p_lieu: s.lieu || null,
+    p_coords: s.coords || null,
+    p_profondeur: s.profondeur && Number.isFinite(prof) ? prof : null,
+    p_consignes: s.consignes || null,
+    p_palanquees: palanquees,
+  });
+}
+
 export const annulerSortie = (id: string) => rpc<null>("annuler_sortie", { p_id: id });
 // Prénoms préparés à l'avance : [["Léa","Paul"],["Sophie"]] = palanquée 1, palanquée 2
 export const ajouterNomsPrevus = (sortie: string, noms: string[][]) => rpc<number>("ajouter_noms_prevus", { p_sortie: sortie, p_noms: noms });

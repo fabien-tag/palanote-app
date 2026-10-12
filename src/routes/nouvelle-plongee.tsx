@@ -687,7 +687,13 @@ function NouvellePlongee() {
         if (idSortie && !existante) {
           try {
             const r = await lierPlongeeSortie(idSortie, idPlongee);
-            annoncerSurAccueil(r.tamponnee ? "Ta plongée est enregistrée et tamponnée par ton club" : "Ta plongée est enregistrée : le DP va poser le tampon");
+            annoncerSurAccueil(
+              r.tamponnee
+                ? "Ta plongée est enregistrée et tamponnée par ton club"
+                : sortieClub?.club_name
+                  ? "Ta plongée est enregistrée : le DP va poser le tampon"
+                  : "Ta plongée est enregistrée",
+            );
             navigate({ to: "/carnet" });
             return;
           } catch (e) {
@@ -815,7 +821,7 @@ function NouvellePlongee() {
         )}
         {sortieClub && !existante && (
           <div className="relative mx-[22px] mt-[12px] galet-b border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[13px] text-[13.5px] leading-snug text-[#123A63]">
-            <b>Préremplie par ta sortie</b> avec {sortieClub.club_name ?? "ton club"}
+            <b>Préremplie par ta sortie</b> {sortieClub.club_name ? `avec ${sortieClub.club_name}` : "entre amis"}
             {sortieClub.palanquee ? ` (palanquée ${sortieClub.palanquee})` : ""}. Ajoute ta profondeur, ton air et ta note
             {sortieClub.statut === "validee" ? " : le tampon du DP s'y posera tout seul." : "."}
           </div>

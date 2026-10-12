@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ChevronRight, Search, UserPlus } from "lucide-react";
+import { CalendarPlus, ChevronRight, Search, UserPlus } from "lucide-react";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
 import {
@@ -23,6 +23,8 @@ import {
 } from "@/lib/amis";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { utilisateurConnecte } from "@/lib/plongees";
+import { sortiesDp, type SortieResume } from "@/lib/club";
+import { LigneSortie } from "@/components/club/Ui";
 
 export const Route = createFileRoute("/amis")({
   head: () => ({ meta: [{ title: "Palanote — Amis" }, { name: "description", content: "Tes binômes de plongée." }] }),
@@ -49,6 +51,8 @@ function PageAmis() {
   const [comptes, setComptes] = useState<Record<string, number>>({});
   const [reponseEnCours, setReponseEnCours] = useState<string | null>(null);
   const [demandes, setDemandes] = useState<DemandeBinome[]>([]);
+  // Sorties entre amis que j'organise (en cours)
+  const [mesSortiesAmis, setMesSortiesAmis] = useState<SortieResume[]>([]);
   const finMessage = useCallback(() => {
     effacerMessageAccueil();
     setMessage(null);
@@ -74,6 +78,9 @@ function PageAmis() {
         ]);
         if (!actif) return;
         setDemandes(dem);
+        void sortiesDp()
+          .then((l) => actif && setMesSortiesAmis(l.filter((x) => !x.centre_id && (x.statut === "prevue" || x.statut === "terminee"))))
+          .catch(() => undefined);
         setBinomes(liste);
         setAConfirmer(attente);
         setComptes(nb);
@@ -292,6 +299,32 @@ function PageAmis() {
                       </div>
                     ))}
                   </div>
+                </>
+              )}
+              {/* Organiser une sortie entre amis */}
+              {binomes.length > 0 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => navigate({ to: "/amis/organiser" })}
+                    className="mt-[20px] flex w-full items-center gap-[13px] galet-c border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left shadow-[0_4px_14px_#123A6309]"
+                  >
+                    <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center goutte bg-[#3DEFBE]">
+                      <CalendarPlus className="h-[21px] w-[21px] text-[#0B3B63]" strokeWidth={2.2} aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[15px] font-bold">Organiser une sortie</span>
+                      <span className="block pt-[1px] text-[12.5px] leading-snug text-[#3F5B76]">Choisis tes binômes, range-les en palanquées : chacun reçoit sa fiche.</span>
+                    </span>
+                    <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" aria-hidden="true" />
+                  </button>
+                  {mesSortiesAmis.length > 0 && (
+                    <div className="flex flex-col gap-[8px] pt-[10px]">
+                      {mesSortiesAmis.map((x) => (
+                        <LigneSortie key={x.id} s={x} onClick={() => navigate({ to: "/club/sortie", search: { id: x.id } })} />
+                      ))}
+                    </div>
+                  )}
                 </>
               )}
               {binomes.length > 0 && (<>

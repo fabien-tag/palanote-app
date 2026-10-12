@@ -125,10 +125,10 @@ function PageSortie() {
                 </span>
                 <span className="min-w-0">
                   <span className="flex items-center gap-[5px] text-[15px] font-bold">
-                    <span className="truncate">{a.centre}</span>
+                    <span className="truncate">{a.centre ?? `Sortie entre amis`}</span>
                     {a.centre_verifie && <BadgeCheck className="h-[15px] w-[15px] shrink-0 text-[#1176A8]" aria-label="Centre vérifié" />}
                   </span>
-                  <span className="block text-[12.5px] text-[#5B7189]">{[a.ville, a.dp ? `DP ${a.dp}` : null].filter(Boolean).join(" · ")}</span>
+                  <span className="block text-[12.5px] text-[#5B7189]">{[a.ville, a.dp ? (a.centre ? `DP ${a.dp}` : `organisée par ${a.dp}`) : null].filter(Boolean).join(" · ")}</span>
                 </span>
               </div>
               <p className="pt-[16px] text-[12.5px] font-bold uppercase tracking-[.07em] text-[#1176A8]">
@@ -150,7 +150,7 @@ function PageSortie() {
               <div className="pt-[20px]">
                 <p className="text-[16px] font-bold">Qui es-tu ?</p>
                 <p className="pb-[10px] text-[12.5px] leading-snug text-[#5B7189]">
-                  {a.dp ?? "Le DP"} a déjà préparé les palanquées. Choisis ton prénom : tu rejoins directement la tienne.
+                  {a.dp ?? "L'organisateur"} a déjà préparé les palanquées. Choisis ton prénom : tu rejoins directement la tienne.
                 </p>
                 <div className="flex flex-wrap gap-[8px]" role="radiogroup" aria-label="Ton prénom dans les palanquées">
                   {libres.map((n) => (
@@ -187,7 +187,9 @@ function PageSortie() {
               {[
                 { Icone: Users, t: "Ta palanquée dans l'app", x: "Tu vois avec qui tu plonges, et les consignes du DP." },
                 { Icone: PenLine, t: "Ta fiche arrive préremplie", x: "Site, date, durée, bateau : tu ajoutes seulement ta profondeur et ton air." },
-                { Icone: BadgeCheck, t: "Le tampon numérique du club", x: "Ta plongée est validée par le DP, sans chercher le tampon à la sortie de l'eau." },
+                a.centre
+                  ? { Icone: BadgeCheck, t: "Le tampon numérique du club", x: "Ta plongée est validée par le DP, sans chercher le tampon à la sortie de l'eau." }
+                  : { Icone: BadgeCheck, t: "Vos carnets se remplissent ensemble", x: "Chacun garde ses propres mesures : profondeur, air, note." },
               ].map(({ Icone, t, x }) => (
                 <div key={t} className="flex items-start gap-[12px]">
                   <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte bg-[#E3F2FB]">
@@ -290,7 +292,8 @@ function PageSortie() {
           {d.temp_fond_c !== null ? <Info Icone={Thermometer} texte={`${String(d.temp_fond_c).replace(".", ",")} °C`} /> : null}
         </div>
         <p className="pt-[10px] text-[12.5px] text-[#5B7189]">
-          Directeur de plongée : <b className="text-[#123A63]">{d.dp.prenom}</b>
+          {d.entre_amis ? "Organisée par " : "Directeur de plongée : "}
+          <b className="text-[#123A63]">{d.dp.prenom}</b>
           {d.dp.niveau ? ` (${d.dp.niveau})` : ""}
         </p>
         <Meduse className="-right-[6px] -top-[14px]" />
@@ -298,7 +301,7 @@ function PageSortie() {
 
       {d.consignes && (
         <>
-          <Titre>Consignes du DP</Titre>
+          <Titre>{d.entre_amis ? "Le mot de l'organisateur" : "Consignes du DP"}</Titre>
           <p className="galet-b border border-[#CFE6F3] bg-[#E3F2FB] px-[15px] py-[13px] text-[14px] leading-normal">« {d.consignes} »</p>
         </>
       )}
@@ -319,7 +322,7 @@ function PageSortie() {
         </div>
       ) : (
         <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] text-[#5B7189]">
-          Le DP compose les palanquées : elle apparaîtra ici.
+          {d.entre_amis ? "L'organisateur compose les palanquées" : "Le DP compose les palanquées"} : elle apparaîtra ici.
         </p>
       )}
 
@@ -327,7 +330,7 @@ function PageSortie() {
       <Titre>Ta plongée</Titre>
       {tamponnee && d.moi?.dive_id ? (
         <div className="flex items-center gap-[14px] galet border border-[#FFD3C8] bg-[#FFF3EF] p-[14px]">
-          <TamponNumerique centre={d.centre.nom} ville={d.centre.ville} dp={d.dp.prenom} niveau={d.dp.niveau} date={d.date} verifie={d.centre.verifie} taille={92} />
+          <TamponNumerique centre={d.centre.nom ?? "Club"} ville={d.centre.ville} dp={d.dp.prenom} niveau={d.dp.niveau} date={d.date} verifie={Boolean(d.centre.verifie)} taille={92} />
           <p className="text-[13.5px] leading-snug">
             <b>Plongée validée</b> par {d.dp.prenom}. Le tampon est sur ta fiche.
           </p>
@@ -339,7 +342,9 @@ function PageSortie() {
             : d.statut === "annulee"
               ? "Cette sortie est annulée."
               : d.moi?.dive_id
-                ? "Ta fiche est complétée. Le DP va poser le tampon."
+                ? d.entre_amis
+                  ? "Ta fiche est complétée. Bonne plongée !"
+                  : "Ta fiche est complétée. Le DP va poser le tampon."
                 : tamponnee
                   ? "Le DP a validé la sortie : complète ta fiche, le tampon s'y posera tout seul."
                   : "La plongée est finie : ta fiche est prête, il ne manque que ta profondeur et ton air."}

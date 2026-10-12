@@ -127,6 +127,9 @@ create table if not exists public.sortie_participants (
 );
 create index if not exists sortie_participants_user_idx on public.sortie_participants (user_id);
 
+-- Sortie entre amis : organisée par un plongeur, sans centre (et donc sans tampon)
+alter table public.sorties alter column centre_id drop not null;
+
 -- Palanquées préparées à l'avance : le DP note des prénoms, rattachés au plongeur quand il scanne le QR.
 -- (pour une base où la table existait déjà avant cette évolution)
 alter table public.sortie_participants add column if not exists nom_prevu text;
@@ -511,9 +514,10 @@ as $$
     'nb_prevus', (select count(*) from public.sortie_participants p where p.sortie_id = s.id and p.user_id is null),
     'nb_completees', (select count(*) from public.sortie_participants p where p.sortie_id = s.id and p.dive_id is not null))
   from public.sorties s
-  join public.centres c on c.id = s.centre_id
+  left join public.centres c on c.id = s.centre_id
   where s.deleted_at is null
-    and exists (select 1 from public.centre_membres m where m.centre_id = s.centre_id and m.user_id = auth.uid() and m.role = 'dp')
+    and (exists (select 1 from public.centre_membres m where m.centre_id = s.centre_id and m.user_id = auth.uid() and m.role = 'dp')
+         or (s.centre_id is null and s.dp_id = auth.uid()))
   order by s.date_sortie desc, s.heure desc nulls last
   limit 60;
 $$;
@@ -547,6 +551,7 @@ begin
     'validee_le', s.validee_le,
     'jeton', case when v_dp then s.jeton end,
     'centre', jsonb_build_object('id', c.id, 'nom', c.nom, 'ville', c.ville, 'verifie', c.verifie),
+    'entre_amis', s.centre_id is null,
     'dp', public.infos_plongeur(s.dp_id),
     'est_dp', v_dp,
     'moi', case when v_moi.id is null then null else jsonb_build_object(
@@ -628,7 +633,7 @@ as $$
          || coalesce(' à ' || to_char(s.heure, 'HH24"h"MI'), '')
          || ' · ' || s.site_name
          || coalesce(' · ' || c.nom, '')
-  from public.sorties s join public.centres c on c.id = s.centre_id
+  from public.sorties s left join public.centres c on c.id = s.centre_id
   where s.id = p_sortie;
 $$;
 revoke all on function public.texte_sortie(uuid) from public, anon, authenticated;
@@ -693,6 +698,7 @@ begin
   select * into s from public.sorties where id = p_sortie;
   if s.statut in ('validee', 'annulee') then raise exception 'sortie fermée'; end if;
   if not exists (select 1 from auth.users where id = p_user) then raise exception 'plongeur introuvable'; end if;
+  if s.centre_id is null and not public.sont_binomes(auth.uid(), p_user) then raise exception 'seulement tes binômes'; end if;
   r := public.inscrire_a_la_sortie(p_sortie, p_user, 'recherche', auth.uid(), null);
   if (r ->> 'nouveau')::boolean then
     perform public.notifier(p_user, 'sortie_inscription',
@@ -869,7 +875,7 @@ begin
     terminee_le = coalesce(terminee_le, now())
   where id = p_id;
   if s.statut = 'prevue' then
-    for p in select user_id from public.sortie_participants where sortie_id = p_id and dive_id is null and user_id is not null loop
+    for p in select user_id from public.sortie_participants where sortie_id = p_id and dive_id is null and user_id is not null and user_id <> auth.uid() loop
       perform public.notifier(p.user_id, 'sortie_a_completer',
         'Ta plongée est prête à compléter',
         public.date_fr(s.date_sortie) || ' · ' || s.site_name || '. Site, date et durée sont déjà remplis : ajoute ta profondeur et ton air.',
@@ -897,6 +903,7 @@ declare
 begin
   if not public.est_dp_sortie(p_id) then raise exception 'réservé au directeur de plongée'; end if;
   select * into s from public.sorties where id = p_id;
+  if s.centre_id is null then raise exception 'pas de tampon pour une sortie entre amis'; end if;
   if s.statut = 'prevue' then raise exception 'termine d''abord la sortie'; end if;
   if s.statut = 'annulee' then raise exception 'sortie annulée'; end if;
   for p in select * from public.sortie_participants where sortie_id = p_id loop
@@ -1036,12 +1043,13 @@ as $$
   select jsonb_build_object(
     'id', s.id, 'date', s.date_sortie, 'date_texte', public.date_fr(s.date_sortie), 'heure', s.heure,
     'site', s.site_name, 'lieu', s.site_location, 'statut', s.statut, 'centre', c.nom,
+    'entre_amis', s.centre_id is null,
     'dp', public.infos_plongeur(s.dp_id) ->> 'prenom',
     'dive_id', p.dive_id, 'tamponne_le', p.tamponne_le,
     'a_completer', p.dive_id is null and s.statut in ('terminee', 'validee'))
   from public.sortie_participants p
   join public.sorties s on s.id = p.sortie_id and s.deleted_at is null and s.statut <> 'annulee'
-  join public.centres c on c.id = s.centre_id
+  left join public.centres c on c.id = s.centre_id
   where p.user_id = auth.uid()
     and (s.date_sortie >= current_date - 1 or p.dive_id is null)
   order by s.date_sortie, s.heure nulls last
@@ -1118,3 +1126,67 @@ end;
 $$;
 revoke all on function public.lier_plongee_sortie(uuid, uuid) from public, anon;
 grant execute on function public.lier_plongee_sortie(uuid, uuid) to authenticated;
+
+
+-- ------------------------------------------------------------
+-- 8. Sortie entre amis (onglet Amis) : un plongeur organise, avec ses binômes
+--    Mêmes écrans que la sortie club, mais sans centre et sans tampon.
+-- ------------------------------------------------------------
+create or replace function public.creer_sortie_amis(
+  p_date date, p_heure time, p_site text, p_lieu text default null, p_coords text default null,
+  p_profondeur numeric default null, p_consignes text default null,
+  p_palanquees jsonb default '[]'::jsonb) -- [["moi", "<id binôme>"], ["<id>"]] : palanquée 1, 2…
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = public
+as $$
+declare
+  v_id uuid;
+  v_jeton text;
+  v_num integer := 0;
+  v_pal jsonb;
+  v_qui text;
+  v_pid uuid;
+  v_user uuid;
+  v_moi_place boolean := false;
+begin
+  if auth.uid() is null then raise exception 'connexion requise'; end if;
+  if char_length(btrim(coalesce(p_site, ''))) = 0 then raise exception 'site manquant'; end if;
+  insert into public.sorties (centre_id, dp_id, date_sortie, heure, site_name, site_location, site_coords, profondeur_prevue, consignes)
+    values (null, auth.uid(), p_date, p_heure, btrim(p_site), nullif(btrim(coalesce(p_lieu, '')), ''), nullif(btrim(coalesce(p_coords, '')), ''),
+            p_profondeur, nullif(btrim(coalesce(p_consignes, '')), ''))
+    returning id, jeton into v_id, v_jeton;
+  for v_pal in select * from jsonb_array_elements(case when jsonb_array_length(coalesce(p_palanquees, '[]'::jsonb)) = 0 then '[["moi"]]'::jsonb else p_palanquees end) loop
+    v_num := v_num + 1;
+    insert into public.sortie_palanquees (sortie_id, numero) values (v_id, v_num) returning id into v_pid;
+    for v_qui in select jsonb_array_elements_text(v_pal) loop
+      if v_qui = 'moi' then
+        v_user := auth.uid();
+        v_moi_place := true;
+      else
+        v_user := v_qui::uuid;
+        if not public.sont_binomes(auth.uid(), v_user) then continue; end if; -- seulement ses binômes
+      end if;
+      insert into public.sortie_participants (sortie_id, user_id, palanquee_id, ajoute_par, via)
+        values (v_id, v_user, v_pid, auth.uid(), 'recherche') on conflict (sortie_id, user_id) do nothing;
+      if v_user <> auth.uid() then
+        perform public.notifier(v_user, 'sortie_inscription',
+          (public.infos_plongeur(auth.uid()) ->> 'prenom') || ' t''embarque en plongée',
+          public.texte_sortie(v_id) || ' · palanquée ' || v_num || '.',
+          '/sortie?id=' || v_id, jsonb_build_object('sortie_id', v_id));
+      end if;
+    end loop;
+  end loop;
+  -- L'organisateur plonge aussi : il a toujours sa place
+  if not v_moi_place then
+    insert into public.sortie_participants (sortie_id, user_id, palanquee_id, ajoute_par, via)
+      values (v_id, auth.uid(), (select id from public.sortie_palanquees where sortie_id = v_id and numero = 1), auth.uid(), 'recherche')
+      on conflict (sortie_id, user_id) do nothing;
+  end if;
+  return jsonb_build_object('id', v_id, 'jeton', v_jeton);
+end;
+$$;
+revoke all on function public.creer_sortie_amis(date, time, text, text, text, numeric, text, jsonb) from public, anon;
+grant execute on function public.creer_sortie_amis(date, time, text, text, text, numeric, text, jsonb) to authenticated;
