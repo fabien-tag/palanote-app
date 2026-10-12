@@ -14,6 +14,7 @@ export function PageClub({
   children,
   bas,
   navigation,
+  large = false,
 }: {
   titre: string;
   onRetour?: () => void; // absent : page d'onglet (titre en grand, pas de retour)
@@ -21,19 +22,20 @@ export function PageClub({
   children: ReactNode;
   bas?: ReactNode;
   navigation?: ReactNode; // barre d'onglets du bas
+  large?: boolean; // tableau de bord : s'élargit sur ordinateur
 }) {
   return (
     <div className="min-h-screen bg-[#F1F6FC] text-[#123A63]">
-      <div className="cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col">
-        <div className="sticky top-0 z-10 flex items-center gap-3 bg-[#F1F6FC]/95 px-[22px] pb-[10px] pt-[clamp(14px,2.6svh,22px)] backdrop-blur">
+      <div className={`cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col ${large ? "lg:max-w-[1120px]" : ""}`}>
+        <div className={`sticky top-0 z-10 flex items-center gap-3 bg-[#F1F6FC]/95 px-[22px] ${large ? "lg:px-[40px]" : ""} pb-[10px] pt-[clamp(14px,2.6svh,22px)] backdrop-blur`}>
           {onRetour && <BoutonRetourCarre onClick={onRetour} />}
           <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"}`}>{titre}</h1>
           {droite}
         </div>
-        <div className="flex flex-grow flex-col px-[22px] pb-[24px]">{children}</div>
+        <div className={`flex flex-grow flex-col px-[22px] pb-[24px] ${large ? "lg:px-[40px]" : ""}`}>{children}</div>
         {bas && (
           <div
-            className={`sticky z-10 bg-gradient-to-t from-[#F1F6FC] via-[#F1F6FC] to-transparent px-[22px] pt-[18px] ${
+            className={`sticky z-10 bg-gradient-to-t from-[#F1F6FC] via-[#F1F6FC] to-transparent px-[22px] pt-[18px] ${large ? "lg:hidden" : ""} ${
               navigation ? "bottom-[calc(76px+env(safe-area-inset-bottom))] pb-[12px]" : "bottom-0 pb-[max(16px,env(safe-area-inset-bottom))]"
             }`}
           >

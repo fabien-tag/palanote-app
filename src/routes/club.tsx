@@ -1,12 +1,29 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, ChevronRight, Plus, QrCode, Stamp, Users } from "lucide-react";
+import { AlertTriangle, Anchor, CheckCircle2, ChevronRight, Clock, FileText, PenLine, Plus, QrCode, Stamp, UserRound, Users } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { BarreNavigation } from "@/components/BarreNavigation";
-import { detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
-import { centreChoisi, choisirCentre, mesCentres, sortiesDp, type Centre, type SortieResume } from "@/lib/club";
+import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
+import {
+  accueilDp,
+  centreChoisi,
+  choisirCentre,
+  heureCourte,
+  mesCentres,
+  relanceRecente,
+  relancerFiches,
+  scriptManquant,
+  sortiesDp,
+  type AccueilDp,
+  type ActionDp,
+  type Centre,
+  type ProchaineSortie,
+  type SortieResume,
+} from "@/lib/club";
 
-// Espace club du directeur de plongée (parcours 15, écran 1)
+// Onglet « Sorties » : l'accueil du directeur de plongée (parcours 15).
+// Le jour J (prochaine sortie), ce qu'il reste à faire, sa saison et les gens du centre.
+// Sur ordinateur, la page s'élargit en tableau de bord à deux colonnes.
 export const Route = createFileRoute("/club")({
   head: () => ({ meta: [{ title: "Palanote — Espace club" }] }),
   component: EspaceClub,
@@ -18,6 +35,9 @@ function EspaceClub() {
   const [centres, setCentres] = useState<Centre[] | null>(null);
   const [sorties, setSorties] = useState<SortieResume[]>([]);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [accueil, setAccueil] = useState<AccueilDp | null>(null);
+  const [relances, setRelances] = useState<Record<string, string>>({});
+  const [toutVoir, setToutVoir] = useState(false);
 
   useEffect(() => {
     if (!pret) return;
@@ -34,10 +54,36 @@ function EspaceClub() {
     })();
   }, [pret]);
 
+  // Le tableau de bord du centre choisi (silencieux si le script SQL n'est pas encore lancé)
+  useEffect(() => {
+    if (!centres || centres.length === 0) return;
+    const id = centres.find((c) => c.id === centreChoisi())?.id ?? centres[0]!.id;
+    let actif = true;
+    setAccueil(null);
+    accueilDp(id)
+      .then((a) => actif && setAccueil(a))
+      .catch((e) => {
+        if (!scriptManquant(e)) console.error(e);
+      });
+    return () => {
+      actif = false;
+    };
+  }, [centres]);
+
   if (ecran) return ecran;
 
   const idCentre = centres?.find((c) => c.id === centreChoisi())?.id ?? centres?.[0]?.id;
   const centre = centres?.find((c) => c.id === idCentre) ?? null;
+  const relancer = async (sortie: string) => {
+    setRelances((r) => ({ ...r, [sortie]: "envoi" }));
+    try {
+      const nb = await relancerFiches(sortie);
+      setRelances((r) => ({ ...r, [sortie]: nb > 0 ? `${nb} relancé${nb > 1 ? "s" : ""}` : "Personne à relancer" }));
+    } catch (e) {
+      const deja = /déjà relancé/i.test(String((e as { message?: string })?.message ?? ""));
+      setRelances((r) => ({ ...r, [sortie]: deja ? "Déjà relancé aujourd'hui" : "Échec, réessaie" }));
+    }
+  };
   const duCentre = sorties.filter((s) => !centre || s.centre_id === centre.id);
   const aTamponner = duCentre.filter((s) => s.statut === "terminee");
   const aVenir = duCentre.filter((s) => s.statut === "prevue").sort((a, b) => a.date.localeCompare(b.date));
@@ -47,7 +93,20 @@ function EspaceClub() {
   return (
     <PageClub
       titre="Sorties"
+      large
       navigation={<BarreNavigation actif="club" />}
+      droite={
+        centre ? (
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id } })}
+            className="hidden h-[44px] items-center gap-2 galet-moyen bg-[#3DEFBE] px-[18px] text-[13px] font-bold text-[#0B3B63] lg:flex"
+          >
+            <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
+            NOUVELLE SORTIE
+          </button>
+        ) : null
+      }
       bas={
         centre ? (
           <button
@@ -104,13 +163,13 @@ function EspaceClub() {
           <button
             type="button"
             onClick={() => navigate({ to: "/club/centre" })}
-            className="mt-[10px] flex w-full items-center gap-[13px] galet-c border border-[#CFE6F3] bg-[#E3F2FB] px-[15px] py-[14px] text-left"
+            className="mt-[10px] flex w-full items-center gap-[13px] galet-c border border-[#CFE6F3] bg-[#E3F2FB] px-[15px] py-[12px] text-left lg:max-w-[520px]"
           >
-            <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center goutte bg-[#0F3D70]">
-              <Anchor className="h-[21px] w-[21px] text-white" strokeWidth={2.1} aria-hidden="true" />
+            <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte bg-[#0F3D70]">
+              <Anchor className="h-[19px] w-[19px] text-white" strokeWidth={2.1} aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-[16px] font-bold">{centre.nom}</span>
+              <span className="block truncate text-[15.5px] font-bold">{centre.nom}</span>
               <span className="block truncate text-[12.5px] text-[#3F5B76]">
                 {[centre.ville, centre.verifie ? "Centre vérifié" : null, `${centre.nb_dp ?? 1} DP`].filter(Boolean).join(" · ")}
               </span>
@@ -118,40 +177,166 @@ function EspaceClub() {
             <span className="shrink-0 text-[13px] font-bold text-[#1176A8]">{(centres?.length ?? 0) > 1 ? "Changer" : "Gérer"}</span>
           </button>
 
-          {aTamponner.length > 0 && (
-            <>
-              <Titre aide="les fiches arrivent">À tamponner</Titre>
-              <div className="flex flex-col gap-[10px]">
-                {aTamponner.map((s) => (
-                  <LigneSortie key={s.id} s={s} onClick={() => ouvrir(s)} />
-                ))}
-              </div>
-            </>
-          )}
+          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-x-[36px]">
+            {/* Colonne principale : le jour J et ce qu'il reste à faire */}
+            <div className="lg:col-start-1 lg:row-start-1">
+              {accueil ? (
+                <>
+                  <Titre>Prochaine sortie</Titre>
+                  {accueil.prochaine ? (
+                    <CarteProchaine
+                      p={accueil.prochaine}
+                      onOuvrir={() => navigate({ to: "/club/sortie", search: { id: accueil.prochaine!.id } })}
+                      onQr={() => navigate({ to: "/club/sortie", search: { id: accueil.prochaine!.id, qr: true } })}
+                      onFiche={() => navigate({ to: "/club/fiche-securite", search: { id: accueil.prochaine!.id } })}
+                    />
+                  ) : (
+                    <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#5B7189]">
+                      Aucune sortie prévue. Crée la prochaine : tes plongeurs la recevront dans leur app.
+                    </p>
+                  )}
 
-          <Titre>À venir</Titre>
-          {aVenir.length === 0 ? (
-            <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#5B7189]">
-              Aucune sortie prévue. Crée la prochaine : tes plongeurs la recevront dans leur app.
-            </p>
-          ) : (
-            <div className="flex flex-col gap-[10px]">
-              {aVenir.map((s) => (
-                <LigneSortie key={s.id} s={s} onClick={() => ouvrir(s)} />
-              ))}
+                  <Titre aide={accueil.a_faire.length > 0 ? `${accueil.a_faire.length} action${accueil.a_faire.length > 1 ? "s" : ""}` : undefined}>À faire</Titre>
+                  {accueil.a_faire.length === 0 ? (
+                    <div className="flex items-center gap-[11px] galet-b bg-[#E2F8EF] px-[14px] py-[13px] text-[13.5px] font-semibold text-[#14805F]">
+                      <CheckCircle2 className="h-[19px] w-[19px] shrink-0" aria-hidden="true" />
+                      Rien en attente : tout est tamponné.
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-[8px]">
+                      {accueil.a_faire.map((a) => (
+                        <LigneAction
+                          key={`${a.type}-${a.sortie_id}`}
+                          a={a}
+                          relance={relances[a.sortie_id]}
+                          onOuvrir={() => navigate({ to: "/club/sortie", search: { id: a.sortie_id } })}
+                          onRelancer={() => void relancer(a.sortie_id)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                aTamponner.length > 0 && (
+                  <>
+                    <Titre aide="les fiches arrivent">À tamponner</Titre>
+                    <div className="flex flex-col gap-[10px]">
+                      {aTamponner.map((s) => (
+                        <LigneSortie key={s.id} s={s} onClick={() => ouvrir(s)} />
+                      ))}
+                    </div>
+                  </>
+                )
+              )}
             </div>
-          )}
 
-          {passees.length > 0 && (
-            <>
-              <Titre>Passées</Titre>
-              <div className="flex flex-col gap-[10px]">
-                {passees.slice(0, 12).map((s) => (
-                  <LigneSortie key={s.id} s={s} onClick={() => ouvrir(s)} />
-                ))}
+            {/* Colonne de droite sur ordinateur : la saison et les gens */}
+            {accueil && (
+              <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
+                <Titre>Ta saison {accueil.stats.annee}</Titre>
+                <div className="grid grid-cols-2 gap-[10px]">
+                  <Tuile Icone={Anchor} valeur={accueil.stats.sorties} libelle={`sortie${accueil.stats.sorties > 1 ? "s" : ""} encadrée${accueil.stats.sorties > 1 ? "s" : ""}`} detail={accueil.stats.sorties_mois > 0 ? `dont ${accueil.stats.sorties_mois} ce mois-ci` : "aucune ce mois-ci"} />
+                  <Tuile Icone={Users} valeur={accueil.stats.plongeurs} libelle={`plongeur${accueil.stats.plongeurs > 1 ? "s" : ""}`} detail={`${accueil.stats.plongees} plongée${accueil.stats.plongees > 1 ? "s" : ""} encadrée${accueil.stats.plongees > 1 ? "s" : ""}`} />
+                  <Tuile Icone={Stamp} valeur={accueil.stats.tampons} libelle={`tampon${accueil.stats.tampons > 1 ? "s" : ""} posé${accueil.stats.tampons > 1 ? "s" : ""}`} detail="carnets validés" corail />
+                  <Tuile Icone={Clock} valeur={heuresMinutes(accueil.stats.minutes)} libelle="d'encadrement" detail="sous l'eau" />
+                </div>
+
+                {accueil.habitues.length > 0 && (
+                  <>
+                    <Titre aide="avec le centre">Les habitués</Titre>
+                    <div className="-mx-[22px] flex gap-[10px] overflow-x-auto px-[22px] pb-[4px] lg:mx-0 lg:flex-wrap lg:px-0">
+                      {accueil.habitues.map((h) => (
+                        <div key={h.id} className="flex w-[96px] shrink-0 flex-col items-center galet-b border border-[#E4EBF1] bg-white px-[8px] pb-[10px] pt-[12px] text-center">
+                          <span className="relative">
+                            <Avatar id={h.id} prenom={h.prenom} taille={44} />
+                            <span className="absolute -bottom-[3px] -right-[8px] rounded-[9px] bg-[#0F3D70] px-[6px] py-[1px] text-[11px] font-bold text-white">×{h.nb}</span>
+                          </span>
+                          <span className="block w-full truncate pt-[7px] text-[13.5px] font-bold">{h.prenom}</span>
+                          <span className="block w-full truncate text-[11.5px] text-[#5B7189]">{h.niveau ?? "—"}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {accueil.nouveaux.length > 0 && (
+                  <>
+                    <Titre aide="30 derniers jours">Les nouveaux</Titre>
+                    <div className="flex flex-col gap-[6px]">
+                      {accueil.nouveaux.slice(0, 5).map((n) => (
+                        <div key={n.id} className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px]">
+                          <Avatar id={n.id} prenom={n.prenom} taille={34} />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[14px] font-bold">
+                              {n.prenom}
+                              {n.niveau ? <span className="font-semibold text-[#5B7189]"> · {n.niveau}</span> : null}
+                            </span>
+                            <span className="block truncate text-[12px] text-[#5B7189]">1re sortie : {n.premiere ? dateCourte(n.premiere) : ""}{n.site ? ` · ${n.site}` : ""}</span>
+                          </span>
+                          <span className="shrink-0 rounded-[9px] bg-[#FFF1D6] px-[7px] py-[2px] text-[11px] font-bold text-[#8A5A10]">Nouveau</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {accueil.sites.length > 0 && (
+                  <>
+                    <Titre>Tes sites</Titre>
+                    <div className="flex flex-col gap-[10px] galet-b border border-[#E4EBF1] bg-white px-[14px] py-[13px]">
+                      {accueil.sites.map((t) => (
+                        <div key={t.site}>
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="truncate text-[14px] font-bold">{t.site}</span>
+                            <span className="shrink-0 text-[12px] text-[#5B7189]">
+                              {t.nb} sortie{t.nb > 1 ? "s" : ""}
+                              {t.duree_moy ? ` · ${t.duree_moy} min` : ""}
+                              {t.prof_max ? ` · ${String(t.prof_max).replace(".0", "").replace(".", ",")} m` : ""}
+                            </span>
+                          </div>
+                          <div className="mt-[5px] h-[6px] overflow-hidden rounded-[3px] bg-[#EEF4F9]">
+                            <div className="h-full rounded-[3px] bg-[#57D4F5]" style={{ width: `${Math.max(8, (t.nb / accueil.sites[0]!.nb) * 100)}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
-            </>
-          )}
+            )}
+
+            {/* Toutes les sorties */}
+            <div className="lg:col-start-1 lg:row-start-2">
+              <Titre>À venir</Titre>
+              {aVenir.length === 0 ? (
+                <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#5B7189]">
+                  Aucune sortie prévue. Crée la prochaine : tes plongeurs la recevront dans leur app.
+                </p>
+              ) : (
+                <div className="flex flex-col gap-[10px]">
+                  {aVenir.map((s) => (
+                    <LigneSortie key={s.id} s={s} onClick={() => ouvrir(s)} />
+                  ))}
+                </div>
+              )}
+
+              {passees.length > 0 && (
+                <>
+                  <Titre aide={`${passees.length}`}>Passées</Titre>
+                  <div className="flex flex-col gap-[10px]">
+                    {passees.slice(0, toutVoir ? 60 : 5).map((s) => (
+                      <LigneSortie key={s.id} s={s} onClick={() => ouvrir(s)} />
+                    ))}
+                  </div>
+                  {passees.length > 5 && !toutVoir && (
+                    <button type="button" onClick={() => setToutVoir(true)} className="mx-auto mt-[12px] block text-[13px] font-bold text-[#1176A8]">
+                      Voir les {passees.length} sorties passées
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         </>
       )}
 
@@ -174,5 +359,136 @@ function EspaceClub() {
         </div>
       )}
     </PageClub>
+  );
+}
+
+const majuscule = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
+function heuresMinutes(min: number) {
+  if (!min) return "0 h";
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return h === 0 ? `${m} min` : m === 0 ? `${h} h` : `${h} h ${String(m).padStart(2, "0")}`;
+}
+
+function dateCourte(d: string) {
+  const x = new Date(`${d}T12:00:00`);
+  return isNaN(x.getTime()) ? d : x.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+}
+
+function quand(p: ProchaineSortie) {
+  const j = p.dans_jours;
+  const jour = j === 0 ? "Aujourd'hui" : j === 1 ? "Demain" : j < 7 ? p.date_texte : `Dans ${j} jours · ${p.date_texte}`;
+  return [jour, heureCourte(p.heure)].filter(Boolean).join(" · ");
+}
+
+// La carte du jour J : remplissage, alertes palanquées, QR en un geste
+function CarteProchaine({ p, onOuvrir, onQr, onFiche }: { p: ProchaineSortie; onOuvrir: () => void; onQr: () => void; onFiche: () => void }) {
+  const alertes = [
+    p.sans_guide > 0 ? `${p.sans_guide} palanquée${p.sans_guide > 1 ? "s" : ""} sans guide` : null,
+    p.sans_palanquee > 0 ? `${p.sans_palanquee} plongeur${p.sans_palanquee > 1 ? "s" : ""} sans palanquée` : null,
+  ].filter(Boolean) as string[];
+  return (
+    <div className="galet border border-[#E4EBF1] bg-white p-[16px] shadow-[0_4px_14px_#123A6306]">
+      <button type="button" onClick={onOuvrir} className="block w-full text-left">
+        <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#1176A8]">{quand(p)}</p>
+        <h3 className="pt-[3px] text-[23px] font-bold leading-tight">{p.site}</h3>
+        <p className="truncate text-[13.5px] text-[#5B7189]">{[p.lieu, p.bateau, p.mienne ? null : "un autre DP"].filter(Boolean).join(" · ")}</p>
+        <div className="grid grid-cols-3 gap-[8px] pt-[13px]">
+          {[
+            { v: p.nb_inscrits, l: `inscrit${p.nb_inscrits > 1 ? "s" : ""}` },
+            { v: p.nb_prevus, l: "en attente" },
+            { v: p.nb_palanquees, l: `palanquée${p.nb_palanquees > 1 ? "s" : ""}` },
+          ].map(({ v, l }) => (
+            <span key={l} className="galet-petit bg-[#F1F6FC] px-[10px] py-[8px]">
+              <span className="block text-[20px] font-bold leading-none">{v}</span>
+              <span className="block pt-[3px] text-[11.5px] text-[#5B7189]">{l}</span>
+            </span>
+          ))}
+        </div>
+      </button>
+      {alertes.length > 0 && (
+        <div className="mt-[10px] flex flex-wrap gap-[6px]">
+          {alertes.map((a) => (
+            <span key={a} className="flex items-center gap-[5px] rounded-[10px] bg-[#FFE9E2] px-[9px] py-[4px] text-[12px] font-bold text-[#D9573F]">
+              <AlertTriangle className="h-[13px] w-[13px]" strokeWidth={2.4} aria-hidden="true" />
+              {a}
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="grid grid-cols-2 gap-[8px] pt-[13px]">
+        <button type="button" onClick={onQr} className="flex h-[46px] items-center justify-center gap-2 galet-moyen bg-[#0F3D70] text-[13px] font-bold text-white">
+          <QrCode className="h-[17px] w-[17px]" strokeWidth={2.2} aria-hidden="true" />
+          QR CODE
+        </button>
+        <button type="button" onClick={onOuvrir} className="flex h-[46px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[13px] font-bold text-[#1176A8]">
+          <Users className="h-[17px] w-[17px]" strokeWidth={2.2} aria-hidden="true" />
+          PALANQUÉES
+        </button>
+      </div>
+      <button type="button" onClick={onFiche} className="mt-[10px] flex w-full items-center justify-center gap-[6px] text-[12.5px] font-bold text-[#5B7189]">
+        <FileText className="h-[14px] w-[14px]" aria-hidden="true" />
+        Fiche de sécurité
+      </button>
+    </div>
+  );
+}
+
+const STYLE_ACTION = {
+  tampon: { Icone: Stamp, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
+  fiches: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  noms: { Icone: UserRound, fond: "bg-[#EEF2F6]", couleur: "text-[#5B7189]" },
+} as const;
+
+function LigneAction({ a, relance, onOuvrir, onRelancer }: { a: ActionDp; relance: string | undefined; onOuvrir: () => void; onRelancer: () => void }) {
+  const { Icone, fond, couleur } = STYLE_ACTION[a.type];
+  const titre =
+    a.type === "tampon"
+      ? `Tamponner ${majuscule(a.site.trim())}`
+      : a.type === "fiches"
+        ? `${a.nb} fiche${a.nb > 1 ? "s" : ""} pas remplie${a.nb > 1 ? "s" : ""}`
+        : `${a.nb} prénom${a.nb > 1 ? "s" : ""} jamais réclamé${a.nb > 1 ? "s" : ""}`;
+  const detail =
+    a.type === "tampon"
+      ? `${a.date_texte} · ${a.nb}/${a.total ?? 0} fiche${(a.total ?? 0) > 1 ? "s" : ""} remplie${a.nb > 1 ? "s" : ""}`
+      : a.type === "fiches"
+        ? `${majuscule(a.site.trim())} · ${a.date_texte}`
+        : `${majuscule(a.site.trim())} · rattache-les ou retire-les`;
+  const aRelancer = a.type === "fiches" ? a.nb : a.type === "tampon" ? (a.manquantes ?? 0) : 0;
+  const dejaRelance = relanceRecente(a.relance_le);
+  const etat = relance ?? (dejaRelance ? "Relancé aujourd'hui" : null);
+  return (
+    <div className="flex items-center gap-[11px] galet-b border border-[#E4EBF1] bg-white px-[12px] py-[10px]">
+      <button type="button" onClick={onOuvrir} className="flex min-w-0 flex-1 items-center gap-[11px] text-left">
+        <span className={`flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte ${fond}`}>
+          <Icone className={`h-[18px] w-[18px] ${couleur}`} strokeWidth={2.2} aria-hidden="true" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[14.5px] font-bold">{titre}</span>
+          <span className="block truncate text-[12px] text-[#5B7189]">{detail}</span>
+        </span>
+      </button>
+      {aRelancer > 0 &&
+        (etat ? (
+          <span className="shrink-0 text-right text-[11.5px] font-semibold leading-tight text-[#14805F]">{etat === "envoi" ? "Envoi…" : etat}</span>
+        ) : (
+          <button type="button" onClick={onRelancer} className="shrink-0 rounded-[14px] border border-[#57D4F5] px-[11px] py-[6px] text-[12px] font-bold text-[#1176A8]">
+            Relancer
+          </button>
+        ))}
+      {aRelancer === 0 && <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />}
+    </div>
+  );
+}
+
+function Tuile({ Icone, valeur, libelle, detail, corail = false }: { Icone: typeof Anchor; valeur: number | string; libelle: string; detail: string; corail?: boolean }) {
+  return (
+    <div className="galet-b border border-[#E4EBF1] bg-white px-[13px] py-[12px]">
+      <Icone className={`h-[18px] w-[18px] ${corail ? "text-[#FF8A75]" : "text-[#1176A8]"}`} strokeWidth={2.2} aria-hidden="true" />
+      <span className="block pt-[7px] text-[26px] font-bold leading-none">{valeur}</span>
+      <span className="block pt-[3px] text-[13px] font-semibold leading-tight">{libelle}</span>
+      <span className="block pt-[2px] text-[11.5px] text-[#7D93A8]">{detail}</span>
+    </div>
   );
 }

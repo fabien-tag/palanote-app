@@ -44,6 +44,7 @@ import { Route as AmisOrganiserRouteImport } from './routes/amis_.organiser'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
 import { Route as ClubCentreRouteImport } from './routes/club_.centre'
+import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-securite'
 import { Route as ClubNouvelleSortieRouteImport } from './routes/club_.nouvelle-sortie'
 import { Route as ClubSortieRouteImport } from './routes/club_.sortie'
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
@@ -237,6 +238,11 @@ const ClubCentreRoute = ClubCentreRouteImport.update({
   path: '/club/centre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClubFicheSecuriteRoute = ClubFicheSecuriteRouteImport.update({
+  id: '/club_/fiche-securite',
+  path: '/club/fiche-securite',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClubNouvelleSortieRoute = ClubNouvelleSortieRouteImport.update({
   id: '/club_/nouvelle-sortie',
   path: '/club/nouvelle-sortie',
@@ -354,6 +360,7 @@ export interface FileRoutesByFullPath {
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
+  '/club/fiche-securite': typeof ClubFicheSecuriteRoute
   '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
   '/club/sortie': typeof ClubSortieRoute
   '/moi/aide': typeof MoiAideRoute
@@ -407,6 +414,7 @@ export interface FileRoutesByTo {
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
+  '/club/fiche-securite': typeof ClubFicheSecuriteRoute
   '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
   '/club/sortie': typeof ClubSortieRoute
   '/moi/aide': typeof MoiAideRoute
@@ -461,6 +469,7 @@ export interface FileRoutesById {
   '/amis_/proposition': typeof AmisPropositionRoute
   '/amis_/rechercher': typeof AmisRechercherRoute
   '/club_/centre': typeof ClubCentreRoute
+  '/club_/fiche-securite': typeof ClubFicheSecuriteRoute
   '/club_/nouvelle-sortie': typeof ClubNouvelleSortieRoute
   '/club_/sortie': typeof ClubSortieRoute
   '/moi_/aide': typeof MoiAideRoute
@@ -516,6 +525,7 @@ export interface FileRouteTypes {
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/centre'
+    | '/club/fiche-securite'
     | '/club/nouvelle-sortie'
     | '/club/sortie'
     | '/moi/aide'
@@ -569,6 +579,7 @@ export interface FileRouteTypes {
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/centre'
+    | '/club/fiche-securite'
     | '/club/nouvelle-sortie'
     | '/club/sortie'
     | '/moi/aide'
@@ -622,6 +633,7 @@ export interface FileRouteTypes {
     | '/amis_/proposition'
     | '/amis_/rechercher'
     | '/club_/centre'
+    | '/club_/fiche-securite'
     | '/club_/nouvelle-sortie'
     | '/club_/sortie'
     | '/moi_/aide'
@@ -676,6 +688,7 @@ export interface RootRouteChildren {
   AmisPropositionRoute: typeof AmisPropositionRoute
   AmisRechercherRoute: typeof AmisRechercherRoute
   ClubCentreRoute: typeof ClubCentreRoute
+  ClubFicheSecuriteRoute: typeof ClubFicheSecuriteRoute
   ClubNouvelleSortieRoute: typeof ClubNouvelleSortieRoute
   ClubSortieRoute: typeof ClubSortieRoute
   MoiAideRoute: typeof MoiAideRoute
@@ -941,6 +954,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClubCentreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/club_/fiche-securite': {
+      id: '/club_/fiche-securite'
+      path: '/club/fiche-securite'
+      fullPath: '/club/fiche-securite'
+      preLoaderRoute: typeof ClubFicheSecuriteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/club_/nouvelle-sortie': {
       id: '/club_/nouvelle-sortie'
       path: '/club/nouvelle-sortie'
@@ -1092,6 +1112,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmisPropositionRoute: AmisPropositionRoute,
   AmisRechercherRoute: AmisRechercherRoute,
   ClubCentreRoute: ClubCentreRoute,
+  ClubFicheSecuriteRoute: ClubFicheSecuriteRoute,
   ClubNouvelleSortieRoute: ClubNouvelleSortieRoute,
   ClubSortieRoute: ClubSortieRoute,
   MoiAideRoute: MoiAideRoute,

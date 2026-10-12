@@ -347,3 +347,95 @@ export function estDirecteurDePlongee(): Promise<boolean | null> {
 export function oublierVerificationDp() {
   verification = null;
 }
+
+// ---------- Accueil du directeur de plongée (sql/palanote-accueil-dp.sql) ----------
+export type ProchaineSortie = {
+  id: string;
+  date: string;
+  date_texte: string;
+  heure: string | null;
+  site: string;
+  lieu: string | null;
+  bateau: string | null;
+  profondeur_prevue: number | null;
+  dans_jours: number;
+  mienne: boolean;
+  nb_inscrits: number;
+  nb_prevus: number;
+  nb_palanquees: number;
+  sans_guide: number;
+  sans_palanquee: number;
+};
+
+export type ActionDp = {
+  type: "tampon" | "fiches" | "noms";
+  sortie_id: string;
+  site: string;
+  date: string;
+  date_texte: string;
+  nb: number;
+  total?: number;
+  manquantes?: number;
+  relance_le?: string | null;
+};
+
+export type StatsDp = {
+  annee: number;
+  sorties: number;
+  sorties_mois: number;
+  plongees: number;
+  plongeurs: number;
+  tampons: number;
+  minutes: number;
+};
+
+export type PlongeurCentre = { id: string; prenom: string; niveau: string | null; club: string | null; nb?: number; derniere?: string; premiere?: string; site?: string };
+
+export type AccueilDp = {
+  prochaine: ProchaineSortie | null;
+  a_faire: ActionDp[];
+  stats: StatsDp;
+  habitues: PlongeurCentre[];
+  nouveaux: PlongeurCentre[];
+  sites: { site: string; nb: number; duree_moy: number | null; prof_max: number | null }[];
+};
+
+export const accueilDp = (centre: string) => rpc<AccueilDp>("accueil_dp", { p_centre: centre });
+export const relancerFiches = (sortie: string) => rpc<number>("relancer_fiches", { p_sortie: sortie });
+
+// Relancé il y a moins de 20 h : la base refuse une 2e relance le même jour
+export function relanceRecente(le: string | null | undefined) {
+  return Boolean(le && Date.now() - new Date(le).getTime() < 20 * 3600 * 1000);
+}
+
+export type FicheSecurite = {
+  id: string;
+  date: string;
+  date_texte: string;
+  heure: string | null;
+  site: string;
+  lieu: string | null;
+  bateau: string | null;
+  profondeur_prevue: number | null;
+  consignes: string | null;
+  statut: StatutSortie;
+  duree_min: number | null;
+  temp_fond_c: number | null;
+  visibilite_m: number | null;
+  centre: { nom: string; ville: string | null } | null;
+  dp: { id: string; prenom: string; nom: string | null; niveau: string | null };
+  plongeurs: {
+    palanquee: number | null;
+    prenom: string;
+    nom: string | null;
+    niveau: string | null;
+    guide: boolean;
+    prevu: boolean;
+    prof_max: number | null;
+    duree: number | null;
+    immersion: string | null;
+    sortie: string | null;
+  }[];
+};
+
+export const ficheSecurite = (sortie: string) => rpc<FicheSecurite>("fiche_securite", { p_sortie: sortie });

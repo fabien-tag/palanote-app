@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Check, Clock, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
+import { Check, ChevronRight, Clock, FileText, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
 import QRCode from "qrcode";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
@@ -27,19 +27,22 @@ import {
 //   2. Après la plongée : durée, eau, visibilité → les fiches partent préremplies
 //   3. Tamponner : toute la sortie d'un geste (on peut décocher quelqu'un)
 export const Route = createFileRoute("/club_/sortie")({
-  validateSearch: (search: Record<string, unknown>): { id?: string } => (typeof search["id"] === "string" ? { id: search["id"] } : {}),
+  validateSearch: (search: Record<string, unknown>): { id?: string; qr?: boolean } => ({
+    ...(typeof search["id"] === "string" ? { id: search["id"] } : {}),
+    ...(search["qr"] === true || search["qr"] === "1" || search["qr"] === 1 ? { qr: true } : {}),
+  }),
   head: () => ({ meta: [{ title: "Palanote — Sortie" }] }),
   component: SortieDp,
 });
 
 function SortieDp() {
   const navigate = useNavigate();
-  const { id } = Route.useSearch();
+  const { id, qr: qrDemande } = Route.useSearch();
   const { pret, ecran } = useConnexionRequise();
   const [s, setS] = useState<DetailSortie | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [qr, setQr] = useState<string | null>(null);
-  const [voirQr, setVoirQr] = useState(false);
+  const [voirQr, setVoirQr] = useState(Boolean(qrDemande)); // ouvert d'emblée depuis l'accueil DP
   const [q, setQ] = useState("");
   const [trouves, setTrouves] = useState<(Participant & { deja_inscrit: boolean })[]>([]);
   const [finie, setFinie] = useState(false);
@@ -192,6 +195,20 @@ function SortieDp() {
             <Etapes statut={s.statut} entreAmis={s.entre_amis} />
             <Meduse className="-right-[6px] -top-[14px]" />
           </div>
+          {s.est_dp && !s.entre_amis && s.statut !== "annulee" && (
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/club/fiche-securite", search: { id: s.id } })}
+              className="mt-[10px] flex w-full items-center gap-[11px] galet-b border border-[#E4EBF1] bg-white px-[14px] py-[11px] text-left"
+            >
+              <FileText className="h-[19px] w-[19px] shrink-0 text-[#1176A8]" strokeWidth={2.1} aria-hidden="true" />
+              <span className="min-w-0 flex-1">
+                <span className="block text-[14px] font-bold">Fiche de sécurité</span>
+                <span className="block text-[12px] text-[#5B7189]">Palanquées, niveaux et paramètres, à imprimer</span>
+              </span>
+              <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+            </button>
+          )}
 
           {/* 1. Inscrire */}
           {s.statut === "prevue" && (
