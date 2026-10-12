@@ -59,7 +59,7 @@ function PageFiche() {
   const aPreparer = f?.statut === "prevue";
 
   return (
-    <div className="min-h-screen bg-[#F1F6FC] text-[#123A63] print:bg-white">
+    <div className="bureau min-h-screen bg-[#F1F6FC] text-[#123A63] print:bg-white">
       <style>{`@page { size: A4 landscape; margin: 10mm; }`}</style>
 
       <div className="mx-auto flex max-w-[1120px] items-center gap-3 px-[22px] pb-[10px] pt-[clamp(14px,2.6svh,22px)] print:hidden">

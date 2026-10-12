@@ -245,6 +245,16 @@
   border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
 }
 
+/* Palanote — « bureau » : le poste de pilotage du DP sur ordinateur.
+   Plus sérieux que l'app mobile : mêmes couleurs et pictos, mais tous les coins
+   au même rayon (pas de galets ni de gouttes). Les avatars restent ronds.
+   Hors couche Tailwind, donc prioritaire sur les utilitaires. */
+@media (min-width: 64rem) {
+  .bureau :is(.galet, .galet-b, .galet-c, .galet-moyen, .galet-petit, .goutte, [class*="rounded-["]) {
+    border-radius: 10px;
+  }
+}
+
 /* Palanote — pile de plongées (carnet) : les cartes sortent de la pile une à une,
    comme les notifications empilées de l'iPhone. */
 @keyframes sortie-de-pile {
