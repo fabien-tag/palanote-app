@@ -10,8 +10,11 @@ import {
   compterPlongeesEnsemble,
   couleurAvatar,
   dateCourte,
+  demandesBinomeRecues,
   initiales,
   mesBinomes,
+  repondreDemandeBinome,
+  type DemandeBinome,
   plongeesAConfirmer,
   plongeesEnsembleTexte,
   refuserIdentification,
@@ -45,6 +48,7 @@ function PageAmis() {
   const [aConfirmer, setAConfirmer] = useState<PlongeeAConfirmer[]>([]);
   const [comptes, setComptes] = useState<Record<string, number>>({});
   const [reponseEnCours, setReponseEnCours] = useState<string | null>(null);
+  const [demandes, setDemandes] = useState<DemandeBinome[]>([]);
   const finMessage = useCallback(() => {
     effacerMessageAccueil();
     setMessage(null);
@@ -62,12 +66,14 @@ function PageAmis() {
       const recu = accepte ?? lireMessageAccueil();
       if (recu && actif) setMessage(recu);
       try {
-        const [liste, attente, nb] = await Promise.all([
+        const [liste, attente, nb, dem] = await Promise.all([
           mesBinomes(),
           plongeesAConfirmer().catch(() => []),
           compterPlongeesEnsemble().catch(() => ({})),
+          demandesBinomeRecues(),
         ]);
         if (!actif) return;
+        setDemandes(dem);
         setBinomes(liste);
         setAConfirmer(attente);
         setComptes(nb);
@@ -84,7 +90,25 @@ function PageAmis() {
     };
   }, []);
 
-  const vide = binomes !== null && binomes.length === 0;
+  const vide = binomes !== null && binomes.length === 0 && demandes.length === 0;
+
+  // Demande de binôme reçue (« Rechercher quelqu'un »)
+  const repondreDemande = async (d: DemandeBinome, accepter: boolean) => {
+    setReponseEnCours(d.demande_id);
+    try {
+      await repondreDemandeBinome(d.demande_id, accepter);
+      setDemandes((l) => l.filter((x) => x.demande_id !== d.demande_id));
+      if (accepter) {
+        setBinomes((b) => [{ id: d.id, prenom: d.prenom, niveau: d.niveau, club: d.club }, ...(b ?? [])]);
+        setMessage(`Toi et ${d.prenom}, vous êtes maintenant binômes`);
+      }
+    } catch (e) {
+      console.error(e);
+      setErreur("Ça n'a pas marché, réessaie.");
+    } finally {
+      setReponseEnCours(null);
+    }
+  };
 
   const repondre = async (p: PlongeeAConfirmer, ajouter: boolean) => {
     setReponseEnCours(p.id);
@@ -112,15 +136,25 @@ function PageAmis() {
       <div className="mx-auto flex min-h-0 w-full max-w-[430px] flex-1 flex-col">
         <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
           <h1 className="text-[clamp(24px,3.6svh,28px)] font-bold">Amis</h1>
-          {binomes && binomes.length > 0 && (
-            <button
-              type="button"
-              aria-label="Inviter un binôme"
-              onClick={() => navigate({ to: "/amis/ajouter" })}
-              className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-[#3DEFBE] text-[#0B3B63] shadow-[0_4px_12px_rgba(61,239,190,.35)]"
-            >
-              <UserPlus className="h-[20px] w-[20px]" strokeWidth={2.2} />
-            </button>
+          {binomes && !vide && (
+            <span className="flex items-center gap-[8px]">
+              <button
+                type="button"
+                aria-label="Rechercher un plongeur"
+                onClick={() => navigate({ to: "/amis/rechercher" })}
+                className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-[#E3EDF6] text-[#123A63]"
+              >
+                <Search className="h-[19px] w-[19px]" strokeWidth={2.3} />
+              </button>
+              <button
+                type="button"
+                aria-label="Inviter un binôme"
+                onClick={() => navigate({ to: "/amis/ajouter" })}
+                className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-[#3DEFBE] text-[#0B3B63] shadow-[0_4px_12px_rgba(61,239,190,.35)]"
+              >
+                <UserPlus className="h-[20px] w-[20px]" strokeWidth={2.2} />
+              </button>
+            </span>
           )}
         </div>
 
@@ -155,17 +189,58 @@ function PageAmis() {
                 </button>
                 <button
                   type="button"
-                  disabled
-                  className="relative flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] opacity-60"
+                  onClick={() => navigate({ to: "/amis/rechercher" })}
+                  className="flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
                 >
                   <Search className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
                   RECHERCHER QUELQU'UN
-                  <span className="absolute right-[12px] rounded-[10px] bg-[#FFE6CC] px-[8px] py-[2px] text-[10px] font-semibold text-[#C2570C]">Bientôt</span>
                 </button>
               </div>
             </div>
           ) : binomes ? (
             <>
+              {demandes.length > 0 && (
+                <>
+                  <div className="flex items-center gap-[8px] pb-[10px] pt-[22px]">
+                    <h2 className="text-[17px] font-bold">Demandes de binôme</h2>
+                    <span className="flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-[#FF8A75] px-[6px] text-[12px] font-bold text-white">
+                      {demandes.length}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-[10px]">
+                    {demandes.map((d) => (
+                      <div key={d.demande_id} className="flex items-center gap-[11px] galet-b border border-[#BFE6F5] bg-white p-[13px] shadow-[0_4px_14px_#123A6308]">
+                        <span
+                          className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full text-[14px] font-bold text-[#0F3D70]"
+                          style={{ background: couleurAvatar(d.id) }}
+                        >
+                          {initiales(d.prenom)}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[15px] font-bold">{d.prenom}</span>
+                          <span className="block truncate text-[12.5px] text-[#5B7189]">{[d.niveau, d.club].filter(Boolean).join(" · ") || "veut devenir ton binôme"}</span>
+                        </span>
+                        <button
+                          type="button"
+                          disabled={reponseEnCours === d.demande_id}
+                          onClick={() => void repondreDemande(d, false)}
+                          className="px-[4px] text-[12.5px] font-semibold text-[#5B7189] underline underline-offset-4 disabled:opacity-60"
+                        >
+                          Refuser
+                        </button>
+                        <button
+                          type="button"
+                          disabled={reponseEnCours === d.demande_id}
+                          onClick={() => void repondreDemande(d, true)}
+                          className="flex h-[38px] items-center rounded-[19px] bg-[#3DEFBE] px-[14px] text-[13px] font-bold text-[#0B3B63] disabled:opacity-60"
+                        >
+                          Accepter
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
               {aConfirmer.length > 0 && (
                 <>
                   <div className="flex items-center gap-[8px] pb-[10px] pt-[22px]">
@@ -219,6 +294,7 @@ function PageAmis() {
                   </div>
                 </>
               )}
+              {binomes.length > 0 && (<>
               <div className="flex items-baseline justify-between pb-[10px] pt-[22px]">
                 <h2 className="text-[17px] font-bold">Mes binômes</h2>
                 <span className="text-[12.5px] text-[#9DB0C0]">
@@ -256,6 +332,7 @@ function PageAmis() {
               >
                 INVITER UN BINÔME
               </button>
+              </>)}
               {erreur && <p className="pt-3 text-center text-[13px] text-[#8A2A1A]">{erreur}</p>}
             </>
           ) : null}

@@ -201,7 +201,7 @@ function Numeriser() {
           <p style={d(retards.import)} className="apparition text-center text-[13px] leading-[1.45] text-white/70">
             Tes plongées sont déjà dans une autre app&nbsp;?
             <br />
-            <button type="button" className="font-bold text-[#3DEFBE] underline underline-offset-4">
+            <button type="button" onClick={() => navigate({ to: "/importer", search: { depuis: "numeriser" } })} className="font-bold text-[#3DEFBE] underline underline-offset-4">
               Importer un fichier de données
             </button>
           </p>

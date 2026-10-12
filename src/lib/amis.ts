@@ -309,3 +309,34 @@ export function chiffresPlongee(p: ResumePlongee) {
     .filter(Boolean)
     .join(" · ");
 }
+
+// ---------- Rechercher quelqu'un et demandes de binôme ----------
+// Par e-mail exact (tout plongeur), ou par prénom parmi les binômes de tes binômes
+// et les plongeurs croisés en sortie club : pas d'annuaire ouvert.
+
+export type Relation = "binome" | "demande_envoyee" | "demande_recue" | null;
+export type PlongeurTrouve = Plongeur & { relation: Relation };
+export type DemandeBinome = Plongeur & { demande_id: string; le: string };
+
+export async function chercherPlongeur(q: string): Promise<PlongeurTrouve[]> {
+  const { data, error } = await supabase.rpc("chercher_plongeur", { p_q: q });
+  if (error) throw error;
+  return (data ?? []) as PlongeurTrouve[];
+}
+
+export async function demanderBinome(id: string): Promise<Relation> {
+  const { data, error } = await supabase.rpc("demander_binome", { p_user: id });
+  if (error) throw error;
+  return ((data as { relation?: Relation } | null)?.relation ?? null) as Relation;
+}
+
+export async function demandesBinomeRecues(): Promise<DemandeBinome[]> {
+  const { data, error } = await supabase.rpc("demandes_binome_recues");
+  if (error) return []; // script pas encore lancé
+  return (data ?? []) as DemandeBinome[];
+}
+
+export async function repondreDemandeBinome(id: string, accepter: boolean) {
+  const { error } = await supabase.rpc("repondre_demande_binome", { p_id: id, p_accepter: accepter });
+  if (error) throw error;
+}

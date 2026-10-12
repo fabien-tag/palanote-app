@@ -169,7 +169,7 @@ function Reglages() {
           C'est la seule façon de recevoir une notification. Règle d'Apple, pas de nous. Dans Safari : bouton Partager, puis « Sur l'écran d'accueil ».
         </div>
       </div>
-      <Note>Les notifications arrivent bientôt : tes choix sont déjà gardés.</Note>
+      <Note>Tes notifications arrivent dans la cloche de l'accueil. Les alertes sur l'écran verrouillé arrivent bientôt : tes choix sont déjà gardés.</Note>
       <Note>
         La lettre annuelle se règle dans{" "}
         <button type="button" onClick={() => navigate({ to: "/moi/confidentialite" })} className="font-bold text-[#123A63] underline underline-offset-2">

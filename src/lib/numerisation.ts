@@ -244,6 +244,25 @@ export async function validerExtraction(e: Extraction, champs: Record<string, st
     .update({ statut: "validee", dive_id: dive.data.id, champs })
     .eq("id", e.id);
   if (maj.error) throw maj.error;
+  // Une plongée d'un vieux carnet faisait partie des « plongées d'avant Palanote » déclarées
+  // à l'inscription : on la retire de ce nombre, pour ne pas la compter deux fois.
+  if (!e.dive_id) await retirerDesPlongeesDAvant(user.id, ligne.duration_min).catch(() => undefined);
+}
+
+async function retirerDesPlongeesDAvant(userId: string, dureeMin: number | null) {
+  const { data } = await supabase.from("profiles").select("numero_depart, heures_avant").eq("id", userId).maybeSingle();
+  const p = (data ?? {}) as { numero_depart?: number | null; heures_avant?: number | null };
+  const avant = Number(p.numero_depart ?? 0);
+  if (avant <= 0) return;
+  const maj: Record<string, number> = { numero_depart: avant - 1 };
+  if (p.heures_avant !== null && p.heures_avant !== undefined && dureeMin)
+    maj["heures_avant"] = Math.max(0, Math.round((Number(p.heures_avant) - dureeMin / 60) * 10) / 10);
+  await supabase.from("profiles").update(maj).eq("id", userId);
+  try {
+    localStorage.removeItem("palanote-entete");
+  } catch {
+    /* stockage indisponible */
+  }
 }
 
 // Cherche la position d'un site lu sur un carnet : « site + lieu », puis le lieu seul,

@@ -206,7 +206,7 @@ function Moi() {
                   valeur="UDDF"
                   onClick={exportEnCours ? undefined : () => void exporter()}
                 />
-                <Ligne icone={Upload} label="Importer un fichier" bientot />
+                <Ligne icone={Upload} label="Importer un fichier" valeur="UDDF" onClick={() => navigate({ to: "/importer", search: { depuis: "moi" } })} />
                 <Ligne icone={Camera} label="Numériser un carnet papier" onClick={() => navigate({ to: "/numeriser" })} />
                 <Ligne icone={Gem} label="Mon forfait" valeur={forfait ? resumeForfait(forfait) : "Gratuit"} onClick={() => navigate({ to: "/forfait" })} />
               </Bloc>
@@ -217,7 +217,7 @@ function Moi() {
                 <Ligne icone={SlidersHorizontal} label="Réglages" onClick={() => navigate({ to: "/moi/reglages" })} />
                 <Ligne icone={Lock} label="Confidentialité" onClick={() => navigate({ to: "/moi/confidentialite" })} />
                 <Ligne icone={MessageCircle} label="Dis-moi ce qui manque" onClick={() => navigate({ to: "/moi/avis" })} />
-                <Ligne icone={HelpCircle} label="Aide et à propos" bientot />
+                <Ligne icone={HelpCircle} label="Aide et à propos" onClick={() => navigate({ to: "/moi/aide" })} />
               </Bloc>
 
               <TitreSection>Informations légales</TitreSection>

@@ -336,8 +336,24 @@ function Carnet() {
       {vide ? (
         /* Avant la première plongée : écran d'accueil d'origine */
         <div className="flex shrink-0 flex-col gap-[13px] p-[22px]">
+          {/* Le plus simple d'abord : noter la plongée qu'on vient de faire */}
           <button
             type="button"
+            onClick={() => navigate({ to: "/plongee-express" })}
+            className="relative flex items-center gap-[13px] galet-moyen border border-[#B8E4D8] bg-[#E2F8EF] p-[13px] text-left shadow-sm"
+          >
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center goutte bg-[#3DEFBE]">
+              <Plus className="h-[28px] w-[28px] text-[#0B3B63]" strokeWidth={2.4} aria-hidden="true" />
+            </div>
+            <div className="flex min-w-0 flex-grow flex-col gap-0.5">
+              <span className="text-[15px] font-semibold text-[#123A63]">Tu rentres de plongée&nbsp;?</span>
+              <span className="text-[12.5px] leading-snug text-[#3F5B76]">Note-la en 30 secondes : le site, la profondeur, la durée.</span>
+            </div>
+            <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/importer" })}
             className="relative flex items-center gap-[13px] galet-moyen bg-white p-[13px] text-left shadow-sm"
           >
             <div className="flex h-14 w-14 shrink-0 items-center justify-center goutte bg-[#57D4F5]/[0.18]">
@@ -495,8 +511,8 @@ function Carnet() {
         </>
       )}
 
-        {/* Bouton flottant : toujours visible, avec ou sans plongée */}
-        <button
+        {/* Bouton flottant : dès la première plongée (carnet vide : la carte « Tu rentres de plongée ? » fait la même chose, sans rien cacher) */}
+        {!vide && <button
           type="button"
           onClick={() => navigate({ to: "/plongee-express" })}
           aria-label="Nouvelle plongée"
@@ -506,7 +522,7 @@ function Carnet() {
         >
           <Plus className="h-[20px] w-[20px] shrink-0" strokeWidth={2} aria-hidden="true" />
           <span className={`whitespace-nowrap transition-all duration-300 ${boutonCompact ? "w-0 opacity-0" : "opacity-100"}`}>Plongée</span>
-        </button>
+        </button>}
 
         <div className="flex-grow" />
 

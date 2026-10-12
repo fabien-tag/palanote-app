@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
-import { Bell, CalendarCheck, CalendarX, PenLine, Stamp, UserPlus } from "lucide-react";
+import { Bell, CalendarCheck, CalendarX, HeartHandshake, PenLine, Stamp, UserPlus, Users } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { PageClub, Titre } from "@/components/club/Ui";
 import { chargerNotifications, ilYA, marquerLues, type Notification } from "@/lib/notifications";
@@ -17,6 +17,8 @@ const ICONES: Record<string, { Icone: typeof Bell; fond: string; couleur: string
   sortie_a_completer: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   tampon: { Icone: Stamp, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
   sortie_annulee: { Icone: CalendarX, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
+  binome_demande: { Icone: Users, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
+  binome_accepte: { Icone: HeartHandshake, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
 };
 
 function PageNotifications() {

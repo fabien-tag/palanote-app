@@ -23,6 +23,7 @@ import { Route as DesabonnementRouteImport } from './routes/desabonnement'
 import { Route as EspeceRouteImport } from './routes/espece'
 import { Route as EspecesRouteImport } from './routes/especes'
 import { Route as ForfaitRouteImport } from './routes/forfait'
+import { Route as ImporterRouteImport } from './routes/importer'
 import { Route as InvitationRouteImport } from './routes/invitation'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as MoiRouteImport } from './routes/moi'
@@ -40,9 +41,11 @@ import { Route as SortieRouteImport } from './routes/sortie'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
+import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
 import { Route as ClubCentreRouteImport } from './routes/club_.centre'
 import { Route as ClubNouvelleSortieRouteImport } from './routes/club_.nouvelle-sortie'
 import { Route as ClubSortieRouteImport } from './routes/club_.sortie'
+import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
 import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
@@ -125,6 +128,11 @@ const EspecesRoute = EspecesRouteImport.update({
 const ForfaitRoute = ForfaitRouteImport.update({
   id: '/forfait',
   path: '/forfait',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImporterRoute = ImporterRouteImport.update({
+  id: '/importer',
+  path: '/importer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvitationRoute = InvitationRouteImport.update({
@@ -213,6 +221,11 @@ const AmisPropositionRoute = AmisPropositionRouteImport.update({
   path: '/amis/proposition',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AmisRechercherRoute = AmisRechercherRouteImport.update({
+  id: '/amis_/rechercher',
+  path: '/amis/rechercher',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClubCentreRoute = ClubCentreRouteImport.update({
   id: '/club_/centre',
   path: '/club/centre',
@@ -226,6 +239,11 @@ const ClubNouvelleSortieRoute = ClubNouvelleSortieRouteImport.update({
 const ClubSortieRoute = ClubSortieRouteImport.update({
   id: '/club_/sortie',
   path: '/club/sortie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoiAideRoute = MoiAideRouteImport.update({
+  id: '/moi_/aide',
+  path: '/moi/aide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoiAvisRoute = MoiAvisRouteImport.update({
@@ -309,6 +327,7 @@ export interface FileRoutesByFullPath {
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
   '/forfait': typeof ForfaitRoute
+  '/importer': typeof ImporterRoute
   '/invitation': typeof InvitationRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
@@ -326,9 +345,11 @@ export interface FileRoutesByFullPath {
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
   '/amis/proposition': typeof AmisPropositionRoute
+  '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
   '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
   '/club/sortie': typeof ClubSortieRoute
+  '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
@@ -358,6 +379,7 @@ export interface FileRoutesByTo {
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
   '/forfait': typeof ForfaitRoute
+  '/importer': typeof ImporterRoute
   '/invitation': typeof InvitationRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
@@ -375,9 +397,11 @@ export interface FileRoutesByTo {
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
   '/amis/proposition': typeof AmisPropositionRoute
+  '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
   '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
   '/club/sortie': typeof ClubSortieRoute
+  '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
   '/moi/profil': typeof MoiProfilRoute
@@ -408,6 +432,7 @@ export interface FileRoutesById {
   '/espece': typeof EspeceRoute
   '/especes': typeof EspecesRoute
   '/forfait': typeof ForfaitRoute
+  '/importer': typeof ImporterRoute
   '/invitation': typeof InvitationRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/moi': typeof MoiRoute
@@ -425,9 +450,11 @@ export interface FileRoutesById {
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
   '/amis_/proposition': typeof AmisPropositionRoute
+  '/amis_/rechercher': typeof AmisRechercherRoute
   '/club_/centre': typeof ClubCentreRoute
   '/club_/nouvelle-sortie': typeof ClubNouvelleSortieRoute
   '/club_/sortie': typeof ClubSortieRoute
+  '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
   '/moi_/profil': typeof MoiProfilRoute
@@ -459,6 +486,7 @@ export interface FileRouteTypes {
     | '/espece'
     | '/especes'
     | '/forfait'
+    | '/importer'
     | '/invitation'
     | '/mentions-legales'
     | '/moi'
@@ -476,9 +504,11 @@ export interface FileRouteTypes {
     | '/amis/ajouter'
     | '/amis/binome'
     | '/amis/proposition'
+    | '/amis/rechercher'
     | '/club/centre'
     | '/club/nouvelle-sortie'
     | '/club/sortie'
+    | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
@@ -508,6 +538,7 @@ export interface FileRouteTypes {
     | '/espece'
     | '/especes'
     | '/forfait'
+    | '/importer'
     | '/invitation'
     | '/mentions-legales'
     | '/moi'
@@ -525,9 +556,11 @@ export interface FileRouteTypes {
     | '/amis/ajouter'
     | '/amis/binome'
     | '/amis/proposition'
+    | '/amis/rechercher'
     | '/club/centre'
     | '/club/nouvelle-sortie'
     | '/club/sortie'
+    | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
     | '/moi/profil'
@@ -557,6 +590,7 @@ export interface FileRouteTypes {
     | '/espece'
     | '/especes'
     | '/forfait'
+    | '/importer'
     | '/invitation'
     | '/mentions-legales'
     | '/moi'
@@ -574,9 +608,11 @@ export interface FileRouteTypes {
     | '/amis_/ajouter'
     | '/amis_/binome'
     | '/amis_/proposition'
+    | '/amis_/rechercher'
     | '/club_/centre'
     | '/club_/nouvelle-sortie'
     | '/club_/sortie'
+    | '/moi_/aide'
     | '/moi_/avis'
     | '/moi_/confidentialite'
     | '/moi_/profil'
@@ -607,6 +643,7 @@ export interface RootRouteChildren {
   EspeceRoute: typeof EspeceRoute
   EspecesRoute: typeof EspecesRoute
   ForfaitRoute: typeof ForfaitRoute
+  ImporterRoute: typeof ImporterRoute
   InvitationRoute: typeof InvitationRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MoiRoute: typeof MoiRoute
@@ -624,9 +661,11 @@ export interface RootRouteChildren {
   AmisAjouterRoute: typeof AmisAjouterRoute
   AmisBinomeRoute: typeof AmisBinomeRoute
   AmisPropositionRoute: typeof AmisPropositionRoute
+  AmisRechercherRoute: typeof AmisRechercherRoute
   ClubCentreRoute: typeof ClubCentreRoute
   ClubNouvelleSortieRoute: typeof ClubNouvelleSortieRoute
   ClubSortieRoute: typeof ClubSortieRoute
+  MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
   MoiProfilRoute: typeof MoiProfilRoute
@@ -740,6 +779,13 @@ declare module '@tanstack/react-router' {
       path: '/forfait'
       fullPath: '/forfait'
       preLoaderRoute: typeof ForfaitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/importer': {
+      id: '/importer'
+      path: '/importer'
+      fullPath: '/importer'
+      preLoaderRoute: typeof ImporterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invitation': {
@@ -861,6 +907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisPropositionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/amis_/rechercher': {
+      id: '/amis_/rechercher'
+      path: '/amis/rechercher'
+      fullPath: '/amis/rechercher'
+      preLoaderRoute: typeof AmisRechercherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/club_/centre': {
       id: '/club_/centre'
       path: '/club/centre'
@@ -880,6 +933,13 @@ declare module '@tanstack/react-router' {
       path: '/club/sortie'
       fullPath: '/club/sortie'
       preLoaderRoute: typeof ClubSortieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/moi_/aide': {
+      id: '/moi_/aide'
+      path: '/moi/aide'
+      fullPath: '/moi/aide'
+      preLoaderRoute: typeof MoiAideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/moi_/avis': {
@@ -991,6 +1051,7 @@ const rootRouteChildren: RootRouteChildren = {
   EspeceRoute: EspeceRoute,
   EspecesRoute: EspecesRoute,
   ForfaitRoute: ForfaitRoute,
+  ImporterRoute: ImporterRoute,
   InvitationRoute: InvitationRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MoiRoute: MoiRoute,
@@ -1008,9 +1069,11 @@ const rootRouteChildren: RootRouteChildren = {
   AmisAjouterRoute: AmisAjouterRoute,
   AmisBinomeRoute: AmisBinomeRoute,
   AmisPropositionRoute: AmisPropositionRoute,
+  AmisRechercherRoute: AmisRechercherRoute,
   ClubCentreRoute: ClubCentreRoute,
   ClubNouvelleSortieRoute: ClubNouvelleSortieRoute,
   ClubSortieRoute: ClubSortieRoute,
+  MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,
   MoiProfilRoute: MoiProfilRoute,
