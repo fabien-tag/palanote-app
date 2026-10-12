@@ -94,7 +94,7 @@ function EspaceClub() {
     <PageClub
       titre="Sorties"
       large
-      navigation={<BarreNavigation actif="club" />}
+      navigation={<BarreNavigation actif="club" cote />}
       droite={
         centre ? (
           <button

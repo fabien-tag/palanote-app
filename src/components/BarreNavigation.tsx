@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { IconeAmis, IconeCarnet, IconeCarte, IconeMoi, IconeSorties } from "@/components/IconesOnglets";
+import logoSigle from "@/assets/palanote-logo-cigle.png";
 import { estDirecteurDePlongee, ongletSortiesGarde } from "@/lib/club";
 
 // Barre de navigation du bas, commune aux pages internes.
@@ -15,7 +16,8 @@ const onglets: { id: Onglet; label: string; icone: typeof IconeCarnet; to?: "/ca
   { id: "moi", label: "Moi", icone: IconeMoi, to: "/moi" },
 ];
 
-export function BarreNavigation({ actif }: { actif: Onglet }) {
+// cote : sur ordinateur (écran large), la barre du bas devient une colonne à gauche.
+export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?: boolean }) {
   const navigate = useNavigate();
   // Gardé sur le téléphone pour que l'onglet ne « saute » pas à chaque écran, puis vérifié en fond.
   const [dp, setDp] = useState(() => actif === "club" || ongletSortiesGarde());
@@ -28,9 +30,54 @@ export function BarreNavigation({ actif }: { actif: Onglet }) {
   }, [actif]);
   const visibles = onglets.filter((o) => o.id !== "club" || dp);
   return (
+    <>
+    {cote && (
+      <nav
+        aria-label="Navigation principale"
+        className="fixed inset-y-0 left-0 z-20 hidden w-[232px] flex-col border-r border-[#DFEAF2] bg-white px-[16px] pb-[24px] pt-[26px] lg:flex"
+      >
+        <span className="flex items-center gap-[10px] px-[10px] pb-[30px]">
+          <span className="flex h-[38px] w-[38px] items-center justify-center goutte bg-[#0F3D70]">
+            <img src={logoSigle} alt="" className="h-[24px] w-[24px] object-contain" />
+          </span>
+          <span className="text-[21px] font-bold tracking-[-.01em] text-[#123A63]">Palanote</span>
+        </span>
+        <div className="flex flex-col gap-[4px]">
+          {visibles.map(({ id, label, icone: Icone, to }) => {
+            const estActif = id === actif;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => to && !estActif && navigate({ to })}
+                aria-current={estActif ? "page" : undefined}
+                className={`flex h-[48px] items-center gap-[12px] galet-petit px-[12px] text-left text-[15px] ${
+                  estActif ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#63809A] hover:bg-[#F1F6FC]"
+                }`}
+              >
+                <Icone className="h-[24px] w-[24px] shrink-0" />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+        <span aria-hidden="true" className="pointer-events-none mt-auto block h-[110px] w-[60px] -rotate-[8deg] self-start opacity-90">
+          <svg viewBox="0 0 58 108" className="h-full w-full" fill="none">
+            <g stroke="#FF8A75" strokeWidth={5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M30 108C24 85 30 71 26 57S14 32 20 12" />
+              <path d="M27 73C13 71 10 62 9 50L4 40" />
+              <path d="M27 57C38 55 42 45 39 30L46 17" />
+              <path d="M23 40C11 36 8 25 8 16" />
+              <path d="M28 90C41 84 46 71 47 58L54 47" />
+              <path d="M39 42L51 37" />
+            </g>
+          </svg>
+        </span>
+      </nav>
+    )}
     <nav
       aria-label="Navigation principale"
-      className={`sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white pt-[10px] pb-[calc(10px+env(safe-area-inset-bottom))] ${dp ? "pl-[26px] pr-[8px]" : "px-[28px]"}`}
+      className={`${cote ? "lg:hidden" : ""} sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white pt-[10px] pb-[calc(10px+env(safe-area-inset-bottom))] ${dp ? "pl-[26px] pr-[8px]" : "px-[28px]"}`}
     >
       <span
         aria-hidden="true"
@@ -71,5 +118,6 @@ export function BarreNavigation({ actif }: { actif: Onglet }) {
         );
       })}
     </nav>
+    </>
   );
 }
