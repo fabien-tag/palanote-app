@@ -22,11 +22,11 @@ export function PageClub({
   children: ReactNode;
   bas?: ReactNode;
   navigation?: ReactNode; // barre d'onglets du bas
-  large?: boolean; // tableau de bord : s'élargit sur ordinateur
+  large?: boolean | "plein"; // tableau de bord : s'élargit sur ordinateur ; « plein » = toute la largeur (planning)
 }) {
   return (
     <div className={`min-h-screen bg-[#F1F6FC] text-[#123A63] ${large ? "lg:pl-[232px]" : ""}`}>
-      <div className={`cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col ${large ? "lg:max-w-[1120px]" : ""}`}>
+      <div className={`cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col ${large === "plein" ? "lg:max-w-none" : large ? "lg:max-w-[1120px]" : ""}`}>
         <div className={`sticky top-0 z-10 flex items-center gap-3 bg-[#F1F6FC]/95 px-[22px] ${large ? "lg:px-[40px]" : ""} pb-[10px] pt-[clamp(14px,2.6svh,22px)] backdrop-blur`}>
           {onRetour && <BoutonRetourCarre onClick={onRetour} />}
           <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"}`}>{titre}</h1>
@@ -218,9 +218,9 @@ export function TamponNumerique({
 
 export function Feuille({ titre, onFermer, children }: { titre: string; onFermer: () => void; children: ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" role="dialog" aria-modal="true" aria-label={titre}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center lg:items-center" role="dialog" aria-modal="true" aria-label={titre}>
       <button type="button" aria-label="Fermer" onClick={onFermer} className="absolute inset-0 bg-[#06203F]/45" />
-      <div className="relative max-h-[92svh] w-full max-w-[430px] overflow-y-auto rounded-t-[34px] bg-white px-[24px] pb-[max(24px,env(safe-area-inset-bottom))] pt-[14px] text-[#123A63] shadow-[0_-10px_30px_rgba(6,32,63,.18)]">
+      <div className="relative max-h-[92svh] w-full max-w-[430px] overflow-y-auto rounded-t-[34px] bg-white px-[24px] lg:rounded-[30px] pb-[max(24px,env(safe-area-inset-bottom))] pt-[14px] text-[#123A63] shadow-[0_-10px_30px_rgba(6,32,63,.18)]">
         <div className="mx-auto mb-[14px] h-[5px] w-[44px] rounded-full bg-[#DCE7F0]" aria-hidden="true" />
         <h2 className="pb-[10px] text-[20px] font-bold leading-tight">{titre}</h2>
         {children}

@@ -17,6 +17,7 @@ const ICONES: Record<string, { Icone: typeof Bell; fond: string; couleur: string
   sortie_a_completer: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   sortie_relance: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   tampon: { Icone: Stamp, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
+  sortie_modifiee: { Icone: CalendarCheck, fond: "bg-[#FFF1D6]", couleur: "text-[#8A5A10]" },
   sortie_annulee: { Icone: CalendarX, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   binome_demande: { Icone: Users, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
   binome_accepte: { Icone: HeartHandshake, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },

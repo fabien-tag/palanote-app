@@ -44,8 +44,11 @@ import { Route as AmisOrganiserRouteImport } from './routes/amis_.organiser'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
 import { Route as ClubCentreRouteImport } from './routes/club_.centre'
+import { Route as ClubEquipeRouteImport } from './routes/club_.equipe'
 import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-securite'
+import { Route as ClubMaterielRouteImport } from './routes/club_.materiel'
 import { Route as ClubNouvelleSortieRouteImport } from './routes/club_.nouvelle-sortie'
+import { Route as ClubPlanningRouteImport } from './routes/club_.planning'
 import { Route as ClubSortieRouteImport } from './routes/club_.sortie'
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
@@ -238,14 +241,29 @@ const ClubCentreRoute = ClubCentreRouteImport.update({
   path: '/club/centre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClubEquipeRoute = ClubEquipeRouteImport.update({
+  id: '/club_/equipe',
+  path: '/club/equipe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClubFicheSecuriteRoute = ClubFicheSecuriteRouteImport.update({
   id: '/club_/fiche-securite',
   path: '/club/fiche-securite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClubMaterielRoute = ClubMaterielRouteImport.update({
+  id: '/club_/materiel',
+  path: '/club/materiel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClubNouvelleSortieRoute = ClubNouvelleSortieRouteImport.update({
   id: '/club_/nouvelle-sortie',
   path: '/club/nouvelle-sortie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubPlanningRoute = ClubPlanningRouteImport.update({
+  id: '/club_/planning',
+  path: '/club/planning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClubSortieRoute = ClubSortieRouteImport.update({
@@ -360,8 +378,11 @@ export interface FileRoutesByFullPath {
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
+  '/club/equipe': typeof ClubEquipeRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
+  '/club/materiel': typeof ClubMaterielRoute
   '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
+  '/club/planning': typeof ClubPlanningRoute
   '/club/sortie': typeof ClubSortieRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
@@ -414,8 +435,11 @@ export interface FileRoutesByTo {
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/centre': typeof ClubCentreRoute
+  '/club/equipe': typeof ClubEquipeRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
+  '/club/materiel': typeof ClubMaterielRoute
   '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
+  '/club/planning': typeof ClubPlanningRoute
   '/club/sortie': typeof ClubSortieRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
@@ -469,8 +493,11 @@ export interface FileRoutesById {
   '/amis_/proposition': typeof AmisPropositionRoute
   '/amis_/rechercher': typeof AmisRechercherRoute
   '/club_/centre': typeof ClubCentreRoute
+  '/club_/equipe': typeof ClubEquipeRoute
   '/club_/fiche-securite': typeof ClubFicheSecuriteRoute
+  '/club_/materiel': typeof ClubMaterielRoute
   '/club_/nouvelle-sortie': typeof ClubNouvelleSortieRoute
+  '/club_/planning': typeof ClubPlanningRoute
   '/club_/sortie': typeof ClubSortieRoute
   '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
@@ -525,8 +552,11 @@ export interface FileRouteTypes {
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/centre'
+    | '/club/equipe'
     | '/club/fiche-securite'
+    | '/club/materiel'
     | '/club/nouvelle-sortie'
+    | '/club/planning'
     | '/club/sortie'
     | '/moi/aide'
     | '/moi/avis'
@@ -579,8 +609,11 @@ export interface FileRouteTypes {
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/centre'
+    | '/club/equipe'
     | '/club/fiche-securite'
+    | '/club/materiel'
     | '/club/nouvelle-sortie'
+    | '/club/planning'
     | '/club/sortie'
     | '/moi/aide'
     | '/moi/avis'
@@ -633,8 +666,11 @@ export interface FileRouteTypes {
     | '/amis_/proposition'
     | '/amis_/rechercher'
     | '/club_/centre'
+    | '/club_/equipe'
     | '/club_/fiche-securite'
+    | '/club_/materiel'
     | '/club_/nouvelle-sortie'
+    | '/club_/planning'
     | '/club_/sortie'
     | '/moi_/aide'
     | '/moi_/avis'
@@ -688,8 +724,11 @@ export interface RootRouteChildren {
   AmisPropositionRoute: typeof AmisPropositionRoute
   AmisRechercherRoute: typeof AmisRechercherRoute
   ClubCentreRoute: typeof ClubCentreRoute
+  ClubEquipeRoute: typeof ClubEquipeRoute
   ClubFicheSecuriteRoute: typeof ClubFicheSecuriteRoute
+  ClubMaterielRoute: typeof ClubMaterielRoute
   ClubNouvelleSortieRoute: typeof ClubNouvelleSortieRoute
+  ClubPlanningRoute: typeof ClubPlanningRoute
   ClubSortieRoute: typeof ClubSortieRoute
   MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
@@ -954,6 +993,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClubCentreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/club_/equipe': {
+      id: '/club_/equipe'
+      path: '/club/equipe'
+      fullPath: '/club/equipe'
+      preLoaderRoute: typeof ClubEquipeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/club_/fiche-securite': {
       id: '/club_/fiche-securite'
       path: '/club/fiche-securite'
@@ -961,11 +1007,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClubFicheSecuriteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/club_/materiel': {
+      id: '/club_/materiel'
+      path: '/club/materiel'
+      fullPath: '/club/materiel'
+      preLoaderRoute: typeof ClubMaterielRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/club_/nouvelle-sortie': {
       id: '/club_/nouvelle-sortie'
       path: '/club/nouvelle-sortie'
       fullPath: '/club/nouvelle-sortie'
       preLoaderRoute: typeof ClubNouvelleSortieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club_/planning': {
+      id: '/club_/planning'
+      path: '/club/planning'
+      fullPath: '/club/planning'
+      preLoaderRoute: typeof ClubPlanningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/club_/sortie': {
@@ -1112,8 +1172,11 @@ const rootRouteChildren: RootRouteChildren = {
   AmisPropositionRoute: AmisPropositionRoute,
   AmisRechercherRoute: AmisRechercherRoute,
   ClubCentreRoute: ClubCentreRoute,
+  ClubEquipeRoute: ClubEquipeRoute,
   ClubFicheSecuriteRoute: ClubFicheSecuriteRoute,
+  ClubMaterielRoute: ClubMaterielRoute,
   ClubNouvelleSortieRoute: ClubNouvelleSortieRoute,
+  ClubPlanningRoute: ClubPlanningRoute,
   ClubSortieRoute: ClubSortieRoute,
   MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,

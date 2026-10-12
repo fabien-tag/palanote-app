@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Anchor, CheckCircle2, ChevronRight, Clock, FileText, PenLine, Plus, QrCode, Stamp, UserRound, Users } from "lucide-react";
+import { AlertTriangle, Anchor, CalendarDays, CheckCircle2, LifeBuoy, UsersRound, ChevronRight, Clock, FileText, PenLine, Plus, QrCode, Stamp, UserRound, Users } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
@@ -94,7 +94,7 @@ function EspaceClub() {
     <PageClub
       titre="Sorties"
       large
-      navigation={<BarreNavigation actif="club" cote />}
+      navigation={<BarreNavigation actif="club" club="accueil" cote />}
       droite={
         centre ? (
           <button
@@ -176,6 +176,27 @@ function EspaceClub() {
             </span>
             <span className="shrink-0 text-[13px] font-bold text-[#1176A8]">{(centres?.length ?? 0) > 1 ? "Changer" : "Gérer"}</span>
           </button>
+
+          {/* Sur téléphone : les écrans du poste de pilotage (sur ordinateur, ils sont dans la colonne de gauche) */}
+          <div className="grid grid-cols-3 gap-[8px] pt-[10px] lg:hidden">
+            {(
+              [
+                ["/club/planning", "Planning", CalendarDays],
+                ["/club/equipe", "Équipe", UsersRound],
+                ["/club/materiel", "Matériel", LifeBuoy],
+              ] as const
+            ).map(([to, l, Icone]) => (
+              <button
+                key={to}
+                type="button"
+                onClick={() => navigate({ to })}
+                className="flex h-[48px] items-center justify-center gap-[6px] galet-petit border border-[#E4EBF1] bg-white text-[13px] font-bold text-[#1176A8]"
+              >
+                <Icone className="h-[17px] w-[17px]" strokeWidth={2.2} aria-hidden="true" />
+                {l}
+              </button>
+            ))}
+          </div>
 
           <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-x-[36px]">
             {/* Colonne principale : le jour J et ce qu'il reste à faire */}

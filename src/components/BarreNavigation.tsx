@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { CalendarDays, LayoutDashboard, LifeBuoy, UsersRound } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { IconeAmis, IconeCarnet, IconeCarte, IconeMoi, IconeSorties } from "@/components/IconesOnglets";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
@@ -16,8 +17,34 @@ const onglets: { id: Onglet; label: string; icone: typeof IconeCarnet; to?: "/ca
   { id: "moi", label: "Moi", icone: IconeMoi, to: "/moi" },
 ];
 
-// cote : sur ordinateur (écran large), la barre du bas devient une colonne à gauche.
-export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?: boolean }) {
+export type PageClub = "accueil" | "planning" | "equipe" | "materiel";
+
+const ENTREES_CLUB: { id: PageClub; label: string; Icone: typeof LayoutDashboard; to: "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" }[] = [
+  { id: "accueil", label: "Tableau de bord", Icone: LayoutDashboard, to: "/club" },
+  { id: "planning", label: "Planning", Icone: CalendarDays, to: "/club/planning" },
+  { id: "equipe", label: "Équipe", Icone: UsersRound, to: "/club/equipe" },
+  { id: "materiel", label: "Matériel", Icone: LifeBuoy, to: "/club/materiel" },
+];
+
+function EntreeLaterale({ label, actif, onClick, children }: { label: string; actif: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-current={actif ? "page" : undefined}
+      className={`flex h-[44px] items-center gap-[12px] galet-petit px-[12px] text-left text-[14.5px] ${
+        actif ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#63809A] hover:bg-[#F1F6FC]"
+      }`}
+    >
+      {children}
+      {label}
+    </button>
+  );
+}
+
+// cote : sur ordinateur (écran large), la barre du bas devient une colonne à gauche,
+// avec la section Club du directeur de plongée (club = la page du club ouverte).
+export function BarreNavigation({ actif, cote = false, club = "accueil" }: { actif: Onglet; cote?: boolean; club?: PageClub }) {
   const navigate = useNavigate();
   // Gardé sur le téléphone pour que l'onglet ne « saute » pas à chaque écran, puis vérifié en fond.
   const [dp, setDp] = useState(() => actif === "club" || ongletSortiesGarde());
@@ -34,34 +61,37 @@ export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?:
     {cote && (
       <nav
         aria-label="Navigation principale"
-        className="fixed inset-y-0 left-0 z-20 hidden w-[232px] flex-col border-r border-[#DFEAF2] bg-white px-[16px] pb-[24px] pt-[26px] lg:flex"
+        className="fixed inset-y-0 left-0 z-20 hidden w-[232px] flex-col overflow-y-auto border-r border-[#DFEAF2] bg-white px-[16px] pb-[20px] pt-[24px] lg:flex"
       >
-        <span className="flex items-center gap-[10px] px-[10px] pb-[30px]">
+        <span className="flex items-center gap-[10px] px-[10px] pb-[24px]">
           <span className="flex h-[38px] w-[38px] items-center justify-center goutte bg-[#0F3D70]">
             <img src={logoSigle} alt="" className="h-[24px] w-[24px] object-contain" />
           </span>
           <span className="text-[21px] font-bold tracking-[-.01em] text-[#123A63]">Palanote</span>
         </span>
-        <div className="flex flex-col gap-[4px]">
-          {visibles.map(({ id, label, icone: Icone, to }) => {
-            const estActif = id === actif;
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => to && !estActif && navigate({ to })}
-                aria-current={estActif ? "page" : undefined}
-                className={`flex h-[48px] items-center gap-[12px] galet-petit px-[12px] text-left text-[15px] ${
-                  estActif ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#63809A] hover:bg-[#F1F6FC]"
-                }`}
-              >
-                <Icone className="h-[24px] w-[24px] shrink-0" />
-                {label}
-              </button>
-            );
-          })}
+        {dp && (
+          <>
+            <span className="px-[12px] pb-[6px] text-[11px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Club</span>
+            <div className="flex flex-col gap-[2px] pb-[18px]">
+              {ENTREES_CLUB.map(({ id, label, Icone, to }) => (
+                <EntreeLaterale key={id} label={label} actif={actif === "club" && club === id} onClick={() => navigate({ to })}>
+                  <Icone className="h-[21px] w-[21px] shrink-0" strokeWidth={2} />
+                </EntreeLaterale>
+              ))}
+            </div>
+            <span className="px-[12px] pb-[6px] text-[11px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Mon carnet</span>
+          </>
+        )}
+        <div className="flex flex-col gap-[2px]">
+          {visibles
+            .filter((o) => o.id !== "club")
+            .map(({ id, label, icone: Icone, to }) => (
+              <EntreeLaterale key={id} label={label} actif={id === actif} onClick={() => to && id !== actif && navigate({ to })}>
+                <Icone className="h-[22px] w-[22px] shrink-0" />
+              </EntreeLaterale>
+            ))}
         </div>
-        <span aria-hidden="true" className="pointer-events-none mt-auto block h-[110px] w-[60px] -rotate-[8deg] self-start opacity-90">
+        <span aria-hidden="true" className="pointer-events-none mt-auto block h-[96px] w-[52px] shrink-0 -rotate-[8deg] self-start pt-[16px] opacity-90">
           <svg viewBox="0 0 58 108" className="h-full w-full" fill="none">
             <g stroke="#FF8A75" strokeWidth={5} strokeLinecap="round" strokeLinejoin="round">
               <path d="M30 108C24 85 30 71 26 57S14 32 20 12" />

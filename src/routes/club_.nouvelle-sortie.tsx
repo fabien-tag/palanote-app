@@ -8,7 +8,11 @@ import { localiserSite } from "@/lib/numerisation";
 
 // Préparer une sortie (parcours 15, écran 3)
 export const Route = createFileRoute("/club_/nouvelle-sortie")({
-  validateSearch: (search: Record<string, unknown>): { centre?: string } => (typeof search["centre"] === "string" ? { centre: search["centre"] } : {}),
+  validateSearch: (search: Record<string, unknown>): { centre?: string; date?: string; retour?: "planning" } => ({
+    ...(typeof search["centre"] === "string" ? { centre: search["centre"] } : {}),
+    ...(typeof search["date"] === "string" && /^\d{4}-\d{2}-\d{2}$/.test(search["date"]) ? { date: search["date"] } : {}),
+    ...(search["retour"] === "planning" ? { retour: "planning" as const } : {}),
+  }),
   head: () => ({ meta: [{ title: "Palanote — Nouvelle sortie" }] }),
   component: NouvelleSortie,
 });
@@ -21,9 +25,9 @@ function demain() {
 
 function NouvelleSortie() {
   const navigate = useNavigate();
-  const { centre } = Route.useSearch();
+  const { centre, date: dateChoisie, retour } = Route.useSearch(); // date : jour cliqué dans le planning
   const { pret, ecran } = useConnexionRequise();
-  const [date, setDate] = useState(demain);
+  const [date, setDate] = useState(() => dateChoisie ?? demain());
   const [heure, setHeure] = useState("09:00");
   const [site, setSite] = useState("");
   const [lieu, setLieu] = useState("");
@@ -77,7 +81,8 @@ function NouvelleSortie() {
       // Prénoms en cours de frappe : ajoutés aussi
       const complets = noms.map((l, i) => [...l, ...(saisie[i] ?? "").split(/[,;\n]/).map((x) => x.trim()).filter(Boolean)]);
       if (complets.some((l) => l.length > 0)) await ajouterNomsPrevus(r.id, complets);
-      navigate({ to: "/club/sortie", search: { id: r.id }, replace: true });
+      if (retour === "planning") navigate({ to: "/club/planning", search: { sortie: r.id, semaine: date }, replace: true });
+      else navigate({ to: "/club/sortie", search: { id: r.id }, replace: true });
     } catch (e) {
       console.error(e);
       setErreur(detailErreur(e, "La sortie n'a pas pu être créée."));
@@ -88,7 +93,7 @@ function NouvelleSortie() {
   return (
     <PageClub
       titre="Nouvelle sortie"
-      onRetour={() => navigate({ to: "/club" })}
+      onRetour={() => (retour === "planning" ? navigate({ to: "/club/planning", search: dateChoisie ? { semaine: dateChoisie } : {} }) : navigate({ to: "/club" }))}
       bas={
         <button
           type="button"

@@ -449,7 +449,7 @@ Table centre_membres {
 
 Table sorties {
   id uuid [pk, default: `gen_random_uuid()`]
-  centre_id uuid [not null]
+  centre_id uuid [note: 'vide = sortie entre amis']
   dp_id uuid [not null]
   date_sortie date [not null]
   heure time
@@ -457,6 +457,7 @@ Table sorties {
   site_location text
   site_coords text
   bateau text
+  bateau_id uuid [note: 'bateau du centre (matériel), avec ses places']
   profondeur_prevue numeric
   consignes text
   statut text [not null, default: 'prevue', note: 'prevue | terminee | validee | annulee']
@@ -497,13 +498,62 @@ Table sortie_participants {
 Table notifications {
   id uuid [pk, default: `gen_random_uuid()`]
   user_id uuid [not null]
-  type text [not null, note: 'sortie_inscription | sortie_rejointe | sortie_a_completer | tampon | sortie_annulee']
+  type text [not null, note: 'sortie_inscription | sortie_rejointe | sortie_a_completer | sortie_relance | sortie_modifiee | tampon | sortie_annulee | binome_demande | binome_accepte']
   titre text [not null]
   texte text
   lien text
   donnees jsonb [not null, default: '{}']
   lue_le timestamptz
   created_at timestamptz [not null, default: `now()`]
+}
+
+Table centre_equipe {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  user_id uuid [note: 'vide = encadrant sans compte (un pilote, par exemple)']
+  nom text [not null]
+  role text [not null, default: 'guide', note: 'dp | guide | pilote | gonfleur | autre']
+  niveau text
+  telephone text
+  actif boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  indexes {
+    (centre_id, user_id) [unique]
+  }
+}
+
+Table sortie_equipe {
+  sortie_id uuid [not null]
+  equipier_id uuid [not null]
+  role text [not null, default: 'guide']
+  created_at timestamptz [not null, default: `now()`]
+  indexes {
+    (sortie_id, equipier_id) [pk]
+  }
+}
+
+Table materiel {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  type text [not null, note: 'bateau | bloc | gilet | detendeur | combinaison | ordinateur | autre']
+  libelle text [not null]
+  quantite integer [not null, default: 1]
+  places integer [note: 'bateau : nombre de plongeurs à bord']
+  prochain_controle date [note: 'révision, inspection des blocs']
+  note text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz
+}
+
+Table sortie_materiel {
+  sortie_id uuid [not null]
+  materiel_id uuid [not null]
+  quantite integer [not null, default: 1]
+  indexes {
+    (sortie_id, materiel_id) [pk]
+  }
 }
 
 Ref: profiles.id - auth.users.id [delete: cascade]
@@ -561,6 +611,14 @@ Ref: sortie_participants.palanquee_id > sortie_palanquees.id [delete: set null]
 Ref: sortie_participants.dive_id > dives.id [delete: set null]
 Ref: dives.sortie_id > sorties.id [delete: set null]
 Ref: notifications.user_id > auth.users.id [delete: cascade]
+Ref: centre_equipe.centre_id > centres.id [delete: cascade]
+Ref: centre_equipe.user_id > auth.users.id [delete: set null]
+Ref: sortie_equipe.sortie_id > sorties.id [delete: cascade]
+Ref: sortie_equipe.equipier_id > centre_equipe.id [delete: cascade]
+Ref: materiel.centre_id > centres.id [delete: cascade]
+Ref: sortie_materiel.sortie_id > sorties.id [delete: cascade]
+Ref: sortie_materiel.materiel_id > materiel.id [delete: cascade]
+Ref: sorties.bateau_id > materiel.id [delete: set null]
 
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
@@ -610,4 +668,8 @@ TableGroup Sorties_club [color: #FF8A75] {
   sortie_palanquees
   sortie_participants
   notifications
+  centre_equipe
+  sortie_equipe
+  materiel
+  sortie_materiel
 }
