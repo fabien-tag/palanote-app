@@ -286,3 +286,47 @@ export function dateLongue(d: string) {
   const x = new Date(`${d}T12:00:00`);
   return isNaN(x.getTime()) ? d : x.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 }
+
+// ---------- Onglet « Sorties » de la barre du bas ----------
+// Visible pour les membres d'un centre, et pour les profils encadrant, directeur de plongée ou club.
+const CLE_DP = "palanote-dp";
+export function ongletSortiesGarde(): boolean {
+  try {
+    return localStorage.getItem(CLE_DP) === "oui";
+  } catch {
+    return false;
+  }
+}
+export function garderOngletSorties(oui: boolean) {
+  try {
+    if (oui) localStorage.setItem(CLE_DP, "oui");
+    else localStorage.removeItem(CLE_DP);
+  } catch {
+    /* stockage indisponible */
+  }
+}
+let verification: Promise<boolean | null> | null = null;
+export function estDirecteurDePlongee(): Promise<boolean | null> {
+  // Une seule vérification par ouverture de l'app
+  verification ??= (async () => {
+    const { data } = await supabase.auth.getSession();
+    const u = data.session?.user;
+    if (!u) return false;
+    try {
+      const [centres, profil] = await Promise.all([
+        mesCentres().catch(() => [] as Centre[]),
+        supabase.from("profiles").select("role_plongee").eq("id", u.id).maybeSingle(),
+      ]);
+      const role = (profil.data as { role_plongee?: string | null } | null)?.role_plongee ?? "";
+      const oui = centres.length > 0 || ["encadrant", "directeur", "centre"].includes(role);
+      garderOngletSorties(oui);
+      return oui;
+    } catch {
+      return null; // sans réseau : on garde ce qu'on savait
+    }
+  })();
+  return verification;
+}
+export function oublierVerificationDp() {
+  verification = null;
+}

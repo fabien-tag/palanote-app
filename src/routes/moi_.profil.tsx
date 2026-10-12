@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { oublierVerificationDp } from "@/lib/club";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PageMoi, TitreSection } from "@/components/moi/Ui";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
@@ -89,6 +90,7 @@ function ModifierProfil() {
     try {
       const certifsChangees = [...certifications].sort().join() !== [...certifsOrigine].sort().join();
       await sauverProfil({ prenom, niveau, club, premiereAnnee, plongeesAvant, ...(certifsChangees ? { certifications } : {}), ...(role !== roleOrigine ? { role } : {}), ...(profMaxAvant !== profOrigine ? { profMaxAvant } : {}), ...(heuresAvant !== heuresOrigine ? { heuresAvant } : {}) });
+      if (role !== roleOrigine) oublierVerificationDp(); // l'onglet « Sorties » suit le rôle
       annoncerSurAccueil("Ton profil a bien été mis à jour");
       navigate({ to: "/moi" });
     } catch (e) {

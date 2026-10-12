@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Anchor, BadgeCheck, Check, Plus, Search } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ChampTexte, detailErreur, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
-import { chercherCentres, choisirCentre, creerCentre, mesCentres, rejoindreCentre, type Centre } from "@/lib/club";
+import { chercherCentres, choisirCentre, creerCentre, garderOngletSorties, mesCentres, oublierVerificationDp, rejoindreCentre, type Centre } from "@/lib/club";
 
 // Choisir ou créer son centre de plongée (parcours 15, écran 2)
 export const Route = createFileRoute("/club_/centre")({
@@ -45,6 +45,9 @@ function ChoixCentre() {
 
   const fini = (c: Centre) => {
     choisirCentre(c.id);
+    // Membre d'un centre : l'onglet « Sorties » apparaît dans la barre du bas
+    garderOngletSorties(true);
+    oublierVerificationDp();
     navigate({ to: "/club" });
   };
 

@@ -13,27 +13,34 @@ export function PageClub({
   droite,
   children,
   bas,
+  navigation,
 }: {
   titre: string;
-  onRetour: () => void;
+  onRetour?: () => void; // absent : page d'onglet (titre en grand, pas de retour)
   droite?: ReactNode;
   children: ReactNode;
   bas?: ReactNode;
+  navigation?: ReactNode; // barre d'onglets du bas
 }) {
   return (
     <div className="min-h-screen bg-[#F1F6FC] text-[#123A63]">
       <div className="cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col">
         <div className="sticky top-0 z-10 flex items-center gap-3 bg-[#F1F6FC]/95 px-[22px] pb-[10px] pt-[clamp(14px,2.6svh,22px)] backdrop-blur">
-          <BoutonRetourCarre onClick={onRetour} />
-          <h1 className="min-w-0 flex-1 truncate text-[17px] font-bold">{titre}</h1>
+          {onRetour && <BoutonRetourCarre onClick={onRetour} />}
+          <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"}`}>{titre}</h1>
           {droite}
         </div>
         <div className="flex flex-grow flex-col px-[22px] pb-[24px]">{children}</div>
         {bas && (
-          <div className="sticky bottom-0 z-10 bg-gradient-to-t from-[#F1F6FC] via-[#F1F6FC] to-transparent px-[22px] pb-[max(16px,env(safe-area-inset-bottom))] pt-[18px]">
+          <div
+            className={`sticky z-10 bg-gradient-to-t from-[#F1F6FC] via-[#F1F6FC] to-transparent px-[22px] pt-[18px] ${
+              navigation ? "bottom-[calc(76px+env(safe-area-inset-bottom))] pb-[12px]" : "bottom-0 pb-[max(16px,env(safe-area-inset-bottom))]"
+            }`}
+          >
             {bas}
           </div>
         )}
+        {navigation}
       </div>
     </div>
   );
@@ -87,7 +94,7 @@ export function BlocDate({ date }: { date: string }) {
 
 export function LigneSortie({ s, onClick, pourDp = true }: { s: SortieResume; onClick: () => void; pourDp?: boolean }) {
   const details = pourDp
-    ? `${s.nb_inscrits ?? 0} plongeur${(s.nb_inscrits ?? 0) > 1 ? "s" : ""}${s.statut === "prevue" && s.nb_prevus ? ` · ${s.nb_prevus} prénom${s.nb_prevus > 1 ? "s" : ""} en attente` : ""}${s.statut !== "prevue" && s.nb_inscrits ? ` · ${s.nb_completees ?? 0} fiche${(s.nb_completees ?? 0) > 1 ? "s" : ""} complétée${(s.nb_completees ?? 0) > 1 ? "s" : ""}` : ""}`
+    ? `${s.nb_inscrits ?? 0} plongeur${(s.nb_inscrits ?? 0) > 1 ? "s" : ""}${s.statut === "prevue" && s.nb_prevus ? ` · ${s.nb_prevus} en attente` : ""}${s.statut !== "prevue" && s.nb_inscrits ? ` · ${s.nb_completees ?? 0} fiche${(s.nb_completees ?? 0) > 1 ? "s" : ""} complétée${(s.nb_completees ?? 0) > 1 ? "s" : ""}` : ""}`
     : [s.centre, s.dp ? `DP ${s.dp}` : null].filter(Boolean).join(" · ");
   return (
     <button

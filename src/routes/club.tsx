@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Anchor, ChevronRight, Plus, QrCode, Stamp, Users } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
+import { BarreNavigation } from "@/components/BarreNavigation";
 import { detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import { centreChoisi, choisirCentre, mesCentres, sortiesDp, type Centre, type SortieResume } from "@/lib/club";
 
@@ -45,8 +46,8 @@ function EspaceClub() {
 
   return (
     <PageClub
-      titre="Espace club"
-      onRetour={() => navigate({ to: "/moi" })}
+      titre="Sorties"
+      navigation={<BarreNavigation actif="club" />}
       bas={
         centre ? (
           <button

@@ -52,3 +52,16 @@ export function IconeAmis({ className }: Props) {
     </svg>
   );
 }
+
+// Sorties (directeurs de plongée) : une ancre, avec sa barre et ses deux pattes.
+export function IconeSorties({ className }: Props) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <circle cx="12" cy="4.6" r="1.9" {...trait} />
+      <path d="M12 6.5v14.2" {...trait} />
+      <path d="M8.2 10h7.6" {...trait} />
+      <path d="M4.4 13.6c.4 4 3.6 7.1 7.6 7.1s7.2-3.1 7.6-7.1" {...trait} />
+      <path d="M2.9 15.1l1.5-1.5 1.5 1.5M18.1 15.1l1.5-1.5 1.5 1.5" {...trait} />
+    </svg>
+  );
+}
