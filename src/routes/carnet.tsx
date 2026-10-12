@@ -99,9 +99,8 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
-  // Directeur de plongée sur ordinateur : son outil, c'est le tableau de bord du club
+  // Directeur de plongée : son app, c'est le tableau de bord du club (téléphone comme ordinateur)
   useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia("(min-width: 1024px)").matches) return;
     void estDirecteurDePlongee().then((oui) => {
       if (oui) navigate({ to: "/club", replace: true });
     });

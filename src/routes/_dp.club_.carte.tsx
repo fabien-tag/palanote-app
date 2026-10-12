@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ChevronRight, MapPin } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
-import { BarreNavigation } from "@/components/BarreNavigation";
+import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { MessageErreur, PageClub } from "@/components/club/Ui";
 import { CarteSpots, type ApiCarteSpots } from "@/components/carte/CarteSpots";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
@@ -67,7 +67,7 @@ function PageCarteClub() {
   const total = spots.reduce((t, s) => t + s.plongees.length, 0);
 
   return (
-    <PageClub titre="Carte du club" large="plein" navigation={<BarreNavigation actif="club" cote />} onRetour={() => navigate({ to: "/club" })}>
+    <PageClub titre="Carte du club" large="plein" navigation={<NavigationDpMobile />}>
       <MessageErreur texte={erreurCentre ?? erreur} />
       {sorties && (
         <>

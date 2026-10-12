@@ -193,7 +193,7 @@ function Moi() {
                 <Ligne
                   icone={Anchor}
                   label="Espace club"
-                  valeur={monCentre ? `${monCentre} · sur ordinateur` : "Sur ordinateur"}
+                  valeur={monCentre ?? "Je suis DP"}
                   onClick={() => navigate({ to: "/club" })}
                 />
               </Bloc>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, ChevronLeft, ChevronRight, FileSpreadsheet, Pencil, Plus } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
-import { BarreNavigation } from "@/components/BarreNavigation";
+import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { ChampTexte, Feuille, MessageErreur, PageClub } from "@/components/club/Ui";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { ImportTableur } from "@/components/club/ImportTableur";
@@ -122,8 +122,8 @@ function PageMateriel() {
     <PageClub
       titre="Matériel"
       large
-      navigation={<BarreNavigation actif="club" cote />}
-      onRetour={() => navigate({ to: "/club" })}
+      navigation={<NavigationDpMobile />}
+     
       droite={
         centre ? (
           <span className="flex items-center gap-[8px]">

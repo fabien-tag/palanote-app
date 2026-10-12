@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, type DragEvent } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, ChevronLeft, ChevronRight, Plus, Ship, Stamp } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
-import { BarreNavigation } from "@/components/BarreNavigation";
+import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { ChampTexte, Feuille, MessageErreur, PageClub } from "@/components/club/Ui";
 import { Jauge, PanneauSortie } from "@/components/club/PanneauSortie";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
@@ -161,7 +161,7 @@ function PagePlanning() {
     <PageClub
       titre="Planning"
       large="plein"
-      navigation={<BarreNavigation actif="club" cote />}
+      navigation={<NavigationDpMobile />}
       droite={
         centre ? (
           <button

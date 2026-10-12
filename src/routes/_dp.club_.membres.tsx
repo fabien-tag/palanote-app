@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Search, X } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
-import { BarreNavigation } from "@/components/BarreNavigation";
+import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, MessageErreur, PageClub } from "@/components/club/Ui";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { ajouterJours, aujourdhui, depuisIso, membresCentre, type MembreClub } from "@/lib/planning";
@@ -57,7 +57,7 @@ function PageMembres() {
   const enRetard = tous.reduce((t, m) => t + Math.max(0, m.sorties - m.fiches), 0);
 
   return (
-    <PageClub titre="Membres du club" large navigation={<BarreNavigation actif="club" cote />} onRetour={() => navigate({ to: "/club" })}>
+    <PageClub titre="Membres du club" large navigation={<NavigationDpMobile />}>
       <MessageErreur texte={erreurCentre ?? erreur} />
       <div className="flex w-fit rounded-[12px] bg-[#E3EDF6] p-[3px]" role="tablist" aria-label="Membres">
         {(

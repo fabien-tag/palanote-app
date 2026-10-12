@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BadgeCheck, ChevronRight, CircleHelp, LogOut, UserRound } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
-import { BarreNavigation } from "@/components/BarreNavigation";
+import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, ChampTexte, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { signOut } from "@/lib/auth";
@@ -75,7 +75,7 @@ function PageParametres() {
   );
 
   return (
-    <PageClub titre="Paramètres" large navigation={<BarreNavigation actif="club" cote />} onRetour={() => navigate({ to: "/club" })}>
+    <PageClub titre="Paramètres" large navigation={<NavigationDpMobile />}>
       <MessageErreur texte={erreurCentre ?? erreur} />
       {p && (
         <div className="grid grid-cols-1 gap-x-[32px] lg:grid-cols-2 lg:items-start">
