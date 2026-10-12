@@ -25,7 +25,7 @@ import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil
 import { QuestionSatisfaction } from "@/components/QuestionSatisfaction";
 import { accepterInvitationGardee, plongeesAConfirmer, type PlongeeAConfirmer } from "@/lib/amis";
 import { chargerProfil } from "@/lib/moi";
-import { mesSorties, rejoindreSortieGardee, type SortieResume } from "@/lib/club";
+import { mesSorties, rejoindreSortieGardee, type SortieResume, estDirecteurDePlongee } from "@/lib/club";
 import { nombreNonLues } from "@/lib/notifications";
 import {
   BandeauCarnetsPapier,
@@ -99,6 +99,13 @@ function Carnet() {
   const chargement = chargees === null;
   const [vue, setVue] = useState<Vue>("liste");
   const [filtre, setFiltre] = useState("toutes");
+  // Directeur de plongée sur ordinateur : son outil, c'est le tableau de bord du club
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia("(min-width: 1024px)").matches) return;
+    void estDirecteurDePlongee().then((oui) => {
+      if (oui) navigate({ to: "/club", replace: true });
+    });
+  }, [navigate]);
   // Plongées notées par un binôme, à ajouter à mon carnet (parcours 07)
   const [propositions, setPropositions] = useState<PlongeeAConfirmer[]>([]);
   useEffect(() => {

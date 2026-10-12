@@ -193,7 +193,7 @@ function Moi() {
                 <Ligne
                   icone={Anchor}
                   label="Espace club"
-                  valeur={monCentre ?? (["encadrant", "directeur", "centre"].includes(profil?.role ?? "") ? "Mes sorties" : "Je suis DP")}
+                  valeur={monCentre ? `${monCentre} · sur ordinateur` : "Sur ordinateur"}
                   onClick={() => navigate({ to: "/club" })}
                 />
               </Bloc>

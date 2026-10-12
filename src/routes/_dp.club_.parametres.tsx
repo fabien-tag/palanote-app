@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BadgeCheck, BookOpen, ChevronRight, CircleHelp, LogOut, UserRound } from "lucide-react";
+import { BadgeCheck, ChevronRight, CircleHelp, LogOut, UserRound } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { Avatar, ChampTexte, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
@@ -152,7 +152,6 @@ function PageParametres() {
             <Titre>Mon compte</Titre>
             <div className="flex flex-col gap-[8px]">
               {ligne(UserRound, "Mon profil", "Prénom, niveau, rôle, certifications", () => navigate({ to: "/moi/profil" }))}
-              {ligne(BookOpen, "Mon carnet de plongeur", "Passer en mode plongeur : mes plongées, ma carte, mes binômes", () => navigate({ to: "/carnet" }))}
               {ligne(CircleHelp, "Aide", "Questions fréquentes, nous écrire", () => navigate({ to: "/moi/aide" }))}
               {ligne(UserRound, "Rejoindre ou créer un autre centre", "Si tu encadres dans plusieurs clubs", () => navigate({ to: "/club/centre" }))}
               {ligne(LogOut, "Se déconnecter", "Sur cet appareil", () => void signOut().then(() => navigate({ to: "/connexion" })))}
