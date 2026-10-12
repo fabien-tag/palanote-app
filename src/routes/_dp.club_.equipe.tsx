@@ -25,7 +25,7 @@ import {
 
 // Équipe du centre : DP, guides, pilotes, gonfleurs (avec ou sans compte Palanote),
 // et qui encadre quoi dans la semaine.
-export const Route = createFileRoute("/club_/equipe")({
+export const Route = createFileRoute("/_dp/club_/equipe")({
   head: () => ({ meta: [{ title: "Palanote — Équipe" }] }),
   component: PageEquipe,
 });
@@ -98,7 +98,7 @@ function PageEquipe() {
     <PageClub
       titre="Équipe"
       large
-      navigation={<BarreNavigation actif="club" club="equipe" cote />}
+      navigation={<BarreNavigation actif="club" cote />}
       onRetour={() => navigate({ to: "/club" })}
       droite={
         centre ? (

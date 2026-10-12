@@ -1,6 +1,26 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Anchor, CalendarDays, CheckCircle2, LifeBuoy, UsersRound, ChevronRight, Clock, FileText, PenLine, Plus, QrCode, Stamp, UserRound, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  Anchor,
+  ArrowUpRight,
+  CalendarDays,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  FileText,
+  LifeBuoy,
+  Map as IconeCarte,
+  PenLine,
+  Plus,
+  QrCode,
+  Settings,
+  Stamp,
+  UserRound,
+  Users,
+  UsersRound,
+  Waves,
+} from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
@@ -20,11 +40,13 @@ import {
   type ProchaineSortie,
   type SortieResume,
 } from "@/lib/club";
+import { monProfil } from "@/lib/amis";
+import { ajouterJours, alertesSortie, aujourdhui, controleProche, depuisIso, lundi, planningCentre, type Planning } from "@/lib/planning";
 
 // Onglet « Sorties » : l'accueil du directeur de plongée (parcours 15).
 // Le jour J (prochaine sortie), ce qu'il reste à faire, sa saison et les gens du centre.
 // Sur ordinateur, la page s'élargit en tableau de bord à deux colonnes.
-export const Route = createFileRoute("/club")({
+export const Route = createFileRoute("/_dp/club")({
   head: () => ({ meta: [{ title: "Palanote — Espace club" }] }),
   component: EspaceClub,
 });
@@ -38,6 +60,8 @@ function EspaceClub() {
   const [accueil, setAccueil] = useState<AccueilDp | null>(null);
   const [relances, setRelances] = useState<Record<string, string>>({});
   const [toutVoir, setToutVoir] = useState(false);
+  const [plan, setPlan] = useState<Planning | null>(null); // 2 semaines à partir de lundi : frise et voyants
+  const [prenom, setPrenom] = useState<string | null>(null);
 
   useEffect(() => {
     if (!pret) return;
@@ -65,6 +89,13 @@ function EspaceClub() {
       .catch((e) => {
         if (!scriptManquant(e)) console.error(e);
       });
+    const debut = lundi(aujourdhui());
+    planningCentre(id, debut, ajouterJours(debut, 13))
+      .then((p) => actif && setPlan(p))
+      .catch((e) => {
+        if (!scriptManquant(e)) console.error(e);
+      });
+    void monProfil().then((m) => actif && setPrenom(m?.prenom ?? null));
     return () => {
       actif = false;
     };
@@ -93,8 +124,10 @@ function EspaceClub() {
   return (
     <PageClub
       titre="Sorties"
+      titreBureau={prenom ? `Bonjour ${prenom}` : "Tableau de bord"}
+      sousTitreBureau={[centre?.nom, depuisIso(aujourdhui()).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })].filter(Boolean).join(" · ")}
       large
-      navigation={<BarreNavigation actif="club" club="accueil" cote />}
+      navigation={<BarreNavigation actif="club" cote />}
       droite={
         centre ? (
           <button
@@ -163,7 +196,7 @@ function EspaceClub() {
           <button
             type="button"
             onClick={() => navigate({ to: "/club/centre" })}
-            className="mt-[10px] flex w-full items-center gap-[13px] galet-c border border-[#CFE6F3] bg-[#E3F2FB] px-[15px] py-[12px] text-left lg:max-w-[520px]"
+            className="mt-[10px] flex w-full items-center gap-[13px] galet-c border border-[#CFE6F3] bg-[#E3F2FB] px-[15px] py-[12px] text-left lg:hidden"
           >
             <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte bg-[#0F3D70]">
               <Anchor className="h-[19px] w-[19px] text-white" strokeWidth={2.1} aria-hidden="true" />
@@ -184,6 +217,9 @@ function EspaceClub() {
                 ["/club/planning", "Planning", CalendarDays],
                 ["/club/equipe", "Équipe", UsersRound],
                 ["/club/materiel", "Matériel", LifeBuoy],
+                ["/club/membres", "Membres", Waves],
+                ["/club/carte", "Carte", IconeCarte],
+                ["/club/parametres", "Réglages", Settings],
               ] as const
             ).map(([to, l, Icone]) => (
               <button
@@ -204,6 +240,7 @@ function EspaceClub() {
               {accueil ? (
                 <>
                   <Titre>Prochaine sortie</Titre>
+                  <div className="lg:grid lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-[16px]">
                   {accueil.prochaine ? (
                     <CarteProchaine
                       p={accueil.prochaine}
@@ -216,6 +253,26 @@ function EspaceClub() {
                       Aucune sortie prévue. Crée la prochaine : tes plongeurs la recevront dans leur app.
                     </p>
                   )}
+                    {/* Sur ordinateur : la saison en deux grandes tuiles */}
+                    <div className="hidden grid-rows-2 gap-[16px] lg:grid">
+                      <TuileDegrade
+                        fond="linear-gradient(140deg,#FFF1EC 0%,#FFC2B4 55%,#FF8A75 100%)"
+                        Icone={Anchor}
+                        titre={`Sorties encadrées en ${accueil.stats.annee}`}
+                        valeur={accueil.stats.sorties}
+                        details={[accueil.stats.sorties_mois > 0 ? `${accueil.stats.sorties_mois} ce mois-ci` : "aucune ce mois-ci", `${accueil.stats.tampons} tampons posés`]}
+                      />
+                      <TuileDegrade
+                        fond="linear-gradient(140deg,#E9FBFF 0%,#9FE6F7 50%,#57B8F5 100%)"
+                        Icone={Users}
+                        titre="Plongeurs encadrés"
+                        valeur={accueil.stats.plongeurs}
+                        details={[`${accueil.stats.plongees} plongées`, `${heuresMinutes(accueil.stats.minutes)} sous l'eau`]}
+                      />
+                    </div>
+                  </div>
+
+                  {plan && <FriseSemaine plan={plan} onOuvrir={(id, date) => navigate({ to: "/club/planning", search: { semaine: date, sortie: id } })} onPlanning={() => navigate({ to: "/club/planning" })} />}
 
                   <Titre aide={accueil.a_faire.length > 0 ? `${accueil.a_faire.length} action${accueil.a_faire.length > 1 ? "s" : ""}` : undefined}>À faire</Titre>
                   {accueil.a_faire.length === 0 ? (
@@ -254,12 +311,15 @@ function EspaceClub() {
             {/* Colonne de droite sur ordinateur : la saison et les gens */}
             {accueil && (
               <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
+                {plan && <PointsAttention plan={plan} accueil={accueil} />}
+                <div className="lg:hidden">
                 <Titre>Ta saison {accueil.stats.annee}</Titre>
                 <div className="grid grid-cols-2 gap-[10px]">
                   <Tuile Icone={Anchor} valeur={accueil.stats.sorties} libelle={`sortie${accueil.stats.sorties > 1 ? "s" : ""} encadrée${accueil.stats.sorties > 1 ? "s" : ""}`} detail={accueil.stats.sorties_mois > 0 ? `dont ${accueil.stats.sorties_mois} ce mois-ci` : "aucune ce mois-ci"} />
                   <Tuile Icone={Users} valeur={accueil.stats.plongeurs} libelle={`plongeur${accueil.stats.plongeurs > 1 ? "s" : ""}`} detail={`${accueil.stats.plongees} plongée${accueil.stats.plongees > 1 ? "s" : ""} encadrée${accueil.stats.plongees > 1 ? "s" : ""}`} />
                   <Tuile Icone={Stamp} valeur={accueil.stats.tampons} libelle={`tampon${accueil.stats.tampons > 1 ? "s" : ""} posé${accueil.stats.tampons > 1 ? "s" : ""}`} detail="carnets validés" corail />
                   <Tuile Icone={Clock} valeur={heuresMinutes(accueil.stats.minutes)} libelle="d'encadrement" detail="sous l'eau" />
+                </div>
                 </div>
 
                 {accueil.habitues.length > 0 && (
@@ -511,5 +571,145 @@ function Tuile({ Icone, valeur, libelle, detail, corail = false }: { Icone: type
       <span className="block pt-[3px] text-[13px] font-semibold leading-tight">{libelle}</span>
       <span className="block pt-[2px] text-[11.5px] text-[#7D93A8]">{detail}</span>
     </div>
+  );
+}
+
+// Grande tuile en dégradé (tableau de bord sur ordinateur), aux couleurs de Palanote
+function TuileDegrade({ fond, Icone, titre, valeur, details }: { fond: string; Icone: typeof Anchor; titre: string; valeur: number; details: string[] }) {
+  return (
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-[10px] px-[20px] py-[16px] text-[#123A63]" style={{ background: fond }}>
+      <div className="flex items-start justify-between gap-2">
+        <span className="text-[14px] font-semibold leading-snug">{titre}</span>
+        <span className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-white/55">
+          <Icone className="h-[17px] w-[17px]" strokeWidth={2.2} aria-hidden="true" />
+        </span>
+      </div>
+      <div className="pt-[10px]">
+        <span className="block text-[44px] font-bold leading-none tracking-[-.02em]">{valeur}</span>
+        <span className="block pt-[6px] text-[12.5px] font-semibold text-[#123A63]/75">{details.join(" · ")}</span>
+      </div>
+    </div>
+  );
+}
+
+// Les deux semaines du centre en frise : un coup d'œil sur les palanquées de chaque jour
+const JOURS_COURTS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+function FriseSemaine({ plan, onOuvrir, onPlanning }: { plan: Planning; onOuvrir: (id: string, date: string) => void; onPlanning: () => void }) {
+  const auj = aujourdhui();
+  const debut = lundi(auj);
+  const jours = Array.from({ length: 7 }, (_, i) => ajouterJours(debut, i));
+  return (
+    <div className="hidden lg:block">
+      <div className="flex items-baseline justify-between pb-[9px] pt-[22px]">
+        <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Cette semaine</h2>
+        <button type="button" onClick={onPlanning} className="flex items-center gap-[4px] text-[12.5px] font-bold text-[#1176A8]">
+          Ouvrir le planning <ArrowUpRight className="h-[14px] w-[14px]" />
+        </button>
+      </div>
+      <div className="grid grid-cols-7 gap-[6px] rounded-[10px] border border-[#E4EBF1] bg-white p-[8px]">
+        {jours.map((d, i) => {
+          const liste = plan.sorties.filter((s) => s.date === d && s.statut !== "annulee");
+          const pal = liste.reduce((t, s) => t + s.nb_palanquees, 0);
+          return (
+            <div key={d} className={`flex min-h-[112px] flex-col gap-[4px] rounded-[10px] p-[6px] ${d === auj ? "bg-[#E3F2FB]" : d < auj ? "bg-[#F7FAFD]" : ""}`}>
+              <div className="flex items-baseline justify-between">
+                <span className={`text-[12px] font-bold ${d === auj ? "text-[#1176A8]" : d < auj ? "text-[#9DB0C0]" : ""}`}>
+                  {JOURS_COURTS[i]} {depuisIso(d).getDate()}
+                </span>
+                {pal > 0 && <span className="text-[10.5px] font-bold text-[#5B7189]">{pal} pal.</span>}
+              </div>
+              {liste.map((s) => {
+                const alerte = alertesSortie(s, plan.sorties, plan.materiel).length > 0;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => onOuvrir(s.id, s.date)}
+                    className={`rounded-[8px] border-l-[3px] bg-white px-[6px] py-[4px] text-left shadow-[0_1px_4px_#123A6314] ${
+                      s.statut === "prevue" ? "border-l-[#57D4F5]" : s.statut === "terminee" ? "border-l-[#FF8A75]" : "border-l-[#3DEFBE]"
+                    }`}
+                  >
+                    <span className="flex items-center gap-[4px] text-[10.5px] font-bold text-[#1176A8]">
+                      {heureCourte(s.heure)}
+                      {alerte && <span className="h-[6px] w-[6px] rounded-full bg-[#FF8A75]" aria-label="point à régler" />}
+                    </span>
+                    <span className="block truncate text-[11.5px] font-bold">{s.site}</span>
+                    <span className="block text-[10.5px] text-[#7D93A8]">{s.nb_inscrits + s.nb_prevus} plong.</span>
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// Points d'attention : les voyants du centre (sorties à risque, matériel à contrôler, tampons)
+type Voyant = { niveau: "rouge" | "orange" | "bleu"; titre: string; sous: string; aller: () => void };
+function PointsAttention({ plan, accueil }: { plan: Planning; accueil: AccueilDp }) {
+  const navigate = useNavigate();
+  const auj = aujourdhui();
+  const jour = (d: string) => depuisIso(d).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" });
+  const voyants: Voyant[] = [];
+  for (const s of plan.sorties.filter((x) => x.date >= auj)) {
+    for (const a of alertesSortie(s, plan.sorties, plan.materiel)) {
+      voyants.push({
+        niveau: /plein|:/.test(a) ? "rouge" : "orange",
+        titre: a,
+        sous: `${jour(s.date)} · ${s.site}`,
+        aller: () => navigate({ to: "/club/planning", search: { semaine: s.date, sortie: s.id } }),
+      });
+    }
+  }
+  for (const m of plan.materiel) {
+    const etat = controleProche(m.prochain_controle);
+    if (etat)
+      voyants.push({
+        niveau: etat === "depasse" ? "rouge" : "orange",
+        titre: `${m.libelle} : contrôle ${etat === "depasse" ? "dépassé" : "à prévoir"}`,
+        sous: `Prévu le ${depuisIso(m.prochain_controle!).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`,
+        aller: () => navigate({ to: "/club/materiel" }),
+      });
+  }
+  for (const a of accueil.a_faire.filter((x) => x.type === "tampon"))
+    voyants.push({ niveau: "bleu", titre: `${a.site.trim().charAt(0).toUpperCase()}${a.site.trim().slice(1)} à tamponner`, sous: `${a.date_texte} · ${a.nb}/${a.total ?? 0} fiches`, aller: () => navigate({ to: "/club/sortie", search: { id: a.sortie_id } }) });
+  const ordre = { rouge: 0, orange: 1, bleu: 2 };
+  voyants.sort((a, b) => ordre[a.niveau] - ordre[b.niveau]);
+  const couleur = { rouge: "#FF6B57", orange: "#F5B544", bleu: "#57B8F5" };
+
+  return (
+    <>
+      <Titre aide={voyants.length > 0 ? `${voyants.length} point${voyants.length > 1 ? "s" : ""}` : undefined}>Points d'attention</Titre>
+      {voyants.length === 0 ? (
+        <div className="flex items-center gap-[11px] galet-b bg-[#E2F8EF] px-[14px] py-[13px] text-[13.5px] font-semibold text-[#14805F]">
+          <CheckCircle2 className="h-[19px] w-[19px] shrink-0" aria-hidden="true" />
+          Tout est en ordre pour les deux semaines à venir.
+        </div>
+      ) : (
+        <div className="galet-b border border-[#E4EBF1] bg-white">
+          {voyants.slice(0, 8).map((v, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={v.aller}
+              className={`flex w-full items-start gap-[12px] px-[14px] py-[11px] text-left hover:bg-[#F7FAFD] ${i > 0 ? "border-t border-[#EEF3F8]" : ""}`}
+            >
+              <span className="relative mt-[5px] flex h-[10px] w-[10px] shrink-0">
+                {v.niveau === "rouge" && <span className="absolute inset-0 animate-ping rounded-full opacity-60" style={{ background: couleur[v.niveau] }} />}
+                <span className="relative h-[10px] w-[10px] rounded-full" style={{ background: couleur[v.niveau], boxShadow: `0 0 0 3px ${couleur[v.niveau]}33` }} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[13.5px] font-bold leading-snug">{v.titre}</span>
+                <span className="block text-[12px] text-[#7D93A8] first-letter:uppercase">{v.sous}</span>
+              </span>
+              <ArrowUpRight className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[#9DB0C0]" />
+            </button>
+          ))}
+          {voyants.length > 8 && <p className="border-t border-[#EEF3F8] px-[14px] py-[9px] text-[12px] text-[#7D93A8]">et {voyants.length - 8} de plus dans le planning</p>}
+        </div>
+      )}
+    </>
   );
 }

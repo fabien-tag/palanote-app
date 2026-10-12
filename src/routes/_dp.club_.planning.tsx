@@ -28,7 +28,7 @@ import {
 // Un clic sur une sortie ouvre son panneau : palanquées en kanban, équipe, bateau, matériel.
 type Vue = "semaine" | "mois" | "suivi";
 
-export const Route = createFileRoute("/club_/planning")({
+export const Route = createFileRoute("/_dp/club_/planning")({
   validateSearch: (search: Record<string, unknown>): { vue?: Vue; semaine?: string; sortie?: string } => ({
     ...(search["vue"] === "mois" || search["vue"] === "suivi" || search["vue"] === "semaine" ? { vue: search["vue"] as Vue } : {}),
     ...(typeof search["semaine"] === "string" && /^\d{4}-\d{2}-\d{2}$/.test(search["semaine"]) ? { semaine: search["semaine"] } : {}),
@@ -161,7 +161,7 @@ function PagePlanning() {
     <PageClub
       titre="Planning"
       large="plein"
-      navigation={<BarreNavigation actif="club" club="planning" cote />}
+      navigation={<BarreNavigation actif="club" cote />}
       droite={
         centre ? (
           <button

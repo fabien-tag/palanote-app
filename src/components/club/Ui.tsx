@@ -15,6 +15,8 @@ export function PageClub({
   bas,
   navigation,
   large = false,
+  titreBureau,
+  sousTitreBureau,
 }: {
   titre: string;
   onRetour?: () => void; // absent : page d'onglet (titre en grand, pas de retour)
@@ -22,14 +24,26 @@ export function PageClub({
   children: ReactNode;
   bas?: ReactNode;
   navigation?: ReactNode; // barre d'onglets du bas
+  titreBureau?: string | undefined; // titre affiché à la place sur ordinateur (« Bonjour Marc »)
+  sousTitreBureau?: string | undefined;
   large?: boolean | "plein"; // tableau de bord : s'élargit sur ordinateur ; « plein » = toute la largeur (planning)
 }) {
   return (
-    <div className={`min-h-screen bg-[#F1F6FC] text-[#123A63] ${large ? "bureau lg:pl-[232px]" : ""}`}>
+    <div className="min-h-screen bg-[#F1F6FC] text-[#123A63]">
       <div className={`cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col ${large === "plein" ? "lg:max-w-none" : large ? "lg:max-w-[1120px]" : ""}`}>
         <div className={`sticky top-0 z-10 flex items-center gap-3 bg-[#F1F6FC]/95 px-[22px] ${large ? "lg:px-[40px]" : ""} pb-[10px] pt-[clamp(14px,2.6svh,22px)] backdrop-blur`}>
-          {onRetour && <BoutonRetourCarre onClick={onRetour} />}
-          <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"}`}>{titre}</h1>
+          {onRetour && (
+            <span className={large ? "lg:hidden" : ""}>
+              <BoutonRetourCarre onClick={onRetour} />
+            </span>
+          )}
+          <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"} ${large ? "lg:text-[26px]" : ""} ${titreBureau ? "lg:hidden" : ""}`}>{titre}</h1>
+          {titreBureau && (
+            <div className="hidden min-w-0 flex-1 lg:block">
+              <h1 className="truncate text-[26px] font-bold leading-tight">{titreBureau}</h1>
+              {sousTitreBureau && <p className="truncate text-[13.5px] text-[#5B7189] first-letter:uppercase">{sousTitreBureau}</p>}
+            </div>
+          )}
           {droite}
         </div>
         <div className={`flex flex-grow flex-col px-[22px] pb-[24px] ${large ? "lg:px-[40px]" : ""}`}>{children}</div>

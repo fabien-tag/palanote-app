@@ -26,7 +26,7 @@ import {
 //   1. Inscrire : QR code, lien, recherche, palanquées
 //   2. Après la plongée : durée, eau, visibilité → les fiches partent préremplies
 //   3. Tamponner : toute la sortie d'un geste (on peut décocher quelqu'un)
-export const Route = createFileRoute("/club_/sortie")({
+export const Route = createFileRoute("/_dp/club_/sortie")({
   validateSearch: (search: Record<string, unknown>): { id?: string; qr?: boolean } => ({
     ...(typeof search["id"] === "string" ? { id: search["id"] } : {}),
     ...(search["qr"] === true || search["qr"] === "1" || search["qr"] === 1 ? { qr: true } : {}),

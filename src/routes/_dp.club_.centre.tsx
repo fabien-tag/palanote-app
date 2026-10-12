@@ -6,7 +6,7 @@ import { ChampTexte, detailErreur, MessageErreur, PageClub, Titre } from "@/comp
 import { chercherCentres, choisirCentre, creerCentre, garderOngletSorties, mesCentres, oublierVerificationDp, rejoindreCentre, type Centre } from "@/lib/club";
 
 // Choisir ou créer son centre de plongée (parcours 15, écran 2)
-export const Route = createFileRoute("/club_/centre")({
+export const Route = createFileRoute("/_dp/club_/centre")({
   head: () => ({ meta: [{ title: "Palanote — Mon centre" }] }),
   component: ChoixCentre,
 });

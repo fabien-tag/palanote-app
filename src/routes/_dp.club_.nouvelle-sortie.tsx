@@ -7,7 +7,7 @@ import { ajouterNomsPrevus, creerSortie } from "@/lib/club";
 import { localiserSite } from "@/lib/numerisation";
 
 // Préparer une sortie (parcours 15, écran 3)
-export const Route = createFileRoute("/club_/nouvelle-sortie")({
+export const Route = createFileRoute("/_dp/club_/nouvelle-sortie")({
   validateSearch: (search: Record<string, unknown>): { centre?: string; date?: string; retour?: "planning" } => ({
     ...(typeof search["centre"] === "string" ? { centre: search["centre"] } : {}),
     ...(typeof search["date"] === "string" && /^\d{4}-\d{2}-\d{2}$/.test(search["date"]) ? { date: search["date"] } : {}),

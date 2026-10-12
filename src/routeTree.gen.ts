@@ -10,11 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DpRouteImport } from './routes/_dp'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AmisRouteImport } from './routes/amis'
 import { Route as CarnetRouteImport } from './routes/carnet'
 import { Route as CarteRouteImport } from './routes/carte'
-import { Route as ClubRouteImport } from './routes/club'
 import { Route as CompteCreeRouteImport } from './routes/compte-cree'
 import { Route as ConditionsUtilisationRouteImport } from './routes/conditions-utilisation'
 import { Route as ConnexionRouteImport } from './routes/connexion'
@@ -38,18 +38,13 @@ import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as RecifRouteImport } from './routes/recif'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as SortieRouteImport } from './routes/sortie'
+import { Route as DpClubRouteImport } from './routes/_dp.club'
 import { Route as AmisAjouterRouteImport } from './routes/amis_.ajouter'
 import { Route as AmisBinomeRouteImport } from './routes/amis_.binome'
 import { Route as AmisOrganiserRouteImport } from './routes/amis_.organiser'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
-import { Route as ClubCentreRouteImport } from './routes/club_.centre'
-import { Route as ClubEquipeRouteImport } from './routes/club_.equipe'
 import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-securite'
-import { Route as ClubMaterielRouteImport } from './routes/club_.materiel'
-import { Route as ClubNouvelleSortieRouteImport } from './routes/club_.nouvelle-sortie'
-import { Route as ClubPlanningRouteImport } from './routes/club_.planning'
-import { Route as ClubSortieRouteImport } from './routes/club_.sortie'
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
@@ -64,10 +59,23 @@ import { Route as NumeriserReprendreRouteImport } from './routes/numeriser_.repr
 import { Route as PlongeeEspecesRouteImport } from './routes/plongee.especes'
 import { Route as PlongeePartageRouteImport } from './routes/plongee.partage'
 import { Route as PlongeePhotosRouteImport } from './routes/plongee.photos'
+import { Route as DpClubCarteRouteImport } from './routes/_dp.club_.carte'
+import { Route as DpClubCentreRouteImport } from './routes/_dp.club_.centre'
+import { Route as DpClubEquipeRouteImport } from './routes/_dp.club_.equipe'
+import { Route as DpClubMaterielRouteImport } from './routes/_dp.club_.materiel'
+import { Route as DpClubMembresRouteImport } from './routes/_dp.club_.membres'
+import { Route as DpClubNouvelleSortieRouteImport } from './routes/_dp.club_.nouvelle-sortie'
+import { Route as DpClubParametresRouteImport } from './routes/_dp.club_.parametres'
+import { Route as DpClubPlanningRouteImport } from './routes/_dp.club_.planning'
+import { Route as DpClubSortieRouteImport } from './routes/_dp.club_.sortie'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DpRoute = DpRouteImport.update({
+  id: '/_dp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -88,11 +96,6 @@ const CarnetRoute = CarnetRouteImport.update({
 const CarteRoute = CarteRouteImport.update({
   id: '/carte',
   path: '/carte',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubRoute = ClubRouteImport.update({
-  id: '/club',
-  path: '/club',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompteCreeRoute = CompteCreeRouteImport.update({
@@ -211,6 +214,11 @@ const SortieRoute = SortieRouteImport.update({
   path: '/sortie',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DpClubRoute = DpClubRouteImport.update({
+  id: '/club',
+  path: '/club',
+  getParentRoute: () => DpRoute,
+} as any)
 const AmisAjouterRoute = AmisAjouterRouteImport.update({
   id: '/amis_/ajouter',
   path: '/amis/ajouter',
@@ -236,39 +244,9 @@ const AmisRechercherRoute = AmisRechercherRouteImport.update({
   path: '/amis/rechercher',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ClubCentreRoute = ClubCentreRouteImport.update({
-  id: '/club_/centre',
-  path: '/club/centre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubEquipeRoute = ClubEquipeRouteImport.update({
-  id: '/club_/equipe',
-  path: '/club/equipe',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ClubFicheSecuriteRoute = ClubFicheSecuriteRouteImport.update({
   id: '/club_/fiche-securite',
   path: '/club/fiche-securite',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubMaterielRoute = ClubMaterielRouteImport.update({
-  id: '/club_/materiel',
-  path: '/club/materiel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubNouvelleSortieRoute = ClubNouvelleSortieRouteImport.update({
-  id: '/club_/nouvelle-sortie',
-  path: '/club/nouvelle-sortie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubPlanningRoute = ClubPlanningRouteImport.update({
-  id: '/club_/planning',
-  path: '/club/planning',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubSortieRoute = ClubSortieRouteImport.update({
-  id: '/club_/sortie',
-  path: '/club/sortie',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoiAideRoute = MoiAideRouteImport.update({
@@ -341,6 +319,51 @@ const PlongeePhotosRoute = PlongeePhotosRouteImport.update({
   path: '/plongee/photos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DpClubCarteRoute = DpClubCarteRouteImport.update({
+  id: '/club_/carte',
+  path: '/club/carte',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubCentreRoute = DpClubCentreRouteImport.update({
+  id: '/club_/centre',
+  path: '/club/centre',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubEquipeRoute = DpClubEquipeRouteImport.update({
+  id: '/club_/equipe',
+  path: '/club/equipe',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubMaterielRoute = DpClubMaterielRouteImport.update({
+  id: '/club_/materiel',
+  path: '/club/materiel',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubMembresRoute = DpClubMembresRouteImport.update({
+  id: '/club_/membres',
+  path: '/club/membres',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubNouvelleSortieRoute = DpClubNouvelleSortieRouteImport.update({
+  id: '/club_/nouvelle-sortie',
+  path: '/club/nouvelle-sortie',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubParametresRoute = DpClubParametresRouteImport.update({
+  id: '/club_/parametres',
+  path: '/club/parametres',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubPlanningRoute = DpClubPlanningRouteImport.update({
+  id: '/club_/planning',
+  path: '/club/planning',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubSortieRoute = DpClubSortieRouteImport.update({
+  id: '/club_/sortie',
+  path: '/club/sortie',
+  getParentRoute: () => DpRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -348,7 +371,6 @@ export interface FileRoutesByFullPath {
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
-  '/club': typeof ClubRoute
   '/compte-cree': typeof CompteCreeRoute
   '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
@@ -372,18 +394,13 @@ export interface FileRoutesByFullPath {
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
   '/sortie': typeof SortieRoute
+  '/club': typeof DpClubRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
   '/amis/organiser': typeof AmisOrganiserRoute
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
-  '/club/centre': typeof ClubCentreRoute
-  '/club/equipe': typeof ClubEquipeRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
-  '/club/materiel': typeof ClubMaterielRoute
-  '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
-  '/club/planning': typeof ClubPlanningRoute
-  '/club/sortie': typeof ClubSortieRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
@@ -398,6 +415,15 @@ export interface FileRoutesByFullPath {
   '/plongee/especes': typeof PlongeeEspecesRoute
   '/plongee/partage': typeof PlongeePartageRoute
   '/plongee/photos': typeof PlongeePhotosRoute
+  '/club/carte': typeof DpClubCarteRoute
+  '/club/centre': typeof DpClubCentreRoute
+  '/club/equipe': typeof DpClubEquipeRoute
+  '/club/materiel': typeof DpClubMaterielRoute
+  '/club/membres': typeof DpClubMembresRoute
+  '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
+  '/club/parametres': typeof DpClubParametresRoute
+  '/club/planning': typeof DpClubPlanningRoute
+  '/club/sortie': typeof DpClubSortieRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -405,7 +431,6 @@ export interface FileRoutesByTo {
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
-  '/club': typeof ClubRoute
   '/compte-cree': typeof CompteCreeRoute
   '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
@@ -429,18 +454,13 @@ export interface FileRoutesByTo {
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
   '/sortie': typeof SortieRoute
+  '/club': typeof DpClubRoute
   '/amis/ajouter': typeof AmisAjouterRoute
   '/amis/binome': typeof AmisBinomeRoute
   '/amis/organiser': typeof AmisOrganiserRoute
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
-  '/club/centre': typeof ClubCentreRoute
-  '/club/equipe': typeof ClubEquipeRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
-  '/club/materiel': typeof ClubMaterielRoute
-  '/club/nouvelle-sortie': typeof ClubNouvelleSortieRoute
-  '/club/planning': typeof ClubPlanningRoute
-  '/club/sortie': typeof ClubSortieRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
@@ -455,15 +475,24 @@ export interface FileRoutesByTo {
   '/plongee/especes': typeof PlongeeEspecesRoute
   '/plongee/partage': typeof PlongeePartageRoute
   '/plongee/photos': typeof PlongeePhotosRoute
+  '/club/carte': typeof DpClubCarteRoute
+  '/club/centre': typeof DpClubCentreRoute
+  '/club/equipe': typeof DpClubEquipeRoute
+  '/club/materiel': typeof DpClubMaterielRoute
+  '/club/membres': typeof DpClubMembresRoute
+  '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
+  '/club/parametres': typeof DpClubParametresRoute
+  '/club/planning': typeof DpClubPlanningRoute
+  '/club/sortie': typeof DpClubSortieRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_dp': typeof DpRouteWithChildren
   '/admin': typeof AdminRoute
   '/amis': typeof AmisRoute
   '/carnet': typeof CarnetRoute
   '/carte': typeof CarteRoute
-  '/club': typeof ClubRoute
   '/compte-cree': typeof CompteCreeRoute
   '/conditions-utilisation': typeof ConditionsUtilisationRoute
   '/connexion': typeof ConnexionRoute
@@ -487,18 +516,13 @@ export interface FileRoutesById {
   '/recif': typeof RecifRoute
   '/site': typeof SiteRoute
   '/sortie': typeof SortieRoute
+  '/_dp/club': typeof DpClubRoute
   '/amis_/ajouter': typeof AmisAjouterRoute
   '/amis_/binome': typeof AmisBinomeRoute
   '/amis_/organiser': typeof AmisOrganiserRoute
   '/amis_/proposition': typeof AmisPropositionRoute
   '/amis_/rechercher': typeof AmisRechercherRoute
-  '/club_/centre': typeof ClubCentreRoute
-  '/club_/equipe': typeof ClubEquipeRoute
   '/club_/fiche-securite': typeof ClubFicheSecuriteRoute
-  '/club_/materiel': typeof ClubMaterielRoute
-  '/club_/nouvelle-sortie': typeof ClubNouvelleSortieRoute
-  '/club_/planning': typeof ClubPlanningRoute
-  '/club_/sortie': typeof ClubSortieRoute
   '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
@@ -513,6 +537,15 @@ export interface FileRoutesById {
   '/plongee/especes': typeof PlongeeEspecesRoute
   '/plongee/partage': typeof PlongeePartageRoute
   '/plongee/photos': typeof PlongeePhotosRoute
+  '/_dp/club_/carte': typeof DpClubCarteRoute
+  '/_dp/club_/centre': typeof DpClubCentreRoute
+  '/_dp/club_/equipe': typeof DpClubEquipeRoute
+  '/_dp/club_/materiel': typeof DpClubMaterielRoute
+  '/_dp/club_/membres': typeof DpClubMembresRoute
+  '/_dp/club_/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
+  '/_dp/club_/parametres': typeof DpClubParametresRoute
+  '/_dp/club_/planning': typeof DpClubPlanningRoute
+  '/_dp/club_/sortie': typeof DpClubSortieRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -522,7 +555,6 @@ export interface FileRouteTypes {
     | '/amis'
     | '/carnet'
     | '/carte'
-    | '/club'
     | '/compte-cree'
     | '/conditions-utilisation'
     | '/connexion'
@@ -546,18 +578,13 @@ export interface FileRouteTypes {
     | '/recif'
     | '/site'
     | '/sortie'
+    | '/club'
     | '/amis/ajouter'
     | '/amis/binome'
     | '/amis/organiser'
     | '/amis/proposition'
     | '/amis/rechercher'
-    | '/club/centre'
-    | '/club/equipe'
     | '/club/fiche-securite'
-    | '/club/materiel'
-    | '/club/nouvelle-sortie'
-    | '/club/planning'
-    | '/club/sortie'
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
@@ -572,6 +599,15 @@ export interface FileRouteTypes {
     | '/plongee/especes'
     | '/plongee/partage'
     | '/plongee/photos'
+    | '/club/carte'
+    | '/club/centre'
+    | '/club/equipe'
+    | '/club/materiel'
+    | '/club/membres'
+    | '/club/nouvelle-sortie'
+    | '/club/parametres'
+    | '/club/planning'
+    | '/club/sortie'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -579,7 +615,6 @@ export interface FileRouteTypes {
     | '/amis'
     | '/carnet'
     | '/carte'
-    | '/club'
     | '/compte-cree'
     | '/conditions-utilisation'
     | '/connexion'
@@ -603,18 +638,13 @@ export interface FileRouteTypes {
     | '/recif'
     | '/site'
     | '/sortie'
+    | '/club'
     | '/amis/ajouter'
     | '/amis/binome'
     | '/amis/organiser'
     | '/amis/proposition'
     | '/amis/rechercher'
-    | '/club/centre'
-    | '/club/equipe'
     | '/club/fiche-securite'
-    | '/club/materiel'
-    | '/club/nouvelle-sortie'
-    | '/club/planning'
-    | '/club/sortie'
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
@@ -629,14 +659,23 @@ export interface FileRouteTypes {
     | '/plongee/especes'
     | '/plongee/partage'
     | '/plongee/photos'
+    | '/club/carte'
+    | '/club/centre'
+    | '/club/equipe'
+    | '/club/materiel'
+    | '/club/membres'
+    | '/club/nouvelle-sortie'
+    | '/club/parametres'
+    | '/club/planning'
+    | '/club/sortie'
   id:
     | '__root__'
     | '/'
+    | '/_dp'
     | '/admin'
     | '/amis'
     | '/carnet'
     | '/carte'
-    | '/club'
     | '/compte-cree'
     | '/conditions-utilisation'
     | '/connexion'
@@ -660,18 +699,13 @@ export interface FileRouteTypes {
     | '/recif'
     | '/site'
     | '/sortie'
+    | '/_dp/club'
     | '/amis_/ajouter'
     | '/amis_/binome'
     | '/amis_/organiser'
     | '/amis_/proposition'
     | '/amis_/rechercher'
-    | '/club_/centre'
-    | '/club_/equipe'
     | '/club_/fiche-securite'
-    | '/club_/materiel'
-    | '/club_/nouvelle-sortie'
-    | '/club_/planning'
-    | '/club_/sortie'
     | '/moi_/aide'
     | '/moi_/avis'
     | '/moi_/confidentialite'
@@ -686,15 +720,24 @@ export interface FileRouteTypes {
     | '/plongee/especes'
     | '/plongee/partage'
     | '/plongee/photos'
+    | '/_dp/club_/carte'
+    | '/_dp/club_/centre'
+    | '/_dp/club_/equipe'
+    | '/_dp/club_/materiel'
+    | '/_dp/club_/membres'
+    | '/_dp/club_/nouvelle-sortie'
+    | '/_dp/club_/parametres'
+    | '/_dp/club_/planning'
+    | '/_dp/club_/sortie'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DpRoute: typeof DpRouteWithChildren
   AdminRoute: typeof AdminRoute
   AmisRoute: typeof AmisRoute
   CarnetRoute: typeof CarnetRoute
   CarteRoute: typeof CarteRoute
-  ClubRoute: typeof ClubRoute
   CompteCreeRoute: typeof CompteCreeRoute
   ConditionsUtilisationRoute: typeof ConditionsUtilisationRoute
   ConnexionRoute: typeof ConnexionRoute
@@ -723,13 +766,7 @@ export interface RootRouteChildren {
   AmisOrganiserRoute: typeof AmisOrganiserRoute
   AmisPropositionRoute: typeof AmisPropositionRoute
   AmisRechercherRoute: typeof AmisRechercherRoute
-  ClubCentreRoute: typeof ClubCentreRoute
-  ClubEquipeRoute: typeof ClubEquipeRoute
   ClubFicheSecuriteRoute: typeof ClubFicheSecuriteRoute
-  ClubMaterielRoute: typeof ClubMaterielRoute
-  ClubNouvelleSortieRoute: typeof ClubNouvelleSortieRoute
-  ClubPlanningRoute: typeof ClubPlanningRoute
-  ClubSortieRoute: typeof ClubSortieRoute
   MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
@@ -753,6 +790,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dp': {
+      id: '/_dp'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -781,13 +825,6 @@ declare module '@tanstack/react-router' {
       path: '/carte'
       fullPath: '/carte'
       preLoaderRoute: typeof CarteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club': {
-      id: '/club'
-      path: '/club'
-      fullPath: '/club'
-      preLoaderRoute: typeof ClubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compte-cree': {
@@ -951,6 +988,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SortieRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dp/club': {
+      id: '/_dp/club'
+      path: '/club'
+      fullPath: '/club'
+      preLoaderRoute: typeof DpClubRouteImport
+      parentRoute: typeof DpRoute
+    }
     '/amis_/ajouter': {
       id: '/amis_/ajouter'
       path: '/amis/ajouter'
@@ -986,53 +1030,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AmisRechercherRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/club_/centre': {
-      id: '/club_/centre'
-      path: '/club/centre'
-      fullPath: '/club/centre'
-      preLoaderRoute: typeof ClubCentreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club_/equipe': {
-      id: '/club_/equipe'
-      path: '/club/equipe'
-      fullPath: '/club/equipe'
-      preLoaderRoute: typeof ClubEquipeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/club_/fiche-securite': {
       id: '/club_/fiche-securite'
       path: '/club/fiche-securite'
       fullPath: '/club/fiche-securite'
       preLoaderRoute: typeof ClubFicheSecuriteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club_/materiel': {
-      id: '/club_/materiel'
-      path: '/club/materiel'
-      fullPath: '/club/materiel'
-      preLoaderRoute: typeof ClubMaterielRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club_/nouvelle-sortie': {
-      id: '/club_/nouvelle-sortie'
-      path: '/club/nouvelle-sortie'
-      fullPath: '/club/nouvelle-sortie'
-      preLoaderRoute: typeof ClubNouvelleSortieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club_/planning': {
-      id: '/club_/planning'
-      path: '/club/planning'
-      fullPath: '/club/planning'
-      preLoaderRoute: typeof ClubPlanningRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club_/sortie': {
-      id: '/club_/sortie'
-      path: '/club/sortie'
-      fullPath: '/club/sortie'
-      preLoaderRoute: typeof ClubSortieRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/moi_/aide': {
@@ -1133,16 +1135,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlongeePhotosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dp/club_/carte': {
+      id: '/_dp/club_/carte'
+      path: '/club/carte'
+      fullPath: '/club/carte'
+      preLoaderRoute: typeof DpClubCarteRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/centre': {
+      id: '/_dp/club_/centre'
+      path: '/club/centre'
+      fullPath: '/club/centre'
+      preLoaderRoute: typeof DpClubCentreRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/equipe': {
+      id: '/_dp/club_/equipe'
+      path: '/club/equipe'
+      fullPath: '/club/equipe'
+      preLoaderRoute: typeof DpClubEquipeRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/materiel': {
+      id: '/_dp/club_/materiel'
+      path: '/club/materiel'
+      fullPath: '/club/materiel'
+      preLoaderRoute: typeof DpClubMaterielRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/membres': {
+      id: '/_dp/club_/membres'
+      path: '/club/membres'
+      fullPath: '/club/membres'
+      preLoaderRoute: typeof DpClubMembresRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/nouvelle-sortie': {
+      id: '/_dp/club_/nouvelle-sortie'
+      path: '/club/nouvelle-sortie'
+      fullPath: '/club/nouvelle-sortie'
+      preLoaderRoute: typeof DpClubNouvelleSortieRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/parametres': {
+      id: '/_dp/club_/parametres'
+      path: '/club/parametres'
+      fullPath: '/club/parametres'
+      preLoaderRoute: typeof DpClubParametresRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/planning': {
+      id: '/_dp/club_/planning'
+      path: '/club/planning'
+      fullPath: '/club/planning'
+      preLoaderRoute: typeof DpClubPlanningRouteImport
+      parentRoute: typeof DpRoute
+    }
+    '/_dp/club_/sortie': {
+      id: '/_dp/club_/sortie'
+      path: '/club/sortie'
+      fullPath: '/club/sortie'
+      preLoaderRoute: typeof DpClubSortieRouteImport
+      parentRoute: typeof DpRoute
+    }
   }
 }
 
+interface DpRouteChildren {
+  DpClubRoute: typeof DpClubRoute
+  DpClubCarteRoute: typeof DpClubCarteRoute
+  DpClubCentreRoute: typeof DpClubCentreRoute
+  DpClubEquipeRoute: typeof DpClubEquipeRoute
+  DpClubMaterielRoute: typeof DpClubMaterielRoute
+  DpClubMembresRoute: typeof DpClubMembresRoute
+  DpClubNouvelleSortieRoute: typeof DpClubNouvelleSortieRoute
+  DpClubParametresRoute: typeof DpClubParametresRoute
+  DpClubPlanningRoute: typeof DpClubPlanningRoute
+  DpClubSortieRoute: typeof DpClubSortieRoute
+}
+
+const DpRouteChildren: DpRouteChildren = {
+  DpClubRoute: DpClubRoute,
+  DpClubCarteRoute: DpClubCarteRoute,
+  DpClubCentreRoute: DpClubCentreRoute,
+  DpClubEquipeRoute: DpClubEquipeRoute,
+  DpClubMaterielRoute: DpClubMaterielRoute,
+  DpClubMembresRoute: DpClubMembresRoute,
+  DpClubNouvelleSortieRoute: DpClubNouvelleSortieRoute,
+  DpClubParametresRoute: DpClubParametresRoute,
+  DpClubPlanningRoute: DpClubPlanningRoute,
+  DpClubSortieRoute: DpClubSortieRoute,
+}
+
+const DpRouteWithChildren = DpRoute._addFileChildren(DpRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DpRoute: DpRouteWithChildren,
   AdminRoute: AdminRoute,
   AmisRoute: AmisRoute,
   CarnetRoute: CarnetRoute,
   CarteRoute: CarteRoute,
-  ClubRoute: ClubRoute,
   CompteCreeRoute: CompteCreeRoute,
   ConditionsUtilisationRoute: ConditionsUtilisationRoute,
   ConnexionRoute: ConnexionRoute,
@@ -1171,13 +1264,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmisOrganiserRoute: AmisOrganiserRoute,
   AmisPropositionRoute: AmisPropositionRoute,
   AmisRechercherRoute: AmisRechercherRoute,
-  ClubCentreRoute: ClubCentreRoute,
-  ClubEquipeRoute: ClubEquipeRoute,
   ClubFicheSecuriteRoute: ClubFicheSecuriteRoute,
-  ClubMaterielRoute: ClubMaterielRoute,
-  ClubNouvelleSortieRoute: ClubNouvelleSortieRoute,
-  ClubPlanningRoute: ClubPlanningRoute,
-  ClubSortieRoute: ClubSortieRoute,
   MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,

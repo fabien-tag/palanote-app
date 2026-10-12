@@ -196,3 +196,45 @@ export function controleProche(date: string | null) {
   const j = Math.round((depuisIso(date).getTime() - depuisIso(aujourdhui()).getTime()) / 86400000);
   return j < 0 ? "depasse" : j <= 30 ? "proche" : null;
 }
+
+// ---------- Espace club : carte, membres, paramètres (sql/palanote-espace-club.sql) ----------
+export type SortieCarte = {
+  id: string;
+  date: string;
+  site: string;
+  lieu: string | null;
+  coords: string;
+  statut: StatutSortie;
+  profondeur: number | null;
+  duree: number | null;
+  dp: string;
+  nb: number;
+};
+export const carteCentre = (centre: string) => rpc<SortieCarte[]>("carte_centre", { p_centre: centre }).then((l) => l ?? []);
+
+export type MembreClub = {
+  id: string;
+  prenom: string;
+  niveau: string | null;
+  club: string | null;
+  sorties: number;
+  premiere: string | null;
+  derniere: string | null;
+  fiches: number;
+  tampons: number;
+  prochaine: string | null;
+};
+export const membresCentre = (centre: string) => rpc<MembreClub[]>("membres_centre", { p_centre: centre }).then((l) => l ?? []);
+
+export type ParametresCentre = {
+  id: string;
+  nom: string;
+  ville: string | null;
+  verifie: boolean;
+  cree_le: string;
+  nb_sorties: number;
+  dp: { id: string; prenom: string; niveau: string | null; depuis: string; moi: boolean }[];
+};
+export const parametresCentre = (centre: string) => rpc<ParametresCentre>("parametres_centre", { p_centre: centre });
+export const modifierCentre = (centre: string, nom: string, ville: string) =>
+  rpc<null>("modifier_centre", { p_centre: centre, p_nom: nom, p_ville: ville });

@@ -25,7 +25,7 @@ import {
 
 // Matériel du centre : bateaux (places), blocs, gilets, détendeurs, combinaisons…
 // avec l'utilisation jour par jour (réservations des sorties) et les contrôles à prévoir.
-export const Route = createFileRoute("/club_/materiel")({
+export const Route = createFileRoute("/_dp/club_/materiel")({
   head: () => ({ meta: [{ title: "Palanote — Matériel" }] }),
   component: PageMateriel,
 });
@@ -119,7 +119,7 @@ function PageMateriel() {
     <PageClub
       titre="Matériel"
       large
-      navigation={<BarreNavigation actif="club" club="materiel" cote />}
+      navigation={<BarreNavigation actif="club" cote />}
       onRetour={() => navigate({ to: "/club" })}
       droite={
         centre ? (

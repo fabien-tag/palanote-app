@@ -249,7 +249,23 @@
    Plus sérieux que l'app mobile : mêmes couleurs et pictos, mais tous les coins
    au même rayon (pas de galets ni de gouttes). Les avatars restent ronds.
    Hors couche Tailwind, donc prioritaire sur les utilitaires. */
+@keyframes fondu {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 @media (min-width: 64rem) {
+  /* Changement d'écran : la colonne reste, le contenu arrive en fondu (sans transformation,
+     pour ne pas casser les éléments fixes comme le panneau d'une sortie). */
+  .fondu {
+    animation: fondu 0.28s ease-out both;
+  }
+  .bureau .cascade > * {
+    animation: none;
+  }
   .bureau :is(.galet, .galet-b, .galet-c, .galet-moyen, .galet-petit, .goutte, [class*="rounded-["]) {
     border-radius: 10px;
   }
