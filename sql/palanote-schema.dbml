@@ -721,6 +721,16 @@ Table sortie_attente {
 Ref: sortie_attente.sortie_id > sorties.id [delete: cascade]
 Ref: sortie_attente.user_id > auth.users.id [delete: cascade]
 
+Table fiche_signatures {
+  sortie_id uuid [pk]
+  signature text [not null, note: 'image PNG de la signature du DP (data URL, 200 ko max)']
+  signe_par uuid
+  signe_le timestamptz [not null, default: `now()`]
+}
+
+Ref: fiche_signatures.sortie_id - sorties.id [delete: cascade]
+Ref: fiche_signatures.signe_par > auth.users.id [delete: set null]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -778,4 +788,5 @@ TableGroup Sorties_club [color: #FF8A75] {
   adherent_plongees
   rappels_envoyes
   sortie_attente
+  fiche_signatures
 }

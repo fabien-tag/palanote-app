@@ -355,3 +355,9 @@ export const annulerReporterSorties = (
   heure: string | null = null,
 ) =>
   rpc<number>("annuler_reporter_sorties", { p_sorties: sorties, p_action: action, p_motif: motif, p_message: message, p_date: date, p_heure: heure });
+
+// Signature du DP sur la fiche de sécurité (sql/palanote-signature-fiche.sql)
+export type SignatureFiche = { signature: string; signe_le: string; par: string | null; nom: string | null };
+export const signatureFiche = (sortie: string) => rpc<SignatureFiche | null>("signature_fiche", { p_sortie: sortie });
+export const signerFiche = (sortie: string, signature: string | null) =>
+  rpc<SignatureFiche | null>("signer_fiche", { p_sortie: sortie, p_signature: signature });

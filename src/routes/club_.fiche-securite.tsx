@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Printer } from "lucide-react";
+import { PenLine, Printer } from "lucide-react";
 import { BoutonRetourCarre, useConnexionRequise } from "@/components/numerisation/Ui";
-import { detailErreur, MessageErreur } from "@/components/club/Ui";
+import { detailErreur, Feuille, MessageErreur } from "@/components/club/Ui";
+import { PadSignature } from "@/components/club/PadSignature";
 import { ficheSecurite, heureCourte, scriptManquant, type FicheSecurite } from "@/lib/club";
-import { heureLocale, minutesEntre, suiviPalanquees, type SuiviPalanquee } from "@/lib/planning";
+import { heureLocale, minutesEntre, signatureFiche, signerFiche, suiviPalanquees, type SignatureFiche, type SuiviPalanquee } from "@/lib/planning";
 import { passeportsSortie, type ResumePasseport } from "@/lib/passeport";
 
 // Fiche de sécurité de la sortie (parcours 15) : palanquées, niveaux, paramètres prévus et réalisés.
@@ -38,12 +39,20 @@ function PageFiche() {
   const [erreur, setErreur] = useState<string | null>(null);
   const [suivi, setSuivi] = useState<SuiviPalanquee[]>([]);
   const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
+  // Signature du DP (facultative) : null = pas encore signée, undefined = script pas lancé
+  const [signature, setSignature] = useState<SignatureFiche | null | undefined>(undefined);
+  const [signer, setSigner] = useState(false);
+  const [trace, setTrace] = useState<string | null>(null);
+  const [enCours, setEnCours] = useState(false);
 
   useEffect(() => {
     if (!pret || !id) return;
     suiviPalanquees(id)
       .then(setSuivi)
       .catch(() => undefined); // suivi à l'eau facultatif (script pas encore lancé)
+    signatureFiche(id)
+      .then((x) => setSignature(x ?? null))
+      .catch(() => setSignature(undefined)); // script de la signature pas encore lancé
     passeportsSortie(id)
       .then((l) => setPasseports(Object.fromEntries(l.map((r) => [r.user_id, r]))))
       .catch(() => undefined); // passeport : script pas encore lancé
@@ -75,6 +84,19 @@ function PageFiche() {
       <div className="mx-auto flex max-w-[1120px] items-center gap-3 px-[22px] pb-[10px] pt-[clamp(14px,2.6svh,22px)] print:hidden">
         <BoutonRetourCarre onClick={() => (id ? navigate({ to: "/club/sortie", search: { id } }) : navigate({ to: "/club" }))} />
         <h1 className="min-w-0 flex-1 truncate text-[17px] font-bold">Fiche de sécurité</h1>
+        {f && signature !== undefined && (
+          <button
+            type="button"
+            onClick={() => {
+              setTrace(null);
+              setSigner(true);
+            }}
+            className="flex h-[42px] items-center gap-2 galet-moyen border border-[#D8E5EE] bg-white px-[14px] text-[13px] font-bold text-[#123A63]"
+          >
+            <PenLine className="h-[16px] w-[16px]" strokeWidth={2.3} aria-hidden="true" />
+            <span className="sr-only sm:not-sr-only">{signature ? "SIGNER À NOUVEAU" : "SIGNER"}</span>
+          </button>
+        )}
         {f && (
           <button
             type="button"
@@ -82,7 +104,7 @@ function PageFiche() {
             className="flex h-[42px] items-center gap-2 galet-moyen bg-[#3DEFBE] px-[16px] text-[13px] font-bold text-[#0B3B63]"
           >
             <Printer className="h-[17px] w-[17px]" strokeWidth={2.3} aria-hidden="true" />
-            IMPRIMER · PDF
+            <span className="hidden sm:inline">IMPRIMER · </span>PDF
           </button>
         )}
       </div>
@@ -186,13 +208,50 @@ function PageFiche() {
                 Générée le {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })} à{" "}
                 {new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}. À conserver par le centre.
               </p>
-              <div className="w-[260px] border border-[#123A63] px-[10px] pb-[42px] pt-[6px] text-[11px] font-bold uppercase tracking-[.05em] text-[#5B7189]">
+              <div className={`w-[260px] border border-[#123A63] px-[10px] pt-[6px] text-[11px] font-bold uppercase tracking-[.05em] text-[#5B7189] ${signature ? "pb-[6px]" : "pb-[42px]"}`}>
                 Signature du directeur de plongée
+                {signature && (
+                  <>
+                    <img src={signature.signature} alt={`Signature de ${signature.par ?? "du DP"}`} className="mx-auto mt-[4px] h-[64px] w-auto" />
+                    <span className="block text-[10px] font-semibold normal-case tracking-normal text-[#5B7189]">
+                      {[signature.nom?.toUpperCase(), signature.par].filter(Boolean).join(" ")} · signée le{" "}
+                      {new Date(signature.signe_le).toLocaleDateString("fr-FR")} à{" "}
+                      {new Date(signature.signe_le).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
         )}
       </div>
+      {signer && id && (
+        <Feuille titre="Signer la fiche de sécurité" onFermer={() => setSigner(false)}>
+          <p className="pb-[12px] text-[13px] leading-snug text-[#5B7189]">
+            Ta signature s'ajoute à la fiche et au PDF, avec la date et l'heure. Tu peux signer à nouveau tant que la sortie n'est pas tamponnée.
+          </p>
+          <PadSignature onChange={setTrace} />
+          <button
+            type="button"
+            disabled={!trace || enCours}
+            onClick={async () => {
+              setEnCours(true);
+              try {
+                setSignature(await signerFiche(id, trace));
+                setSigner(false);
+              } catch (e) {
+                setErreur(detailErreur(e, "La signature n'a pas pu être enregistrée."));
+                setSigner(false);
+              } finally {
+                setEnCours(false);
+              }
+            }}
+            className="mt-[14px] flex h-[52px] w-full items-center justify-center rounded-[10px] bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] disabled:opacity-50"
+          >
+            {enCours ? "ENREGISTREMENT…" : "VALIDER MA SIGNATURE"}
+          </button>
+        </Feuille>
+      )}
     </div>
   );
 }
