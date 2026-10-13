@@ -67,6 +67,7 @@ import { Route as DpClubMembresRouteImport } from './routes/_dp.club_.membres'
 import { Route as DpClubNouvelleSortieRouteImport } from './routes/_dp.club_.nouvelle-sortie'
 import { Route as DpClubParametresRouteImport } from './routes/_dp.club_.parametres'
 import { Route as DpClubPlanningRouteImport } from './routes/_dp.club_.planning'
+import { Route as DpClubPrivilegiesRouteImport } from './routes/_dp.club_.privilegies'
 import { Route as DpClubSortieRouteImport } from './routes/_dp.club_.sortie'
 
 const IndexRoute = IndexRouteImport.update({
@@ -359,6 +360,11 @@ const DpClubPlanningRoute = DpClubPlanningRouteImport.update({
   path: '/club/planning',
   getParentRoute: () => DpRoute,
 } as any)
+const DpClubPrivilegiesRoute = DpClubPrivilegiesRouteImport.update({
+  id: '/club_/privilegies',
+  path: '/club/privilegies',
+  getParentRoute: () => DpRoute,
+} as any)
 const DpClubSortieRoute = DpClubSortieRouteImport.update({
   id: '/club_/sortie',
   path: '/club/sortie',
@@ -423,6 +429,7 @@ export interface FileRoutesByFullPath {
   '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
+  '/club/privilegies': typeof DpClubPrivilegiesRoute
   '/club/sortie': typeof DpClubSortieRoute
 }
 export interface FileRoutesByTo {
@@ -483,6 +490,7 @@ export interface FileRoutesByTo {
   '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
+  '/club/privilegies': typeof DpClubPrivilegiesRoute
   '/club/sortie': typeof DpClubSortieRoute
 }
 export interface FileRoutesById {
@@ -545,6 +553,7 @@ export interface FileRoutesById {
   '/_dp/club_/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
   '/_dp/club_/parametres': typeof DpClubParametresRoute
   '/_dp/club_/planning': typeof DpClubPlanningRoute
+  '/_dp/club_/privilegies': typeof DpClubPrivilegiesRoute
   '/_dp/club_/sortie': typeof DpClubSortieRoute
 }
 export interface FileRouteTypes {
@@ -607,6 +616,7 @@ export interface FileRouteTypes {
     | '/club/nouvelle-sortie'
     | '/club/parametres'
     | '/club/planning'
+    | '/club/privilegies'
     | '/club/sortie'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -667,6 +677,7 @@ export interface FileRouteTypes {
     | '/club/nouvelle-sortie'
     | '/club/parametres'
     | '/club/planning'
+    | '/club/privilegies'
     | '/club/sortie'
   id:
     | '__root__'
@@ -728,6 +739,7 @@ export interface FileRouteTypes {
     | '/_dp/club_/nouvelle-sortie'
     | '/_dp/club_/parametres'
     | '/_dp/club_/planning'
+    | '/_dp/club_/privilegies'
     | '/_dp/club_/sortie'
   fileRoutesById: FileRoutesById
 }
@@ -1191,6 +1203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DpClubPlanningRouteImport
       parentRoute: typeof DpRoute
     }
+    '/_dp/club_/privilegies': {
+      id: '/_dp/club_/privilegies'
+      path: '/club/privilegies'
+      fullPath: '/club/privilegies'
+      preLoaderRoute: typeof DpClubPrivilegiesRouteImport
+      parentRoute: typeof DpRoute
+    }
     '/_dp/club_/sortie': {
       id: '/_dp/club_/sortie'
       path: '/club/sortie'
@@ -1211,6 +1230,7 @@ interface DpRouteChildren {
   DpClubNouvelleSortieRoute: typeof DpClubNouvelleSortieRoute
   DpClubParametresRoute: typeof DpClubParametresRoute
   DpClubPlanningRoute: typeof DpClubPlanningRoute
+  DpClubPrivilegiesRoute: typeof DpClubPrivilegiesRoute
   DpClubSortieRoute: typeof DpClubSortieRoute
 }
 
@@ -1224,6 +1244,7 @@ const DpRouteChildren: DpRouteChildren = {
   DpClubNouvelleSortieRoute: DpClubNouvelleSortieRoute,
   DpClubParametresRoute: DpClubParametresRoute,
   DpClubPlanningRoute: DpClubPlanningRoute,
+  DpClubPrivilegiesRoute: DpClubPrivilegiesRoute,
   DpClubSortieRoute: DpClubSortieRoute,
 }
 

@@ -6,6 +6,9 @@ import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import { Avatar, detailErreur, MessageErreur, PastilleStatut } from "@/components/club/Ui";
 import { ajouterPalanquee, definirGuide, detailSortie, heureCourte, placerParticipant, type DetailSortie, type Participant } from "@/lib/club";
 import {
+  definirSortiePrivilegies,
+  MELANGES,
+  optionsSortie,
   affecterEquipier,
   choisirBateau,
   enConflit,
@@ -29,11 +32,15 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
   const [erreur, setErreur] = useState<string | null>(null);
   const [survol, setSurvol] = useState<string | null>(null);
   const [importer, setImporter] = useState(false);
+  const [options, setOptions] = useState<{ reservee: boolean; melange: string | null } | null>(null);
 
   const charger = useCallback(async () => {
     try {
       const d = await detailSortie(id);
       setS(d);
+      void optionsSortie(id)
+        .then(setOptions)
+        .catch(() => setOptions(null)); // script des privilégiés pas encore lancé
       if (d.centre.id) setJour(await planningCentre(d.centre.id, d.date, d.date));
     } catch (e) {
       console.error(e);
@@ -137,6 +144,50 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                   <ExternalLink className="h-[15px] w-[15px]" /> {s.statut === "terminee" ? "Tamponner" : "Ouvrir la sortie"}
                 </BoutonPetit>
               </div>
+
+              {/* Accès et mélange : sortie réservée aux membres privilégiés */}
+              {options && !s.entre_amis && (
+                <Section titre="Accès et mélange">
+                  <button
+                    type="button"
+                    disabled={!modifiable}
+                    onClick={() => {
+                      const o = { ...options, reservee: !options.reservee };
+                      setOptions(o);
+                      void agir(() => definirSortiePrivilegies(id, o.reservee, o.melange));
+                    }}
+                    className={`flex w-full items-center gap-[12px] border px-[14px] py-[11px] text-left ${options.reservee ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1] bg-white"} rounded-[10px]`}
+                  >
+                    <Star className="h-[19px] w-[19px] shrink-0" fill={options.reservee ? "#E9A93A" : "none"} stroke={options.reservee ? "#E9A93A" : "#9DB0C0"} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[14px] font-bold">Réservée aux membres privilégiés</span>
+                      <span className="block text-[12px] text-[#7D93A8]">
+                        {options.reservee ? "Seuls les privilégiés peuvent s'inscrire avec le QR ou le lien" : "Ouverte à tous les plongeurs"}
+                      </span>
+                    </span>
+                    <span className={`h-[24px] w-[42px] shrink-0 rounded-full p-[3px] transition-colors ${options.reservee ? "bg-[#E9A93A]" : "bg-[#D5E1EC]"}`}>
+                      <span className={`block h-[18px] w-[18px] rounded-full bg-white transition-transform ${options.reservee ? "translate-x-[18px]" : ""}`} />
+                    </span>
+                  </button>
+                  <div className="flex flex-wrap gap-[6px] pt-[10px]">
+                    {MELANGES.map((g) => (
+                      <button
+                        key={g}
+                        type="button"
+                        disabled={!modifiable}
+                        onClick={() => {
+                          const o = { ...options, melange: options.melange === g ? null : g };
+                          setOptions(o);
+                          void agir(() => definirSortiePrivilegies(id, o.reservee, o.melange));
+                        }}
+                        className={`h-[32px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${options.melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+                      >
+                        {g}
+                      </button>
+                    ))}
+                  </div>
+                </Section>
+              )}
 
               {/* Palanquées */}
               <Section titre="Palanquées" aide={modifiable ? "glisse les plongeurs d'une colonne à l'autre" : undefined}>

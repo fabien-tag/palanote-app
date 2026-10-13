@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { CalendarDays, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, UsersRound, Waves, X } from "lucide-react";
+import { CalendarDays, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
 import { accueilDp, centreChoisi, mesCentres, type Centre } from "@/lib/club";
 import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre } from "@/lib/planning";
@@ -9,7 +9,7 @@ import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProch
 // Elle reste en place quand on change d'écran (seul le contenu change) et porte des voyants :
 // actions en attente, points à régler sur les 14 prochains jours, matériel à contrôler.
 
-type Cible = "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" | "/club/carte" | "/club/membres" | "/club/parametres";
+type Cible = "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" | "/club/carte" | "/club/membres" | "/club/privilegies" | "/club/parametres";
 
 const ENTREES: { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" }[] = [
   { to: "/club", label: "Tableau de bord", Icone: LayoutDashboard, voyant: "faire" },
@@ -18,6 +18,7 @@ const ENTREES: { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant
   { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
   { to: "/club/carte", label: "Carte du club", Icone: IconeCarte },
   { to: "/club/membres", label: "Membres du club", Icone: Waves, voyant: "membres" },
+  { to: "/club/privilegies", label: "Privilégiés", Icone: Star },
 ];
 
 export type Voyants = { faire: number; planning: number; materiel: number; materielDepasse: boolean; membres: number; membresDepasse: boolean };
@@ -138,6 +139,7 @@ const PRINCIPAUX: { to: Cible; label: string; Icone: typeof LayoutDashboard; voy
   { to: "/club/membres", label: "Membres", Icone: Waves, voyant: "membres" },
 ];
 const SECONDAIRES: { to: Cible; label: string; Icone: typeof LayoutDashboard; texte: string }[] = [
+  { to: "/club/privilegies", label: "Membres privilégiés", Icone: Star, texte: "La communauté, les plongées réservées" },
   { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, texte: "Bateaux, blocs, gilets, contrôles" },
   { to: "/club/carte", label: "Carte du club", Icone: IconeCarte, texte: "Les sites plongés par le centre" },
   { to: "/club/parametres", label: "Paramètres", Icone: Settings, texte: "Le centre, ses DP, mon compte" },

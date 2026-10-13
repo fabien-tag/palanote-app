@@ -458,6 +458,8 @@ Table sorties {
   site_coords text
   bateau text
   bateau_id uuid [note: 'bateau du centre (matériel), avec ses places']
+  reservee_privilegies boolean [not null, default: false, note: 'seuls les membres privilégiés s’inscrivent par QR ou lien']
+  melange text [note: 'Air | Nitrox 32 | Nitrox 36 | Nitrox 40 | Trimix | Air ou nitrox']
   profondeur_prevue numeric
   consignes text
   statut text [not null, default: 'prevue', note: 'prevue | terminee | validee | annulee']
@@ -569,6 +571,8 @@ Table centre_adherents {
   adhesion date
   note text
   user_id uuid [note: 'son compte, retrouvé par l’e-mail']
+  privilegie boolean [not null, default: false, note: 'membre privilégié du club (étoile)']
+  privilegie_depuis timestamptz
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]
 }

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, Star, X } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ChampTexte, detailErreur, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import { ajouterNomsPrevus, creerSortie } from "@/lib/club";
 import { localiserSite } from "@/lib/numerisation";
+import { definirSortiePrivilegies, MELANGES } from "@/lib/planning";
 
 // Préparer une sortie (parcours 15, écran 3)
 export const Route = createFileRoute("/_dp/club_/nouvelle-sortie")({
@@ -34,6 +35,8 @@ function NouvelleSortie() {
   const [bateau, setBateau] = useState("");
   const [profondeur, setProfondeur] = useState("");
   const [consignes, setConsignes] = useState("");
+  const [reservee, setReservee] = useState(false);
+  const [melange, setMelange] = useState<string | null>(null);
   const [palanquees, setPalanquees] = useState(2);
   // Prénoms préparés pour chaque palanquée (facultatif) : rattachés au plongeur quand il scanne le QR
   const [noms, setNoms] = useState<string[][]>([[], []]);
@@ -81,6 +84,13 @@ function NouvelleSortie() {
       // Prénoms en cours de frappe : ajoutés aussi
       const complets = noms.map((l, i) => [...l, ...(saisie[i] ?? "").split(/[,;\n]/).map((x) => x.trim()).filter(Boolean)]);
       if (complets.some((l) => l.length > 0)) await ajouterNomsPrevus(r.id, complets);
+      if (reservee || melange) {
+        try {
+          await definirSortiePrivilegies(r.id, reservee, melange);
+        } catch (e) {
+          console.error(e); // script des privilégiés pas encore lancé : la sortie existe quand même
+        }
+      }
       if (retour === "planning") navigate({ to: "/club/planning", search: { sortie: r.id, semaine: date }, replace: true });
       else navigate({ to: "/club/sortie", search: { id: r.id }, replace: true });
     } catch (e) {
@@ -191,6 +201,28 @@ function NouvelleSortie() {
           </div>
         ))}
       </div>
+
+      <Titre aide="facultatif">Mélange et accès</Titre>
+      <div className="flex flex-wrap gap-[6px]">
+        {MELANGES.map((g) => (
+          <button
+            key={g}
+            type="button"
+            onClick={() => setMelange(melange === g ? null : g)}
+            className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+          >
+            {g}
+          </button>
+        ))}
+      </div>
+      <label className={`mt-[10px] flex cursor-pointer items-center gap-[12px] galet-b border px-[14px] py-[11px] ${reservee ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1] bg-white"}`}>
+        <Star className="h-[19px] w-[19px] shrink-0" fill={reservee ? "#E9A93A" : "none"} stroke={reservee ? "#E9A93A" : "#9DB0C0"} />
+        <span className="min-w-0 flex-1">
+          <span className="block text-[14px] font-bold">Réservée aux membres privilégiés</span>
+          <span className="block text-[12px] text-[#7D93A8]">Épave, plongée profonde… seuls les privilégiés s'inscrivent avec le QR ou le lien</span>
+        </span>
+        <input type="checkbox" checked={reservee} onChange={(e) => setReservee(e.target.checked)} className="h-[18px] w-[18px] accent-[#E9A93A]" />
+      </label>
 
       <Titre>Consignes</Titre>
       <textarea

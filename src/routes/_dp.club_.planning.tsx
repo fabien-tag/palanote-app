@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type DragEvent } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, ChevronLeft, ChevronRight, Plus, Ship, Stamp } from "lucide-react";
+import { AlertTriangle, ChevronLeft, ChevronRight, Plus, Ship, Stamp, Star } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { ChampTexte, Feuille, MessageErreur, PageClub } from "@/components/club/Ui";
@@ -15,6 +15,7 @@ import {
   depuisIso,
   lundi,
   planningCentre,
+  privilegiesCentre,
   roleCourt,
   type Planning,
   type SortiePlanning,
@@ -59,6 +60,7 @@ function PagePlanning() {
   const [survol, setSurvol] = useState<string | null>(null);
   const [aCloturer, setACloturer] = useState<SortieResume | null>(null);
   const [aTamponner, setATamponner] = useState<SortieResume | null>(null);
+  const [reservees, setReservees] = useState<Map<string, string | null>>(new Map()); // sortie → mélange
 
   const ref = semaine ?? aujourdhui();
   const debutSemaine = lundi(ref);
@@ -95,6 +97,14 @@ function PagePlanning() {
   useEffect(() => {
     void charger();
   }, [charger]);
+
+  // Les plongées réservées aux membres privilégiés (étoile sur les cartes)
+  useEffect(() => {
+    if (!centre) return;
+    privilegiesCentre(centre.id)
+      .then((c) => setReservees(new Map(c.sorties.map((x) => [x.id, x.melange]))))
+      .catch(() => undefined);
+  }, [centre, sortie]);
 
   if (ecran) return ecran;
 
@@ -258,7 +268,7 @@ function PagePlanning() {
                     </div>
                     <div className="flex flex-col gap-[8px]">
                       {liste.map((s) => (
-                        <CarteSortie key={s.id} s={s} plan={plan!} onClick={() => ouvrir(s.id)} />
+                        <CarteSortie key={s.id} s={s} plan={plan!} reservee={reservees.has(s.id) ? { melange: reservees.get(s.id) ?? null } : null} onClick={() => ouvrir(s.id)} />
                       ))}
                     </div>
                     {!passe && (
@@ -410,7 +420,7 @@ function ResumePeriode({ plan }: { plan: Planning }) {
   );
 }
 
-function CarteSortie({ s, plan, onClick }: { s: SortiePlanning; plan: Planning; onClick: () => void }) {
+function CarteSortie({ s, plan, reservee, onClick }: { s: SortiePlanning; plan: Planning; reservee: { melange: string | null } | null; onClick: () => void }) {
   const alertes = alertesSortie(s, plan.sorties, plan.materiel);
   const monde = s.nb_inscrits + s.nb_prevus;
   const deplacable = s.statut === "prevue" && s.date >= aujourdhui();
@@ -427,15 +437,17 @@ function CarteSortie({ s, plan, onClick }: { s: SortiePlanning; plan: Planning; 
         deplacable ? "cursor-grab active:cursor-grabbing" : ""
       }`}
     >
-      <span className="block text-[11.5px] font-bold text-[#1176A8]">
+      <span className="flex items-center gap-[4px] text-[11.5px] font-bold text-[#1176A8]">
         {heureCourte(s.heure) || "—"}
         {!s.mienne && <span className="font-semibold text-[#7D93A8]"> · DP {s.dp}</span>}
+        {reservee && <Star className="ml-auto h-[13px] w-[13px] shrink-0" fill="#E9A93A" stroke="#E9A93A" aria-label="Réservée aux membres privilégiés" />}
       </span>
       <span className="block truncate text-[14px] font-bold leading-snug">{s.site}</span>
       <span className="block truncate text-[11.5px] text-[#5B7189]">
         {monde} plong. · {s.nb_palanquees} pal.
         {s.statut !== "prevue" && ` · ${s.nb_completees}/${s.nb_inscrits} fiches`}
       </span>
+      {reservee?.melange && <span className="mt-[3px] inline-block rounded-[6px] bg-[#E3F2FB] px-[5px] py-[1px] text-[10.5px] font-bold text-[#1176A8]">{reservee.melange}</span>}
       {s.bateau && (
         <span className="flex items-center gap-[4px] pt-[3px] text-[11px] text-[#7D93A8]">
           <Ship className="h-[11px] w-[11px]" /> <span className="truncate">{s.bateau}</span>

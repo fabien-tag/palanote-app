@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, FileSpreadsheet, Mail, Search, Trash2, UserCheck, X } from "lucide-react";
+import { AlertTriangle, FileSpreadsheet, Mail, Search, Star, Trash2, UserCheck, X } from "lucide-react";
 import { Avatar, MessageErreur } from "@/components/club/Ui";
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_ADHERENTS, IMPORT_HISTORIQUE } from "@/components/club/importsClub";
 import { messagePlanning } from "@/components/club/useCentre";
 import type { Centre } from "@/lib/club";
-import { adherentsCentre, certificatProche, depuisIso, supprimerAdherent, type Adherent } from "@/lib/planning";
+import { adherentsCentre, basculerPrivilegie, certificatProche, depuisIso, idsPrivilegies, supprimerAdherent, type Adherent } from "@/lib/planning";
 
 // Les adhérents du club, importés d'Excel avant même qu'ils aient l'app :
 // niveaux, licences, certificats médicaux, historique des plongées avec le club,
@@ -17,14 +17,18 @@ const sansAccents = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").to
 export function OngletAdherents({ centre }: { centre: Centre }) {
   const [adherents, setAdherents] = useState<Adherent[] | null>(null);
   const [q, setQ] = useState("");
-  const [filtre, setFiltre] = useState<"tous" | "certificat" | "pas_inscrits">("tous");
+  const [filtre, setFiltre] = useState<"tous" | "privilegies" | "certificat" | "pas_inscrits">("tous");
   const [importer, setImporter] = useState<null | "adherents" | "historique">(null);
   const [aSupprimer, setASupprimer] = useState<Adherent | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [vip, setVip] = useState<Set<string>>(new Set());
 
   const charger = useCallback(async () => {
     try {
       setAdherents(await adherentsCentre(centre.id));
+      void idsPrivilegies(centre.id)
+        .then((l) => setVip(new Set(l.map((x) => x.id))))
+        .catch(() => undefined); // script des privilégiés pas encore lancé
       setErreur(null);
     } catch (e) {
       console.error(e);
@@ -40,7 +44,7 @@ export function OngletAdherents({ centre }: { centre: Centre }) {
   const tous = adherents ?? [];
   const certificats = tous.filter((a) => certificatProche(a.certificat_fin));
   const liste = tous
-    .filter((a) => filtre === "tous" || (filtre === "certificat" ? certificatProche(a.certificat_fin) : !a.sur_palanote))
+    .filter((a) => filtre === "tous" || (filtre === "privilegies" ? vip.has(a.id) : filtre === "certificat" ? certificatProche(a.certificat_fin) : !a.sur_palanote))
     .filter((a) => !q.trim() || sansAccents(`${a.prenom} ${a.nom ?? ""} ${a.niveau ?? ""} ${a.email ?? ""} ${a.licence ?? ""}`).includes(sansAccents(q.trim())));
   const historique = tous.reduce((t, a) => t + a.plongees, 0);
 
@@ -115,6 +119,7 @@ export function OngletAdherents({ centre }: { centre: Centre }) {
                   {(
                     [
                       ["tous", "Tous"],
+                      ["privilegies", "★ Privilégiés"],
                       ["certificat", "Certificat à renouveler"],
                       ["pas_inscrits", "Pas encore sur Palanote"],
                     ] as const
@@ -135,7 +140,8 @@ export function OngletAdherents({ centre }: { centre: Centre }) {
                 <table className="w-full min-w-[900px] border-collapse text-[13px]">
                   <thead>
                     <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#7D93A8]">
-                      <th className="px-[14px] py-[10px] font-bold">Adhérent</th>
+                      <th className="w-[40px] pl-[10px]" aria-label="Privilégié" />
+                      <th className="px-[10px] py-[10px] font-bold">Adhérent</th>
                       <th className="px-[8px] font-bold">Niveau</th>
                       <th className="px-[8px] font-bold">Licence</th>
                       <th className="px-[8px] font-bold">Certificat médical</th>
@@ -150,7 +156,29 @@ export function OngletAdherents({ centre }: { centre: Centre }) {
                       const cert = certificatProche(a.certificat_fin);
                       return (
                         <tr key={a.id} className="border-t border-[#EEF3F8]">
-                          <td className="px-[14px] py-[9px]">
+                          <td className="pl-[10px]">
+                            <button
+                              type="button"
+                              aria-pressed={vip.has(a.id)}
+                              aria-label={vip.has(a.id) ? `Retirer l'étoile de ${a.prenom}` : `${a.prenom} devient membre privilégié`}
+                              title={vip.has(a.id) ? "Membre privilégié" : "Mettre l'étoile"}
+                              onClick={() => {
+                                const oui = !vip.has(a.id);
+                                const n = new Set(vip);
+                                if (oui) n.add(a.id);
+                                else n.delete(a.id);
+                                setVip(n);
+                                void basculerPrivilegie(a.id, oui).catch((e) => {
+                                  setErreur(messagePlanning(e, "L'étoile n'a pas pu être enregistrée.").replace("palanote-planning-club.sql", "palanote-privilegies.sql"));
+                                  void charger();
+                                });
+                              }}
+                              className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] hover:bg-[#FFF8E8]"
+                            >
+                              <Star className="h-[17px] w-[17px]" fill={vip.has(a.id) ? "#E9A93A" : "none"} stroke={vip.has(a.id) ? "#E9A93A" : "#C9D5E0"} />
+                            </button>
+                          </td>
+                          <td className="px-[10px] py-[9px]">
                             <span className="flex items-center gap-[10px]">
                               <Avatar id={a.id} prenom={a.prenom} taille={32} prevu={!a.sur_palanote} />
                               <span className="min-w-0">

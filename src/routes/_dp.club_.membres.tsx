@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Search, X } from "lucide-react";
+import { Search, Star, X } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, MessageErreur, PageClub } from "@/components/club/Ui";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
-import { ajouterJours, aujourdhui, depuisIso, membresCentre, type MembreClub } from "@/lib/planning";
+import { ajouterJours, aujourdhui, depuisIso, idsPrivilegies, membresCentre, privilegierPlongeur, type MembreClub } from "@/lib/planning";
 import { OngletAdherents } from "@/components/club/OngletAdherents";
 
 // Membres du club, en deux onglets :
@@ -31,6 +31,14 @@ function PageMembres() {
   const [tri, setTri] = useState<Tri>("recents");
   const [erreur, setErreur] = useState<string | null>(null);
   const [onglet, setOnglet] = useState<"adherents" | "sorties">("adherents");
+  const [vip, setVip] = useState<Set<string>>(new Set()); // comptes Palanote des membres privilégiés
+
+  useEffect(() => {
+    if (!centre || onglet !== "sorties") return;
+    void idsPrivilegies(centre.id)
+      .then((l) => setVip(new Set(l.map((x) => x.user_id).filter((x): x is string => Boolean(x)))))
+      .catch(() => undefined);
+  }, [centre, onglet]);
 
   useEffect(() => {
     if (!centre) return;
@@ -136,7 +144,8 @@ function PageMembres() {
               <table className="w-full min-w-[760px] border-collapse text-[13px]">
                 <thead>
                   <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#7D93A8]">
-                    <th className="px-[14px] py-[10px] font-bold">Membre</th>
+                    <th className="w-[40px] pl-[10px]" aria-label="Privilégié" />
+                    <th className="px-[10px] py-[10px] font-bold">Membre</th>
                     <th className="px-[8px] font-bold">Sorties</th>
                     <th className="px-[8px] font-bold">1re sortie</th>
                     <th className="px-[8px] font-bold">Dernière</th>
@@ -148,7 +157,29 @@ function PageMembres() {
                 <tbody>
                   {liste.map((m) => (
                     <tr key={m.id} className="border-t border-[#EEF3F8]">
-                      <td className="px-[14px] py-[9px]">
+                      <td className="pl-[10px]">
+                        <button
+                          type="button"
+                          aria-pressed={vip.has(m.id)}
+                          aria-label={vip.has(m.id) ? `Retirer l'étoile de ${m.prenom}` : `${m.prenom} devient membre privilégié`}
+                          title={vip.has(m.id) ? "Membre privilégié" : "Mettre l'étoile"}
+                          onClick={() => {
+                            if (!centre) return;
+                            const oui = !vip.has(m.id);
+                            const n = new Set(vip);
+                            if (oui) n.add(m.id);
+                            else n.delete(m.id);
+                            setVip(n);
+                            void privilegierPlongeur(centre.id, m.id, oui).catch((e) =>
+                              setErreur(messagePlanning(e, "L'étoile n'a pas pu être enregistrée.").replace("palanote-planning-club.sql", "palanote-privilegies.sql")),
+                            );
+                          }}
+                          className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] hover:bg-[#FFF8E8]"
+                        >
+                          <Star className="h-[17px] w-[17px]" fill={vip.has(m.id) ? "#E9A93A" : "none"} stroke={vip.has(m.id) ? "#E9A93A" : "#C9D5E0"} />
+                        </button>
+                      </td>
+                      <td className="px-[10px] py-[9px]">
                         <span className="flex items-center gap-[10px]">
                           <Avatar id={m.id} prenom={m.prenom} taille={32} />
                           <span className="min-w-0">

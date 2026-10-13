@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BadgeCheck, Clock, PenLine, Ship, Thermometer, Users, Waves } from "lucide-react";
+import { Anchor, BadgeCheck, Clock, PenLine, Ship, Thermometer, Star, Users, Waves } from "lucide-react";
 import { Meduse } from "@/components/numerisation/Ui";
 import { Avatar, BlocDate, detailErreur, MessageErreur, PageClub, PastilleStatut, TamponNumerique, Titre } from "@/components/club/Ui";
 import {
@@ -15,6 +15,7 @@ import {
 } from "@/lib/club";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { utilisateurConnecte } from "@/lib/plongees";
+import { reservationSortie } from "@/lib/planning";
 
 // La sortie vue par le plongeur (parcours 15, écrans 7 et 8)
 //   ?code=… : ouvert en scannant le QR du DP ou par le lien reçu (même sans compte)
@@ -41,6 +42,8 @@ function PageSortie() {
   const [enCours, setEnCours] = useState(false);
   // « Qui es-tu ? » : la place préparée par le DP (null = je ne suis pas dans la liste)
   const [place, setPlace] = useState<string | null | undefined>(undefined);
+  // Sortie réservée aux membres privilégiés du club, et mélange prévu
+  const [reservation, setReservation] = useState<{ reservee: boolean; melange: string | null; privilegie: boolean } | null>(null);
 
   const chargerDetail = async (idSortie: string) => {
     try {
@@ -64,6 +67,9 @@ function PageSortie() {
         // Déjà inscrit : on montre directement sa sortie
         if (a.deja_inscrit && a.id) return void chargerDetail(a.id);
         setApercu(a);
+        void reservationSortie(code)
+          .then((r) => actif && setReservation(r))
+          .catch(() => undefined);
         // Le prénom du compte correspond à une place préparée : présélectionnée
         const mien = (a.noms_libres ?? []).filter((n) => n.le_mien);
         if (mien.length === 1) setPlace(mien[0]!.id);
@@ -85,7 +91,12 @@ function PageSortie() {
       await chargerDetail(r.id);
       setApercu(null);
     } catch (e) {
-      setErreur(detailErreur(e, "L'inscription n'a pas marché. Vérifie ta connexion et réessaie."));
+      const m = String((e as { message?: string })?.message ?? "");
+      setErreur(
+        /réservée aux membres privilégiés/.test(m)
+          ? "Cette plongée est réservée aux membres privilégiés du club. Demande au directeur de plongée de t'ajouter."
+          : detailErreur(e, "L'inscription n'a pas marché. Vérifie ta connexion et réessaie."),
+      );
     } finally {
       setEnCours(false);
     }
@@ -140,8 +151,18 @@ function PageSortie() {
               <div className="flex flex-wrap gap-[6px] pt-[12px]">
                 {a.bateau && <Info Icone={Ship} texte={a.bateau} />}
                 {a.profondeur_prevue ? <Info Icone={Waves} texte={`${String(a.profondeur_prevue).replace(".", ",")} m prévus`} /> : null}
+                {reservation?.melange && <Info Icone={Waves} texte={reservation.melange} />}
                 <Info Icone={Users} texte={`${a.nb_inscrits ?? 0} inscrit${(a.nb_inscrits ?? 0) > 1 ? "s" : ""}`} />
               </div>
+              {reservation?.reservee && (
+                <p className={`mt-[12px] flex items-start gap-[8px] rounded-[14px] px-[12px] py-[9px] text-[13px] leading-snug ${reservation.privilegie ? "bg-[#FFF8E8] text-[#6B5320]" : "bg-[#FFF3EF] text-[#8A2A1A]"}`}>
+                  <Star className="mt-[1px] h-[16px] w-[16px] shrink-0" fill="#E9A93A" stroke="#E9A93A" aria-hidden="true" />
+                  <span>
+                    <b>Réservée aux membres privilégiés du club.</b>{" "}
+                    {reservation.privilegie ? "Tu en fais partie : tu peux t'inscrire." : connecte ? "Tu n'en fais pas partie pour l'instant : demande au directeur de plongée de t'ajouter." : "Connecte-toi pour vérifier ton accès."}
+                  </span>
+                </p>
+              )}
               <Meduse className="-right-[6px] -top-[14px]" />
             </div>
 
@@ -203,7 +224,15 @@ function PageSortie() {
               ))}
             </div>
             <div className="min-h-[22px] flex-grow" />
-            {connecte ? (
+            {connecte && reservation?.reservee && !reservation.privilegie && !place ? (
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/carnet" })}
+                className="flex h-14 w-full items-center justify-center galet-moyen border border-[#D8E5EE] bg-white text-[14px] font-bold text-[#5B7189]"
+              >
+                REVENIR À MON CARNET
+              </button>
+            ) : connecte ? (
               <button
                 type="button"
                 disabled={enCours || choixRequis}

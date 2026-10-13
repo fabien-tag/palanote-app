@@ -281,3 +281,51 @@ export const marquerHistoriqueClub = (centre: string) => rpc<number>("marquer_hi
 
 // Certificat médical : expiré, ou qui expire dans le mois
 export const certificatProche = controleProche;
+
+// ---------- Membres privilégiés (sql/palanote-privilegies.sql) ----------
+export const MELANGES = ["Air", "Nitrox 32", "Nitrox 36", "Nitrox 40", "Trimix", "Air ou nitrox"] as const;
+
+export type Privilegie = {
+  id: string;
+  user_id: string | null;
+  prenom: string;
+  nom: string | null;
+  email: string | null;
+  niveau: string | null;
+  certificat_fin: string | null;
+  depuis: string | null;
+  sur_palanote: boolean;
+  activite: number;
+  derniere: string | null;
+  inscrit_reservees: number;
+};
+export type Suggestion = { id: string | null; user_id: string | null; prenom: string; nom: string | null; niveau: string | null; activite: number };
+export type SortieReservee = {
+  id: string;
+  date: string;
+  date_texte: string;
+  heure: string | null;
+  site: string;
+  lieu: string | null;
+  melange: string | null;
+  profondeur_prevue: number | null;
+  bateau: string | null;
+  jeton: string;
+  nb_inscrits: number;
+};
+export type Communaute = { membres: Privilegie[]; suggestions: Suggestion[]; sorties: SortieReservee[] };
+
+export const privilegiesCentre = (centre: string) => rpc<Communaute>("privilegies_centre", { p_centre: centre });
+export const basculerPrivilegie = (adherent: string, oui: boolean) => rpc<null>("basculer_privilegie", { p_adherent: adherent, p_oui: oui });
+export const privilegierPlongeur = (centre: string, user: string, oui: boolean) =>
+  rpc<string>("privilegier_plongeur", { p_centre: centre, p_user: user, p_oui: oui });
+export const idsPrivilegies = (centre: string) => rpc<{ id: string; user_id: string | null }[]>("ids_privilegies", { p_centre: centre }).then((l) => l ?? []);
+export const definirSortiePrivilegies = (sortie: string, reservee: boolean, melange: string | null) =>
+  rpc<null>("definir_sortie_privilegies", { p_sortie: sortie, p_reservee: reservee, p_melange: melange });
+export const optionsSortie = (sortie: string) => rpc<{ reservee: boolean; melange: string | null } | null>("options_sortie", { p_sortie: sortie });
+export const reservationSortie = (jeton: string) =>
+  rpc<{ reservee: boolean; melange: string | null; privilegie: boolean } | null>("reservation_sortie", { p_jeton: jeton });
+export type PlongeeSerie = { date: string; heure: string; site: string; lieu: string; profondeur: string; melange: string; bateau_id: string | null; consignes: string };
+export const creerSeriePrivilegies = (centre: string, sorties: PlongeeSerie[]) => rpc<number>("creer_serie_privilegies", { p_centre: centre, p_sorties: sorties });
+export const inviterPrivilegies = (centre: string, adherents: string[], sorties: string[]) =>
+  rpc<{ avec_app: number; sans_app: number }>("inviter_privilegies", { p_centre: centre, p_adherents: adherents, p_sorties: sorties });
