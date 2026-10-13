@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BadgeCheck, ChevronRight, CircleHelp, LogOut, UserRound } from "lucide-react";
+import { BadgeCheck, ChevronRight, CircleHelp, FileSpreadsheet, LogOut, UserRound } from "lucide-react";
+import { ExportSaison } from "@/components/club/ExportSaison";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, ChampTexte, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
@@ -20,6 +21,7 @@ function PageParametres() {
   const navigate = useNavigate();
   const { pret, ecran } = useConnexionRequise();
   const { centre, centres, erreur: erreurCentre } = useCentre(pret);
+  const [exporter, setExporter] = useState(false);
   const [p, setP] = useState<ParametresCentre | null>(null);
   const [nom, setNom] = useState("");
   const [ville, setVille] = useState("");
@@ -149,6 +151,14 @@ function PageParametres() {
           </div>
 
           <div>
+            {centre && (
+              <>
+                <Titre>Exports</Titre>
+                <div className="flex flex-col gap-[8px] pb-[6px]">
+                  {ligne(FileSpreadsheet, "Exporter la saison (Excel)", "Sorties, plongées et bilan de chaque plongeur", () => setExporter(true))}
+                </div>
+              </>
+            )}
             <Titre>Mon compte</Titre>
             <div className="flex flex-col gap-[8px]">
               {ligne(UserRound, "Mon profil", "Prénom, niveau, rôle, certifications", () => navigate({ to: "/moi/profil" }))}
@@ -190,6 +200,7 @@ function PageParametres() {
           </div>
         </div>
       )}
+      {exporter && centre && <ExportSaison centre={centre.id} onFermer={() => setExporter(false)} />}
     </PageClub>
   );
 }

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState, type DragEvent } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, ChevronLeft, ChevronRight, Plus, Ship, Stamp, Star } from "lucide-react";
+import { AlertTriangle, ChevronLeft, ChevronRight, FileSpreadsheet, Plus, Ship, Stamp, Star } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { ChampTexte, Feuille, MessageErreur, PageClub } from "@/components/club/Ui";
 import { Jauge, PanneauSortie } from "@/components/club/PanneauSortie";
+import { ExportSaison } from "@/components/club/ExportSaison";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { heureCourte, poserTampon, sortiesDp, terminerSortie, type SortieResume, type StatutSortie } from "@/lib/club";
 import {
@@ -60,6 +61,7 @@ function PagePlanning() {
   const [survol, setSurvol] = useState<string | null>(null);
   const [aCloturer, setACloturer] = useState<SortieResume | null>(null);
   const [aTamponner, setATamponner] = useState<SortieResume | null>(null);
+  const [exporter, setExporter] = useState(false);
   const [reservees, setReservees] = useState<Map<string, string | null>>(new Map()); // sortie → mélange
 
   const ref = semaine ?? aujourdhui();
@@ -174,6 +176,16 @@ function PagePlanning() {
       navigation={<NavigationDpMobile />}
       droite={
         centre ? (
+          <span className="flex items-center gap-[8px]">
+          <button
+            type="button"
+            onClick={() => setExporter(true)}
+            aria-label="Exporter la saison en Excel"
+            className="flex h-[42px] items-center gap-2 rounded-[10px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#14805F] lg:px-[14px]"
+          >
+            <FileSpreadsheet className="h-[17px] w-[17px]" aria-hidden="true" />
+            <span className="hidden sm:inline">EXPORTER</span>
+          </button>
           <button
             type="button"
             onClick={() => nouvelle()}
@@ -182,6 +194,7 @@ function PagePlanning() {
             <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
             <span className="hidden sm:inline">NOUVELLE SORTIE</span>
           </button>
+          </span>
         ) : null
       }
     >
@@ -390,6 +403,7 @@ function PagePlanning() {
           </button>
         </Feuille>
       )}
+      {exporter && centre && <ExportSaison centre={centre.id} onFermer={() => setExporter(false)} />}
     </PageClub>
   );
 }
