@@ -53,7 +53,7 @@ export function FeuilleConditions() {
     return () => data.subscription.unsubscribe();
   }, []);
 
-  if (!aDemander || PAGES_LIBRES.includes(chemin)) return null;
+  if (!aDemander || PAGES_LIBRES.includes(chemin) || chemin.startsWith("/clubs/")) return null; // le site d'un club est public
 
   const accepter = async () => {
     setEnvoi(true);

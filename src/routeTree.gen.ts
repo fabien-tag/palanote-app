@@ -46,6 +46,7 @@ import { Route as AmisOrganiserRouteImport } from './routes/amis_.organiser'
 import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
 import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-securite'
+import { Route as ClubsSlugRouteImport } from './routes/clubs.$slug'
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
@@ -73,6 +74,7 @@ import { Route as DpClubNouvelleSortieRouteImport } from './routes/_dp.club_.nou
 import { Route as DpClubParametresRouteImport } from './routes/_dp.club_.parametres'
 import { Route as DpClubPlanningRouteImport } from './routes/_dp.club_.planning'
 import { Route as DpClubPrivilegiesRouteImport } from './routes/_dp.club_.privilegies'
+import { Route as DpClubSiteRouteImport } from './routes/_dp.club_.site'
 import { Route as DpClubSortieRouteImport } from './routes/_dp.club_.sortie'
 
 const IndexRoute = IndexRouteImport.update({
@@ -260,6 +262,11 @@ const ClubFicheSecuriteRoute = ClubFicheSecuriteRouteImport.update({
   path: '/club/fiche-securite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClubsSlugRoute = ClubsSlugRouteImport.update({
+  id: '/clubs/$slug',
+  path: '/clubs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoiAideRoute = MoiAideRouteImport.update({
   id: '/moi_/aide',
   path: '/moi/aide',
@@ -395,6 +402,11 @@ const DpClubPrivilegiesRoute = DpClubPrivilegiesRouteImport.update({
   path: '/club/privilegies',
   getParentRoute: () => DpRoute,
 } as any)
+const DpClubSiteRoute = DpClubSiteRouteImport.update({
+  id: '/club_/site',
+  path: '/club/site',
+  getParentRoute: () => DpRoute,
+} as any)
 const DpClubSortieRoute = DpClubSortieRouteImport.update({
   id: '/club_/sortie',
   path: '/club/sortie',
@@ -438,6 +450,7 @@ export interface FileRoutesByFullPath {
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
+  '/clubs/$slug': typeof ClubsSlugRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
@@ -465,6 +478,7 @@ export interface FileRoutesByFullPath {
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
   '/club/privilegies': typeof DpClubPrivilegiesRoute
+  '/club/site': typeof DpClubSiteRoute
   '/club/sortie': typeof DpClubSortieRoute
 }
 export interface FileRoutesByTo {
@@ -504,6 +518,7 @@ export interface FileRoutesByTo {
   '/amis/proposition': typeof AmisPropositionRoute
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
+  '/clubs/$slug': typeof ClubsSlugRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
@@ -531,6 +546,7 @@ export interface FileRoutesByTo {
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
   '/club/privilegies': typeof DpClubPrivilegiesRoute
+  '/club/site': typeof DpClubSiteRoute
   '/club/sortie': typeof DpClubSortieRoute
 }
 export interface FileRoutesById {
@@ -572,6 +588,7 @@ export interface FileRoutesById {
   '/amis_/proposition': typeof AmisPropositionRoute
   '/amis_/rechercher': typeof AmisRechercherRoute
   '/club_/fiche-securite': typeof ClubFicheSecuriteRoute
+  '/clubs/$slug': typeof ClubsSlugRoute
   '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
@@ -599,6 +616,7 @@ export interface FileRoutesById {
   '/_dp/club_/parametres': typeof DpClubParametresRoute
   '/_dp/club_/planning': typeof DpClubPlanningRoute
   '/_dp/club_/privilegies': typeof DpClubPrivilegiesRoute
+  '/_dp/club_/site': typeof DpClubSiteRoute
   '/_dp/club_/sortie': typeof DpClubSortieRoute
 }
 export interface FileRouteTypes {
@@ -640,6 +658,7 @@ export interface FileRouteTypes {
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/fiche-securite'
+    | '/clubs/$slug'
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
@@ -667,6 +686,7 @@ export interface FileRouteTypes {
     | '/club/parametres'
     | '/club/planning'
     | '/club/privilegies'
+    | '/club/site'
     | '/club/sortie'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -706,6 +726,7 @@ export interface FileRouteTypes {
     | '/amis/proposition'
     | '/amis/rechercher'
     | '/club/fiche-securite'
+    | '/clubs/$slug'
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
@@ -733,6 +754,7 @@ export interface FileRouteTypes {
     | '/club/parametres'
     | '/club/planning'
     | '/club/privilegies'
+    | '/club/site'
     | '/club/sortie'
   id:
     | '__root__'
@@ -773,6 +795,7 @@ export interface FileRouteTypes {
     | '/amis_/proposition'
     | '/amis_/rechercher'
     | '/club_/fiche-securite'
+    | '/clubs/$slug'
     | '/moi_/aide'
     | '/moi_/avis'
     | '/moi_/confidentialite'
@@ -800,6 +823,7 @@ export interface FileRouteTypes {
     | '/_dp/club_/parametres'
     | '/_dp/club_/planning'
     | '/_dp/club_/privilegies'
+    | '/_dp/club_/site'
     | '/_dp/club_/sortie'
   fileRoutesById: FileRoutesById
 }
@@ -840,6 +864,7 @@ export interface RootRouteChildren {
   AmisPropositionRoute: typeof AmisPropositionRoute
   AmisRechercherRoute: typeof AmisRechercherRoute
   ClubFicheSecuriteRoute: typeof ClubFicheSecuriteRoute
+  ClubsSlugRoute: typeof ClubsSlugRoute
   MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
@@ -1119,6 +1144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClubFicheSecuriteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clubs/$slug': {
+      id: '/clubs/$slug'
+      path: '/clubs/$slug'
+      fullPath: '/clubs/$slug'
+      preLoaderRoute: typeof ClubsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/moi_/aide': {
       id: '/moi_/aide'
       path: '/moi/aide'
@@ -1308,6 +1340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DpClubPrivilegiesRouteImport
       parentRoute: typeof DpRoute
     }
+    '/_dp/club_/site': {
+      id: '/_dp/club_/site'
+      path: '/club/site'
+      fullPath: '/club/site'
+      preLoaderRoute: typeof DpClubSiteRouteImport
+      parentRoute: typeof DpRoute
+    }
     '/_dp/club_/sortie': {
       id: '/_dp/club_/sortie'
       path: '/club/sortie'
@@ -1331,6 +1370,7 @@ interface DpRouteChildren {
   DpClubParametresRoute: typeof DpClubParametresRoute
   DpClubPlanningRoute: typeof DpClubPlanningRoute
   DpClubPrivilegiesRoute: typeof DpClubPrivilegiesRoute
+  DpClubSiteRoute: typeof DpClubSiteRoute
   DpClubSortieRoute: typeof DpClubSortieRoute
 }
 
@@ -1347,6 +1387,7 @@ const DpRouteChildren: DpRouteChildren = {
   DpClubParametresRoute: DpClubParametresRoute,
   DpClubPlanningRoute: DpClubPlanningRoute,
   DpClubPrivilegiesRoute: DpClubPrivilegiesRoute,
+  DpClubSiteRoute: DpClubSiteRoute,
   DpClubSortieRoute: DpClubSortieRoute,
 }
 
@@ -1389,6 +1430,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmisPropositionRoute: AmisPropositionRoute,
   AmisRechercherRoute: AmisRechercherRoute,
   ClubFicheSecuriteRoute: ClubFicheSecuriteRoute,
+  ClubsSlugRoute: ClubsSlugRoute,
   MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,

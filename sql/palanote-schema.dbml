@@ -817,6 +817,35 @@ Table formations_seances {
   created_at timestamptz [not null, default: `now()`]
 }
 
+Table club_sites {
+  centre_id uuid [pk, note: 'un site par centre']
+  slug text [not null, unique, note: 'adresse publique /clubs/<slug>']
+  publie boolean [not null, default: false]
+  offre text [not null, default: 'starter', note: 'starter | premium | advanced']
+  modele text [not null, default: 'lagon', note: 'modèle de page : lagon | abysse']
+  couleur_accent text [not null]
+  couleur_secondaire text [not null]
+  couleur_tertiaire text [not null]
+  couleur_fond text [not null]
+  couleur_texte text [not null]
+  logo_url text [note: 'image du seau public sites-clubs']
+  couverture_url text
+  accroche text
+  sous_titre text
+  presentation text
+  atouts jsonb [not null, default: '[]', note: 'points forts : titre, texte']
+  zones jsonb [not null, default: '[]', note: 'sites de plongée : nom, profondeur, niveau, description']
+  adresse text
+  telephone text
+  email text
+  horaires text
+  saison text
+  infos text
+  sections jsonb [not null, note: 'rubriques affichées']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
 Ref: formations_catalogue.centre_id > centres.id [delete: cascade]
 Ref: formations_eleves.centre_id > centres.id [delete: cascade]
 Ref: formations_eleves.catalogue_id > formations_catalogue.id [delete: set null]
@@ -888,4 +917,7 @@ TableGroup Sorties_club [color: #FF8A75] {
   formations_catalogue
   formations_eleves
   formations_seances
+  club_sites
 }
+
+Ref: club_sites.centre_id - centres.id [delete: cascade]

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { CalendarDays, CircleHelp, GraduationCap, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
+import { CalendarDays, CircleHelp, GraduationCap, Globe, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
 import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { accueilDp, centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
@@ -20,7 +20,8 @@ type Cible =
   | "/club/privilegies"
   | "/club/parametres"
   | "/club/notifications"
-  | "/club/formations";
+  | "/club/formations"
+  | "/club/site";
 type Entree = { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" };
 
 // La colonne est rangée en sections : le quotidien du DP, puis les ressources du club ;
@@ -43,6 +44,10 @@ const SECTIONS: { titre: string; entrees: Entree[] }[] = [
       { to: "/club/equipe", label: "Équipe", Icone: UsersRound },
       { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
     ],
+  },
+  {
+    titre: "Visibilité",
+    entrees: [{ to: "/club/site", label: "Mon site internet", Icone: Globe }],
   },
 ];
 
@@ -192,6 +197,7 @@ const SECONDAIRES: { to: Cible; label: string; Icone: typeof LayoutDashboard; te
   { to: "/club/privilegies", label: "Membres privilégiés", Icone: Star, texte: "La communauté, les plongées réservées" },
   { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, texte: "Bateaux, blocs, gilets, contrôles" },
   { to: "/club/carte", label: "Carte du club", Icone: IconeCarte, texte: "Les sites plongés par le centre" },
+  { to: "/club/site", label: "Mon site internet", Icone: Globe, texte: "Le site vitrine du club" },
   { to: "/club/parametres", label: "Paramètres", Icone: Settings, texte: "Le centre, ses DP, mon compte" },
 ];
 
