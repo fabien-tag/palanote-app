@@ -28,6 +28,8 @@ import {
 // Matériel du centre : bateaux (places), blocs, gilets, détendeurs, combinaisons…
 // avec l'utilisation jour par jour (réservations des sorties) et les contrôles à prévoir.
 export const Route = createFileRoute("/_dp/club_/materiel")({
+  // Depuis la recherche : ouvre directement la fiche d'un élément
+  validateSearch: (search: Record<string, unknown>): { ouvrir?: string } => (typeof search["ouvrir"] === "string" ? { ouvrir: search["ouvrir"] } : {}),
   head: () => ({ meta: [{ title: "Palanote — Matériel" }] }),
   component: PageMateriel,
 });
@@ -65,6 +67,15 @@ function PageMateriel() {
   useEffect(() => {
     void charger();
   }, [charger]);
+
+  // Fiche demandée par la recherche
+  const { ouvrir } = Route.useSearch();
+  useEffect(() => {
+    if (!ouvrir || !materiel) return;
+    const m = materiel.find((x) => x.id === ouvrir);
+    if (m) setFiche({ id: m.id, type: m.type, libelle: m.libelle, quantite: String(m.quantite), places: m.places ? String(m.places) : "", controle: m.prochain_controle ?? "", note: m.note ?? "" });
+    navigate({ to: ".", search: {}, replace: true });
+  }, [ouvrir, materiel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (ecran) return ecran;
 

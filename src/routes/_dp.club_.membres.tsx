@@ -13,6 +13,11 @@ import { OngletAdherents } from "@/components/club/OngletAdherents";
 //     et qui est déjà sur Palanote ;
 //   · Venus en sortie : les plongeurs venus avec le centre, leurs fiches, tampons, prochaine sortie.
 export const Route = createFileRoute("/_dp/club_/membres")({
+  // Depuis la recherche : onglet et texte préremplis
+  validateSearch: (search: Record<string, unknown>): { onglet?: "adherents" | "sorties"; q?: string } => ({
+    ...(search["onglet"] === "adherents" || search["onglet"] === "sorties" ? { onglet: search["onglet"] } : {}),
+    ...(typeof search["q"] === "string" ? { q: search["q"] } : {}),
+  }),
   head: () => ({ meta: [{ title: "Palanote — Membres du club" }] }),
   component: PageMembres,
 });
@@ -27,10 +32,17 @@ function PageMembres() {
   const { pret, ecran } = useConnexionRequise();
   const { centre, erreur: erreurCentre } = useCentre(pret);
   const [membres, setMembres] = useState<MembreClub[] | null>(null);
-  const [q, setQ] = useState("");
+  const recherche = Route.useSearch();
+  const [q, setQ] = useState(recherche.onglet === "sorties" ? (recherche.q ?? "") : "");
   const [tri, setTri] = useState<Tri>("recents");
   const [erreur, setErreur] = useState<string | null>(null);
-  const [onglet, setOnglet] = useState<"adherents" | "sorties">("adherents");
+  const [onglet, setOnglet] = useState<"adherents" | "sorties">(recherche.onglet ?? "adherents");
+  // Nouvelle recherche alors qu'on est déjà sur la page : on suit
+  useEffect(() => {
+    if (!recherche.onglet) return;
+    setOnglet(recherche.onglet);
+    if (recherche.onglet === "sorties") setQ(recherche.q ?? "");
+  }, [recherche.onglet, recherche.q]);
   const [vip, setVip] = useState<Set<string>>(new Set()); // comptes Palanote des membres privilégiés
 
   useEffect(() => {
@@ -86,7 +98,7 @@ function PageMembres() {
           </button>
         ))}
       </div>
-      {onglet === "adherents" && centre && <OngletAdherents centre={centre} />}
+      {onglet === "adherents" && centre && <OngletAdherents key={recherche.q ?? ""} centre={centre} qInitial={recherche.onglet === "adherents" ? recherche.q : undefined} />}
       {onglet === "sorties" && membres && (
         <>
           <div className="grid grid-cols-2 gap-[10px] pt-[6px] lg:grid-cols-4">

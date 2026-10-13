@@ -364,3 +364,14 @@ export type SignatureFiche = { signature: string; signe_le: string; par: string 
 export const signatureFiche = (sortie: string) => rpc<SignatureFiche | null>("signature_fiche", { p_sortie: sortie });
 export const signerFiche = (sortie: string, signature: string | null) =>
   rpc<SignatureFiche | null>("signer_fiche", { p_sortie: sortie, p_signature: signature });
+
+// Recherche de l'espace DP (sql/palanote-recherche-dp.sql)
+export type ResultatRecherche = { id?: string; titre: string; texte: string; type?: string; user_id?: string | null; date?: string };
+export type Recherche = {
+  plongeurs?: ResultatRecherche[];
+  equipe?: ResultatRecherche[];
+  materiel?: ResultatRecherche[];
+  sorties?: ResultatRecherche[];
+  sites?: ResultatRecherche[];
+};
+export const rechercheDp = (centre: string, q: string) => rpc<Recherche>("recherche_dp", { p_centre: centre, p_q: q });

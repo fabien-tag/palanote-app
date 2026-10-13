@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Anchor } from "lucide-react";
 import { ClocheDp } from "@/components/club/ClocheDp";
+import { RechercheBarre } from "@/components/club/RechercheDp";
 import { Avatar } from "@/components/club/Ui";
 import { centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
 import { supabase } from "@/lib/supabase";
@@ -52,7 +53,10 @@ export function BarreHautDp() {
 
   return (
     <header className="sticky top-0 z-30 hidden h-[72px] items-center gap-[12px] border-b border-[#DFEAF2] bg-white/95 px-[32px] backdrop-blur lg:flex">
-      <span className="flex-1 text-[14px] font-semibold text-[#5B7189]">{date}</span>
+      <div className="flex min-w-0 flex-1 items-center gap-[18px]">
+        <RechercheBarre />
+        <span className="hidden whitespace-nowrap text-[13px] font-semibold text-[#7D93A8] xl:inline">{date}</span>
+      </div>
 
       <ClocheDp />
 

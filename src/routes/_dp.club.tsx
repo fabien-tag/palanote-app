@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ClocheDp } from "@/components/club/ClocheDp";
+import { BoutonRecherche } from "@/components/club/RechercheDp";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import {
@@ -137,7 +138,12 @@ function EspaceClub() {
       sousTitreBureau={[centre?.nom, depuisIso(aujourdhui()).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })].filter(Boolean).join(" · ")}
       large
       navigation={<NavigationDpMobile />}
-      droite={<ClocheDp className="lg:hidden" />}
+      droite={
+        <span className="flex items-center gap-[8px] lg:hidden">
+          <BoutonRecherche />
+          <ClocheDp />
+        </span>
+      }
       bas={
         centre ? (
           <button

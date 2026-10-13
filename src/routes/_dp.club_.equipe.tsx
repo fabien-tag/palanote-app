@@ -28,6 +28,8 @@ import {
 // Équipe du centre : DP, guides, pilotes, gonfleurs (avec ou sans compte Palanote),
 // et qui encadre quoi dans la semaine.
 export const Route = createFileRoute("/_dp/club_/equipe")({
+  // Depuis la recherche : ouvre directement la fiche d'un élément
+  validateSearch: (search: Record<string, unknown>): { ouvrir?: string } => (typeof search["ouvrir"] === "string" ? { ouvrir: search["ouvrir"] } : {}),
   head: () => ({ meta: [{ title: "Palanote — Équipe" }] }),
   component: PageEquipe,
 });
@@ -65,6 +67,15 @@ function PageEquipe() {
   useEffect(() => {
     void charger();
   }, [charger]);
+
+  // Fiche demandée par la recherche
+  const { ouvrir } = Route.useSearch();
+  useEffect(() => {
+    if (!ouvrir || !equipe) return;
+    const e = equipe.find((x) => x.id === ouvrir);
+    if (e) setFiche({ id: e.id, nom: e.nom, role: e.role, niveau: e.niveau ?? "", telephone: e.telephone ?? "", actif: true, compte: Boolean(e.user_id) });
+    navigate({ to: ".", search: {}, replace: true });
+  }, [ouvrir, equipe]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (ecran) return ecran;
 

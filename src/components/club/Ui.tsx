@@ -30,7 +30,7 @@ export function PageClub({
 }) {
   return (
     <div className="min-h-screen bg-[#F1F6FC] text-[#123A63]">
-      <div className={`cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col ${large === "plein" ? "lg:max-w-none" : large ? "lg:max-w-[1120px]" : ""}`}>
+      <div className={`cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col ${large === "plein" ? "lg:max-w-none" : large ? "lg:max-w-[1120px] xl:max-w-[1320px] 2xl:max-w-[1560px]" : ""}`}>
         <div className={`entete-page sticky top-0 z-10 flex items-center gap-3 bg-[#F1F6FC]/95 px-[22px] ${large ? "lg:px-[40px]" : ""} pb-[10px] pt-[clamp(14px,2.6svh,22px)] backdrop-blur`}>
           {onRetour && (
             <span className={large ? "lg:hidden" : ""}>

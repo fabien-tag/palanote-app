@@ -14,9 +14,9 @@ import { adherentsCentre, basculerPrivilegie, certificatProche, depuisIso, idsPr
 const dateCourte = (d: string | null) => (d ? depuisIso(d).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "2-digit" }) : "—");
 const sansAccents = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-export function OngletAdherents({ centre }: { centre: Centre }) {
+export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial?: string | undefined }) {
   const [adherents, setAdherents] = useState<Adherent[] | null>(null);
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(qInitial ?? "");
   const [filtre, setFiltre] = useState<"tous" | "privilegies" | "certificat" | "pas_inscrits">("tous");
   const [importer, setImporter] = useState<null | "adherents" | "historique">(null);
   const [aSupprimer, setASupprimer] = useState<Adherent | null>(null);
