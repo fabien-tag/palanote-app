@@ -5,22 +5,16 @@ import { CalendarPlus, X } from "lucide-react";
 import { FormulaireNouvelleSortie } from "@/components/club/FormulaireSortie";
 import { centreChoisi, mesCentres } from "@/lib/club";
 
-// « Nouvelle sortie » sur ordinateur : un panneau vertical qui glisse depuis la droite,
-// par-dessus l'écran en cours. Sur téléphone, c'est la page /club/nouvelle-sortie.
+// « Nouvelle sortie » : un panneau vertical qui glisse depuis la droite, par-dessus l'écran
+// en cours (sur toute la largeur sur téléphone). La page /club/nouvelle-sortie reste pour les liens directs.
 const EVENEMENT = "palanote-nouvelle-sortie";
 type Options = { date?: string; retour?: "planning" };
 
 export function useNouvelleSortie() {
-  const navigate = useNavigate();
-  return useCallback(
-    (centre: string | null, o: Options = {}) => {
-      if (!centre) return;
-      const bureau = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
-      if (bureau) window.dispatchEvent(new CustomEvent<Options>(EVENEMENT, { detail: o }));
-      else navigate({ to: "/club/nouvelle-sortie", search: { centre, ...(o.date ? { date: o.date } : {}), ...(o.retour ? { retour: o.retour } : {}) } });
-    },
-    [navigate],
-  );
+  return useCallback((centre: string | null, o: Options = {}) => {
+    if (!centre) return;
+    window.dispatchEvent(new CustomEvent<Options>(EVENEMENT, { detail: o }));
+  }, []);
 }
 
 export function PanneauNouvelleSortie() {
@@ -89,8 +83,9 @@ export function PanneauNouvelleSortie() {
               dateInitiale={options.date}
               onCree={(id, date) => {
                 fermer();
-                // La sortie créée s'ouvre dans le planning, à sa semaine
-                navigate({ to: "/club/planning", search: { sortie: id, semaine: date } });
+                // La sortie créée s'ouvre dans le planning, à sa semaine (sur téléphone : sa page)
+                if (window.matchMedia("(min-width: 1024px)").matches) navigate({ to: "/club/planning", search: { sortie: id, semaine: date } });
+                else navigate({ to: "/club/sortie", search: { id } });
               }}
             />
           ) : (

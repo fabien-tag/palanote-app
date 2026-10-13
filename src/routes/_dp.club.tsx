@@ -24,6 +24,7 @@ import {
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ClocheDp } from "@/components/club/ClocheDp";
 import { BoutonRecherche } from "@/components/club/RechercheDp";
+import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import {
@@ -63,6 +64,7 @@ function EspaceClub() {
   const [relances, setRelances] = useState<Record<string, string>>({});
   const [toutVoir, setToutVoir] = useState(false);
   const [plan, setPlan] = useState<Planning | null>(null); // 2 semaines à partir de lundi : frise et voyants
+  const nouvelleSortie = useNouvelleSortie();
   const [prenom, setPrenom] = useState<string | null>(null);
   const [certificats, setCertificats] = useState({ expires: 0, proches: 0 });
 
@@ -148,7 +150,7 @@ function EspaceClub() {
         centre ? (
           <button
             type="button"
-            onClick={() => navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id } })}
+            onClick={() => nouvelleSortie(centre.id)}
             className="flex h-14 w-full items-center justify-center gap-2 galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D]"
           >
             <Plus className="h-[18px] w-[18px]" strokeWidth={2.6} aria-hidden="true" />
