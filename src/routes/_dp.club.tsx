@@ -137,23 +137,7 @@ function EspaceClub() {
       sousTitreBureau={[centre?.nom, depuisIso(aujourdhui()).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })].filter(Boolean).join(" · ")}
       large
       navigation={<NavigationDpMobile />}
-      droite={
-        centre ? (
-          <>
-          <ClocheDp className="lg:hidden" />
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id } })}
-            className="hidden h-[44px] items-center gap-2 galet-moyen bg-[#3DEFBE] px-[18px] text-[13px] font-bold text-[#0B3B63] lg:flex"
-          >
-            <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
-            NOUVELLE SORTIE
-          </button>
-          </>
-        ) : (
-          <ClocheDp className="lg:hidden" />
-        )
-      }
+      droite={<ClocheDp className="lg:hidden" />}
       bas={
         centre ? (
           <button

@@ -189,7 +189,7 @@ function PagePlanning() {
           <button
             type="button"
             onClick={() => nouvelle()}
-            className="flex h-[42px] items-center gap-2 galet-moyen bg-[#3DEFBE] px-[14px] text-[13px] font-bold text-[#0B3B63] lg:px-[18px]"
+            className="flex h-[42px] items-center gap-2 galet-moyen bg-[#3DEFBE] px-[14px] text-[13px] font-bold text-[#0B3B63] lg:hidden"
           >
             <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
             <span className="hidden sm:inline">NOUVELLE SORTIE</span>

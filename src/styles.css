@@ -315,3 +315,10 @@
 }
 .tampon-pose { animation: tampon-pose 0.55s cubic-bezier(0.3, 0.7, 0.4, 1) backwards; transform-origin: center; }
 @media (prefers-reduced-motion: reduce) { .tampon-pose { animation: none; } }
+
+/* Espace DP sur ordinateur : l'en-tête de page colle sous la barre du haut (72 px) */
+@media (min-width: 1024px) {
+  .bureau .entete-page {
+    top: 72px;
+  }
+}
