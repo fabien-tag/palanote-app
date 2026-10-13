@@ -257,6 +257,66 @@ export function lienSortie(jeton: string, via?: "lien") {
   return `${window.location.origin}/sortie?code=${encodeURIComponent(jeton)}${via ? "&via=lien" : ""}`;
 }
 
+// ---------- Nouveau membre et invitation sur Palanote (sql/palanote-ajout-membre.sql) ----------
+export type MembreInvite = { id: string; prenom: string; email: string | null; telephone: string | null; jeton: string; compte: boolean };
+export type NouveauMembre = {
+  prenom: string;
+  nom: string;
+  email: string;
+  telephone: string;
+  niveau: string;
+  licence: string;
+  certificat: string;
+  privilegie: boolean;
+};
+export const ajouterMembre = (centre: string, m: NouveauMembre) =>
+  rpc<MembreInvite>("ajouter_membre", {
+    p_centre: centre,
+    p_prenom: m.prenom,
+    p_nom: m.nom || null,
+    p_email: m.email || null,
+    p_telephone: m.telephone || null,
+    p_niveau: m.niveau || null,
+    p_licence: m.licence || null,
+    p_certificat: m.certificat || null,
+    p_privilegie: m.privilegie,
+  });
+export const inviterMembre = (adherent: string) => rpc<MembreInvite>("inviter_membre", { p_adherent: adherent });
+export type InvitationClub = { club: string; ville: string | null; prenom: string; email: string | null; plongees: number; relie: boolean };
+export const voirInvitationClub = (jeton: string) => rpc<InvitationClub | null>("voir_invitation_club", { p_jeton: jeton });
+export const accepterInvitationClub = (jeton: string) => rpc<{ club: string; prenom: string }>("accepter_invitation_club", { p_jeton: jeton });
+export function lienInvitationClub(jeton: string) {
+  return `${window.location.origin}/rejoindre?code=${encodeURIComponent(jeton)}`;
+}
+// Invitation ouverte avant d'avoir un compte : gardée sur l'appareil, acceptée dès la connexion
+const CLE_INVITATION = "palanote-invitation-club";
+export function garderInvitationClub(jeton: string) {
+  try {
+    localStorage.setItem(CLE_INVITATION, jeton);
+  } catch {
+    /* stockage indisponible */
+  }
+}
+export async function accepterInvitationClubGardee(): Promise<string | null> {
+  let jeton: string | null = null;
+  try {
+    jeton = localStorage.getItem(CLE_INVITATION);
+  } catch {
+    jeton = null;
+  }
+  if (!jeton) return null;
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) return null;
+  try {
+    const r = await accepterInvitationClub(jeton);
+    localStorage.removeItem(CLE_INVITATION);
+    return `Bienvenue ! Ton compte est relié à ${r.club}.`;
+  } catch {
+    localStorage.removeItem(CLE_INVITATION);
+    return null;
+  }
+}
+
 // ---------- Côté plongeur ----------
 export const voirSortie = (jeton: string) => rpc<ApercuSortie>("voir_sortie", { p_jeton: jeton });
 export const rejoindreSortie = (jeton: string, via: "qr" | "lien" = "qr", place: string | null = null) =>

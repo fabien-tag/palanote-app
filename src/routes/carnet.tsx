@@ -25,7 +25,7 @@ import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil
 import { QuestionSatisfaction } from "@/components/QuestionSatisfaction";
 import { accepterInvitationGardee, plongeesAConfirmer, type PlongeeAConfirmer } from "@/lib/amis";
 import { chargerProfil } from "@/lib/moi";
-import { mesSorties, rejoindreSortieGardee, type SortieResume, estDirecteurDePlongee } from "@/lib/club";
+import { accepterInvitationClubGardee, mesSorties, rejoindreSortieGardee, type SortieResume, estDirecteurDePlongee } from "@/lib/club";
 import { genererRappelsPlongeur, nombreNonLues } from "@/lib/notifications";
 import {
   BandeauCarnetsPapier,
@@ -122,6 +122,9 @@ function Carnet() {
       // Sortie scannée avant la connexion : inscription faite dès le retour sur l'accueil
       const m = await rejoindreSortieGardee().catch(() => null);
       if (m && actif) setConfirmation(m);
+      // Invitation du club ouverte avant d'avoir un compte : le compte est relié au club
+      const inv = await accepterInvitationClubGardee().catch(() => null);
+      if (inv && actif) setConfirmation(inv);
       await genererRappelsPlongeur().catch(() => 0); // rappel de la veille d'une sortie
       const [s, n] = await Promise.all([mesSorties().catch(() => []), nombreNonLues()]);
       if (!actif) return;

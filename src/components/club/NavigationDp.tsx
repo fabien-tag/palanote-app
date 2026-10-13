@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { CalendarDays, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
+import { CalendarDays, CircleHelp, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
 import { accueilDp, centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
 import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre } from "@/lib/planning";
@@ -9,16 +9,38 @@ import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProch
 // Elle reste en place quand on change d'écran (seul le contenu change) et porte des voyants :
 // actions en attente, points à régler sur les 14 prochains jours, matériel à contrôler.
 
-type Cible = "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" | "/club/carte" | "/club/membres" | "/club/privilegies" | "/club/parametres" | "/club/notifications";
+type Cible =
+  | "/club"
+  | "/club/planning"
+  | "/club/equipe"
+  | "/club/materiel"
+  | "/club/carte"
+  | "/club/membres"
+  | "/club/privilegies"
+  | "/club/parametres"
+  | "/club/notifications";
+type Entree = { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" };
 
-const ENTREES: { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" }[] = [
-  { to: "/club", label: "Tableau de bord", Icone: LayoutDashboard, voyant: "faire" },
-  { to: "/club/planning", label: "Planning", Icone: CalendarDays, voyant: "planning" },
-  { to: "/club/equipe", label: "Équipe", Icone: UsersRound },
-  { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
-  { to: "/club/carte", label: "Carte du club", Icone: IconeCarte },
-  { to: "/club/membres", label: "Membres du club", Icone: Waves, voyant: "membres" },
-  { to: "/club/privilegies", label: "Privilégiés", Icone: Star },
+// La colonne est rangée en sections : le quotidien du DP, puis les ressources du club ;
+// les réglages et l'aide restent en bas, à part.
+const SECTIONS: { titre: string; entrees: Entree[] }[] = [
+  {
+    titre: "Mes sorties",
+    entrees: [
+      { to: "/club", label: "Tableau de bord", Icone: LayoutDashboard, voyant: "faire" },
+      { to: "/club/planning", label: "Planning", Icone: CalendarDays, voyant: "planning" },
+      { to: "/club/carte", label: "Carte du club", Icone: IconeCarte },
+    ],
+  },
+  {
+    titre: "Le club",
+    entrees: [
+      { to: "/club/membres", label: "Membres du club", Icone: Waves, voyant: "membres" },
+      { to: "/club/privilegies", label: "Privilégiés", Icone: Star },
+      { to: "/club/equipe", label: "Équipe", Icone: UsersRound },
+      { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
+    ],
+  },
 ];
 
 export type Voyants = { faire: number; planning: number; materiel: number; materielDepasse: boolean; membres: number; membresDepasse: boolean };
@@ -111,7 +133,14 @@ export function NavigationDp() {
           <span className="block text-[11px] font-bold uppercase tracking-[.1em] text-[#1176A8]">Club</span>
         </span>
       </span>
-      <div className="flex flex-col gap-[2px]">{ENTREES.map((e) => entree(e.to, e.label, e.Icone, e.voyant))}</div>
+      <div className="flex flex-col gap-[18px]">
+        {SECTIONS.map((sec) => (
+          <div key={sec.titre}>
+            <p className="px-[12px] pb-[6px] text-[11px] font-bold uppercase tracking-[.14em] text-[#9DB0C0]">{sec.titre}</p>
+            <div className="flex flex-col gap-[2px]">{sec.entrees.map((e) => entree(e.to, e.label, e.Icone, e.voyant))}</div>
+          </div>
+        ))}
+      </div>
       <div className="mt-auto flex flex-col gap-[10px] pt-[20px]">
         {/* Encart « Nouvelle sortie » : l'action principale du DP, toujours à portée de main */}
         {centre && (
@@ -128,7 +157,16 @@ export function NavigationDp() {
             </button>
           </div>
         )}
-        {entree("/club/parametres", "Paramètres", Settings)}
+        <div className="border-t border-[#E9F0F6] pt-[10px]">
+          {entree("/club/parametres", "Paramètres", Settings)}
+          <Link
+            to="/moi/aide"
+            className="flex h-[40px] items-center gap-[12px] rounded-[10px] px-[12px] text-[14px] font-medium text-[#63809A] hover:bg-[#F1F6FC]"
+          >
+            <CircleHelp className="h-[20px] w-[20px] shrink-0" strokeWidth={2} />
+            Aide
+          </Link>
+        </div>
       </div>
     </nav>
   );

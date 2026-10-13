@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, FileSpreadsheet, Mail, Search, Star, Trash2, UserCheck, X } from "lucide-react";
+import { AlertTriangle, FileSpreadsheet, Mail, Search, Star, Trash2, UserCheck, UserPlus, X } from "lucide-react";
+import { FeuilleAjoutMembre, FeuilleInvitationMembre } from "@/components/club/FeuilleMembre";
 import { Avatar, MessageErreur } from "@/components/club/Ui";
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_ADHERENTS, IMPORT_HISTORIQUE } from "@/components/club/importsClub";
 import { messagePlanning } from "@/components/club/useCentre";
-import type { Centre } from "@/lib/club";
+import { inviterMembre, type Centre, type MembreInvite } from "@/lib/club";
 import { adherentsCentre, basculerPrivilegie, certificatProche, depuisIso, idsPrivilegies, supprimerAdherent, type Adherent } from "@/lib/planning";
 
 // Les adhérents du club, importés d'Excel avant même qu'ils aient l'app :
@@ -17,6 +18,8 @@ const sansAccents = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").to
 export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial?: string | undefined }) {
   const [adherents, setAdherents] = useState<Adherent[] | null>(null);
   const [q, setQ] = useState(qInitial ?? "");
+  const [ajout, setAjout] = useState(false);
+  const [invite, setInvite] = useState<MembreInvite | null>(null);
   const [filtre, setFiltre] = useState<"tous" | "privilegies" | "certificat" | "pas_inscrits">("tous");
   const [importer, setImporter] = useState<null | "adherents" | "historique">(null);
   const [aSupprimer, setASupprimer] = useState<Adherent | null>(null);
@@ -79,6 +82,13 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
           </div>
 
           <div className="flex flex-wrap items-center gap-[10px] pt-[16px]">
+            <button
+              type="button"
+              onClick={() => setAjout(true)}
+              className="flex h-[42px] items-center gap-[8px] rounded-[10px] bg-[#3DEFBE] px-[14px] text-[13px] font-bold text-[#0B3B63]"
+            >
+              <UserPlus className="h-[16px] w-[16px]" /> Ajouter un membre
+            </button>
             <button
               type="button"
               onClick={() => setImporter("adherents")}
@@ -223,12 +233,18 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                                 <UserCheck className="h-[14px] w-[14px]" /> Inscrit
                                 {a.recuperees > 0 && <span className="font-semibold text-[#7D93A8]">· {a.recuperees} au carnet</span>}
                               </span>
-                            ) : a.email ? (
-                              <a href={invitation(a)} className="inline-flex items-center gap-[4px] rounded-[8px] border border-[#57D4F5] px-[8px] py-[3px] text-[12px] font-bold text-[#1176A8]">
-                                <Mail className="h-[13px] w-[13px]" /> Inviter
-                              </a>
                             ) : (
-                              <span className="text-[12px] text-[#9DB0C0]">Sans e-mail</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  void inviterMembre(a.id)
+                                    .then(setInvite)
+                                    .catch(() => (a.email ? window.open(invitation(a), "_self") : undefined))
+                                }
+                                className="inline-flex items-center gap-[4px] rounded-[8px] border border-[#57D4F5] px-[8px] py-[3px] text-[12px] font-bold text-[#1176A8]"
+                              >
+                                <Mail className="h-[13px] w-[13px]" /> Inviter
+                              </button>
                             )}
                           </td>
                           <td className="pr-[10px] text-right">
@@ -299,6 +315,10 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
           }}
         />
       )}
+      {ajout && (
+        <FeuilleAjoutMembre centre={centre.id} nomClub={centre.nom} onFermer={() => setAjout(false)} onAjoute={() => void charger()} />
+      )}
+      {invite && <FeuilleInvitationMembre invite={invite} nomClub={centre.nom} onFermer={() => setInvite(null)} />}
     </>
   );
 }

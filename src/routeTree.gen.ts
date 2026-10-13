@@ -36,6 +36,7 @@ import { Route as PlongeeExpressRouteImport } from './routes/plongee-express'
 import { Route as PolitiqueDeConfidentialiteRouteImport } from './routes/politique-de-confidentialite'
 import { Route as ProfilPlongeurRouteImport } from './routes/profil-plongeur'
 import { Route as RecifRouteImport } from './routes/recif'
+import { Route as RejoindreRouteImport } from './routes/rejoindre'
 import { Route as SiteRouteImport } from './routes/site'
 import { Route as SortieRouteImport } from './routes/sortie'
 import { Route as DpClubRouteImport } from './routes/_dp.club'
@@ -205,6 +206,11 @@ const ProfilPlongeurRoute = ProfilPlongeurRouteImport.update({
 const RecifRoute = RecifRouteImport.update({
   id: '/recif',
   path: '/recif',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RejoindreRoute = RejoindreRouteImport.update({
+  id: '/rejoindre',
+  path: '/rejoindre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SiteRoute = SiteRouteImport.update({
@@ -410,6 +416,7 @@ export interface FileRoutesByFullPath {
   '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
+  '/rejoindre': typeof RejoindreRoute
   '/site': typeof SiteRoute
   '/sortie': typeof SortieRoute
   '/club': typeof DpClubRoute
@@ -473,6 +480,7 @@ export interface FileRoutesByTo {
   '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
+  '/rejoindre': typeof RejoindreRoute
   '/site': typeof SiteRoute
   '/sortie': typeof SortieRoute
   '/club': typeof DpClubRoute
@@ -538,6 +546,7 @@ export interface FileRoutesById {
   '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/profil-plongeur': typeof ProfilPlongeurRoute
   '/recif': typeof RecifRoute
+  '/rejoindre': typeof RejoindreRoute
   '/site': typeof SiteRoute
   '/sortie': typeof SortieRoute
   '/_dp/club': typeof DpClubRoute
@@ -603,6 +612,7 @@ export interface FileRouteTypes {
     | '/politique-de-confidentialite'
     | '/profil-plongeur'
     | '/recif'
+    | '/rejoindre'
     | '/site'
     | '/sortie'
     | '/club'
@@ -666,6 +676,7 @@ export interface FileRouteTypes {
     | '/politique-de-confidentialite'
     | '/profil-plongeur'
     | '/recif'
+    | '/rejoindre'
     | '/site'
     | '/sortie'
     | '/club'
@@ -730,6 +741,7 @@ export interface FileRouteTypes {
     | '/politique-de-confidentialite'
     | '/profil-plongeur'
     | '/recif'
+    | '/rejoindre'
     | '/site'
     | '/sortie'
     | '/_dp/club'
@@ -795,6 +807,7 @@ export interface RootRouteChildren {
   PolitiqueDeConfidentialiteRoute: typeof PolitiqueDeConfidentialiteRoute
   ProfilPlongeurRoute: typeof ProfilPlongeurRoute
   RecifRoute: typeof RecifRoute
+  RejoindreRoute: typeof RejoindreRoute
   SiteRoute: typeof SiteRoute
   SortieRoute: typeof SortieRoute
   AmisAjouterRoute: typeof AmisAjouterRoute
@@ -1009,6 +1022,13 @@ declare module '@tanstack/react-router' {
       path: '/recif'
       fullPath: '/recif'
       preLoaderRoute: typeof RecifRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rejoindre': {
+      id: '/rejoindre'
+      path: '/rejoindre'
+      fullPath: '/rejoindre'
+      preLoaderRoute: typeof RejoindreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/site': {
@@ -1319,6 +1339,7 @@ const rootRouteChildren: RootRouteChildren = {
   PolitiqueDeConfidentialiteRoute: PolitiqueDeConfidentialiteRoute,
   ProfilPlongeurRoute: ProfilPlongeurRoute,
   RecifRoute: RecifRoute,
+  RejoindreRoute: RejoindreRoute,
   SiteRoute: SiteRoute,
   SortieRoute: SortieRoute,
   AmisAjouterRoute: AmisAjouterRoute,

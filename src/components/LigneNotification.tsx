@@ -14,6 +14,8 @@ export const ICONES_NOTIFICATION: Record<string, { Icone: typeof Bell; fond: str
   sortie_annulee: { Icone: CalendarX, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   binome_demande: { Icone: Users, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
   binome_accepte: { Icone: HeartHandshake, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  club_adhesion: { Icone: UserPlus, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  membre_rejoint: { Icone: UserPlus, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   sortie_desistement: { Icone: UserMinus, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
   desistement_valide: { Icone: UserMinus, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   sortie_attente: { Icone: Hourglass, fond: "bg-[#FFF3D9]", couleur: "text-[#B07A12]" },

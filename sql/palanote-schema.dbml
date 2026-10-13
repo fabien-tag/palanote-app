@@ -580,6 +580,9 @@ Table centre_adherents {
   user_id uuid [note: 'son compte, retrouvé par l’e-mail']
   privilegie boolean [not null, default: false, note: 'membre privilégié du club (étoile)']
   privilegie_depuis timestamptz
+  invitation_jeton text [unique, note: 'lien personnel d’invitation sur Palanote (QR, SMS, e-mail)']
+  invite_le timestamptz
+  rejoint_le timestamptz [note: 'compte Palanote relié au club']
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]
 }
