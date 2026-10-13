@@ -704,6 +704,22 @@ Table rappels_envoyes {
 
 Ref: rappels_envoyes.user_id > auth.users.id [delete: cascade]
 
+Table sortie_attente {
+  id uuid [pk, default: `gen_random_uuid()`]
+  sortie_id uuid [not null]
+  user_id uuid [not null]
+  via text [not null, default: 'qr', note: 'qr | lien']
+  created_at timestamptz [not null, default: `now()`, note: 'ordre de passage']
+
+  indexes {
+    (sortie_id, user_id) [unique]
+    (sortie_id, created_at)
+  }
+}
+
+Ref: sortie_attente.sortie_id > sorties.id [delete: cascade]
+Ref: sortie_attente.user_id > auth.users.id [delete: cascade]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -760,4 +776,5 @@ TableGroup Sorties_club [color: #FF8A75] {
   centre_adherents
   adherent_plongees
   rappels_envoyes
+  sortie_attente
 }

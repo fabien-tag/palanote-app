@@ -4,6 +4,7 @@ import { AlertTriangle, BadgeCheck, ExternalLink, FileSpreadsheet, FileText, Min
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
+import { ListeAttente } from "@/components/club/ListeAttente";
 import { PasseportDp } from "@/components/club/PasseportDp";
 import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
 import { Avatar, detailErreur, MessageErreur, PastilleStatut } from "@/components/club/Ui";
@@ -282,6 +283,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                     dureeDefaut={s.duree_min}
                   />
                 )}
+                {s.statut === "prevue" && <ListeAttente key={`${id}-${s.participants.length}`} sortie={id} modifiable onChange={() => void agir(async () => undefined)} />}
                 {s.participants.length === 0 && (
                   <p className="pt-[6px] text-[13px] text-[#5B7189]">Personne n'est encore inscrit : montre le QR code ou ouvre la sortie pour ajouter des plongeurs.</p>
                 )}

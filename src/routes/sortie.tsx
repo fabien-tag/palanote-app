@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BadgeCheck, Clock, PenLine, Ship, Thermometer, Star, Users, Waves } from "lucide-react";
+import { Anchor, BadgeCheck, Clock, Hourglass, PenLine, Ship, Thermometer, Star, Users, Waves } from "lucide-react";
 import { Meduse } from "@/components/numerisation/Ui";
 import { Avatar, BlocDate, detailErreur, MessageErreur, PageClub, PastilleStatut, TamponNumerique, Titre } from "@/components/club/Ui";
 import {
   detailSortie,
   garderSortie,
   heureCourte,
+  placesSortie,
+  quitterAttente,
   rejoindreSortie,
   retirerParticipant,
   voirSortie,
   type ApercuSortie,
   type DetailSortie,
+  type PlacesSortie,
 } from "@/lib/club";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { utilisateurConnecte } from "@/lib/plongees";
@@ -44,6 +47,8 @@ function PageSortie() {
   const [place, setPlace] = useState<string | null | undefined>(undefined);
   // Sortie réservée aux membres privilégiés du club, et mélange prévu
   const [reservation, setReservation] = useState<{ reservee: boolean; melange: string | null; privilegie: boolean } | null>(null);
+  // Bateau complet : liste d'attente
+  const [places, setPlaces] = useState<PlacesSortie | null>(null);
 
   const chargerDetail = async (idSortie: string) => {
     try {
@@ -70,6 +75,9 @@ function PageSortie() {
         void reservationSortie(code)
           .then((r) => actif && setReservation(r))
           .catch(() => undefined);
+        void placesSortie(code)
+          .then((p) => actif && setPlaces(p))
+          .catch(() => undefined); // script de la liste d'attente pas encore lancé
         // Le prénom du compte correspond à une place préparée : présélectionnée
         const mien = (a.noms_libres ?? []).filter((n) => n.le_mien);
         if (mien.length === 1) setPlace(mien[0]!.id);
@@ -88,6 +96,10 @@ function PageSortie() {
     setErreur(null);
     try {
       const r = await rejoindreSortie(code, via === "lien" ? "lien" : "qr", place ?? null);
+      if (r.attente) {
+        setPlaces((p) => ({ restantes: 0, complet: true, en_attente: p?.en_attente ?? r.attente!, mon_rang: r.attente! }));
+        return;
+      }
       await chargerDetail(r.id);
       setApercu(null);
     } catch (e) {
@@ -97,6 +109,19 @@ function PageSortie() {
           ? "Cette plongée est réservée aux membres privilégiés du club. Demande au directeur de plongée de t'ajouter."
           : detailErreur(e, "L'inscription n'a pas marché. Vérifie ta connexion et réessaie."),
       );
+    } finally {
+      setEnCours(false);
+    }
+  };
+
+  const quitter = async () => {
+    if (!apercu?.id) return;
+    setEnCours(true);
+    try {
+      await quitterAttente(apercu.id);
+      setPlaces((p) => (p ? { ...p, mon_rang: null, en_attente: Math.max(0, p.en_attente - 1) } : p));
+    } catch (e) {
+      setErreur(detailErreur(e, "Tu n'as pas pu quitter la liste d'attente."));
     } finally {
       setEnCours(false);
     }
@@ -163,6 +188,24 @@ function PageSortie() {
                   </span>
                 </p>
               )}
+              {places?.mon_rang ? (
+                <p className="mt-[12px] flex items-start gap-[8px] rounded-[14px] bg-[#FFF8E8] px-[12px] py-[9px] text-[13px] leading-snug text-[#6B5320]">
+                  <Hourglass className="mt-[1px] h-[16px] w-[16px] shrink-0" aria-hidden="true" />
+                  <span>
+                    <b>Tu es {places.mon_rang === 1 ? "1er" : `${places.mon_rang}e`} sur la liste d'attente.</b> Dès qu'une place se libère, tu es inscrit
+                    automatiquement et prévenu dans ta cloche.
+                  </span>
+                </p>
+              ) : places?.complet && !place ? (
+                <p className="mt-[12px] flex items-start gap-[8px] rounded-[14px] bg-[#FFF3EF] px-[12px] py-[9px] text-[13px] leading-snug text-[#8A2A1A]">
+                  <Hourglass className="mt-[1px] h-[16px] w-[16px] shrink-0" aria-hidden="true" />
+                  <span>
+                    <b>Le bateau est complet.</b>{" "}
+                    {places.en_attente > 0 ? `${places.en_attente} plongeur${places.en_attente > 1 ? "s" : ""} en attente. ` : ""}Inscris-toi sur la liste
+                    d'attente : tu passes dès qu'une place se libère.
+                  </span>
+                </p>
+              ) : null}
               <Meduse className="-right-[6px] -top-[14px]" />
             </div>
 
@@ -224,7 +267,25 @@ function PageSortie() {
               ))}
             </div>
             <div className="min-h-[22px] flex-grow" />
-            {connecte && reservation?.reservee && !reservation.privilegie && !place ? (
+            {connecte && places?.mon_rang ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => navigate({ to: "/carnet" })}
+                  className="flex h-14 w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
+                >
+                  REVENIR À MON CARNET
+                </button>
+                <button
+                  type="button"
+                  disabled={enCours}
+                  onClick={() => void quitter()}
+                  className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+                >
+                  Quitter la liste d'attente
+                </button>
+              </>
+            ) : connecte && reservation?.reservee && !reservation.privilegie && !place ? (
               <button
                 type="button"
                 onClick={() => navigate({ to: "/carnet" })}
@@ -245,7 +306,9 @@ function PageSortie() {
                     ? "CHOISIS TON PRÉNOM"
                     : place
                       ? `JE SUIS ${(libres.find((n) => n.id === place)?.nom ?? "").toUpperCase()}`
-                      : "JE PARTICIPE"}
+                      : places?.complet
+                        ? "ME METTRE EN LISTE D'ATTENTE"
+                        : "JE PARTICIPE"}
               </button>
             ) : connecte === false ? (
               <>

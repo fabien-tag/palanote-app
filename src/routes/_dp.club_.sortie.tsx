@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, BadgeCheck, Check, ChevronRight, Clock, FileSpreadsheet, FileText, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
+import { ListeAttente } from "@/components/club/ListeAttente";
 import { minutesEntre, optionsSortie, type SuiviPalanquee } from "@/lib/planning";
 import { PasseportDp } from "@/components/club/PasseportDp";
 import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
@@ -405,6 +406,9 @@ function SortieDp() {
                       ))}
                     </div>
                   </div>
+                )}
+                {s.statut === "prevue" && !s.entre_amis && (
+                  <ListeAttente key={`${s.id}-${participants.length}`} sortie={s.id} modifiable onChange={() => void charger()} />
                 )}
                 <button
                   type="button"

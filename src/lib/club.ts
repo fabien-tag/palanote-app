@@ -201,6 +201,13 @@ export const sortiesDp = () => rpc<SortieResume[]>("sorties_dp").then((l) => l ?
 export const detailSortie = (id: string) => rpc<DetailSortie>("detail_sortie", { p_id: id });
 export const chercherPlongeurs = (sortie: string, q: string) =>
   rpc<(Participant & { deja_inscrit: boolean })[]>("chercher_plongeurs_sortie", { p_sortie: sortie, p_q: q }).then((l) => l ?? []);
+// Liste d'attente quand le bateau est plein (sql/palanote-liste-attente.sql)
+export type PlacesSortie = { restantes: number | null; complet: boolean; en_attente: number; mon_rang: number | null };
+export const placesSortie = (jeton: string) => rpc<PlacesSortie | null>("places_sortie", { p_jeton: jeton });
+export const quitterAttente = (sortie: string, user: string | null = null) => rpc<null>("quitter_attente", { p_sortie: sortie, p_user: user });
+export type EnAttente = { id: string; prenom: string; niveau: string | null; depuis: string; via: string };
+export const attenteSortie = (sortie: string) => rpc<{ restantes: number | null; liste: EnAttente[] }>("attente_sortie", { p_sortie: sortie });
+
 export const ajouterParticipant = (sortie: string, user: string) => rpc<{ ajoute: boolean }>("ajouter_participant", { p_sortie: sortie, p_user: user });
 export const retirerParticipant = (participant: string) => rpc<null>("retirer_participant", { p_participant: participant });
 export const placerParticipant = (participant: string, palanquee: string | null) =>
@@ -238,7 +245,7 @@ export function lienSortie(jeton: string, via?: "lien") {
 // ---------- Côté plongeur ----------
 export const voirSortie = (jeton: string) => rpc<ApercuSortie>("voir_sortie", { p_jeton: jeton });
 export const rejoindreSortie = (jeton: string, via: "qr" | "lien" = "qr", place: string | null = null) =>
-  rpc<{ id: string; rejoint: boolean; nom_prevu: string | null; palanquee: number | null }>("rejoindre_sortie", { p_jeton: jeton, p_via: via, p_place: place });
+  rpc<{ id: string; rejoint: boolean; attente?: number; nom_prevu: string | null; palanquee: number | null }>("rejoindre_sortie", { p_jeton: jeton, p_via: via, p_place: place });
 export const preremplirSortie = (id: string) => rpc<Preremplissage>("preremplir_sortie", { p_id: id });
 export const lierPlongeeSortie = (sortie: string, dive: string) => rpc<{ tamponnee: boolean }>("lier_plongee_sortie", { p_sortie: sortie, p_dive: dive });
 
@@ -272,9 +279,10 @@ export async function rejoindreSortieGardee(): Promise<string | null> {
   const { data } = await supabase.auth.getSession();
   if (!data.session) return null;
   try {
-    await rejoindreSortie(gardee.jeton, gardee.via);
+    const r = await rejoindreSortie(gardee.jeton, gardee.via);
     const a = await voirSortie(gardee.jeton);
     localStorage.removeItem(CLE_SORTIE);
+    if (r.attente) return `Le bateau est complet : tu es ${r.attente === 1 ? "1er" : `${r.attente}e`} sur la liste d'attente${a.site ? ` (${a.site})` : ""}. On te prévient dès qu'une place se libère.`;
     return a.site ? `Tu es inscrit à la sortie : ${a.date_texte ?? ""} · ${a.site}` : "Tu es inscrit à la sortie";
   } catch (e) {
     console.error(e);
