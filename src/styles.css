@@ -245,8 +245,8 @@
   border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
 }
 
-/* Palanote — « bureau » : le poste de pilotage du DP sur ordinateur.
-   Plus sérieux que l'app mobile : mêmes couleurs et pictos, mais tous les coins
+/* Palanote — « bureau » : l'espace du directeur de plongée, sur téléphone comme sur ordinateur.
+   Plus sérieux que l'app du plongeur : mêmes couleurs et pictos, mais tous les coins
    au même rayon (pas de galets ni de gouttes). Les avatars restent ronds.
    Hors couche Tailwind, donc prioritaire sur les utilitaires. */
 @keyframes fondu {
@@ -266,9 +266,10 @@
   .bureau .cascade > * {
     animation: none;
   }
-  .bureau :is(.galet, .galet-b, .galet-c, .galet-moyen, .galet-petit, .goutte, [class*="rounded-["]) {
-    border-radius: 10px;
-  }
+}
+/* Le même rayon partout (téléphone comme ordinateur) dans l'espace du DP */
+.bureau :is(.galet, .galet-b, .galet-c, .galet-moyen, .galet-petit, .goutte, [class*="rounded-["]) {
+  border-radius: 10px;
 }
 
 /* Palanote — pile de plongées (carnet) : les cartes sortent de la pile une à une,
