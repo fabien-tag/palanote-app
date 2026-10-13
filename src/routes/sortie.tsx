@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BadgeCheck, Clock, Hourglass, PenLine, Ship, Thermometer, Star, Users, Waves } from "lucide-react";
+import { Anchor, BadgeCheck, Clock, Hourglass, UserMinus, PenLine, Ship, Thermometer, Star, Users, Waves } from "lucide-react";
 import { Meduse } from "@/components/numerisation/Ui";
-import { Avatar, BlocDate, detailErreur, MessageErreur, PageClub, PastilleStatut, TamponNumerique, Titre } from "@/components/club/Ui";
+import { Avatar, BlocDate, detailErreur, Feuille, MessageErreur, PageClub, PastilleStatut, TamponNumerique, Titre } from "@/components/club/Ui";
 import {
   detailSortie,
   garderSortie,
   heureCourte,
+  annulerDesistement,
+  desistementsSortie,
+  MOTIFS_DESISTEMENT,
   placesSortie,
   quitterAttente,
+  seDesister,
   rejoindreSortie,
   retirerParticipant,
   voirSortie,
@@ -49,10 +53,18 @@ function PageSortie() {
   const [reservation, setReservation] = useState<{ reservee: boolean; melange: string | null; privilegie: boolean } | null>(null);
   // Bateau complet : liste d'attente
   const [places, setPlaces] = useState<PlacesSortie | null>(null);
+  // Désistement (sortie de club) : le DP valide le retrait
+  const [desiste, setDesiste] = useState<{ le: string; motif: string | null } | null>(null);
+  const [feuilleDesistement, setFeuilleDesistement] = useState(false);
+  const [motif, setMotif] = useState<string | null>(null);
+  const [precision, setPrecision] = useState("");
 
   const chargerDetail = async (idSortie: string) => {
     try {
       setDetail(await detailSortie(idSortie));
+      void desistementsSortie(idSortie)
+        .then((l) => setDesiste(l[0] ?? null))
+        .catch(() => setDesiste(null)); // script du désistement pas encore lancé
     } catch (e) {
       setErreur(detailErreur(e, "La sortie n'a pas pu être chargée."));
     }
@@ -443,7 +455,95 @@ function PageSortie() {
         </p>
       )}
 
-      {d.statut === "prevue" && d.moi && (
+      {d.statut === "prevue" && d.moi && desiste && (
+        <div className="mt-[18px] rounded-[14px] border border-[#FFD2C7] bg-[#FFF4F0] px-[15px] py-[13px] text-[13.5px] leading-normal text-[#8A2A1A]">
+          <p className="flex items-center gap-[7px] font-bold">
+            <UserMinus className="h-[16px] w-[16px]" /> Tu as prévenu {d.dp.prenom} que tu ne viens pas
+          </p>
+          <p className="pt-[2px] text-[#8A5A4A]">
+            {desiste.motif ? `Motif : ${desiste.motif}. ` : ""}Il va te retirer de la sortie. Tu changes d'avis ? Tant qu'il n'a pas validé, tu peux revenir.
+          </p>
+          <button
+            type="button"
+            disabled={enCours}
+            onClick={async () => {
+              setEnCours(true);
+              try {
+                await annulerDesistement(d.id);
+                setDesiste(null);
+              } catch (e) {
+                setErreur(detailErreur(e, "Ça n'a pas marché."));
+              } finally {
+                setEnCours(false);
+              }
+            }}
+            className="mt-[10px] h-[40px] rounded-[12px] bg-white px-[14px] text-[13px] font-bold text-[#123A63]"
+          >
+            Finalement, je viens
+          </button>
+        </div>
+      )}
+      {d.statut === "prevue" && d.moi && !desiste && !d.entre_amis && (
+        <button
+          type="button"
+          onClick={() => {
+            setMotif(null);
+            setPrecision("");
+            setFeuilleDesistement(true);
+          }}
+          className="mx-auto mt-[24px] flex items-center gap-[6px] text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+        >
+          <UserMinus className="h-[14px] w-[14px]" /> Je ne peux plus venir
+        </button>
+      )}
+      {feuilleDesistement && (
+        <Feuille titre="Prévenir que tu ne viens pas" onFermer={() => setFeuilleDesistement(false)}>
+          <p className="pb-[12px] text-[13.5px] leading-snug text-[#5B7189]">
+            {d.dp.prenom} reçoit une notification et te retire de ta palanquée. Même au dernier moment, ça l'aide à réorganiser la sortie.
+          </p>
+          <div className="flex flex-wrap gap-[6px]">
+            {MOTIFS_DESISTEMENT.map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMotif(m)}
+                className={`h-[36px] rounded-[14px] px-[13px] text-[13px] font-bold ${motif === m ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+          <input
+            value={precision}
+            onChange={(e) => setPrecision(e.target.value)}
+            maxLength={120}
+            placeholder="Un mot pour le DP (facultatif)"
+            className="mt-[12px] block h-[46px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] px-[12px] text-[14px] outline-none focus:border-[#57D4F5]"
+          />
+          <button
+            type="button"
+            disabled={enCours}
+            onClick={async () => {
+              setEnCours(true);
+              try {
+                const m = [motif, precision.trim()].filter(Boolean).join(" · ");
+                await seDesister(d.id, m || null);
+                setDesiste({ le: new Date().toISOString(), motif: m || null });
+                setFeuilleDesistement(false);
+              } catch (e) {
+                setErreur(detailErreur(e, "Ça n'a pas marché."));
+                setFeuilleDesistement(false);
+              } finally {
+                setEnCours(false);
+              }
+            }}
+            className="mt-[14px] flex h-[52px] w-full items-center justify-center galet-moyen bg-[#123A63] text-[14px] font-bold text-white disabled:opacity-50"
+          >
+            {enCours ? "ENVOI…" : `PRÉVENIR ${d.dp.prenom.toUpperCase()}`}
+          </button>
+        </Feuille>
+      )}
+      {d.statut === "prevue" && d.moi && d.entre_amis && (
         <button
           type="button"
           disabled={enCours}

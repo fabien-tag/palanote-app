@@ -5,6 +5,7 @@ import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
 import { ListeAttente } from "@/components/club/ListeAttente";
+import { BandeauDesistements } from "@/components/club/BandeauDesistements";
 import { FeuilleMeteo } from "@/components/club/FeuilleMeteo";
 import { PasseportDp } from "@/components/club/PasseportDp";
 import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
@@ -41,6 +42,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
   const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
   const [passeport, setPasseport] = useState<string | null>(null);
   const [meteo, setMeteo] = useState(false);
+  const [desistes, setDesistes] = useState<Set<string>>(new Set());
   const [info, setInfo] = useState<string | null>(null);
 
   const charger = useCallback(async () => {
@@ -111,6 +113,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
   const alertes = s
     ? s.participants
         .map((p) => ({ p, a: p.id ? alertesPasseport(passeports[p.id], melange, s.date) : [] }))
+        .filter((x) => !desistes.has(x.p.participant_id))
         .filter((x) => x.a.length > 0)
     : [];
 
@@ -216,6 +219,9 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
 
               {/* Palanquées */}
               <Section titre="Palanquées" aide={modifiable ? "glisse les plongeurs d'une colonne à l'autre" : undefined}>
+                {s.statut === "prevue" && (
+                  <BandeauDesistements key={`desist-${id}-${s.participants.length}`} sortie={id} onListe={setDesistes} onChange={() => void agir(async () => undefined)} />
+                )}
                 {alertes.length > 0 && (
                   <div className="mb-[10px] rounded-[10px] border border-[#FFD2C7] bg-[#FFF4F0] px-[12px] py-[9px] text-[12.5px] text-[#8A2A1A]">
                     <p className="flex items-center gap-[6px] font-bold">
@@ -264,7 +270,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                             guide={c.guide !== null && p.id === c.guide}
                             profMax={profMax}
                             resume={p.id ? passeports[p.id] : undefined}
-                            alertes={p.id ? alertesPasseport(passeports[p.id], melange, s.date) : []}
+                            alertes={desistes.has(p.participant_id) ? ["se désiste"] : p.id ? alertesPasseport(passeports[p.id], melange, s.date) : []}
                             onPasseport={p.id && passeports[p.id] ? () => setPasseport(p.id) : undefined}
                             deplacable={modifiable}
                             peutGuider={modifiable && c.id !== null && Boolean(p.id)}
@@ -292,7 +298,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                     dureeDefaut={s.duree_min}
                   />
                 )}
-                {s.statut === "prevue" && <ListeAttente key={`${id}-${s.participants.length}`} sortie={id} modifiable onChange={() => void agir(async () => undefined)} />}
+                {s.statut === "prevue" && <ListeAttente key={`attente-${id}-${s.participants.length}`} sortie={id} modifiable onChange={() => void agir(async () => undefined)} />}
                 {s.participants.length === 0 && (
                   <p className="pt-[6px] text-[13px] text-[#5B7189]">Personne n'est encore inscrit : montre le QR code ou ouvre la sortie pour ajouter des plongeurs.</p>
                 )}

@@ -208,6 +208,14 @@ export const quitterAttente = (sortie: string, user: string | null = null) => rp
 export type EnAttente = { id: string; prenom: string; niveau: string | null; depuis: string; via: string };
 export const attenteSortie = (sortie: string) => rpc<{ restantes: number | null; liste: EnAttente[] }>("attente_sortie", { p_sortie: sortie });
 
+// Désistement d'un plongeur, validé par le DP (sql/palanote-desistement.sql)
+export type Desistement = { participant_id: string; user_id: string | null; prenom: string; le: string; motif: string | null; palanquee: number | null };
+export const MOTIFS_DESISTEMENT = ["Malade", "Empêchement", "Pas en forme", "Problème de matériel", "Autre"];
+export const seDesister = (sortie: string, motif: string | null) => rpc<null>("se_desister", { p_sortie: sortie, p_motif: motif });
+export const annulerDesistement = (sortie: string) => rpc<null>("annuler_desistement", { p_sortie: sortie });
+export const validerDesistement = (participant: string) => rpc<null>("valider_desistement", { p_participant: participant });
+export const desistementsSortie = (sortie: string) => rpc<Desistement[]>("desistements_sortie", { p_sortie: sortie }).then((l) => l ?? []);
+
 export const ajouterParticipant = (sortie: string, user: string) => rpc<{ ajoute: boolean }>("ajouter_participant", { p_sortie: sortie, p_user: user });
 export const retirerParticipant = (participant: string) => rpc<null>("retirer_participant", { p_participant: participant });
 export const placerParticipant = (participant: string, palanquee: string | null) =>

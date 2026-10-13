@@ -1,4 +1,4 @@
-import { AlertTriangle, Hourglass, BadgeCheck, Bell, CalendarCheck, CalendarClock, CalendarX, ClipboardCheck, HeartHandshake, LifeBuoy, PenLine, ShieldAlert, Stamp, Star, UserPlus, Users } from "lucide-react";
+import { AlertTriangle, Hourglass, UserMinus, BadgeCheck, Bell, CalendarCheck, CalendarClock, CalendarX, ClipboardCheck, HeartHandshake, LifeBuoy, PenLine, ShieldAlert, Stamp, Star, UserPlus, Users } from "lucide-react";
 import { ilYA, type Notification } from "@/lib/notifications";
 
 // Une notification de la cloche (plongeur et directeur de plongée)
@@ -14,6 +14,8 @@ export const ICONES_NOTIFICATION: Record<string, { Icone: typeof Bell; fond: str
   sortie_annulee: { Icone: CalendarX, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   binome_demande: { Icone: Users, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
   binome_accepte: { Icone: HeartHandshake, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  sortie_desistement: { Icone: UserMinus, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
+  desistement_valide: { Icone: UserMinus, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   sortie_attente: { Icone: Hourglass, fond: "bg-[#FFF3D9]", couleur: "text-[#B07A12]" },
   sortie_place_liberee: { Icone: CalendarCheck, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   rappel_veille: { Icone: CalendarClock, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },

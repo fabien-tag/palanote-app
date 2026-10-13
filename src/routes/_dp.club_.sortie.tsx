@@ -4,6 +4,7 @@ import { AlertTriangle, BadgeCheck, Check, ChevronRight, Clock, FileSpreadsheet,
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
 import { ListeAttente } from "@/components/club/ListeAttente";
+import { BandeauDesistements } from "@/components/club/BandeauDesistements";
 import { FeuilleMeteo } from "@/components/club/FeuilleMeteo";
 import { minutesEntre, optionsSortie, type SuiviPalanquee } from "@/lib/planning";
 import { PasseportDp } from "@/components/club/PasseportDp";
@@ -69,6 +70,7 @@ function SortieDp() {
   const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
   const [melange, setMelange] = useState<string | null>(null);
   const [passeport, setPasseport] = useState<string | null>(null);
+  const [desistes, setDesistes] = useState<Set<string>>(new Set());
 
   const charger = useCallback(async () => {
     if (!id) return;
@@ -147,8 +149,9 @@ function SortieDp() {
   const aTamponner = participants.filter((p) => !exclus.includes(p.participant_id)).length;
   const completes = participants.filter((p) => p.complete).length;
   const inscrits = participants.filter((p) => !p.prevu).length;
-  const alertesDe = (p: Participant) => (p.id && s ? alertesPasseport(passeports[p.id], melange, s.date) : []);
-  const alertes = participants.map((p) => ({ p, a: alertesDe(p) })).filter((x) => x.a.length > 0);
+  const alertesDe = (p: Participant) =>
+    desistes.has(p.participant_id) ? ["se désiste"] : p.id && s ? alertesPasseport(passeports[p.id], melange, s.date) : [];
+  const alertes = participants.map((p) => ({ p, a: alertesDe(p) })).filter((x) => x.a.length > 0 && !desistes.has(x.p.participant_id));
   const propsPasseport = (p: Participant) => ({
     resume: p.id ? passeports[p.id] : undefined,
     alertes: alertesDe(p),
@@ -331,6 +334,9 @@ function SortieDp() {
 
               {/* Palanquées */}
               <Titre aide="prépare-les à l'avance">Palanquées</Titre>
+              {!s.entre_amis && (
+                <BandeauDesistements key={`desist-${s.id}-${participants.length}`} sortie={s.id} onListe={setDesistes} onChange={() => void charger()} />
+              )}
               {alertes.length > 0 && (
                 <div className="mb-[10px] rounded-[10px] border border-[#FFD2C7] bg-[#FFF4F0] px-[12px] py-[9px] text-[12.5px] text-[#8A2A1A]">
                   <p className="flex items-center gap-[6px] font-bold">
@@ -409,7 +415,7 @@ function SortieDp() {
                   </div>
                 )}
                 {s.statut === "prevue" && !s.entre_amis && (
-                  <ListeAttente key={`${s.id}-${participants.length}`} sortie={s.id} modifiable onChange={() => void charger()} />
+                  <ListeAttente key={`attente-${s.id}-${participants.length}`} sortie={s.id} modifiable onChange={() => void charger()} />
                 )}
                 <button
                   type="button"
