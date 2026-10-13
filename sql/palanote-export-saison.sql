@@ -32,6 +32,7 @@ begin
         'statut', case s.statut when 'prevue' then 'Prévue' when 'terminee' then 'À tamponner'
                                 when 'validee' then 'Tamponnée' when 'annulee' then 'Annulée' else s.statut end,
         'melange', s.melange, 'reservee', s.reservee_privilegies,
+        'motif', to_jsonb(s) ->> 'motif_changement', -- annulation ou report (palanote-meteo.sql)
         'profondeur_prevue', s.profondeur_prevue, 'duree', s.duree_min, 'temperature', s.temp_fond_c, 'visibilite', s.visibilite_m,
         'plongeurs', (select count(*) from public.sortie_participants p where p.sortie_id = s.id),
         'palanquees', (select count(*) from public.sortie_palanquees q where q.sortie_id = s.id

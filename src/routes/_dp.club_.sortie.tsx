@@ -4,6 +4,7 @@ import { AlertTriangle, BadgeCheck, Check, ChevronRight, Clock, FileSpreadsheet,
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
 import { ListeAttente } from "@/components/club/ListeAttente";
+import { FeuilleMeteo } from "@/components/club/FeuilleMeteo";
 import { minutesEntre, optionsSortie, type SuiviPalanquee } from "@/lib/planning";
 import { PasseportDp } from "@/components/club/PasseportDp";
 import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
@@ -529,7 +530,7 @@ function SortieDp() {
               onClick={() => setAnnuler(true)}
               className="mx-auto mt-[26px] block text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
             >
-              Annuler la sortie
+              {s.statut === "prevue" && !s.entre_amis ? "Annuler ou reporter (météo…)" : "Annuler la sortie"}
             </button>
           )}
         </>
@@ -627,7 +628,18 @@ function SortieDp() {
         </Feuille>
       )}
 
-      {annuler && s && (
+      {annuler && s && s.statut === "prevue" && !s.entre_amis && (
+        <FeuilleMeteo
+          sortie={{ id: s.id, date: s.date, centre: s.centre.id, site: s.site, heure: s.heure, inscrits: inscrits }}
+          onFermer={() => setAnnuler(false)}
+          onFait={(m) => {
+            setAnnuler(false);
+            setPartage(m);
+            void charger();
+          }}
+        />
+      )}
+      {annuler && s && !(s.statut === "prevue" && !s.entre_amis) && (
         <Feuille titre="Annuler cette sortie ?" onFermer={() => setAnnuler(false)}>
           <p className="pb-[16px] text-[13.5px] leading-normal text-[#5B7189]">Les {participants.length} plongeurs inscrits seront prévenus dans leur app.</p>
           <button

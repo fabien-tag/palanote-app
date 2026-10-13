@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState, type DragEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, BadgeCheck, ExternalLink, FileSpreadsheet, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
+import { AlertTriangle, BadgeCheck, CloudRain, ExternalLink, FileSpreadsheet, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
 import { ListeAttente } from "@/components/club/ListeAttente";
+import { FeuilleMeteo } from "@/components/club/FeuilleMeteo";
 import { PasseportDp } from "@/components/club/PasseportDp";
 import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
 import { Avatar, detailErreur, MessageErreur, PastilleStatut } from "@/components/club/Ui";
@@ -39,6 +40,8 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
   const [options, setOptions] = useState<{ reservee: boolean; melange: string | null } | null>(null);
   const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
   const [passeport, setPasseport] = useState<string | null>(null);
+  const [meteo, setMeteo] = useState(false);
+  const [info, setInfo] = useState<string | null>(null);
 
   const charger = useCallback(async () => {
     try {
@@ -159,7 +162,13 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                 <BoutonPetit onClick={() => navigate({ to: "/club/sortie", search: { id } })}>
                   <ExternalLink className="h-[15px] w-[15px]" /> {s.statut === "terminee" ? "Tamponner" : "Ouvrir la sortie"}
                 </BoutonPetit>
+                {s.statut === "prevue" && !s.entre_amis && (
+                  <BoutonPetit onClick={() => setMeteo(true)}>
+                    <CloudRain className="h-[15px] w-[15px]" /> Annuler ou reporter
+                  </BoutonPetit>
+                )}
               </div>
+              {info && <p className="pt-[10px] text-[13px] font-semibold text-[#14805F]">{info}</p>}
 
               {/* Accès et mélange : sortie réservée aux membres privilégiés */}
               {options && !s.entre_amis && (
@@ -449,6 +458,18 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
           )}
         </div>
       </div>
+      {meteo && s && (
+        <FeuilleMeteo
+          sortie={{ id, date: s.date, centre: s.centre.id, site: s.site, heure: s.heure, inscrits: s.participants.filter((p) => !p.prevu).length }}
+          onFermer={() => setMeteo(false)}
+          onFait={(m) => {
+            setMeteo(false);
+            setInfo(m);
+            void charger();
+            onChange();
+          }}
+        />
+      )}
       {passeport && <PasseportDp userId={passeport} onFermer={() => setPasseport(null)} onChange={() => void charger()} />}
       {importer && (
         <ImportTableur

@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 
 type SortieExport = {
   date: string; heure: string | null; site: string; lieu: string | null; bateau: string | null; dp: string | null; statut: string;
-  melange: string | null; reservee: boolean | null; profondeur_prevue: number | null; duree: number | null; temperature: number | null;
+  melange: string | null; reservee: boolean | null; motif: string | null; profondeur_prevue: number | null; duree: number | null; temperature: number | null;
   visibilite: number | null; plongeurs: number; palanquees: number; tampons: number;
 };
 type PlongeeExport = {
@@ -73,10 +73,10 @@ export async function telechargerExport(e: ExportSaison, p: Periode) {
   ];
 
   const sorties = [
-    entete(["Date", "Heure", "Site", "Lieu", "Bateau", "DP", "Statut", "Mélange", "Réservée privilégiés", "Prof. prévue (m)", "Durée (min)", "Temp. fond (°C)", "Visibilité (m)", "Plongeurs", "Palanquées", "Tampons"]),
+    entete(["Date", "Heure", "Site", "Lieu", "Bateau", "DP", "Statut", "Mélange", "Réservée privilégiés", "Prof. prévue (m)", "Durée (min)", "Temp. fond (°C)", "Visibilité (m)", "Plongeurs", "Palanquées", "Tampons", "Annulation / report"]),
     ...e.sorties.map((s) => [
       d(s.date), s.heure, s.site, s.lieu, s.bateau, s.dp, s.statut, s.melange, ouiNon(s.reservee),
-      nombre(s.profondeur_prevue), nombre(s.duree), nombre(s.temperature), nombre(s.visibilite), s.plongeurs, s.palanquees, s.tampons,
+      nombre(s.profondeur_prevue), nombre(s.duree), nombre(s.temperature), nombre(s.visibilite), s.plongeurs, s.palanquees, s.tampons, s.motif,
     ]),
   ];
 
@@ -101,7 +101,7 @@ export async function telechargerExport(e: ExportSaison, p: Periode) {
   await writeXlsxFile(
     [
       { sheet: "Résumé", data: resume, columns: largeurs([34, 14]) },
-      { sheet: "Sorties", data: sorties, columns: largeurs([12, 7, 26, 18, 14, 12, 13, 10, 11, 10, 9, 10, 10, 10, 10, 9]), stickyRowsCount: 1 },
+      { sheet: "Sorties", data: sorties, columns: largeurs([12, 7, 26, 18, 14, 12, 13, 10, 11, 10, 9, 10, 10, 10, 10, 9, 30]), stickyRowsCount: 1 },
       { sheet: "Plongées", data: plongees, columns: largeurs([12, 26, 14, 16, 10, 10, 10, 12, 10, 10, 13]), stickyRowsCount: 1 },
       { sheet: "Plongeurs", data: plongeurs, columns: largeurs([14, 16, 10, 9, 9, 11, 12, 12, 10, 10, 12, 13, 10]), stickyRowsCount: 1 },
     ] as never,

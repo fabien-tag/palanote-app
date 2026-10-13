@@ -343,3 +343,15 @@ export const dureePrevuePalanquee = (palanquee: string, minutes: number | null) 
 export const heureLocale = (iso: string | null) =>
   iso ? new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }).replace(":", "h") : "";
 export const minutesEntre = (a: string, b: string | null) => Math.max(0, Math.round(((b ? new Date(b) : new Date()).getTime() - new Date(a).getTime()) / 60000));
+
+// Annuler ou reporter une ou plusieurs sorties avec un motif (sql/palanote-meteo.sql)
+export const MOTIFS_CHANGEMENT = ["Météo", "Mer formée", "Vent", "Visibilité", "Bateau indisponible", "Autre"];
+export const annulerReporterSorties = (
+  sorties: string[],
+  action: "annuler" | "reporter",
+  motif: string,
+  message: string | null,
+  date: string | null = null,
+  heure: string | null = null,
+) =>
+  rpc<number>("annuler_reporter_sorties", { p_sorties: sorties, p_action: action, p_motif: motif, p_message: message, p_date: date, p_heure: heure });

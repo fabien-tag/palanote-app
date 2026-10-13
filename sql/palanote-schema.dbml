@@ -461,6 +461,7 @@ Table sorties {
   bateau_id uuid [note: 'bateau du centre (matériel), avec ses places']
   reservee_privilegies boolean [not null, default: false, note: 'seuls les membres privilégiés s’inscrivent par QR ou lien']
   melange text [note: 'Air | Nitrox | Trimix | Air ou nitrox (le pourcentage dépend du gonflage)']
+  motif_changement text [note: 'motif de l’annulation ou du report : Météo, Mer formée… + message du DP']
   profondeur_prevue numeric
   consignes text
   statut text [not null, default: 'prevue', note: 'prevue | terminee | validee | annulee']
