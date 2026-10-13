@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Anchor, Plus } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Anchor } from "lucide-react";
 import { ClocheDp } from "@/components/club/ClocheDp";
 import { Avatar } from "@/components/club/Ui";
-import { centreChoisi, mesCentres, type Centre } from "@/lib/club";
+import { centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
 import { supabase } from "@/lib/supabase";
 
-// Barre du haut de l'espace DP sur ordinateur : la date à gauche ; à droite le bouton
-// « Nouvelle sortie », la cloche, le club représenté et le compte connecté.
+// Barre du haut de l'espace DP sur ordinateur : la date à gauche ; à droite
+// la cloche, le club représenté et le compte connecté.
 // Elle reste en place d'un écran à l'autre, comme la colonne de navigation.
 type Moi = { id: string; prenom: string; nom: string | null; niveau: string | null; email: string | null };
 
 export function BarreHautDp() {
-  const navigate = useNavigate();
   const [moi, setMoi] = useState<Moi | null>(null);
   const [centre, setCentre] = useState<Centre | null>(null);
 
@@ -35,11 +34,16 @@ export function BarreHautDp() {
         email: u.email ?? null,
       });
     })();
-    void mesCentres()
-      .then((l) => actif && setCentre(l.find((c) => c.id === centreChoisi()) ?? l[0] ?? null))
-      .catch(() => undefined);
+    const chargerCentre = () =>
+      void mesCentres()
+        .then((l) => actif && setCentre(l.find((c) => c.id === centreChoisi()) ?? l[0] ?? null))
+        .catch(() => undefined);
+    chargerCentre();
+    // Le club renommé ou changé dans Paramètres : l'étiquette suit
+    window.addEventListener(EVENEMENT_CENTRE, chargerCentre);
     return () => {
       actif = false;
+      window.removeEventListener(EVENEMENT_CENTRE, chargerCentre);
     };
   }, []);
 
@@ -49,17 +53,6 @@ export function BarreHautDp() {
   return (
     <header className="sticky top-0 z-30 hidden h-[72px] items-center gap-[12px] border-b border-[#DFEAF2] bg-white/95 px-[32px] backdrop-blur lg:flex">
       <span className="flex-1 text-[14px] font-semibold text-[#5B7189]">{date}</span>
-
-      {centre && (
-        <button
-          type="button"
-          onClick={() => navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id } })}
-          className="flex h-[42px] items-center gap-[8px] rounded-[10px] bg-[#3DEFBE] px-[16px] text-[13px] font-bold text-[#0B3B63] hover:bg-[#34E0B1]"
-        >
-          <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
-          NOUVELLE SORTIE
-        </button>
-      )}
 
       <ClocheDp />
 

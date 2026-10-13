@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import type { StatutSortie } from "@/lib/club";
+import { signalerCentreModifie, type StatutSortie } from "@/lib/club";
 
 // ============================================================
 // Poste de pilotage du DP (version ordinateur) : planning, équipe, matériel.
@@ -237,7 +237,10 @@ export type ParametresCentre = {
 };
 export const parametresCentre = (centre: string) => rpc<ParametresCentre>("parametres_centre", { p_centre: centre });
 export const modifierCentre = (centre: string, nom: string, ville: string) =>
-  rpc<null>("modifier_centre", { p_centre: centre, p_nom: nom, p_ville: ville });
+  rpc<null>("modifier_centre", { p_centre: centre, p_nom: nom, p_ville: ville }).then((r) => {
+    signalerCentreModifie(); // le nom du club dans la barre du haut suit
+    return r;
+  });
 
 // ---------- Import Excel du club (sql/palanote-import-excel.sql) ----------
 type Lignes = Record<string, string | number | null>[];

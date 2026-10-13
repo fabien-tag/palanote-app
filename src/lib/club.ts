@@ -165,6 +165,13 @@ export function choisirCentre(id: string) {
   } catch {
     /* stockage indisponible */
   }
+  signalerCentreModifie();
+}
+
+// Le centre a changé (renommé, ou un autre centre choisi) : la barre du haut se met à jour
+export const EVENEMENT_CENTRE = "palanote-centre-modifie";
+export function signalerCentreModifie() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(EVENEMENT_CENTRE));
 }
 
 // ---------- Sorties (DP) ----------
