@@ -201,23 +201,6 @@ function EspaceClub() {
 
       {centre && (
         <>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/club/centre" })}
-            className="mt-[10px] flex w-full items-center gap-[13px] galet-c border border-[#CFE6F3] bg-[#E3F2FB] px-[15px] py-[12px] text-left lg:hidden"
-          >
-            <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte bg-[#0F3D70]">
-              <Anchor className="h-[19px] w-[19px] text-white" strokeWidth={2.1} aria-hidden="true" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-[15.5px] font-bold">{centre.nom}</span>
-              <span className="block truncate text-[12.5px] text-[#3F5B76]">
-                {[centre.ville, centre.verifie ? "Centre vérifié" : null, `${centre.nb_dp ?? 1} DP`].filter(Boolean).join(" · ")}
-              </span>
-            </span>
-            <span className="shrink-0 text-[13px] font-bold text-[#1176A8]">{(centres?.length ?? 0) > 1 ? "Changer" : "Gérer"}</span>
-          </button>
-
           <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-x-[36px]">
             {/* Colonne principale : le jour J et ce qu'il reste à faire */}
             <div className="lg:col-start-1 lg:row-start-1">
@@ -405,24 +388,6 @@ function EspaceClub() {
         </>
       )}
 
-      {centres && centres.length > 1 && (
-        <div className="flex flex-wrap gap-[8px] pt-[18px]">
-          {centres.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => {
-                choisirCentre(c.id);
-                setCentres([...centres]);
-              }}
-              className={`flex h-[34px] items-center gap-1 rounded-[17px] px-[13px] text-[13px] font-bold ${c.id === centre?.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
-            >
-              {c.nom}
-              {c.id !== centre?.id && <ChevronRight className="h-[13px] w-[13px]" aria-hidden="true" />}
-            </button>
-          ))}
-        </div>
-      )}
     </PageClub>
   );
 }

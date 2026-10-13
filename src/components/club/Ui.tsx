@@ -24,7 +24,7 @@ export function PageClub({
   children: ReactNode;
   bas?: ReactNode;
   navigation?: ReactNode; // barre d'onglets du bas
-  titreBureau?: string | undefined; // titre affiché à la place sur ordinateur (« Bonjour Marc »)
+  titreBureau?: string | undefined; // titre affiché à la place sur ordinateur ; avec lui, le sous-titre s'affiche partout
   sousTitreBureau?: string | undefined;
   large?: boolean | "plein"; // tableau de bord : s'élargit sur ordinateur ; « plein » = toute la largeur (planning)
 }) {
@@ -37,12 +37,17 @@ export function PageClub({
               <BoutonRetourCarre onClick={onRetour} />
             </span>
           )}
-          <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"} ${large ? "lg:text-[26px]" : ""} ${titreBureau ? "lg:hidden" : ""}`}>{titre}</h1>
-          {titreBureau && (
-            <div className="hidden min-w-0 flex-1 lg:block">
-              <h1 className="truncate text-[26px] font-bold leading-tight">{titreBureau}</h1>
-              {sousTitreBureau && <p className="truncate text-[13.5px] text-[#5B7189] first-letter:uppercase">{sousTitreBureau}</p>}
+          {titreBureau ? (
+            // Accueil du DP : « Bonjour Marc », avec le centre et la date dessous (téléphone et ordinateur)
+            <div className="min-w-0 flex-1">
+              <h1 className="truncate text-[clamp(24px,3.6svh,28px)] font-bold leading-tight lg:text-[26px]">
+                <span className="lg:hidden">{titre}</span>
+                <span className="hidden lg:inline">{titreBureau}</span>
+              </h1>
+              {sousTitreBureau && <p className="truncate pt-[2px] text-[13.5px] text-[#5B7189] first-letter:uppercase">{sousTitreBureau}</p>}
             </div>
+          ) : (
+            <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"} ${large ? "lg:text-[26px]" : ""}`}>{titre}</h1>
           )}
           {droite}
         </div>
