@@ -234,6 +234,7 @@ begin
     'plongeurs', coalesce((
       select jsonb_agg(jsonb_build_object(
                'palanquee', q.numero,
+               'user_id', p.user_id,
                'prenom', coalesce(public.infos_plongeur(p.user_id) ->> 'prenom', p.nom_prevu),
                'nom', (select nullif(to_jsonb(pr) ->> 'nom', '') from public.profiles pr where pr.id = p.user_id),
                'niveau', public.infos_plongeur(p.user_id) ->> 'niveau',

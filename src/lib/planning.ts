@@ -330,3 +330,16 @@ export type PlongeeSerie = { date: string; heure: string; site: string; lieu: st
 export const creerSeriePrivilegies = (centre: string, sorties: PlongeeSerie[]) => rpc<number>("creer_serie_privilegies", { p_centre: centre, p_sorties: sorties });
 export const inviterPrivilegies = (centre: string, adherents: string[], sorties: string[]) =>
   rpc<{ avec_app: number; sans_app: number }>("inviter_privilegies", { p_centre: centre, p_adherents: adherents, p_sorties: sorties });
+
+// ---------- Suivi des palanquées sur le bateau, facultatif (sql/palanote-suivi-palanquees.sql) ----------
+export type SuiviPalanquee = { id: string; numero: number; immersion_le: string | null; sortie_le: string | null; duree_prevue: number | null };
+export const suiviPalanquees = (sortie: string) => rpc<SuiviPalanquee[]>("suivi_palanquees", { p_sortie: sortie }).then((l) => l ?? []);
+export const marquerPalanquee = (palanquee: string, etape: "eau" | "sortie" | "annuler") =>
+  rpc<{ id: string; immersion_le: string | null; sortie_le: string | null }>("marquer_palanquee", { p_palanquee: palanquee, p_etape: etape });
+export const corrigerHeurePalanquee = (palanquee: string, etape: "eau" | "sortie", quand: string | null) =>
+  rpc<null>("corriger_heure_palanquee", { p_palanquee: palanquee, p_etape: etape, p_quand: quand });
+export const dureePrevuePalanquee = (palanquee: string, minutes: number | null) =>
+  rpc<null>("duree_prevue_palanquee", { p_palanquee: palanquee, p_minutes: minutes });
+export const heureLocale = (iso: string | null) =>
+  iso ? new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }).replace(":", "h") : "";
+export const minutesEntre = (a: string, b: string | null) => Math.max(0, Math.round(((b ? new Date(b) : new Date()).getTime() - new Date(a).getTime()) / 60000));

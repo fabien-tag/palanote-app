@@ -4,6 +4,8 @@ import { Printer } from "lucide-react";
 import { BoutonRetourCarre, useConnexionRequise } from "@/components/numerisation/Ui";
 import { detailErreur, MessageErreur } from "@/components/club/Ui";
 import { ficheSecurite, heureCourte, scriptManquant, type FicheSecurite } from "@/lib/club";
+import { heureLocale, minutesEntre, suiviPalanquees, type SuiviPalanquee } from "@/lib/planning";
+import { passeportsSortie, type ResumePasseport } from "@/lib/passeport";
 
 // Fiche de sécurité de la sortie (parcours 15) : palanquées, niveaux, paramètres prévus et réalisés.
 // Pensée pour l'impression (A4 paysage) ou l'enregistrement en PDF depuis le navigateur.
@@ -34,9 +36,17 @@ function PageFiche() {
   const { pret, ecran } = useConnexionRequise();
   const [f, setF] = useState<FicheSecurite | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [suivi, setSuivi] = useState<SuiviPalanquee[]>([]);
+  const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
 
   useEffect(() => {
     if (!pret || !id) return;
+    suiviPalanquees(id)
+      .then(setSuivi)
+      .catch(() => undefined); // suivi à l'eau facultatif (script pas encore lancé)
+    passeportsSortie(id)
+      .then((l) => setPasseports(Object.fromEntries(l.map((r) => [r.user_id, r]))))
+      .catch(() => undefined); // passeport : script pas encore lancé
     ficheSecurite(id)
       .then(setF)
       .catch((e) => {
@@ -124,23 +134,31 @@ function PageFiche() {
                         {k === null ? "Pas encore en palanquée" : `Palanquée ${k}`}
                       </td>
                     </tr>
-                    {(groupes.get(k) ?? []).map((p, i) => (
+                    {(groupes.get(k) ?? []).map((p, i) => {
+                      // Heures de la palanquée (suivi à l'eau) quand le plongeur n'a pas encore rempli sa fiche
+                      const pal = suivi.find((q) => q.numero === k);
+                      return (
                       <tr key={i} className="border-b border-[#DCE6EE]">
                         <td className="px-[6px] py-[7px] font-semibold">
                           {[p.nom?.toUpperCase(), p.prenom].filter(Boolean).join(" ")}
                           {p.prevu && <span className="pl-[5px] text-[10.5px] font-normal text-[#9DB0C0]">(hors Palanote)</span>}
                         </td>
-                        <td className="px-[6px]">{p.niveau ?? ""}</td>
+                        <td className="px-[6px]">
+                          {[p.niveau, p.user_id && passeports[p.user_id]?.trimix ? "Trimix" : p.user_id && passeports[p.user_id]?.nitrox ? "Nitrox" : null]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </td>
                         <td className="px-[6px] font-semibold">{p.guide ? "GP" : "P"}</td>
                         <td className="px-[6px]">{nombre(f.profondeur_prevue, "m")}</td>
                         <Case valeur={nombre(p.prof_max, "m")} />
-                        <Case valeur={nombre(p.duree, "min")} />
-                        <Case valeur={heureCourte(p.immersion)} />
-                        <Case valeur={heureSortie(p)} />
+                        <Case valeur={nombre(p.duree, "min") || (pal?.immersion_le && pal.sortie_le ? `${minutesEntre(pal.immersion_le, pal.sortie_le)} min` : "")} />
+                        <Case valeur={heureCourte(p.immersion) || heureLocale(pal?.immersion_le ?? null)} />
+                        <Case valeur={heureSortie(p) || heureLocale(pal?.sortie_le ?? null)} />
                         <Case valeur="" />
                         <Case valeur="" large />
                       </tr>
-                    ))}
+                      );
+                    })}
                     {aPreparer && k !== null && (
                       <tr className="border-b border-[#DCE6EE]">
                         {Array.from({ length: 10 }, (_, i) => (

@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState, type DragEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, ExternalLink, FileSpreadsheet, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
+import { AlertTriangle, BadgeCheck, ExternalLink, FileSpreadsheet, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_SORTIE } from "@/components/club/importsClub";
+import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
+import { PasseportDp } from "@/components/club/PasseportDp";
+import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
 import { Avatar, detailErreur, MessageErreur, PastilleStatut } from "@/components/club/Ui";
 import { ajouterPalanquee, definirGuide, detailSortie, heureCourte, placerParticipant, type DetailSortie, type Participant } from "@/lib/club";
 import {
@@ -33,6 +36,8 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
   const [survol, setSurvol] = useState<string | null>(null);
   const [importer, setImporter] = useState(false);
   const [options, setOptions] = useState<{ reservee: boolean; melange: string | null } | null>(null);
+  const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
+  const [passeport, setPasseport] = useState<string | null>(null);
 
   const charger = useCallback(async () => {
     try {
@@ -41,6 +46,9 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
       void optionsSortie(id)
         .then(setOptions)
         .catch(() => setOptions(null)); // script des privilégiés pas encore lancé
+      void passeportsSortie(id)
+        .then((l) => setPasseports(Object.fromEntries(l.map((r) => [r.user_id, r]))))
+        .catch(() => setPasseports({})); // script du passeport pas encore lancé
       if (d.centre.id) setJour(await planningCentre(d.centre.id, d.date, d.date));
     } catch (e) {
       console.error(e);
@@ -94,6 +102,13 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
       await placerParticipant(pid, palanquee);
     });
   };
+
+  const melange = options?.melange ?? null;
+  const alertes = s
+    ? s.participants
+        .map((p) => ({ p, a: p.id ? alertesPasseport(passeports[p.id], melange, s.date) : [] }))
+        .filter((x) => x.a.length > 0)
+    : [];
 
   const colonnes: { id: string | null; titre: string; guide: string | null }[] = s
     ? [{ id: null, titre: "Non placés", guide: null }, ...s.palanquees.map((q) => ({ id: q.id, titre: `P${q.numero}`, guide: q.guide_id }))]
@@ -191,6 +206,18 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
 
               {/* Palanquées */}
               <Section titre="Palanquées" aide={modifiable ? "glisse les plongeurs d'une colonne à l'autre" : undefined}>
+                {alertes.length > 0 && (
+                  <div className="mb-[10px] rounded-[10px] border border-[#FFD2C7] bg-[#FFF4F0] px-[12px] py-[9px] text-[12.5px] text-[#8A2A1A]">
+                    <p className="flex items-center gap-[6px] font-bold">
+                      <AlertTriangle className="h-[14px] w-[14px]" /> À vérifier avant de partir
+                    </p>
+                    {alertes.map(({ p, a }) => (
+                      <button key={p.participant_id} type="button" onClick={() => p.id && setPasseport(p.id)} className="block pt-[3px] text-left underline-offset-2 hover:underline">
+                        {p.prenom} : {a.join(", ")}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 <div className="-mx-[24px] flex gap-[10px] overflow-x-auto px-[24px] pb-[6px]">
                   {colonnes.map((c) => {
                     const membres = s.participants.filter((p) => p.palanquee_id === c.id);
@@ -226,6 +253,9 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                             p={p}
                             guide={c.guide !== null && p.id === c.guide}
                             profMax={profMax}
+                            resume={p.id ? passeports[p.id] : undefined}
+                            alertes={p.id ? alertesPasseport(passeports[p.id], melange, s.date) : []}
+                            onPasseport={p.id && passeports[p.id] ? () => setPasseport(p.id) : undefined}
                             deplacable={modifiable}
                             peutGuider={modifiable && c.id !== null && Boolean(p.id)}
                             onGuide={() => c.id && void agir(() => definirGuide(c.id!, c.guide === p.id ? null : p.id))}
@@ -245,6 +275,13 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                     </button>
                   )}
                 </div>
+                {(s.statut === "prevue" || s.statut === "terminee") && (
+                  <SuiviPalanquees
+                    sortie={id}
+                    effectifs={Object.fromEntries(s.palanquees.map((q) => [q.id, s.participants.filter((p) => p.palanquee_id === q.id).length]))}
+                    dureeDefaut={s.duree_min}
+                  />
+                )}
                 {s.participants.length === 0 && (
                   <p className="pt-[6px] text-[13px] text-[#5B7189]">Personne n'est encore inscrit : montre le QR code ou ouvre la sortie pour ajouter des plongeurs.</p>
                 )}
@@ -410,6 +447,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
           )}
         </div>
       </div>
+      {passeport && <PasseportDp userId={passeport} onFermer={() => setPasseport(null)} onChange={() => void charger()} />}
       {importer && (
         <ImportTableur
           titre={IMPORT_SORTIE.titre}
@@ -435,6 +473,9 @@ function CartePlongeur({
   p,
   guide,
   profMax,
+  resume,
+  alertes,
+  onPasseport,
   deplacable,
   peutGuider,
   onGuide,
@@ -442,6 +483,9 @@ function CartePlongeur({
   p: Participant;
   guide: boolean;
   profMax: number | null;
+  resume?: ResumePasseport | undefined;
+  alertes: string[];
+  onPasseport?: (() => void) | undefined;
   deplacable: boolean;
   peutGuider: boolean;
   onGuide: () => void;
@@ -456,15 +500,28 @@ function CartePlongeur({
         e.dataTransfer.effectAllowed = "move";
       }}
       className={`flex items-center gap-[7px] galet-petit border bg-white px-[8px] py-[7px] shadow-[0_2px_6px_#123A630A] ${deplacable ? "cursor-grab active:cursor-grabbing" : ""} ${
-        tropProfond ? "border-[#FF8A75]" : "border-transparent"
+        tropProfond || alertes.length ? "border-[#FF8A75]" : "border-transparent"
       }`}
-      title={tropProfond ? `${p.niveau} : ${max} m maximum en principe, ${profMax} m prévus` : undefined}
+      title={[tropProfond ? `${p.niveau} : ${max} m maximum en principe, ${profMax} m prévus` : null, ...alertes].filter(Boolean).join(" · ") || undefined}
     >
       <Avatar id={p.id} prenom={p.prenom} taille={26} prevu={p.prevu} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-bold leading-tight">{p.prenom}</span>
-        <span className={`block truncate text-[11px] leading-tight ${tropProfond ? "font-bold text-[#D9573F]" : "text-[#7D93A8]"}`}>
-          {tropProfond ? `${p.niveau} · ${max} m max` : p.prevu ? "pas encore inscrit" : (p.niveau ?? "niveau ?")}
+        {onPasseport ? (
+          <button type="button" onClick={onPasseport} title="Voir son passeport" className="flex max-w-full items-center gap-[3px] text-left">
+            <span className="truncate text-[13px] font-bold leading-tight underline decoration-[#B5D9EC] underline-offset-2">{p.prenom}</span>
+            {resume && resume.verifies > 0 && <BadgeCheck className="h-[12px] w-[12px] shrink-0 text-[#14805F]" aria-label="Carte vérifiée" />}
+          </button>
+        ) : (
+          <span className="block truncate text-[13px] font-bold leading-tight">{p.prenom}</span>
+        )}
+        <span className={`block truncate text-[11px] leading-tight ${tropProfond || alertes.length ? "font-bold text-[#D9573F]" : "text-[#7D93A8]"}`}>
+          {alertes.length
+            ? alertes[0]
+            : tropProfond
+              ? `${p.niveau} · ${max} m max`
+              : p.prevu
+                ? "pas encore inscrit"
+                : [p.niveau ?? "niveau ?", resume?.trimix ? "Trimix" : resume?.nitrox ? "Nitrox" : null].filter(Boolean).join(" · ")}
         </span>
       </span>
       {peutGuider || guide ? (

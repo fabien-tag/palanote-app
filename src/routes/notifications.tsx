@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
-import { Bell, CalendarCheck, CalendarX, HeartHandshake, PenLine, Stamp, Star, UserPlus, Users } from "lucide-react";
+import { BadgeCheck, Bell, CalendarCheck, CalendarX, HeartHandshake, PenLine, Stamp, Star, UserPlus, Users } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { PageClub, Titre } from "@/components/club/Ui";
 import { chargerNotifications, ilYA, marquerLues, type Notification } from "@/lib/notifications";
@@ -17,6 +17,7 @@ const ICONES: Record<string, { Icone: typeof Bell; fond: string; couleur: string
   sortie_a_completer: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   sortie_relance: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   tampon: { Icone: Stamp, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
+  passeport_verifie: { Icone: BadgeCheck, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   privilegies_invitation: { Icone: Star, fond: "bg-[#FFF3D9]", couleur: "text-[#B07A12]" },
   sortie_modifiee: { Icone: CalendarCheck, fond: "bg-[#FFF1D6]", couleur: "text-[#8A5A10]" },
   sortie_annulee: { Icone: CalendarX, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },

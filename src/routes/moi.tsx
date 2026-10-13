@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
+import { Anchor, BadgeCheck, BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
@@ -200,6 +200,7 @@ function Moi() {
 
               <TitreSection>Mon carnet</TitreSection>
               <Bloc>
+                <Ligne icone={BadgeCheck} label="Mon passeport de plongeur" valeur="Brevets, certificat" onClick={() => navigate({ to: "/moi/passeport" })} />
                 <Ligne
                   icone={Download}
                   label={exportEnCours ? "Export en cours…" : "Exporter mes plongées"}

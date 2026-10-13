@@ -426,6 +426,7 @@ export type FicheSecurite = {
   dp: { id: string; prenom: string; nom: string | null; niveau: string | null };
   plongeurs: {
     palanquee: number | null;
+    user_id?: string | null;
     prenom: string;
     nom: string | null;
     niveau: string | null;

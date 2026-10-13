@@ -83,6 +83,7 @@ Table profiles {
   avatar_url text
   niveau text [note: 'N1 / Open Water … Encadrant']
   certifications "text[]" [not null, default: '{}', note: 'Nitrox, Trimix']
+  certificat_fin date [note: 'fin du certificat médical (la date seulement, jamais le document)']
   role_plongee text [note: 'plongeur | encadrant | directeur | centre']
   club text
   premiere_plongee_le date
@@ -479,6 +480,9 @@ Table sortie_palanquees {
   sortie_id uuid [not null]
   numero integer [not null]
   guide_id uuid
+  immersion_le timestamptz [note: 'suivi à l’eau facultatif : « À l’eau »']
+  sortie_le timestamptz [note: '« Sortie de l’eau »']
+  duree_prevue integer [note: 'minutes (5 à 240), alerte « encore à l’eau »']
   created_at timestamptz [not null, default: `now()`]
 }
 
@@ -664,11 +668,36 @@ Ref: adherent_plongees.centre_id > centres.id [delete: cascade]
 Ref: adherent_plongees.adherent_id > centre_adherents.id [delete: cascade]
 Ref: adherent_plongees.dive_id > dives.id [delete: set null]
 
+Table plongeur_brevets {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  type text [not null, default: 'niveau', note: 'niveau | nitrox | trimix | autre']
+  intitule text [not null]
+  organisme text [note: 'FFESSM, PADI, SSI…']
+  numero text
+  obtenu_le date
+  photo_recto text [note: 'chemin dans le stockage privé « passeports »']
+  photo_verso text
+  verifie_par uuid [note: 'DP qui a vu la carte ; tombe si la carte change']
+  verifie_le timestamptz
+  verifie_centre text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    user_id
+  }
+}
+
+Ref: plongeur_brevets.user_id > auth.users.id [delete: cascade]
+Ref: plongeur_brevets.verifie_par > auth.users.id [delete: set null]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
   user_settings
   consents
+  plongeur_brevets
 }
 
 TableGroup Carnet [color: #3DEFBE] {

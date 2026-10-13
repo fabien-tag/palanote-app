@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Check, ChevronRight, Clock, FileSpreadsheet, FileText, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
+import { AlertTriangle, BadgeCheck, Check, ChevronRight, Clock, FileSpreadsheet, FileText, Plus, QrCode, Search, Share2, Ship, Thermometer, Waves, X } from "lucide-react";
 import { ImportTableur } from "@/components/club/ImportTableur";
+import { SuiviPalanquees } from "@/components/club/SuiviPalanquees";
+import { minutesEntre, optionsSortie, type SuiviPalanquee } from "@/lib/planning";
+import { PasseportDp } from "@/components/club/PasseportDp";
+import { alertesPasseport, passeportsSortie, type ResumePasseport } from "@/lib/passeport";
 import { IMPORT_SORTIE } from "@/components/club/importsClub";
 import QRCode from "qrcode";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
@@ -46,6 +50,7 @@ function SortieDp() {
   const [qr, setQr] = useState<string | null>(null);
   const [voirQr, setVoirQr] = useState(Boolean(qrDemande)); // ouvert d'emblée depuis l'accueil DP
   const [importer, setImporter] = useState(false);
+  const [suivi, setSuivi] = useState<SuiviPalanquee[]>([]);
   const [q, setQ] = useState("");
   const [trouves, setTrouves] = useState<(Participant & { deja_inscrit: boolean })[]>([]);
   const [finie, setFinie] = useState(false);
@@ -59,12 +64,21 @@ function SortieDp() {
   const [annuler, setAnnuler] = useState(false);
   // Prénom en cours de saisie dans une palanquée (préparer la palanquée à l'avance)
   const [nouveauNom, setNouveauNom] = useState<{ palanquee: string; nom: string } | null>(null);
+  const [passeports, setPasseports] = useState<Record<string, ResumePasseport>>({});
+  const [melange, setMelange] = useState<string | null>(null);
+  const [passeport, setPasseport] = useState<string | null>(null);
 
   const charger = useCallback(async () => {
     if (!id) return;
     try {
       const d = await detailSortie(id);
       setS(d);
+      void passeportsSortie(id)
+        .then((l) => setPasseports(Object.fromEntries(l.map((r) => [r.user_id, r]))))
+        .catch(() => setPasseports({})); // script du passeport pas encore lancé
+      void optionsSortie(id)
+        .then((o) => setMelange(o?.melange ?? null))
+        .catch(() => setMelange(null));
       if (d.jeton && !qr) {
         setQr(await QRCode.toString(lienSortie(d.jeton), { type: "svg", margin: 0, errorCorrectionLevel: "M", color: { dark: "#0F3D70", light: "#FFFFFF" } }));
       }
@@ -131,6 +145,13 @@ function SortieDp() {
   const aTamponner = participants.filter((p) => !exclus.includes(p.participant_id)).length;
   const completes = participants.filter((p) => p.complete).length;
   const inscrits = participants.filter((p) => !p.prevu).length;
+  const alertesDe = (p: Participant) => (p.id && s ? alertesPasseport(passeports[p.id], melange, s.date) : []);
+  const alertes = participants.map((p) => ({ p, a: alertesDe(p) })).filter((x) => x.a.length > 0);
+  const propsPasseport = (p: Participant) => ({
+    resume: p.id ? passeports[p.id] : undefined,
+    alertes: alertesDe(p),
+    onPasseport: p.id && passeports[p.id] ? () => setPasseport(p.id) : undefined,
+  });
   const prevus = participants.length - inscrits;
   const ajouterNom = (palanquee: string) => {
     const nom = nouveauNom?.palanquee === palanquee ? nouveauNom.nom.trim() : "";
@@ -147,7 +168,9 @@ function SortieDp() {
         type="button"
         disabled={enCours || participants.length === 0}
         onClick={() => {
-          setDuree(s.duree_min ? String(s.duree_min) : "");
+          // Durée proposée : la plus longue des palanquées sorties de l'eau, si le suivi a été tenu
+          const durees = suivi.filter((q) => q.immersion_le && q.sortie_le).map((q) => minutesEntre(q.immersion_le!, q.sortie_le));
+          setDuree(s.duree_min ? String(s.duree_min) : durees.length ? String(Math.max(...durees)) : "");
           setFinie(true);
         }}
         className="flex h-14 w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63] shadow-[0_4px_12px_#123A630D] disabled:opacity-50"
@@ -211,6 +234,15 @@ function SortieDp() {
               </span>
               <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
             </button>
+          )}
+
+          {s.est_dp && (s.statut === "prevue" || s.statut === "terminee") && (
+            <SuiviPalanquees
+              sortie={s.id}
+              effectifs={Object.fromEntries(s.palanquees.map((q) => [q.id, s.participants.filter((p) => p.palanquee_id === q.id).length]))}
+              dureeDefaut={s.duree_min}
+              onChange={setSuivi}
+            />
           )}
 
           {/* 1. Inscrire */}
@@ -297,6 +329,18 @@ function SortieDp() {
 
               {/* Palanquées */}
               <Titre aide="prépare-les à l'avance">Palanquées</Titre>
+              {alertes.length > 0 && (
+                <div className="mb-[10px] rounded-[10px] border border-[#FFD2C7] bg-[#FFF4F0] px-[12px] py-[9px] text-[12.5px] text-[#8A2A1A]">
+                  <p className="flex items-center gap-[6px] font-bold">
+                    <AlertTriangle className="h-[14px] w-[14px]" /> Passeports à vérifier avant de partir
+                  </p>
+                  {alertes.map(({ p, a }) => (
+                    <button key={p.participant_id} type="button" onClick={() => p.id && setPasseport(p.id)} className="block pt-[3px] text-left underline-offset-2 hover:underline">
+                      {p.prenom} : {a.join(", ")}
+                    </button>
+                  ))}
+                </div>
+              )}
               <p className="-mt-[4px] pb-[10px] text-[12.5px] leading-snug text-[#5B7189]">
                 Note les prénoms dès maintenant : quand un plongeur scanne le QR, il retrouve sa place et rejoint sa palanquée.
               </p>
@@ -311,7 +355,7 @@ function SortieDp() {
                       </p>
                       <div className="flex flex-col gap-[6px]">
                         {membres.map((p) => (
-                          <LigneParticipant key={p.participant_id} p={p} s={s} onAgir={agir} desactive={enCours} />
+                          <LigneParticipant key={p.participant_id} p={p} s={s} onAgir={agir} desactive={enCours} {...propsPasseport(p)} />
                         ))}
                         {membres.length === 0 && nouveauNom?.palanquee !== pal.id && <p className="text-[12.5px] text-[#B5C4D1]">Personne pour l'instant</p>}
                       </div>
@@ -357,7 +401,7 @@ function SortieDp() {
                     <p className="pb-[8px] text-[13.5px] font-bold text-[#5B7189]">Sans palanquée</p>
                     <div className="flex flex-col gap-[6px]">
                       {sansPalanquee.map((p) => (
-                        <LigneParticipant key={p.participant_id} p={p} s={s} onAgir={agir} desactive={enCours} />
+                        <LigneParticipant key={p.participant_id} p={p} s={s} onAgir={agir} desactive={enCours} {...propsPasseport(p)} />
                       ))}
                     </div>
                   </div>
@@ -487,6 +531,7 @@ function SortieDp() {
         </>
       )}
 
+      {passeport && <PasseportDp userId={passeport} onFermer={() => setPasseport(null)} onChange={() => void charger()} />}
       {importer && s && (
         <ImportTableur
           titre={IMPORT_SORTIE.titre}
@@ -617,21 +662,36 @@ function LigneParticipant({
   s,
   onAgir,
   desactive,
+  resume,
+  alertes,
+  onPasseport,
 }: {
   p: Participant;
   s: DetailSortie;
   onAgir: (a: () => Promise<unknown>, d: string) => Promise<boolean>;
   desactive: boolean;
+  resume?: ResumePasseport | undefined;
+  alertes: string[];
+  onPasseport?: (() => void) | undefined;
 }) {
   return (
     <div className="flex items-center gap-[10px]">
       <Avatar id={p.id} prenom={p.prenom} taille={32} prevu={p.prevu} />
       <span className="min-w-0 flex-1">
-        <span className={`block truncate text-[14px] font-bold ${p.prevu ? "text-[#7D93A8]" : ""}`}>{p.prenom}</span>
-        <span className="block truncate text-[11.5px] text-[#9DB0C0]">
-          {p.prevu
+        {onPasseport ? (
+          <button type="button" onClick={onPasseport} title="Voir son passeport" className="flex max-w-full items-center gap-[4px] text-left">
+            <span className="truncate text-[14px] font-bold underline decoration-[#B5D9EC] underline-offset-2">{p.prenom}</span>
+            {resume && resume.verifies > 0 && <BadgeCheck className="h-[13px] w-[13px] shrink-0 text-[#14805F]" aria-label="Carte vérifiée" />}
+          </button>
+        ) : (
+          <span className={`block truncate text-[14px] font-bold ${p.prevu ? "text-[#7D93A8]" : ""}`}>{p.prenom}</span>
+        )}
+        <span className={`block truncate text-[11.5px] ${alertes.length ? "font-bold text-[#D9573F]" : "text-[#9DB0C0]"}`}>
+          {alertes.length
+            ? alertes.join(" · ")
+            : p.prevu
             ? "en attente de son scan"
-            : [p.niveau, p.via === "qr" ? (p.nom_prevu ? "a pris sa place (QR)" : "QR code") : p.via === "lien" ? (p.nom_prevu ? "a pris sa place (lien)" : "par le lien") : "ajouté par toi"]
+            : [p.niveau, resume?.trimix ? "Trimix" : resume?.nitrox ? "Nitrox" : null, p.via === "qr" ? (p.nom_prevu ? "a pris sa place (QR)" : "QR code") : p.via === "lien" ? (p.nom_prevu ? "a pris sa place (lien)" : "par le lien") : "ajouté par toi"]
                 .filter(Boolean)
                 .join(" · ")}
         </span>

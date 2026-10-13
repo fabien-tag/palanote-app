@@ -48,6 +48,7 @@ import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-secu
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
+import { Route as MoiPasseportRouteImport } from './routes/moi_.passeport'
 import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
 import { Route as MoiReglagesRouteImport } from './routes/moi_.reglages'
 import { Route as NumeriserCaptureRouteImport } from './routes/numeriser_.capture'
@@ -265,6 +266,11 @@ const MoiConfidentialiteRoute = MoiConfidentialiteRouteImport.update({
   path: '/moi/confidentialite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MoiPasseportRoute = MoiPasseportRouteImport.update({
+  id: '/moi_/passeport',
+  path: '/moi/passeport',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoiProfilRoute = MoiProfilRouteImport.update({
   id: '/moi_/profil',
   path: '/moi/profil',
@@ -410,6 +416,7 @@ export interface FileRoutesByFullPath {
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi/passeport': typeof MoiPasseportRoute
   '/moi/profil': typeof MoiProfilRoute
   '/moi/reglages': typeof MoiReglagesRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
@@ -471,6 +478,7 @@ export interface FileRoutesByTo {
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi/passeport': typeof MoiPasseportRoute
   '/moi/profil': typeof MoiProfilRoute
   '/moi/reglages': typeof MoiReglagesRoute
   '/numeriser/capture': typeof NumeriserCaptureRoute
@@ -534,6 +542,7 @@ export interface FileRoutesById {
   '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi_/passeport': typeof MoiPasseportRoute
   '/moi_/profil': typeof MoiProfilRoute
   '/moi_/reglages': typeof MoiReglagesRoute
   '/numeriser_/capture': typeof NumeriserCaptureRoute
@@ -597,6 +606,7 @@ export interface FileRouteTypes {
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
+    | '/moi/passeport'
     | '/moi/profil'
     | '/moi/reglages'
     | '/numeriser/capture'
@@ -658,6 +668,7 @@ export interface FileRouteTypes {
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
+    | '/moi/passeport'
     | '/moi/profil'
     | '/moi/reglages'
     | '/numeriser/capture'
@@ -720,6 +731,7 @@ export interface FileRouteTypes {
     | '/moi_/aide'
     | '/moi_/avis'
     | '/moi_/confidentialite'
+    | '/moi_/passeport'
     | '/moi_/profil'
     | '/moi_/reglages'
     | '/numeriser_/capture'
@@ -782,6 +794,7 @@ export interface RootRouteChildren {
   MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
+  MoiPasseportRoute: typeof MoiPasseportRoute
   MoiProfilRoute: typeof MoiProfilRoute
   MoiReglagesRoute: typeof MoiReglagesRoute
   NumeriserCaptureRoute: typeof NumeriserCaptureRoute
@@ -1070,6 +1083,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoiConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/moi_/passeport': {
+      id: '/moi_/passeport'
+      path: '/moi/passeport'
+      fullPath: '/moi/passeport'
+      preLoaderRoute: typeof MoiPasseportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/moi_/profil': {
       id: '/moi_/profil'
       path: '/moi/profil'
@@ -1289,6 +1309,7 @@ const rootRouteChildren: RootRouteChildren = {
   MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,
+  MoiPasseportRoute: MoiPasseportRoute,
   MoiProfilRoute: MoiProfilRoute,
   MoiReglagesRoute: MoiReglagesRoute,
   NumeriserCaptureRoute: NumeriserCaptureRoute,
