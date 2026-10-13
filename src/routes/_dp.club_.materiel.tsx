@@ -7,6 +7,7 @@ import { ChampTexte, Feuille, MessageErreur, PageClub } from "@/components/club/
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { ImportTableur } from "@/components/club/ImportTableur";
 import { IMPORT_MATERIEL } from "@/components/club/importsClub";
+import { InventaireMateriel } from "@/components/club/InventaireMateriel";
 import { heureCourte } from "@/lib/club";
 import {
   ajouterJours,
@@ -29,7 +30,10 @@ import {
 // avec l'utilisation jour par jour (réservations des sorties) et les contrôles à prévoir.
 export const Route = createFileRoute("/_dp/club_/materiel")({
   // Depuis la recherche : ouvre directement la fiche d'un élément
-  validateSearch: (search: Record<string, unknown>): { ouvrir?: string } => (typeof search["ouvrir"] === "string" ? { ouvrir: search["ouvrir"] } : {}),
+  validateSearch: (search: Record<string, unknown>): { ouvrir?: string; vue?: "inventaire" | "reservations" } => ({
+    ...(typeof search["ouvrir"] === "string" ? { ouvrir: search["ouvrir"] } : {}),
+    ...(search["vue"] === "inventaire" || search["vue"] === "reservations" ? { vue: search["vue"] } : {}),
+  }),
   head: () => ({ meta: [{ title: "Palanote — Matériel" }] }),
   component: PageMateriel,
 });
@@ -49,6 +53,8 @@ function PageMateriel() {
   const [fiche, setFiche] = useState<Brouillon | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [importer, setImporter] = useState(false);
+  const rechercheVue = Route.useSearch();
+  const [vue, setVue] = useState<"inventaire" | "reservations">(rechercheVue.vue ?? (rechercheVue.ouvrir ? "reservations" : "inventaire"));
 
   const charger = useCallback(async () => {
     if (!centre) return;
@@ -159,7 +165,29 @@ function PageMateriel() {
       }
     >
       <MessageErreur texte={erreurCentre ?? erreur} />
-      {centre && materiel && (
+      {centre && (
+        <div className="mt-[4px] flex w-fit rounded-[10px] bg-[#E3EDF6] p-[3px]" role="tablist" aria-label="Vue du matériel">
+          {(
+            [
+              ["inventaire", "Inventaire"],
+              ["reservations", "Réservations des sorties"],
+            ] as const
+          ).map(([id, l]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={vue === id}
+              onClick={() => setVue(id)}
+              className={`h-[36px] rounded-[8px] px-[14px] text-[13px] font-bold ${vue === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+      )}
+      {centre && vue === "inventaire" && <InventaireMateriel centre={centre.id} />}
+      {centre && materiel && vue === "reservations" && (
         <>
           {controles.length > 0 && (
             <div className="mt-[6px] flex flex-wrap gap-[8px]">

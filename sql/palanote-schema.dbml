@@ -736,6 +736,37 @@ Table fiche_signatures {
 Ref: fiche_signatures.sortie_id - sorties.id [delete: cascade]
 Ref: fiche_signatures.signe_par > auth.users.id [delete: set null]
 
+Table materiel_articles {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  materiel_id uuid [note: 'ligne de stock réservée par les sorties']
+  categorie text [not null, note: 'bateau | bloc | detendeur | combinaison | recycleur | gilet | ordinateur | autre']
+  reference text [not null, note: 'n° d’inventaire du club (B12-07…)']
+  libelle text
+  marque text
+  modele text
+  taille text
+  numero_serie text
+  mise_en_service date
+  dernier_controle date [note: 'TIV, révision, visite…']
+  prochain_controle date
+  derniere_requalif date [note: 'blocs : requalification périodique']
+  prochaine_requalif date
+  etat text [not null, default: 'ok', note: 'ok | a_controler | en_reparation | hors_service']
+  caracteristiques jsonb [not null, default: '{}', note: 'volume, robinetterie, immatriculation, moteur…']
+  note text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz
+
+  indexes {
+    (centre_id, categorie)
+  }
+}
+
+Ref: materiel_articles.centre_id > centres.id [delete: cascade]
+Ref: materiel_articles.materiel_id > materiel.id [delete: set null]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -794,4 +825,5 @@ TableGroup Sorties_club [color: #FF8A75] {
   rappels_envoyes
   sortie_attente
   fiche_signatures
+  materiel_articles
 }
