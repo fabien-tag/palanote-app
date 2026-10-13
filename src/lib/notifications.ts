@@ -49,8 +49,13 @@ export function ilYA(iso: string) {
 // Créés à l'ouverture de l'app, au plus toutes les 30 minutes ; chacun n'est envoyé qu'une fois.
 export const EVENEMENT_NOTIFICATIONS = "palanote-notifications";
 
-export async function genererRappelsDp(forcer = false) {
-  const cle = "palanote-rappels-dp";
+export const genererRappelsDp = (forcer = false) => generer("generer_rappels_dp", "palanote-rappels-dp", forcer);
+
+// Rappel de la veille pour le plongeur (sql/palanote-rappels-plongeur.sql) : heure, lieu,
+// mélange, consignes, et ce qu'il doit régler (certificat, carte Nitrox ou Trimix)
+export const genererRappelsPlongeur = (forcer = false) => generer("generer_rappels_plongeur", "palanote-rappels-plongeur", forcer);
+
+async function generer(fonction: string, cle: string, forcer: boolean) {
   try {
     const avant = Number(sessionStorage.getItem(cle) ?? 0);
     if (!forcer && Date.now() - avant < 30 * 60 * 1000) return 0;
@@ -58,7 +63,7 @@ export async function genererRappelsDp(forcer = false) {
   } catch {
     /* stockage indisponible : on génère quand même */
   }
-  const { data, error } = await supabase.rpc("generer_rappels_dp");
+  const { data, error } = await supabase.rpc(fonction);
   if (error) return 0; // script pas encore lancé
   const nb = Number(data ?? 0);
   if (nb > 0) window.dispatchEvent(new Event(EVENEMENT_NOTIFICATIONS));

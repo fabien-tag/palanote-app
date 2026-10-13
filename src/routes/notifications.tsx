@@ -4,7 +4,7 @@ import { Bell } from "lucide-react";
 import { LigneNotification } from "@/components/LigneNotification";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { PageClub, Titre } from "@/components/club/Ui";
-import { chargerNotifications, marquerLues, type Notification } from "@/lib/notifications";
+import { chargerNotifications, genererRappelsPlongeur, marquerLues, type Notification } from "@/lib/notifications";
 
 // La cloche de l'accueil (parcours 15) : sorties, fiches à compléter, tampons.
 export const Route = createFileRoute("/notifications")({
@@ -20,7 +20,7 @@ function PageNotifications() {
 
   useEffect(() => {
     if (!pret) return;
-    void chargerNotifications().then((l) => {
+    void genererRappelsPlongeur(true).then(() => chargerNotifications()).then((l) => {
       setListe(l);
       // Ouvertes = vues : la pastille de la cloche disparaît (les nouvelles restent marquées ici).
       if (l.some((n) => !n.lue_le)) void marquerLues();
