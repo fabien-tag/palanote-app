@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { CalendarDays, CircleHelp, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
+import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { accueilDp, centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
 import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre } from "@/lib/planning";
 
@@ -75,7 +76,7 @@ export function useVoyants(centre: string | null, cle: string) {
 }
 
 export function NavigationDp() {
-  const navigate = useNavigate();
+  const nouvelleSortie = useNouvelleSortie();
   const chemin = useRouterState({ select: (s) => s.location.pathname });
   const [centres, setCentres] = useState<Centre[] | null>(null);
   useEffect(() => {
@@ -149,7 +150,7 @@ export function NavigationDp() {
             <p className="pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75">Date, site, bateau : les plongeurs s'inscrivent ensuite par QR code.</p>
             <button
               type="button"
-              onClick={() => navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id } })}
+              onClick={() => nouvelleSortie(centre.id)}
               className="flex h-[40px] w-full items-center justify-center gap-[6px] rounded-[10px] bg-[#3DEFBE] text-[12.5px] font-bold text-[#0B3B63] hover:bg-[#34E0B1]"
             >
               <Plus className="h-[16px] w-[16px]" strokeWidth={2.6} aria-hidden="true" />

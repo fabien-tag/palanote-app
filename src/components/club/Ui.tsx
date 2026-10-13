@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 import { BoutonRetourCarre } from "@/components/numerisation/Ui";
@@ -236,15 +237,20 @@ export function TamponNumerique({
 }
 
 export function Feuille({ titre, onFermer, children }: { titre: string; onFermer: () => void; children: ReactNode }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center lg:items-center" role="dialog" aria-modal="true" aria-label={titre}>
+  // Rendu à la racine de la page (au-dessus de la barre du haut et de la colonne du DP) ;
+  // dans l'espace DP, la feuille garde le même rayon partout.
+  if (typeof document === "undefined") return null;
+  const bureau = Boolean(document.querySelector(".bureau"));
+  return createPortal(
+    <div className={`${bureau ? "bureau " : ""}fixed inset-0 z-[65] flex items-end justify-center lg:items-center`} role="dialog" aria-modal="true" aria-label={titre}>
       <button type="button" aria-label="Fermer" onClick={onFermer} className="absolute inset-0 bg-[#06203F]/45" />
       <div className="relative max-h-[92svh] w-full max-w-[430px] overflow-y-auto rounded-t-[34px] bg-white px-[24px] lg:rounded-[30px] pb-[max(24px,env(safe-area-inset-bottom))] pt-[14px] text-[#123A63] shadow-[0_-10px_30px_rgba(6,32,63,.18)]">
         <div className="mx-auto mb-[14px] h-[5px] w-[44px] rounded-full bg-[#DCE7F0]" aria-hidden="true" />
         <h2 className="pb-[10px] text-[20px] font-bold leading-tight">{titre}</h2>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

@@ -21,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import { centreChoisi, EVENEMENT_CENTRE, mesCentres } from "@/lib/club";
+import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { lundi, rechercheDp, type Recherche, type ResultatRecherche } from "@/lib/planning";
 
 // La recherche de l'espace DP : plongeurs, équipe, matériel, sorties, sites, et les écrans
@@ -67,13 +68,14 @@ function useRecherche(q: string) {
 
 function useLignes(q: string, centre: string | null, r: Recherche | null, fermer: () => void): Ligne[] {
   const navigate = useNavigate();
+  const nouvelleSortie = useNouvelleSortie();
   return useMemo(() => {
     const go = (f: () => void) => () => {
       fermer();
       f();
     };
     const PAGES: { titre: string; mots: string; Icone: typeof Search; aller: () => void }[] = [
-      { titre: "Nouvelle sortie", mots: "nouvelle sortie creer ajouter plongee", Icone: Plus, aller: () => centre && navigate({ to: "/club/nouvelle-sortie", search: { centre } }) },
+      { titre: "Nouvelle sortie", mots: "nouvelle sortie creer ajouter plongee", Icone: Plus, aller: () => nouvelleSortie(centre) },
       { titre: "Tableau de bord", mots: "tableau de bord accueil", Icone: LayoutDashboard, aller: () => navigate({ to: "/club" }) },
       { titre: "Planning", mots: "planning calendrier semaine mois kanban", Icone: CalendarDays, aller: () => navigate({ to: "/club/planning" }) },
       { titre: "Équipe", mots: "equipe guide pilote gonfleur encadrant personnel", Icone: UsersRound, aller: () => navigate({ to: "/club/equipe" }) },
@@ -105,7 +107,7 @@ function useLignes(q: string, centre: string | null, r: Recherche | null, fermer
       }
     }
     return lignes;
-  }, [q, centre, r, fermer, navigate]);
+  }, [q, centre, r, fermer, navigate, nouvelleSortie]);
 }
 
 // Liste des résultats (commune à la barre et au plein écran)

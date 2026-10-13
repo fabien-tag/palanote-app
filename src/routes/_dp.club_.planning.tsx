@@ -6,6 +6,7 @@ import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { ChampTexte, Feuille, MessageErreur, PageClub } from "@/components/club/Ui";
 import { Jauge, PanneauSortie } from "@/components/club/PanneauSortie";
 import { ExportSaison } from "@/components/club/ExportSaison";
+import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { messagePlanning, useCentre } from "@/components/club/useCentre";
 import { heureCourte, poserTampon, sortiesDp, terminerSortie, type SortieResume, type StatutSortie } from "@/lib/club";
 import {
@@ -62,6 +63,7 @@ function PagePlanning() {
   const [aCloturer, setACloturer] = useState<SortieResume | null>(null);
   const [aTamponner, setATamponner] = useState<SortieResume | null>(null);
   const [exporter, setExporter] = useState(false);
+  const nouvelleSortie = useNouvelleSortie();
   const [reservees, setReservees] = useState<Map<string, string | null>>(new Map()); // sortie → mélange
 
   const ref = semaine ?? aujourdhui();
@@ -127,7 +129,7 @@ function PagePlanning() {
     } else aller({ semaine: ajouterJours(debutSemaine, 7 * n) });
   };
   const nouvelle = (date?: string) =>
-    centre && navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id, ...(date ? { date } : {}), retour: "planning" } });
+    nouvelleSortie(centre?.id ?? null, { ...(date ? { date } : {}), retour: "planning" });
 
   // Glisser une sortie prévue sur un autre jour
   const deposer = (date: string) => (e: DragEvent) => {

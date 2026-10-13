@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type DragEvent } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, BadgeCheck, CloudRain, ExternalLink, FileSpreadsheet, FileText, Minus, Plus, QrCode, Ship, Star, X } from "lucide-react";
 import { ImportTableur } from "@/components/club/ImportTableur";
@@ -121,8 +122,10 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
     ? [{ id: null, titre: "Non placés", guide: null }, ...s.palanquees.map((q) => ({ id: q.id, titre: `P${q.numero}`, guide: q.guide_id }))]
     : [];
 
-  return (
-    <div className="fixed inset-0 z-40 flex justify-end" role="dialog" aria-label="Sortie">
+  // Rendu à la racine de la page, au-dessus de la barre du haut et de la colonne
+  if (typeof document === "undefined") return null;
+  return createPortal(
+    <div className="bureau fixed inset-0 z-[55] flex justify-end" role="dialog" aria-label="Sortie">
       <button type="button" aria-label="Fermer" onClick={onFermer} className="absolute inset-0 bg-[#0B2540]/30" />
       <div className="relative flex h-full w-full max-w-[720px] flex-col overflow-y-auto bg-[#F1F6FC] shadow-[-12px_0_40px_#0B254026]">
         <div className="sticky top-0 z-10 flex items-start gap-3 border-b border-[#DFEAF2] bg-white px-[24px] pb-[14px] pt-[18px]">
@@ -494,7 +497,8 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
           }}
         />
       )}
-    </div>
+    </div>,
+    document.body,
   );
 }
 

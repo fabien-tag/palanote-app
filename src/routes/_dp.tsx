@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { NavigationDp } from "@/components/club/NavigationDp";
 import { BarreHautDp } from "@/components/club/BarreHautDp";
+import { PanneauNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { estDirecteurDePlongee, ongletSortiesGarde } from "@/lib/club";
 import { genererRappelsDp } from "@/lib/notifications";
 
@@ -28,6 +29,7 @@ function LayoutDp() {
   return (
     <div className={dp ? "bureau" : ""}>
       {dp && <NavigationDp />}
+      {dp && <PanneauNouvelleSortie />}
       <div className={dp ? "lg:pl-[232px]" : ""}>
         {dp && <BarreHautDp />}
         <div key={chemin} className={dp ? "fondu" : ""}>
