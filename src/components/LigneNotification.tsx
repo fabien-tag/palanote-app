@@ -1,4 +1,4 @@
-import { AlertTriangle, Hourglass, UserMinus, BadgeCheck, Bell, CalendarCheck, CalendarClock, CalendarX, ClipboardCheck, HeartHandshake, LifeBuoy, PenLine, ShieldAlert, Stamp, Star, UserPlus, Users } from "lucide-react";
+import { AlertTriangle, GraduationCap, Hourglass, UserMinus, BadgeCheck, Bell, CalendarCheck, CalendarClock, CalendarX, ClipboardCheck, HeartHandshake, LifeBuoy, PenLine, ShieldAlert, Stamp, Star, UserPlus, Users } from "lucide-react";
 import { ilYA, type Notification } from "@/lib/notifications";
 
 // Une notification de la cloche (plongeur et directeur de plongée)
@@ -14,6 +14,11 @@ export const ICONES_NOTIFICATION: Record<string, { Icone: typeof Bell; fond: str
   sortie_annulee: { Icone: CalendarX, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   binome_demande: { Icone: Users, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
   binome_accepte: { Icone: HeartHandshake, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  formation_programmee: { Icone: GraduationCap, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
+  formation_moniteur: { Icone: GraduationCap, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
+  formation_rappel: { Icone: GraduationCap, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  formation_validee: { Icone: GraduationCap, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
+  formation_annulee: { Icone: GraduationCap, fond: "bg-[#EEF2F6]", couleur: "text-[#7D93A8]" },
   club_adhesion: { Icone: UserPlus, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   membre_rejoint: { Icone: UserPlus, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   sortie_desistement: { Icone: UserMinus, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },

@@ -24,6 +24,7 @@ import {
   type RoleEquipe,
   type SortiePlanning,
 } from "@/lib/planning";
+import { seancesCentre, type SeancePlanning } from "@/lib/formations";
 
 // Équipe du centre : DP, guides, pilotes, gonfleurs (avec ou sans compte Palanote),
 // et qui encadre quoi dans la semaine.
@@ -45,6 +46,7 @@ function PageEquipe() {
   const { centre, erreur: erreurCentre } = useCentre(pret);
   const [equipe, setEquipe] = useState<Equipier[] | null>(null);
   const [sorties, setSorties] = useState<SortiePlanning[]>([]);
+  const [seances, setSeances] = useState<SeancePlanning[]>([]); // cours des formations (palanote-formations.sql)
   const [semaine, setSemaine] = useState(() => lundi(aujourdhui()));
   const [fiche, setFiche] = useState<Brouillon | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -57,6 +59,9 @@ function PageEquipe() {
       setEquipe(e);
       setSorties(p.sorties.filter((s) => s.statut !== "annulee"));
       setErreur(null);
+      void seancesCentre(centre.id, semaine, ajouterJours(semaine, 6))
+        .then(setSeances)
+        .catch(() => setSeances([]));
     } catch (e) {
       console.error(e);
       setEquipe([]);
@@ -206,6 +211,19 @@ function PageEquipe() {
                         const m = missions(e, d);
                         return (
                           <td key={d} className="px-[3px] py-[6px] align-top">
+                            {seances
+                              .filter((x) => x.jour === d && x.moniteur_id === e.id)
+                              .map((x) => (
+                                <button
+                                  key={x.id}
+                                  type="button"
+                                  onClick={() => navigate({ to: "/club/formations" })}
+                                  title={`Formation ${x.code} · ${x.eleve} · ${x.type === "theorie" ? "théorie" : "pratique"}`}
+                                  className={`mb-[3px] block w-full truncate rounded-[7px] px-[5px] py-[2px] text-left text-[10.5px] font-bold ${x.type === "theorie" ? "bg-[#EEE8FB] text-[#5B3FA8]" : "bg-[#E3F2FB] text-[#1176A8]"}`}
+                                >
+                                  {x.heure_debut.replace(":", "h")} {x.code}
+                                </button>
+                              ))}
                             {m.map(({ s, role }) => (
                               <button
                                 key={s.id}

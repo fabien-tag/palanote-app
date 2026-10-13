@@ -767,6 +767,65 @@ Table materiel_articles {
 Ref: materiel_articles.centre_id > centres.id [delete: cascade]
 Ref: materiel_articles.materiel_id > materiel.id [delete: set null]
 
+Table formations_catalogue {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  code text [not null, note: 'N1, N2, Nitrox…']
+  intitule text [not null]
+  organisme text [not null, default: 'FFESSM']
+  categorie text [not null, default: 'niveau', note: 'niveau | gaz | encadrement | secourisme | specialite']
+  prix numeric
+  nb_theorie integer [not null, default: 0]
+  nb_pratique integer [not null, default: 0]
+  prerequis text
+  description text
+  actif boolean [not null, default: true]
+  ordre integer [not null, default: 0]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table formations_eleves {
+  id uuid [pk, default: `gen_random_uuid()`]
+  centre_id uuid [not null]
+  catalogue_id uuid
+  intitule text [not null]
+  adherent_id uuid
+  eleve_id uuid [note: 'compte Palanote de l’élève']
+  eleve_nom text [not null]
+  moniteur_id uuid [note: 'membre de l’équipe en charge']
+  date_debut date [not null]
+  date_fin date [not null]
+  prix numeric
+  statut text [not null, default: 'prevue', note: 'prevue | en_cours | validee | abandon']
+  note text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table formations_seances {
+  id uuid [pk, default: `gen_random_uuid()`]
+  formation_id uuid [not null]
+  type text [not null, note: 'theorie | pratique']
+  jour date [not null]
+  heure_debut time [not null]
+  heure_fin time
+  intitule text
+  lieu text
+  moniteur_id uuid
+  faite boolean [not null, default: false]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Ref: formations_catalogue.centre_id > centres.id [delete: cascade]
+Ref: formations_eleves.centre_id > centres.id [delete: cascade]
+Ref: formations_eleves.catalogue_id > formations_catalogue.id [delete: set null]
+Ref: formations_eleves.adherent_id > centre_adherents.id [delete: set null]
+Ref: formations_eleves.eleve_id > auth.users.id [delete: set null]
+Ref: formations_eleves.moniteur_id > centre_equipe.id [delete: set null]
+Ref: formations_seances.formation_id > formations_eleves.id [delete: cascade]
+Ref: formations_seances.moniteur_id > centre_equipe.id [delete: set null]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -826,4 +885,7 @@ TableGroup Sorties_club [color: #FF8A75] {
   sortie_attente
   fiche_signatures
   materiel_articles
+  formations_catalogue
+  formations_eleves
+  formations_seances
 }

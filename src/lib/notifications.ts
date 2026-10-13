@@ -55,6 +55,9 @@ export const genererRappelsDp = (forcer = false) => generer("generer_rappels_dp"
 // mélange, consignes, et ce qu'il doit régler (certificat, carte Nitrox ou Trimix)
 export const genererRappelsPlongeur = (forcer = false) => generer("generer_rappels_plongeur", "palanote-rappels-plongeur", forcer);
 
+// Formations du club (sql/palanote-formations.sql) : 3 jours avant, la veille de chaque journée de cours
+export const genererRappelsFormations = (forcer = false) => generer("generer_rappels_formations", "palanote-rappels-formations", forcer);
+
 async function generer(fonction: string, cle: string, forcer: boolean) {
   try {
     const avant = Number(sessionStorage.getItem(cle) ?? 0);

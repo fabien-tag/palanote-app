@@ -26,7 +26,7 @@ import { QuestionSatisfaction } from "@/components/QuestionSatisfaction";
 import { accepterInvitationGardee, plongeesAConfirmer, type PlongeeAConfirmer } from "@/lib/amis";
 import { chargerProfil } from "@/lib/moi";
 import { accepterInvitationClubGardee, mesSorties, rejoindreSortieGardee, type SortieResume, estDirecteurDePlongee } from "@/lib/club";
-import { genererRappelsPlongeur, nombreNonLues } from "@/lib/notifications";
+import { genererRappelsFormations, genererRappelsPlongeur, nombreNonLues } from "@/lib/notifications";
 import {
   BandeauCarnetsPapier,
   EnTeteStatistiques,
@@ -126,6 +126,7 @@ function Carnet() {
       const inv = await accepterInvitationClubGardee().catch(() => null);
       if (inv && actif) setConfirmation(inv);
       await genererRappelsPlongeur().catch(() => 0); // rappel de la veille d'une sortie
+      await genererRappelsFormations().catch(() => 0); // cours de formation à venir
       const [s, n] = await Promise.all([mesSorties().catch(() => []), nombreNonLues()]);
       if (!actif) return;
       setSorties(s);

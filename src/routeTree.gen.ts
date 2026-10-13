@@ -49,6 +49,7 @@ import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-secu
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
+import { Route as MoiFormationRouteImport } from './routes/moi_.formation'
 import { Route as MoiPasseportRouteImport } from './routes/moi_.passeport'
 import { Route as MoiProfilRouteImport } from './routes/moi_.profil'
 import { Route as MoiReglagesRouteImport } from './routes/moi_.reglages'
@@ -64,6 +65,7 @@ import { Route as PlongeePhotosRouteImport } from './routes/plongee.photos'
 import { Route as DpClubCarteRouteImport } from './routes/_dp.club_.carte'
 import { Route as DpClubCentreRouteImport } from './routes/_dp.club_.centre'
 import { Route as DpClubEquipeRouteImport } from './routes/_dp.club_.equipe'
+import { Route as DpClubFormationsRouteImport } from './routes/_dp.club_.formations'
 import { Route as DpClubMaterielRouteImport } from './routes/_dp.club_.materiel'
 import { Route as DpClubMembresRouteImport } from './routes/_dp.club_.membres'
 import { Route as DpClubNotificationsRouteImport } from './routes/_dp.club_.notifications'
@@ -273,6 +275,11 @@ const MoiConfidentialiteRoute = MoiConfidentialiteRouteImport.update({
   path: '/moi/confidentialite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MoiFormationRoute = MoiFormationRouteImport.update({
+  id: '/moi_/formation',
+  path: '/moi/formation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoiPasseportRoute = MoiPasseportRouteImport.update({
   id: '/moi_/passeport',
   path: '/moi/passeport',
@@ -346,6 +353,11 @@ const DpClubCentreRoute = DpClubCentreRouteImport.update({
 const DpClubEquipeRoute = DpClubEquipeRouteImport.update({
   id: '/club_/equipe',
   path: '/club/equipe',
+  getParentRoute: () => DpRoute,
+} as any)
+const DpClubFormationsRoute = DpClubFormationsRouteImport.update({
+  id: '/club_/formations',
+  path: '/club/formations',
   getParentRoute: () => DpRoute,
 } as any)
 const DpClubMaterielRoute = DpClubMaterielRouteImport.update({
@@ -429,6 +441,7 @@ export interface FileRoutesByFullPath {
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi/formation': typeof MoiFormationRoute
   '/moi/passeport': typeof MoiPasseportRoute
   '/moi/profil': typeof MoiProfilRoute
   '/moi/reglages': typeof MoiReglagesRoute
@@ -444,6 +457,7 @@ export interface FileRoutesByFullPath {
   '/club/carte': typeof DpClubCarteRoute
   '/club/centre': typeof DpClubCentreRoute
   '/club/equipe': typeof DpClubEquipeRoute
+  '/club/formations': typeof DpClubFormationsRoute
   '/club/materiel': typeof DpClubMaterielRoute
   '/club/membres': typeof DpClubMembresRoute
   '/club/notifications': typeof DpClubNotificationsRoute
@@ -493,6 +507,7 @@ export interface FileRoutesByTo {
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi/formation': typeof MoiFormationRoute
   '/moi/passeport': typeof MoiPasseportRoute
   '/moi/profil': typeof MoiProfilRoute
   '/moi/reglages': typeof MoiReglagesRoute
@@ -508,6 +523,7 @@ export interface FileRoutesByTo {
   '/club/carte': typeof DpClubCarteRoute
   '/club/centre': typeof DpClubCentreRoute
   '/club/equipe': typeof DpClubEquipeRoute
+  '/club/formations': typeof DpClubFormationsRoute
   '/club/materiel': typeof DpClubMaterielRoute
   '/club/membres': typeof DpClubMembresRoute
   '/club/notifications': typeof DpClubNotificationsRoute
@@ -559,6 +575,7 @@ export interface FileRoutesById {
   '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
+  '/moi_/formation': typeof MoiFormationRoute
   '/moi_/passeport': typeof MoiPasseportRoute
   '/moi_/profil': typeof MoiProfilRoute
   '/moi_/reglages': typeof MoiReglagesRoute
@@ -574,6 +591,7 @@ export interface FileRoutesById {
   '/_dp/club_/carte': typeof DpClubCarteRoute
   '/_dp/club_/centre': typeof DpClubCentreRoute
   '/_dp/club_/equipe': typeof DpClubEquipeRoute
+  '/_dp/club_/formations': typeof DpClubFormationsRoute
   '/_dp/club_/materiel': typeof DpClubMaterielRoute
   '/_dp/club_/membres': typeof DpClubMembresRoute
   '/_dp/club_/notifications': typeof DpClubNotificationsRoute
@@ -625,6 +643,7 @@ export interface FileRouteTypes {
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
+    | '/moi/formation'
     | '/moi/passeport'
     | '/moi/profil'
     | '/moi/reglages'
@@ -640,6 +659,7 @@ export interface FileRouteTypes {
     | '/club/carte'
     | '/club/centre'
     | '/club/equipe'
+    | '/club/formations'
     | '/club/materiel'
     | '/club/membres'
     | '/club/notifications'
@@ -689,6 +709,7 @@ export interface FileRouteTypes {
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
+    | '/moi/formation'
     | '/moi/passeport'
     | '/moi/profil'
     | '/moi/reglages'
@@ -704,6 +725,7 @@ export interface FileRouteTypes {
     | '/club/carte'
     | '/club/centre'
     | '/club/equipe'
+    | '/club/formations'
     | '/club/materiel'
     | '/club/membres'
     | '/club/notifications'
@@ -754,6 +776,7 @@ export interface FileRouteTypes {
     | '/moi_/aide'
     | '/moi_/avis'
     | '/moi_/confidentialite'
+    | '/moi_/formation'
     | '/moi_/passeport'
     | '/moi_/profil'
     | '/moi_/reglages'
@@ -769,6 +792,7 @@ export interface FileRouteTypes {
     | '/_dp/club_/carte'
     | '/_dp/club_/centre'
     | '/_dp/club_/equipe'
+    | '/_dp/club_/formations'
     | '/_dp/club_/materiel'
     | '/_dp/club_/membres'
     | '/_dp/club_/notifications'
@@ -819,6 +843,7 @@ export interface RootRouteChildren {
   MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
+  MoiFormationRoute: typeof MoiFormationRoute
   MoiPasseportRoute: typeof MoiPasseportRoute
   MoiProfilRoute: typeof MoiProfilRoute
   MoiReglagesRoute: typeof MoiReglagesRoute
@@ -1115,6 +1140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoiConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/moi_/formation': {
+      id: '/moi_/formation'
+      path: '/moi/formation'
+      fullPath: '/moi/formation'
+      preLoaderRoute: typeof MoiFormationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/moi_/passeport': {
       id: '/moi_/passeport'
       path: '/moi/passeport'
@@ -1220,6 +1252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DpClubEquipeRouteImport
       parentRoute: typeof DpRoute
     }
+    '/_dp/club_/formations': {
+      id: '/_dp/club_/formations'
+      path: '/club/formations'
+      fullPath: '/club/formations'
+      preLoaderRoute: typeof DpClubFormationsRouteImport
+      parentRoute: typeof DpRoute
+    }
     '/_dp/club_/materiel': {
       id: '/_dp/club_/materiel'
       path: '/club/materiel'
@@ -1284,6 +1323,7 @@ interface DpRouteChildren {
   DpClubCarteRoute: typeof DpClubCarteRoute
   DpClubCentreRoute: typeof DpClubCentreRoute
   DpClubEquipeRoute: typeof DpClubEquipeRoute
+  DpClubFormationsRoute: typeof DpClubFormationsRoute
   DpClubMaterielRoute: typeof DpClubMaterielRoute
   DpClubMembresRoute: typeof DpClubMembresRoute
   DpClubNotificationsRoute: typeof DpClubNotificationsRoute
@@ -1299,6 +1339,7 @@ const DpRouteChildren: DpRouteChildren = {
   DpClubCarteRoute: DpClubCarteRoute,
   DpClubCentreRoute: DpClubCentreRoute,
   DpClubEquipeRoute: DpClubEquipeRoute,
+  DpClubFormationsRoute: DpClubFormationsRoute,
   DpClubMaterielRoute: DpClubMaterielRoute,
   DpClubMembresRoute: DpClubMembresRoute,
   DpClubNotificationsRoute: DpClubNotificationsRoute,
@@ -1351,6 +1392,7 @@ const rootRouteChildren: RootRouteChildren = {
   MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,
+  MoiFormationRoute: MoiFormationRoute,
   MoiPasseportRoute: MoiPasseportRoute,
   MoiProfilRoute: MoiProfilRoute,
   MoiReglagesRoute: MoiReglagesRoute,

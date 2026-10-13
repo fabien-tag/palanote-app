@@ -4,7 +4,7 @@ import { NavigationDp } from "@/components/club/NavigationDp";
 import { BarreHautDp } from "@/components/club/BarreHautDp";
 import { PanneauNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { estDirecteurDePlongee, ongletSortiesGarde } from "@/lib/club";
-import { genererRappelsDp } from "@/lib/notifications";
+import { genererRappelsDp, genererRappelsFormations } from "@/lib/notifications";
 
 // Mise en page commune aux écrans du directeur de plongée (/club…).
 // Le DP n'a pas l'app du plongeur : son app, c'est ce tableau de bord, responsive.
@@ -24,7 +24,10 @@ function LayoutDp() {
   }, []);
   // Rappels du DP (matériel, certificats, sorties) : créés à l'ouverture, au plus toutes les 30 min
   useEffect(() => {
-    if (dp) void genererRappelsDp();
+    if (dp) {
+      void genererRappelsDp();
+      void genererRappelsFormations(); // le DP moniteur : la veille des cours qu'il encadre
+    }
   }, [dp, chemin]);
   return (
     <div className={dp ? "bureau" : ""}>

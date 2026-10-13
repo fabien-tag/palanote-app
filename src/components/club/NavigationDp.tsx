@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { CalendarDays, CircleHelp, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
+import { CalendarDays, CircleHelp, GraduationCap, Plus, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
 import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { accueilDp, centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
@@ -19,7 +19,8 @@ type Cible =
   | "/club/membres"
   | "/club/privilegies"
   | "/club/parametres"
-  | "/club/notifications";
+  | "/club/notifications"
+  | "/club/formations";
 type Entree = { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" };
 
 // La colonne est rangée en sections : le quotidien du DP, puis les ressources du club ;
@@ -38,6 +39,7 @@ const SECTIONS: { titre: string; entrees: Entree[] }[] = [
     entrees: [
       { to: "/club/membres", label: "Membres du club", Icone: Waves, voyant: "membres" },
       { to: "/club/privilegies", label: "Privilégiés", Icone: Star },
+      { to: "/club/formations", label: "Formations", Icone: GraduationCap },
       { to: "/club/equipe", label: "Équipe", Icone: UsersRound },
       { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
     ],
@@ -182,6 +184,7 @@ const PRINCIPAUX: { to: Cible; label: string; Icone: typeof LayoutDashboard; voy
   { to: "/club/membres", label: "Membres", Icone: Waves, voyant: "membres" },
 ];
 const SECONDAIRES: { to: Cible; label: string; Icone: typeof LayoutDashboard; texte: string }[] = [
+  { to: "/club/formations", label: "Formations", Icone: GraduationCap, texte: "Niveaux, tarifs, élèves et moniteurs" },
   { to: "/club/privilegies", label: "Membres privilégiés", Icone: Star, texte: "La communauté, les plongées réservées" },
   { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, texte: "Bateaux, blocs, gilets, contrôles" },
   { to: "/club/carte", label: "Carte du club", Icone: IconeCarte, texte: "Les sites plongés par le centre" },
