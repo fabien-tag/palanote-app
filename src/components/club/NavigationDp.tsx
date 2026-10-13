@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { CalendarDays, LayoutDashboard, LifeBuoy, Map as IconeCarte, MoreHorizontal, Settings, Star, UsersRound, Waves, X } from "lucide-react";
 import logoSigle from "@/assets/palanote-logo-cigle.png";
+import { ClocheDp } from "@/components/club/ClocheDp";
 import { accueilDp, centreChoisi, mesCentres, type Centre } from "@/lib/club";
 import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProche, planningCentre } from "@/lib/planning";
 
@@ -9,7 +10,7 @@ import { adherentsCentre, ajouterJours, alertesSortie, aujourdhui, controleProch
 // Elle reste en place quand on change d'écran (seul le contenu change) et porte des voyants :
 // actions en attente, points à régler sur les 14 prochains jours, matériel à contrôler.
 
-type Cible = "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" | "/club/carte" | "/club/membres" | "/club/privilegies" | "/club/parametres";
+type Cible = "/club" | "/club/planning" | "/club/equipe" | "/club/materiel" | "/club/carte" | "/club/membres" | "/club/privilegies" | "/club/parametres" | "/club/notifications";
 
 const ENTREES: { to: Cible; label: string; Icone: typeof LayoutDashboard; voyant?: "faire" | "planning" | "materiel" | "membres" }[] = [
   { to: "/club", label: "Tableau de bord", Icone: LayoutDashboard, voyant: "faire" },
@@ -97,7 +98,7 @@ export function NavigationDp() {
       aria-label="Navigation du club"
       className="fixed inset-y-0 left-0 z-20 hidden w-[232px] flex-col overflow-y-auto border-r border-[#DFEAF2] bg-white px-[16px] pb-[18px] pt-[24px] lg:flex"
     >
-      <span className="flex items-center gap-[10px] px-[10px] pb-[22px]">
+      <span className="flex items-center gap-[10px] pl-[10px] pb-[22px]">
         <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] bg-[#0F3D70]">
           <img src={logoSigle} alt="" className="h-[24px] w-[24px] object-contain" />
         </span>
@@ -105,6 +106,7 @@ export function NavigationDp() {
           <span className="block text-[19px] font-bold leading-tight tracking-[-.01em] text-[#123A63]">Palanote</span>
           <span className="block text-[11px] font-bold uppercase tracking-[.1em] text-[#1176A8]">Club</span>
         </span>
+        <ClocheDp className="ml-auto" />
       </span>
       <div className="flex flex-col gap-[2px]">{ENTREES.map((e) => entree(e.to, e.label, e.Icone, e.voyant))}</div>
       <div className="mt-auto flex flex-col gap-[10px] pt-[20px]">

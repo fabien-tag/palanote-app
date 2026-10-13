@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { NavigationDp } from "@/components/club/NavigationDp";
 import { estDirecteurDePlongee, ongletSortiesGarde } from "@/lib/club";
+import { genererRappelsDp } from "@/lib/notifications";
 
 // Mise en page commune aux écrans du directeur de plongée (/club…).
 // Le DP n'a pas l'app du plongeur : son app, c'est ce tableau de bord, responsive.
@@ -19,6 +20,10 @@ function LayoutDp() {
   useEffect(() => {
     void estDirecteurDePlongee().then((oui) => oui !== null && setDp(oui));
   }, []);
+  // Rappels du DP (matériel, certificats, sorties) : créés à l'ouverture, au plus toutes les 30 min
+  useEffect(() => {
+    if (dp) void genererRappelsDp();
+  }, [dp, chemin]);
   return (
     <div className={dp ? "bureau" : ""}>
       {dp && <NavigationDp />}

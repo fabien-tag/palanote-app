@@ -22,6 +22,7 @@ import {
   Waves,
 } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
+import { ClocheDp } from "@/components/club/ClocheDp";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
 import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import {
@@ -138,6 +139,8 @@ function EspaceClub() {
       navigation={<NavigationDpMobile />}
       droite={
         centre ? (
+          <>
+          <ClocheDp className="lg:hidden" />
           <button
             type="button"
             onClick={() => navigate({ to: "/club/nouvelle-sortie", search: { centre: centre.id } })}
@@ -146,7 +149,10 @@ function EspaceClub() {
             <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
             NOUVELLE SORTIE
           </button>
-        ) : null
+          </>
+        ) : (
+          <ClocheDp className="lg:hidden" />
+        )
       }
       bas={
         centre ? (

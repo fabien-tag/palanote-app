@@ -692,6 +692,18 @@ Table plongeur_brevets {
 Ref: plongeur_brevets.user_id > auth.users.id [delete: cascade]
 Ref: plongeur_brevets.verifie_par > auth.users.id [delete: set null]
 
+Table rappels_envoyes {
+  user_id uuid [not null]
+  cle text [not null, note: 'rappel déjà envoyé au DP (matériel, certificats, sorties)']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, cle) [pk]
+  }
+}
+
+Ref: rappels_envoyes.user_id > auth.users.id [delete: cascade]
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -747,4 +759,5 @@ TableGroup Sorties_club [color: #FF8A75] {
   sortie_materiel
   centre_adherents
   adherent_plongees
+  rappels_envoyes
 }

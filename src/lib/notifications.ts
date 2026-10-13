@@ -43,3 +43,24 @@ export function ilYA(iso: string) {
   if (j < 7) return `il y a ${j} jours`;
   return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 }
+
+// Rappels du directeur de plongée (sql/palanote-rappels-dp.sql) : contrôles du matériel,
+// certificats des adhérents, sorties à préparer, à clôturer, à tamponner.
+// Créés à l'ouverture de l'app, au plus toutes les 30 minutes ; chacun n'est envoyé qu'une fois.
+export const EVENEMENT_NOTIFICATIONS = "palanote-notifications";
+
+export async function genererRappelsDp(forcer = false) {
+  const cle = "palanote-rappels-dp";
+  try {
+    const avant = Number(sessionStorage.getItem(cle) ?? 0);
+    if (!forcer && Date.now() - avant < 30 * 60 * 1000) return 0;
+    sessionStorage.setItem(cle, String(Date.now()));
+  } catch {
+    /* stockage indisponible : on génère quand même */
+  }
+  const { data, error } = await supabase.rpc("generer_rappels_dp");
+  if (error) return 0; // script pas encore lancé
+  const nb = Number(data ?? 0);
+  if (nb > 0) window.dispatchEvent(new Event(EVENEMENT_NOTIFICATIONS));
+  return nb;
+}

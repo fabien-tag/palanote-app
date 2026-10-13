@@ -65,6 +65,7 @@ import { Route as DpClubCentreRouteImport } from './routes/_dp.club_.centre'
 import { Route as DpClubEquipeRouteImport } from './routes/_dp.club_.equipe'
 import { Route as DpClubMaterielRouteImport } from './routes/_dp.club_.materiel'
 import { Route as DpClubMembresRouteImport } from './routes/_dp.club_.membres'
+import { Route as DpClubNotificationsRouteImport } from './routes/_dp.club_.notifications'
 import { Route as DpClubNouvelleSortieRouteImport } from './routes/_dp.club_.nouvelle-sortie'
 import { Route as DpClubParametresRouteImport } from './routes/_dp.club_.parametres'
 import { Route as DpClubPlanningRouteImport } from './routes/_dp.club_.planning'
@@ -351,6 +352,11 @@ const DpClubMembresRoute = DpClubMembresRouteImport.update({
   path: '/club/membres',
   getParentRoute: () => DpRoute,
 } as any)
+const DpClubNotificationsRoute = DpClubNotificationsRouteImport.update({
+  id: '/club_/notifications',
+  path: '/club/notifications',
+  getParentRoute: () => DpRoute,
+} as any)
 const DpClubNouvelleSortieRoute = DpClubNouvelleSortieRouteImport.update({
   id: '/club_/nouvelle-sortie',
   path: '/club/nouvelle-sortie',
@@ -433,6 +439,7 @@ export interface FileRoutesByFullPath {
   '/club/equipe': typeof DpClubEquipeRoute
   '/club/materiel': typeof DpClubMaterielRoute
   '/club/membres': typeof DpClubMembresRoute
+  '/club/notifications': typeof DpClubNotificationsRoute
   '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
@@ -495,6 +502,7 @@ export interface FileRoutesByTo {
   '/club/equipe': typeof DpClubEquipeRoute
   '/club/materiel': typeof DpClubMaterielRoute
   '/club/membres': typeof DpClubMembresRoute
+  '/club/notifications': typeof DpClubNotificationsRoute
   '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
@@ -559,6 +567,7 @@ export interface FileRoutesById {
   '/_dp/club_/equipe': typeof DpClubEquipeRoute
   '/_dp/club_/materiel': typeof DpClubMaterielRoute
   '/_dp/club_/membres': typeof DpClubMembresRoute
+  '/_dp/club_/notifications': typeof DpClubNotificationsRoute
   '/_dp/club_/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
   '/_dp/club_/parametres': typeof DpClubParametresRoute
   '/_dp/club_/planning': typeof DpClubPlanningRoute
@@ -623,6 +632,7 @@ export interface FileRouteTypes {
     | '/club/equipe'
     | '/club/materiel'
     | '/club/membres'
+    | '/club/notifications'
     | '/club/nouvelle-sortie'
     | '/club/parametres'
     | '/club/planning'
@@ -685,6 +695,7 @@ export interface FileRouteTypes {
     | '/club/equipe'
     | '/club/materiel'
     | '/club/membres'
+    | '/club/notifications'
     | '/club/nouvelle-sortie'
     | '/club/parametres'
     | '/club/planning'
@@ -748,6 +759,7 @@ export interface FileRouteTypes {
     | '/_dp/club_/equipe'
     | '/_dp/club_/materiel'
     | '/_dp/club_/membres'
+    | '/_dp/club_/notifications'
     | '/_dp/club_/nouvelle-sortie'
     | '/_dp/club_/parametres'
     | '/_dp/club_/planning'
@@ -1202,6 +1214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DpClubMembresRouteImport
       parentRoute: typeof DpRoute
     }
+    '/_dp/club_/notifications': {
+      id: '/_dp/club_/notifications'
+      path: '/club/notifications'
+      fullPath: '/club/notifications'
+      preLoaderRoute: typeof DpClubNotificationsRouteImport
+      parentRoute: typeof DpRoute
+    }
     '/_dp/club_/nouvelle-sortie': {
       id: '/_dp/club_/nouvelle-sortie'
       path: '/club/nouvelle-sortie'
@@ -1247,6 +1266,7 @@ interface DpRouteChildren {
   DpClubEquipeRoute: typeof DpClubEquipeRoute
   DpClubMaterielRoute: typeof DpClubMaterielRoute
   DpClubMembresRoute: typeof DpClubMembresRoute
+  DpClubNotificationsRoute: typeof DpClubNotificationsRoute
   DpClubNouvelleSortieRoute: typeof DpClubNouvelleSortieRoute
   DpClubParametresRoute: typeof DpClubParametresRoute
   DpClubPlanningRoute: typeof DpClubPlanningRoute
@@ -1261,6 +1281,7 @@ const DpRouteChildren: DpRouteChildren = {
   DpClubEquipeRoute: DpClubEquipeRoute,
   DpClubMaterielRoute: DpClubMaterielRoute,
   DpClubMembresRoute: DpClubMembresRoute,
+  DpClubNotificationsRoute: DpClubNotificationsRoute,
   DpClubNouvelleSortieRoute: DpClubNouvelleSortieRoute,
   DpClubParametresRoute: DpClubParametresRoute,
   DpClubPlanningRoute: DpClubPlanningRoute,
