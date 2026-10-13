@@ -459,7 +459,7 @@ Table sorties {
   bateau text
   bateau_id uuid [note: 'bateau du centre (matériel), avec ses places']
   reservee_privilegies boolean [not null, default: false, note: 'seuls les membres privilégiés s’inscrivent par QR ou lien']
-  melange text [note: 'Air | Nitrox 32 | Nitrox 36 | Nitrox 40 | Trimix | Air ou nitrox']
+  melange text [note: 'Air | Nitrox | Trimix | Air ou nitrox (le pourcentage dépend du gonflage)']
   profondeur_prevue numeric
   consignes text
   statut text [not null, default: 'prevue', note: 'prevue | terminee | validee | annulee']

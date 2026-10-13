@@ -3570,8 +3570,9 @@ alter table public.centre_adherents add column if not exists privilegie_depuis t
 alter table public.sorties add column if not exists reservee_privilegies boolean not null default false;
 alter table public.sorties add column if not exists melange text;
 alter table public.sorties drop constraint if exists sorties_melange_check;
+update public.sorties set melange = 'Nitrox' where melange like 'Nitrox %';
 alter table public.sorties add constraint sorties_melange_check
-  check (melange is null or melange in ('Air', 'Nitrox 32', 'Nitrox 36', 'Nitrox 40', 'Trimix', 'Air ou nitrox'));
+  check (melange is null or melange in ('Air', 'Nitrox', 'Trimix', 'Air ou nitrox'));
 
 -- Le plongeur est-il un membre privilégié de ce centre ? (compte relié, ou même e-mail)
 create or replace function public.est_privilegie(p_centre uuid, p_user uuid)
@@ -3810,7 +3811,7 @@ begin
     values (p_centre, auth.uid(), public.cellule_date(l, 'date'), public.cellule_heure(l, 'heure'), left(public.cellule(l, 'site'), 120),
             left(public.cellule(l, 'lieu'), 120), public.cellule_nombre(l, 'profondeur'), left(public.cellule(l, 'consignes'), 500),
             v_bateau.libelle, v_bateau.id, true,
-            case when public.cellule(l, 'melange') in ('Air', 'Nitrox 32', 'Nitrox 36', 'Nitrox 40', 'Trimix', 'Air ou nitrox') then public.cellule(l, 'melange') end)
+            case when public.cellule(l, 'melange') in ('Air', 'Nitrox', 'Trimix', 'Air ou nitrox') then public.cellule(l, 'melange') end)
     returning id into v_id;
     insert into public.sortie_palanquees (sortie_id, numero) values (v_id, 1);
     v_nb := v_nb + 1;

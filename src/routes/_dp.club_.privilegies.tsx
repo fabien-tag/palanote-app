@@ -281,7 +281,7 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
   const [debut, setDebut] = useState(prochainDimanche);
   const [semaines, setSemaines] = useState(4);
   const [plongees, setPlongees] = useState<Plongee[]>([
-    { heure: "09:00", site: "", lieu: "", profondeur: "40", melange: "Nitrox 32" },
+    { heure: "09:00", site: "", lieu: "", profondeur: "30", melange: "Nitrox" },
     { heure: "14:00", site: "", lieu: "", profondeur: "30", melange: "Air" },
   ]);
   const [bateaux, setBateaux] = useState<Materiel[]>([]);

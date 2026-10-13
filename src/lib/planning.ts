@@ -283,7 +283,8 @@ export const marquerHistoriqueClub = (centre: string) => rpc<number>("marquer_hi
 export const certificatProche = controleProche;
 
 // ---------- Membres privilégiés (sql/palanote-privilegies.sql) ----------
-export const MELANGES = ["Air", "Nitrox 32", "Nitrox 36", "Nitrox 40", "Trimix", "Air ou nitrox"] as const;
+// Le type de gaz seulement : le pourcentage d'oxygène dépend du gonflage, pas du DP
+export const MELANGES = ["Air", "Nitrox", "Trimix", "Air ou nitrox"] as const;
 
 export type Privilegie = {
   id: string;
