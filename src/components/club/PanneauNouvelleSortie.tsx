@@ -63,7 +63,7 @@ export function PanneauNouvelleSortie() {
           entre ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <header className="flex items-center gap-[12px] border-b border-[#DFEAF2] px-[24px] py-[16px]">
+        <header className="flex items-center gap-[12px] border-b border-[#DFEAF2] px-[44px] py-[16px]">
           <span className="flex h-[40px] w-[40px] items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#1176A8]">
             <CalendarPlus className="h-[20px] w-[20px]" />
           </span>
@@ -75,7 +75,7 @@ export function PanneauNouvelleSortie() {
             <X className="h-[18px] w-[18px]" />
           </button>
         </header>
-        <div className="flex-1 overflow-y-auto px-[24px] pb-[20px]">
+        <div className="flex-1 overflow-y-auto px-[44px] pb-[20px]">
           {centre ? (
             <FormulaireNouvelleSortie
               key={cle}
