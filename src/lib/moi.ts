@@ -8,6 +8,8 @@ import type { LignePlongee } from "@/lib/plongees";
 
 export type Profil = {
   prenom: string;
+  nom: string;
+  certificatFin: string; // fin du certificat médical, AAAA-MM-JJ (vide si non renseignée)
   niveau: string;
   certifications: string[]; // « Nitrox », « Trimix »
   role: string; // plongeur, encadrant, directeur, centre (vide si non renseigné)
@@ -21,6 +23,9 @@ export type Profil = {
   lettreAnnuelle: boolean;
   lettreAnnuelleLe: string | null;
 };
+
+// Le profil enregistré : la barre du haut du DP (nom, niveau) se met à jour
+export const EVENEMENT_PROFIL = "palanote-profil-modifie";
 
 export type Compte = { id: string; email: string; avecGoogle: boolean; avecMotDePasse: boolean };
 
@@ -62,6 +67,8 @@ export async function chargerProfil(): Promise<Profil | null> {
   const heuresAvant = p["heures_avant"] === null || p["heures_avant"] === undefined ? NaN : Number(p["heures_avant"]);
   return {
     prenom,
+    nom: texte(p["nom"]),
+    certificatFin: texte(p["certificat_fin"]).slice(0, 10),
     niveau: texte(p["niveau"]),
     role: texte(p["role_plongee"]),
     certifications: Array.isArray(p["certifications"]) ? (p["certifications"] as string[]) : [],
@@ -100,7 +107,7 @@ async function majProfil(champs: Record<string, unknown>) {
   }
 }
 
-export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" | "premiereAnnee" | "plongeesAvant"> & { certifications?: string[]; role?: string; profMaxAvant?: string; heuresAvant?: string }) {
+export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" | "premiereAnnee" | "plongeesAvant"> & { certifications?: string[]; role?: string; profMaxAvant?: string; heuresAvant?: string; nom?: string; certificatFin?: string }) {
   const annee = p.premiereAnnee.trim();
   const avant = p.plongeesAvant.trim();
   await majProfil({
@@ -113,7 +120,10 @@ export async function sauverProfil(p: Pick<Profil, "prenom" | "niveau" | "club" 
     ...(p.profMaxAvant !== undefined ? { prof_max_avant: profondeurOuNull(p.profMaxAvant) } : {}),
     ...(p.role !== undefined ? { role_plongee: p.role || null } : {}),
     ...(p.heuresAvant !== undefined ? { heures_avant: heuresOuNull(p.heuresAvant) } : {}),
+    ...(p.nom !== undefined ? { nom: p.nom.trim() || null } : {}),
+    ...(p.certificatFin !== undefined ? { certificat_fin: /^\d{4}-\d{2}-\d{2}$/.test(p.certificatFin) ? p.certificatFin : null } : {}),
   });
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(EVENEMENT_PROFIL));
   try {
     localStorage.removeItem("palanote-entete"); // l'en-tête du carnet se mettra à jour
   } catch {

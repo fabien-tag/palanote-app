@@ -92,7 +92,9 @@ export function NavigationDp() {
   }, []);
   const centre = centres?.find((c) => c.id === centreChoisi()) ?? centres?.[0] ?? null;
   const voyants = useVoyants(centre?.id ?? null, chemin);
-  const actif = (to: Cible) => (to === "/club" ? chemin === "/club" || chemin === "/club/" : chemin.startsWith(to));
+  const aide = useRouterState({ select: (st) => (st.location.search as { onglet?: string }).onglet === "aide" });
+  const actif = (to: Cible) =>
+    to === "/club" ? chemin === "/club" || chemin === "/club/" : to === "/club/parametres" ? chemin.startsWith(to) && !aide : chemin.startsWith(to);
 
   const entree = (to: Cible, label: string, Icone: typeof LayoutDashboard, voyant?: "faire" | "planning" | "materiel" | "membres") => {
     const nb = voyant && voyants ? voyants[voyant] : 0;
@@ -163,8 +165,10 @@ export function NavigationDp() {
         <div className="border-t border-[#E9F0F6] pt-[10px]">
           {entree("/club/parametres", "Paramètres", Settings)}
           <Link
-            to="/moi/aide"
-            className="flex h-[40px] items-center gap-[12px] rounded-[10px] px-[12px] text-[14px] font-medium text-[#63809A] hover:bg-[#F1F6FC]"
+            to="/club/parametres"
+            search={{ onglet: "aide" }}
+            aria-current={aide ? "page" : undefined}
+            className={`flex h-[40px] items-center gap-[12px] rounded-[10px] px-[12px] text-[14px] ${aide ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#63809A] hover:bg-[#F1F6FC]"}`}
           >
             <CircleHelp className="h-[20px] w-[20px] shrink-0" strokeWidth={2} />
             Aide

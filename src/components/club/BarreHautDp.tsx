@@ -5,6 +5,7 @@ import { ClocheDp } from "@/components/club/ClocheDp";
 import { RechercheBarre } from "@/components/club/RechercheDp";
 import { Avatar } from "@/components/club/Ui";
 import { centreChoisi, EVENEMENT_CENTRE, mesCentres, type Centre } from "@/lib/club";
+import { EVENEMENT_PROFIL } from "@/lib/moi";
 import { supabase } from "@/lib/supabase";
 
 // Barre du haut de l'espace DP sur ordinateur : la date à gauche ; à droite
@@ -18,7 +19,7 @@ export function BarreHautDp() {
 
   useEffect(() => {
     let actif = true;
-    void (async () => {
+    const chargerMoi = () => void (async () => {
       const { data } = await supabase.auth.getSession();
       const u = data.session?.user;
       if (!u) return;
@@ -35,6 +36,8 @@ export function BarreHautDp() {
         email: u.email ?? null,
       });
     })();
+    chargerMoi();
+    window.addEventListener(EVENEMENT_PROFIL, chargerMoi);
     const chargerCentre = () =>
       void mesCentres()
         .then((l) => actif && setCentre(l.find((c) => c.id === centreChoisi()) ?? l[0] ?? null))
@@ -45,6 +48,7 @@ export function BarreHautDp() {
     return () => {
       actif = false;
       window.removeEventListener(EVENEMENT_CENTRE, chargerCentre);
+      window.removeEventListener(EVENEMENT_PROFIL, chargerMoi);
     };
   }, []);
 
@@ -65,6 +69,7 @@ export function BarreHautDp() {
       {centre && (
         <Link
           to="/club/parametres"
+          search={{ onglet: "centre" }}
           title="Le club que tu représentes"
           className="flex h-[34px] max-w-[220px] items-center gap-[7px] rounded-[10px] bg-[#E3F2FB] px-[10px] text-[12.5px] font-bold text-[#1176A8] hover:bg-[#D5EBF8]"
         >
@@ -74,7 +79,7 @@ export function BarreHautDp() {
       )}
 
       {moi && (
-        <Link to="/club/parametres" className="flex items-center gap-[10px] rounded-[10px] py-[4px] pl-[4px] pr-[8px] hover:bg-[#F1F6FC]" title="Mon compte">
+        <Link to="/club/parametres" search={{ onglet: "profil" }} className="flex items-center gap-[10px] rounded-[10px] py-[4px] pl-[4px] pr-[8px] hover:bg-[#F1F6FC]" title="Mon compte">
           <Avatar id={moi.id} prenom={moi.prenom} taille={40} />
           <span className="min-w-0 leading-tight">
             <span className="block max-w-[180px] truncate text-[14px] font-bold text-[#123A63]">{[moi.prenom, moi.nom].filter(Boolean).join(" ")}</span>

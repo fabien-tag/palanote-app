@@ -86,8 +86,12 @@ function useLignes(q: string, centre: string | null, r: Recherche | null, fermer
       { titre: "Formations", mots: "formations niveau n1 n2 n3 n4 nitrox trimix rifap eleves moniteur cours tarifs", Icone: GraduationCap, aller: () => navigate({ to: "/club/formations" }) },
       { titre: "Carte du club", mots: "carte sites plongees", Icone: IconeCarte, aller: () => navigate({ to: "/club/carte" }) },
       { titre: "Notifications", mots: "notifications cloche rappels", Icone: Bell, aller: () => navigate({ to: "/club/notifications" }) },
-      { titre: "Exporter la saison (Excel)", mots: "export excel saison bilan", Icone: FileSpreadsheet, aller: () => navigate({ to: "/club/parametres" }) },
+      { titre: "Exporter la saison (Excel)", mots: "export excel saison bilan", Icone: FileSpreadsheet, aller: () => navigate({ to: "/club/parametres", search: { onglet: "exports" } }) },
       { titre: "Paramètres", mots: "parametres centre compte deconnexion", Icone: Settings, aller: () => navigate({ to: "/club/parametres" }) },
+      { titre: "Mon profil", mots: "profil nom niveau certificat medical", Icone: Settings, aller: () => navigate({ to: "/club/parametres", search: { onglet: "profil" } }) },
+      { titre: "Connexion et sécurité", mots: "mot de passe email adresse securite deconnexion", Icone: Settings, aller: () => navigate({ to: "/club/parametres", search: { onglet: "securite" } }) },
+      { titre: "Le centre", mots: "centre club nom ville directeurs quitter", Icone: Settings, aller: () => navigate({ to: "/club/parametres", search: { onglet: "centre" } }) },
+      { titre: "Aide", mots: "aide questions faq contact", Icone: Settings, aller: () => navigate({ to: "/club/parametres", search: { onglet: "aide" } }) },
     ];
     const s = sansAccents(q.trim());
     const lignes: Ligne[] = [];
