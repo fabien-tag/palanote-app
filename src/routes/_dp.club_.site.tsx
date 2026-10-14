@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronDown, Copy, ExternalLink, ImagePlus, Monitor, Plus, Smartphone, Trash2, Upload } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
@@ -7,6 +7,7 @@ import { detailErreur, MessageErreur, PageClub } from "@/components/club/Ui";
 import { useCentre } from "@/components/club/useCentre";
 import { BOUTON_PRINCIPAL, BOUTON_SECONDAIRE, Bascule, CHAMP, Libelle } from "@/components/club/parametres/Commun";
 import { SiteClub } from "@/components/site/SiteClub";
+import { ReglageDomaine } from "@/components/site/ReglageDomaine";
 import {
   CHIFFRES_DEFAUT,
   CHIFFRES_SITE,
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/_dp/club_/site")({
   component: PageMonSite,
 });
 
-type Rubrique = "apparence" | "tarifs" | "chiffres" | "textes" | "sites" | "contact" | "rubriques";
+type Rubrique = "apparence" | "tarifs" | "chiffres" | "domaine" | "textes" | "sites" | "contact" | "rubriques";
 
 const ZONE_VIDE: Zone = { nom: "", profondeur: "", niveau: "", description: "" };
 const NIVEAUX_ZONE = ["", "baptême", "N1", "N2", "N3"];
@@ -148,7 +149,9 @@ function PageMonSite() {
             <span className={`rounded-[8px] px-[10px] py-[5px] text-[12px] font-bold ${b.publie ? "bg-[#E2F8EF] text-[#14805F]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}>
               {b.publie ? "En ligne" : "Brouillon"}
             </span>
-            <span className="rounded-[8px] bg-[#E3F2FB] px-[10px] py-[5px] text-[12px] font-bold text-[#1176A8]">Offre Starter</span>
+            <Link to="/club/offre" title="Voir les offres" className="rounded-[8px] bg-[#E3F2FB] px-[10px] py-[5px] text-[12px] font-bold text-[#1176A8] hover:bg-[#D5EBF8]">
+              Offre {contenu.site.offre === "advanced" ? "Advanced" : contenu.site.offre === "premium" ? "Premium" : "Starter"}
+            </Link>
             <span className="min-w-0 truncate text-[13px] text-[#5B7189]">
               {lienSite(contenu.site.slug)}
             </span>
@@ -483,6 +486,10 @@ function PageMonSite() {
                     </Libelle>
                   </div>
                 </div>
+              </Volet>
+
+              <Volet titre="Nom de domaine" texte="Ton site à ton adresse (Premium)" ouvert={ouverte === "domaine"} onClick={() => setOuverte("domaine")}>
+                {centre && <ReglageDomaine centre={centre.id} />}
               </Volet>
 
               <Volet titre="Rubriques et adresse" texte="Ce qui s'affiche, l'adresse du site" ouvert={ouverte === "rubriques"} onClick={() => setOuverte("rubriques")}>

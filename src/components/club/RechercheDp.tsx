@@ -88,6 +88,7 @@ function useLignes(q: string, centre: string | null, r: Recherche | null, fermer
       { titre: "Notifications", mots: "notifications cloche rappels", Icone: Bell, aller: () => navigate({ to: "/club/notifications" }) },
       { titre: "Exporter la saison (Excel)", mots: "export excel saison bilan", Icone: FileSpreadsheet, aller: () => navigate({ to: "/club/parametres", search: { onglet: "exports" } }) },
       { titre: "Paramètres", mots: "parametres centre compte deconnexion", Icone: Settings, aller: () => navigate({ to: "/club/parametres" }) },
+      { titre: "Mon offre", mots: "offre abonnement premium advanced starter paiement stripe facture domaine", Icone: Settings, aller: () => navigate({ to: "/club/offre" }) },
       { titre: "Mon site internet", mots: "site internet web vitrine page publique referencement google", Icone: Settings, aller: () => navigate({ to: "/club/site" }) },
       { titre: "Mon profil", mots: "profil nom niveau certificat medical", Icone: Settings, aller: () => navigate({ to: "/club/parametres", search: { onglet: "profil" } }) },
       { titre: "Connexion et sécurité", mots: "mot de passe email adresse securite deconnexion", Icone: Settings, aller: () => navigate({ to: "/club/parametres", search: { onglet: "securite" } }) },

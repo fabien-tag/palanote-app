@@ -71,6 +71,7 @@ import { Route as DpClubMaterielRouteImport } from './routes/_dp.club_.materiel'
 import { Route as DpClubMembresRouteImport } from './routes/_dp.club_.membres'
 import { Route as DpClubNotificationsRouteImport } from './routes/_dp.club_.notifications'
 import { Route as DpClubNouvelleSortieRouteImport } from './routes/_dp.club_.nouvelle-sortie'
+import { Route as DpClubOffreRouteImport } from './routes/_dp.club_.offre'
 import { Route as DpClubParametresRouteImport } from './routes/_dp.club_.parametres'
 import { Route as DpClubPlanningRouteImport } from './routes/_dp.club_.planning'
 import { Route as DpClubPrivilegiesRouteImport } from './routes/_dp.club_.privilegies'
@@ -387,6 +388,11 @@ const DpClubNouvelleSortieRoute = DpClubNouvelleSortieRouteImport.update({
   path: '/club/nouvelle-sortie',
   getParentRoute: () => DpRoute,
 } as any)
+const DpClubOffreRoute = DpClubOffreRouteImport.update({
+  id: '/club_/offre',
+  path: '/club/offre',
+  getParentRoute: () => DpRoute,
+} as any)
 const DpClubParametresRoute = DpClubParametresRouteImport.update({
   id: '/club_/parametres',
   path: '/club/parametres',
@@ -475,6 +481,7 @@ export interface FileRoutesByFullPath {
   '/club/membres': typeof DpClubMembresRoute
   '/club/notifications': typeof DpClubNotificationsRoute
   '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
+  '/club/offre': typeof DpClubOffreRoute
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
   '/club/privilegies': typeof DpClubPrivilegiesRoute
@@ -543,6 +550,7 @@ export interface FileRoutesByTo {
   '/club/membres': typeof DpClubMembresRoute
   '/club/notifications': typeof DpClubNotificationsRoute
   '/club/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
+  '/club/offre': typeof DpClubOffreRoute
   '/club/parametres': typeof DpClubParametresRoute
   '/club/planning': typeof DpClubPlanningRoute
   '/club/privilegies': typeof DpClubPrivilegiesRoute
@@ -613,6 +621,7 @@ export interface FileRoutesById {
   '/_dp/club_/membres': typeof DpClubMembresRoute
   '/_dp/club_/notifications': typeof DpClubNotificationsRoute
   '/_dp/club_/nouvelle-sortie': typeof DpClubNouvelleSortieRoute
+  '/_dp/club_/offre': typeof DpClubOffreRoute
   '/_dp/club_/parametres': typeof DpClubParametresRoute
   '/_dp/club_/planning': typeof DpClubPlanningRoute
   '/_dp/club_/privilegies': typeof DpClubPrivilegiesRoute
@@ -683,6 +692,7 @@ export interface FileRouteTypes {
     | '/club/membres'
     | '/club/notifications'
     | '/club/nouvelle-sortie'
+    | '/club/offre'
     | '/club/parametres'
     | '/club/planning'
     | '/club/privilegies'
@@ -751,6 +761,7 @@ export interface FileRouteTypes {
     | '/club/membres'
     | '/club/notifications'
     | '/club/nouvelle-sortie'
+    | '/club/offre'
     | '/club/parametres'
     | '/club/planning'
     | '/club/privilegies'
@@ -820,6 +831,7 @@ export interface FileRouteTypes {
     | '/_dp/club_/membres'
     | '/_dp/club_/notifications'
     | '/_dp/club_/nouvelle-sortie'
+    | '/_dp/club_/offre'
     | '/_dp/club_/parametres'
     | '/_dp/club_/planning'
     | '/_dp/club_/privilegies'
@@ -1319,6 +1331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DpClubNouvelleSortieRouteImport
       parentRoute: typeof DpRoute
     }
+    '/_dp/club_/offre': {
+      id: '/_dp/club_/offre'
+      path: '/club/offre'
+      fullPath: '/club/offre'
+      preLoaderRoute: typeof DpClubOffreRouteImport
+      parentRoute: typeof DpRoute
+    }
     '/_dp/club_/parametres': {
       id: '/_dp/club_/parametres'
       path: '/club/parametres'
@@ -1367,6 +1386,7 @@ interface DpRouteChildren {
   DpClubMembresRoute: typeof DpClubMembresRoute
   DpClubNotificationsRoute: typeof DpClubNotificationsRoute
   DpClubNouvelleSortieRoute: typeof DpClubNouvelleSortieRoute
+  DpClubOffreRoute: typeof DpClubOffreRoute
   DpClubParametresRoute: typeof DpClubParametresRoute
   DpClubPlanningRoute: typeof DpClubPlanningRoute
   DpClubPrivilegiesRoute: typeof DpClubPrivilegiesRoute
@@ -1384,6 +1404,7 @@ const DpRouteChildren: DpRouteChildren = {
   DpClubMembresRoute: DpClubMembresRoute,
   DpClubNotificationsRoute: DpClubNotificationsRoute,
   DpClubNouvelleSortieRoute: DpClubNouvelleSortieRoute,
+  DpClubOffreRoute: DpClubOffreRoute,
   DpClubParametresRoute: DpClubParametresRoute,
   DpClubPlanningRoute: DpClubPlanningRoute,
   DpClubPrivilegiesRoute: DpClubPrivilegiesRoute,

@@ -203,7 +203,8 @@ begin
 
   return (
     select jsonb_build_object(
-      'site', to_jsonb(s) - 'created_at',
+      -- Jamais d'informations de paiement ni de jeton de vérification sur le site public
+      'site', to_jsonb(s) - array['created_at', 'stripe_client', 'stripe_abonnement', 'domaine_jeton', 'abonnement_fin'],
       'centre', jsonb_build_object('nom', c.nom, 'ville', c.ville, 'verifie', c.verifie),
       'formations', v_formations,
       'bateaux', v_bateaux,
