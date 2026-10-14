@@ -149,10 +149,9 @@ begin
   -- Formations actives, avec leurs tarifs (si l'espace Formations est installé)
   if to_regclass('public.formations_catalogue') is not null then
     execute $f$
-      select coalesce(jsonb_agg(jsonb_build_object(
-               'code', f.code, 'intitule', f.intitule, 'organisme', f.organisme, 'categorie', f.categorie,
-               'prix', f.prix, 'nb_theorie', f.nb_theorie, 'nb_pratique', f.nb_pratique,
-               'prerequis', f.prerequis, 'description', f.description) order by f.ordre, f.code), '[]'::jsonb)
+      -- Toute la fiche (tarif, cours, objectifs, contenu, prérogatives…), sans les champs internes
+      select coalesce(jsonb_agg(to_jsonb(f) - array['id', 'centre_id', 'actif', 'ordre', 'created_at', 'updated_at']
+               order by f.ordre, f.code), '[]'::jsonb)
       from public.formations_catalogue f where f.centre_id = $1 and f.actif$f$
       into v_formations using p_centre;
   end if;

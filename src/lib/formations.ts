@@ -28,6 +28,16 @@ export type FormationCatalogue = {
   nb_pratique: number;
   prerequis: string | null;
   description: string | null;
+  accroche?: string | null;
+  objectifs?: string | null;
+  age_min?: number | null;
+  profondeur_max?: number | null;
+  contenu?: string[];
+  inclus?: string[];
+  prerogatives?: string | null;
+  documents?: string[];
+  periode?: string | null;
+  cursus?: string | null;
   actif: boolean;
   ordre: number;
   en_cours: number;

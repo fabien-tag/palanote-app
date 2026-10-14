@@ -52,6 +52,16 @@ export type FormationSite = {
   nb_pratique: number;
   prerequis: string | null;
   description: string | null;
+  accroche?: string | null;
+  objectifs?: string | null;
+  age_min?: number | null;
+  profondeur_max?: number | null;
+  contenu?: string[];
+  inclus?: string[];
+  prerogatives?: string | null;
+  documents?: string[];
+  periode?: string | null;
+  cursus?: string | null;
 };
 export type BateauSite = { nom: string; modele?: string | null; type?: string | null; places?: string | null; longueur?: string | null; moteur?: string | null; port?: string | null; oxygene?: string | null };
 export type EquipementSite = { categorie: string; variante: string; nb: number };

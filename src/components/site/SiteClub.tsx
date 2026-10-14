@@ -43,7 +43,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
   const sombre = !clair(site.couleur_fond);
   const zones = (site.zones ?? []).filter((z) => z.nom?.trim());
   const niveaux = formations.filter((f) => f.categorie === "niveau");
-  const autres = formations.filter((f) => f.categorie !== "niveau");
+  const autres = formations.filter((f) => f.categorie !== "niveau" && !/^N\s?[1-4]$/i.test(f.code.trim()));
   const encadrants = equipe.filter((e) => e.role !== "pilote");
   const places = bateaux.map((b) => parseInt(b.places ?? "", 10)).filter((n) => n > 0);
   const profMax = Math.max(0, ...zones.map((z) => profondeur(z) ?? 0));
@@ -211,10 +211,10 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
 
         {voir.formations && (
           <Section id="formations" libelle="Formations" titre="Passer ses niveaux avec nous" texte="Des cours théoriques entre deux plongées et de la pratique en mer, encadrés par nos moniteurs.">
-            {niveaux.length > 0 && <Parcours niveaux={niveaux} contact={contact} />}
+            {niveauxTarifs.length > 0 && <Parcours niveaux={niveauxTarifs} contact={contact} />}
             {autres.length > 0 && (
-              <div className={niveaux.length > 0 ? "pt-[36px]" : ""}>
-                <h3 className="pb-[14px] text-[22px] font-medium tracking-[-0.02em]">{niveaux.length > 0 ? "Et aussi" : "Nos formations"}</h3>
+              <div className={niveauxTarifs.length > 0 ? "pt-[36px]" : ""}>
+                <h3 className="pb-[14px] text-[22px] font-medium tracking-[-0.02em]">{niveauxTarifs.length > 0 ? "Et aussi" : "Nos formations"}</h3>
                 <ul className="overflow-hidden rounded-[22px] bg-[var(--surface)] ring-1 ring-[var(--ligne)]">
                   {autres.map((f) => (
                     <li key={f.code} className="grid grid-cols-[1fr_auto] items-center gap-x-[16px] gap-y-[4px] border-t border-[var(--ligne)] px-[20px] py-[16px] first:border-t-0 @2xl:grid-cols-[110px_1fr_auto_auto] @2xl:px-[26px]">
@@ -651,9 +651,15 @@ function Tarifs({ tarifs, niveaux, contact, image }: { tarifs: Tarif[]; niveaux:
       cle: n.code,
       code: n.code,
       titre: n.intitule,
-      detail: n.description,
+      detail: n.objectifs || n.description,
       prix: prixEuros(n.prix) ?? "Sur demande",
-      infos: [n.nb_theorie > 0 ? `${n.nb_theorie} cours théoriques` : "", n.nb_pratique > 0 ? `${n.nb_pratique} plongées` : "", n.prerequis ? `Pour s'inscrire : ${n.prerequis}` : ""].filter(Boolean),
+      infos: [
+        n.age_min ? `Dès ${n.age_min} ans` : "",
+        n.profondeur_max ? `Jusqu'à ${n.profondeur_max} m` : "",
+        n.nb_pratique > 0 ? `${n.nb_pratique} plongées` : "",
+        n.nb_theorie > 0 ? `${n.nb_theorie} cours théoriques` : "",
+        n.prerequis ? `Pour s'inscrire : ${n.prerequis}` : "",
+      ].filter(Boolean),
     })),
   ];
   const plonger: CarteTarif[] = tarifs
@@ -819,26 +825,48 @@ function Parcours({ niveaux, contact }: { niveaux: FormationSite[]; contact: { h
         </ol>
         <p className="pt-[20px] text-[12.5px] text-white/70">Choisissez un niveau pour voir son programme et son tarif.</p>
       </div>
-      <article className="flex flex-col rounded-[26px] bg-[var(--surface)] p-[24px] ring-1 ring-[var(--ligne)] @3xl:p-[34px]">
+      <article className="galet flex flex-col bg-[var(--surface)] p-[24px] ring-1 ring-[var(--ligne)] @3xl:p-[34px]">
         <div className="flex flex-wrap items-start justify-between gap-[16px]">
           <div>
-            <p className="text-[13.5px] text-[var(--doux)]">{f.organisme}</p>
+            <p className="text-[13.5px] text-[var(--acc)]">{[f.accroche, f.organisme].filter(Boolean).join(", ")}</p>
             <h3 className="pt-[4px] text-[clamp(26px,3cqw,36px)] font-medium leading-[1.1] tracking-[-0.02em]">{f.intitule}</h3>
           </div>
           <p className="text-[clamp(34px,4cqw,48px)] font-medium leading-none tracking-[-0.03em] text-[var(--acc)] [font-family:var(--titres)]">{prixEuros(f.prix) ?? "Sur demande"}</p>
         </div>
-        {f.description && <p className="max-w-[58ch] pt-[16px] text-[15.5px] leading-[1.6] text-[var(--doux)]">{f.description}</p>}
-        <div className="grid grid-cols-2 gap-[12px] pt-[24px]">
-          <Compteur nombre={f.nb_theorie} texte={f.nb_theorie > 1 ? "cours théoriques" : "cours théorique"} />
-          <Compteur nombre={f.nb_pratique} texte={f.nb_pratique > 1 ? "séances en mer ou en fosse" : "séance en mer"} />
+        {(f.objectifs || f.description) && <p className="max-w-[62ch] pt-[14px] text-[15.5px] leading-[1.6] text-[var(--doux)]">{f.objectifs || f.description}</p>}
+
+        {/* L'essentiel en chiffres */}
+        <div className="grid grid-cols-2 gap-[10px] pt-[20px] @2xl:grid-cols-4">
+          {f.age_min ? <Compteur nombre={`${f.age_min} ans`} texte="âge minimum" /> : null}
+          {f.profondeur_max ? <Compteur nombre={`${f.profondeur_max} m`} texte="profondeur maximale" /> : null}
+          {f.nb_pratique > 0 && <Compteur nombre={String(f.nb_pratique)} texte={f.nb_pratique > 1 ? "plongées en mer" : "plongée en mer"} />}
+          {f.nb_theorie > 0 && <Compteur nombre={String(f.nb_theorie)} texte={f.nb_theorie > 1 ? "cours théoriques" : "cours théorique"} />}
         </div>
-        {f.prerequis && (
-          <p className="pt-[18px] text-[14px] leading-[1.5]">
-            <span className="text-[var(--doux)]">Pour s'inscrire : </span>
-            {f.prerequis}
+
+        {/* Ce qu'on fait, ce qui est compris */}
+        {((f.contenu?.length ?? 0) > 0 || (f.inclus?.length ?? 0) > 0) && (
+          <div className="grid grid-cols-1 gap-[18px] pt-[22px] @2xl:grid-cols-2">
+            {(f.contenu?.length ?? 0) > 0 && <ListeFiche titre="Au programme" items={f.contenu!} />}
+            {(f.inclus?.length ?? 0) > 0 && <ListeFiche titre="Compris dans le prix" items={f.inclus!} />}
+          </div>
+        )}
+
+        {f.prerogatives && (
+          <p className="galet-moyen mt-[20px] bg-[color-mix(in_srgb,var(--acc)_12%,transparent)] px-[16px] py-[12px] text-[14.5px] leading-snug">
+            <span className="font-semibold text-[var(--acc)]">Après la formation : </span>
+            {f.prerogatives}
           </p>
         )}
-        <div className="mt-auto pt-[26px]">
+
+        {/* Les conditions */}
+        <dl className="grid grid-cols-1 gap-x-[20px] gap-y-[12px] pt-[18px] text-[13.5px] leading-[1.5] @2xl:grid-cols-2">
+          {f.prerequis && <InfoFiche titre="Pour s'inscrire">{f.prerequis}</InfoFiche>}
+          {(f.documents?.length ?? 0) > 0 && <InfoFiche titre="Documents à fournir">{f.documents!.join(", ")}</InfoFiche>}
+          {f.periode && <InfoFiche titre="Quand">{f.periode}</InfoFiche>}
+          {f.cursus && <InfoFiche titre="Cursus">{f.cursus}</InfoFiche>}
+        </dl>
+
+        <div className="mt-auto pt-[24px]">
           <a href={contact.href} className="inline-block galet-moyen bg-[var(--sec)] px-[22px] py-[13px] text-[14px] font-semibold text-white">
             S'inscrire au {f.code}
           </a>
@@ -848,10 +876,35 @@ function Parcours({ niveaux, contact }: { niveaux: FormationSite[]; contact: { h
   );
 }
 
-function Compteur({ nombre, texte }: { nombre: number; texte: string }) {
+function ListeFiche({ titre, items }: { titre: string; items: string[] }) {
   return (
-    <div className="rounded-[18px] bg-[color-mix(in_srgb,var(--acc)_9%,transparent)] p-[16px]">
-      <p className="text-[30px] font-medium leading-none tracking-[-0.02em] [font-family:var(--titres)]">{nombre}</p>
+    <div>
+      <p className="pb-[8px] text-[14px] font-semibold">{titre}</p>
+      <ul className="flex flex-col gap-[7px]">
+        {items.map((x) => (
+          <li key={x} className="flex gap-[9px] text-[14px] leading-snug text-[var(--doux)]">
+            <span className="goutte mt-[5px] h-[8px] w-[8px] shrink-0 bg-[var(--acc)]" aria-hidden="true" />
+            {x}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function InfoFiche({ titre, children }: { titre: string; children: ReactNode }) {
+  return (
+    <div>
+      <dt className="text-[12.5px] font-semibold text-[var(--doux)]">{titre}</dt>
+      <dd className="pt-[2px]">{children}</dd>
+    </div>
+  );
+}
+
+function Compteur({ nombre, texte }: { nombre: number | string; texte: string }) {
+  return (
+    <div className="galet-moyen bg-[color-mix(in_srgb,var(--acc)_9%,transparent)] p-[14px]">
+      <p className="text-[26px] font-medium leading-none tracking-[-0.02em] [font-family:var(--titres)]">{nombre}</p>
       <p className="pt-[6px] text-[13px] leading-snug text-[var(--doux)]">{texte}</p>
     </div>
   );

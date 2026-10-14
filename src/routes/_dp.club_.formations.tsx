@@ -314,13 +314,33 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
     prerequis: f.prerequis ?? "",
     description: f.description ?? "",
     actif: f.actif ?? true,
+    // La fiche détaillée, affichée sur le site du club
+    accroche: f.accroche ?? "",
+    objectifs: f.objectifs ?? "",
+    age_min: f.age_min ? String(f.age_min) : "",
+    profondeur_max: f.profondeur_max ? String(f.profondeur_max) : "",
+    prerogatives: f.prerogatives ?? "",
+    contenu: (f.contenu ?? []).join("\n"),
+    inclus: (f.inclus ?? []).join("\n"),
+    documents: (f.documents ?? []).join("\n"),
+    periode: f.periode ?? "",
+    cursus: f.cursus ?? "",
   });
+  const [fiche, setFiche] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);
   const valider = async () => {
     setEnCours(true);
     try {
-      await enregistrerFormationCatalogue(centre, { ...(f.id ? { id: f.id } : {}), ...b, prix: b.prix.replace(",", ".") } as unknown as Partial<FormationCatalogue>);
+      const lignes = (t: string) => t.split("\n").map((x) => x.trim()).filter(Boolean);
+      await enregistrerFormationCatalogue(centre, {
+        ...(f.id ? { id: f.id } : {}),
+        ...b,
+        prix: b.prix.replace(",", "."),
+        contenu: lignes(b.contenu),
+        inclus: lignes(b.inclus),
+        documents: lignes(b.documents),
+      } as unknown as Partial<FormationCatalogue>);
       onFait();
       onFermer();
     } catch (e) {
@@ -357,6 +377,30 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
       <ChampTexte label="Organisme" value={b.organisme} onChange={(e) => setB({ ...b, organisme: e.target.value })} />
       <ChampTexte label="Prérequis" value={b.prerequis} onChange={(e) => setB({ ...b, prerequis: e.target.value })} placeholder="N1, 16 ans, certificat médical" />
       <ChampTexte label="Description" value={b.description} onChange={(e) => setB({ ...b, description: e.target.value })} placeholder="Autonome à 20 m…" />
+      {/* La fiche complète, comme sur le site du club */}
+      <button type="button" aria-expanded={fiche} onClick={() => setFiche(!fiche)} className="mt-[6px] flex w-full items-center justify-between rounded-[10px] border border-[#D8E5EE] bg-[#F7FAFC] px-[12px] py-[10px] text-left">
+        <span>
+          <span className="block text-[13px] font-bold">Fiche détaillée (site du club)</span>
+          <span className="block text-[11.5px] text-[#7D93A8]">Objectifs, âge, profondeur, programme, ce qui est compris, documents</span>
+        </span>
+        <span className="text-[18px] font-bold text-[#1176A8]">{fiche ? "−" : "+"}</span>
+      </button>
+      {fiche && (
+        <div className="flex flex-col gap-[2px] pt-[8px]">
+          <ChampTexte label="Accroche" value={b.accroche} onChange={(e) => setB({ ...b, accroche: e.target.value })} placeholder="Votre permis de plonger" />
+          <ZoneTexte label="Objectifs" value={b.objectifs} onChange={(v) => setB({ ...b, objectifs: v })} lignes={3} placeholder="Plonger encadré jusqu'à 20 m…" />
+          <div className="grid grid-cols-2 gap-x-[10px]">
+            <ChampTexte label="Âge minimum" inputMode="numeric" value={b.age_min} onChange={(e) => setB({ ...b, age_min: nombre(e.target.value) })} placeholder="14" />
+            <ChampTexte label="Profondeur max (m)" inputMode="numeric" value={b.profondeur_max} onChange={(e) => setB({ ...b, profondeur_max: nombre(e.target.value) })} placeholder="20" />
+          </div>
+          <ChampTexte label="Après la formation (prérogatives)" value={b.prerogatives} onChange={(e) => setB({ ...b, prerogatives: e.target.value })} placeholder="Plonger encadré jusqu'à 20 m (PE20)." />
+          <ZoneTexte label="Au programme (une ligne par point)" value={b.contenu} onChange={(v) => setB({ ...b, contenu: v })} lignes={4} />
+          <ZoneTexte label="Compris dans le prix (une ligne par point)" value={b.inclus} onChange={(v) => setB({ ...b, inclus: v })} lignes={3} />
+          <ZoneTexte label="Documents à fournir (une ligne par document)" value={b.documents} onChange={(v) => setB({ ...b, documents: v })} lignes={3} />
+          <ChampTexte label="Période" value={b.periode} onChange={(e) => setB({ ...b, periode: e.target.value })} placeholder="Toute la saison, sur rendez-vous" />
+          <ChampTexte label="Cursus" value={b.cursus} onChange={(e) => setB({ ...b, cursus: e.target.value })} placeholder="FFESSM (licence en supplément)" />
+        </div>
+      )}
       {f.id && (
         <label className="flex items-center gap-[8px] pt-[4px] text-[13px] font-semibold">
           <input type="checkbox" checked={b.actif} onChange={(e) => setB({ ...b, actif: e.target.checked })} className="h-[17px] w-[17px] accent-[#0F3D70]" />
@@ -382,6 +426,21 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
         </button>
       )}
     </Feuille>
+  );
+}
+
+function ZoneTexte({ label, value, onChange, lignes, placeholder }: { label: string; value: string; onChange: (v: string) => void; lignes: number; placeholder?: string }) {
+  return (
+    <label className="block pb-[10px]">
+      <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
+      <textarea
+        value={value}
+        rows={lignes}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        className="block w-full resize-y rounded-[10px] border-[1.5px] border-[#E4EBF1] bg-white px-[14px] py-[10px] text-[14px] leading-normal text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+      />
+    </label>
   );
 }
 

@@ -783,6 +783,16 @@ Table formations_catalogue {
   ordre integer [not null, default: 0]
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]
+  accroche text [note: 'fiche détaillée, affichée sur le site du club']
+  objectifs text
+  age_min integer
+  profondeur_max integer
+  contenu jsonb [not null, default: '[]', note: 'au programme : une ligne par point']
+  inclus jsonb [not null, default: '[]', note: 'compris dans le prix']
+  prerogatives text [note: 'ce que permet le niveau obtenu']
+  documents jsonb [not null, default: '[]', note: 'documents à fournir']
+  periode text
+  cursus text
 }
 
 Table formations_eleves {
