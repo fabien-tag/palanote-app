@@ -9,6 +9,7 @@ import {
   type ContenuSite,
   type EquipementSite,
   type FormationSite,
+  type Tarif,
   type Zone,
 } from "@/lib/siteClub";
 
@@ -45,7 +46,13 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
   const profMax = Math.max(0, ...zones.map((z) => profondeur(z) ?? 0));
   const s = site.sections ?? { formations: true, zones: true, materiel: true, equipe: true, infos: true };
 
+  const tarifs = (site.tarifs ?? []).filter((t) => t.libelle?.trim());
+  // Les niveaux du tarif : N1 à N4, même si le N4 est rangé en « encadrement » dans le catalogue
+  const niveauxTarifs = formations
+    .filter((f) => f.categorie === "niveau" || /^N\s?[1-4]$/i.test(f.code.trim()))
+    .sort((a, b) => (a.categorie === b.categorie ? 0 : a.categorie === "niveau" ? -1 : 1));
   const voir = {
+    tarifs: s.tarifs !== false && (tarifs.length > 0 || niveauxTarifs.length > 0),
     formations: s.formations && formations.length > 0,
     zones: s.zones && zones.length > 0,
     materiel: s.materiel && (bateaux.length > 0 || equipement.length > 0),
@@ -73,6 +80,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
       : { href: "#contact", texte: "Nous contacter" };
 
   const menu = [
+    voir.tarifs && { href: "#tarifs", texte: "Tarifs" },
     voir.formations && { href: "#formations", texte: "Formations" },
     voir.zones && { href: "#sites", texte: "Sites de plongée" },
     voir.materiel && { href: "#materiel", texte: "Matériel" },
@@ -158,6 +166,8 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
             ))}
           </section>
         )}
+
+        {voir.tarifs && <Tarifs tarifs={tarifs} niveaux={niveauxTarifs} contact={contact} />}
 
         {/* ——— Le club ——— */}
         <Section id="club" libelle="Le club" titre={centre.ville ? `Plonger à ${centre.ville}` : "Plonger avec nous"} texte={site.presentation}>
@@ -370,6 +380,70 @@ function CartesHeros({ zones, niveaux, bateau }: { zones: Zone[]; niveaux: Forma
         </div>
       )}
     </div>
+  );
+}
+
+// Les prix en un coup d'œil : le baptême et les niveaux d'un côté, les plongées de l'autre
+function Tarifs({ tarifs, niveaux, contact }: { tarifs: Tarif[]; niveaux: FormationSite[]; contact: { href: string; texte: string } }) {
+  const prix = (p: Tarif["prix"]) => {
+    const n = Number(String(p ?? "").replace(",", "."));
+    return p === null || p === "" || !Number.isFinite(n) ? "Sur demande" : prixEuros(n)!;
+  };
+  const progresser = [
+    ...tarifs.filter((t) => t.groupe !== "plongee").map((t) => ({ code: null as string | null, libelle: t.libelle, detail: t.detail, prix: prix(t.prix) })),
+    ...niveaux.map((n) => ({ code: n.code, libelle: n.intitule, detail: dureeTexte(n), prix: prixEuros(n.prix) ?? "Sur demande" })),
+  ];
+  const plonger = tarifs.filter((t) => t.groupe === "plongee");
+  return (
+    <Section id="tarifs" libelle="Tarifs" titre="Nos tarifs" texte="Tarifs par personne, susceptibles d'évoluer en cours de saison.">
+      <div className={`grid grid-cols-1 gap-[12px] ${progresser.length > 0 && plonger.length > 0 ? "@4xl:grid-cols-2" : ""}`}>
+        {progresser.length > 0 && (
+          <div className="rounded-[26px] bg-[var(--sec)] p-[24px] text-white @3xl:p-[32px]">
+            <h3 className="text-[22px] font-medium tracking-[-0.01em]">Découvrir et progresser</h3>
+            <p className="pt-[4px] text-[13.5px] text-white/65">Du baptême au niveau 4, à votre rythme.</p>
+            <ul className="mt-[18px]">
+              {progresser.map((t, i) => (
+                <li key={`${t.libelle}-${i}`} className="flex items-center gap-[14px] border-t border-white/12 py-[14px] first:border-t-0">
+                  <span className={`flex h-[38px] min-w-[38px] items-center justify-center rounded-full px-[6px] text-[12.5px] font-semibold ${t.code ? "bg-white/12" : "bg-[var(--acc)]"}`}>
+                    {t.code ?? <Waves className="h-[17px] w-[17px]" aria-hidden="true" />}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[15.5px] font-medium">{t.libelle}</span>
+                    {t.detail && <span className="block text-[12.5px] leading-snug text-white/60">{t.detail}</span>}
+                  </span>
+                  <span className="shrink-0 text-[22px] font-medium tracking-[-0.02em] [font-family:var(--titres)]">{t.prix}</span>
+                </li>
+              ))}
+            </ul>
+            {niveaux.length > 0 && (
+              <a href="#formations" className="mt-[10px] inline-block text-[13.5px] font-semibold text-white underline underline-offset-4">
+                Le programme de chaque niveau
+              </a>
+            )}
+          </div>
+        )}
+        {plonger.length > 0 && (
+          <div className="flex flex-col rounded-[26px] bg-[var(--surface)] p-[24px] ring-1 ring-[var(--ligne)] @3xl:p-[32px]">
+            <h3 className="text-[22px] font-medium tracking-[-0.01em]">Plonger avec nous</h3>
+            <p className="pt-[4px] text-[13.5px] text-[var(--doux)]">Pour les plongeurs déjà brevetés.</p>
+            <ul className="mt-[18px] grid grid-cols-1 gap-[10px]">
+              {plonger.map((t, i) => (
+                <li key={`${t.libelle}-${i}`} className="flex items-center gap-[16px] rounded-[18px] bg-[color-mix(in_srgb,var(--acc)_8%,transparent)] p-[16px]">
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[16px] font-semibold">{t.libelle}</span>
+                    {t.detail && <span className="block pt-[2px] text-[13px] leading-snug text-[var(--doux)]">{t.detail}</span>}
+                  </span>
+                  <span className="shrink-0 text-[28px] font-medium leading-none tracking-[-0.03em] text-[var(--acc)] [font-family:var(--titres)]">{prix(t.prix)}</span>
+                </li>
+              ))}
+            </ul>
+            <a href={contact.href} className="mt-auto w-fit pt-[20px]">
+              <span className="inline-block rounded-full bg-[var(--sec)] px-[22px] py-[13px] text-[14px] font-semibold text-white">Réserver une plongée</span>
+            </a>
+          </div>
+        )}
+      </div>
+    </Section>
   );
 }
 

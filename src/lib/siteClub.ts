@@ -4,7 +4,8 @@ import { supabase, SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase
 
 export type Zone = { nom: string; profondeur: number | string | null; niveau: string; description: string };
 export type Atout = { titre: string; texte: string };
-export type Sections = { formations: boolean; zones: boolean; materiel: boolean; equipe: boolean; infos: boolean };
+export type Tarif = { libelle: string; detail: string; prix: number | string | null; groupe: "formation" | "plongee" };
+export type Sections = { tarifs?: boolean; formations: boolean; zones: boolean; materiel: boolean; equipe: boolean; infos: boolean };
 
 export type ReglagesSite = {
   centre_id: string;
@@ -30,6 +31,7 @@ export type ReglagesSite = {
   horaires: string | null;
   saison: string | null;
   infos: string | null;
+  tarifs: Tarif[];
   sections: Sections;
   updated_at?: string;
 };
@@ -93,6 +95,9 @@ export const PALETTES = [
   { nom: "Lagon", accent: "#00B3A6", secondaire: "#073B4C", tertiaire: "#7BDFF2" },
 ];
 
+// Un site enregistré avant l'ajout des tarifs : liste vide plutôt qu'absente
+const normaliser = (c: ContenuSite | null): ContenuSite | null => (c ? { ...c, site: { ...c.site, tarifs: c.site.tarifs ?? [] } } : c);
+
 export const modeleDe = (id: string) => MODELES.find((m) => m.id === id) ?? MODELES[0];
 
 const rpcPublic = async (slug: string): Promise<ContenuSite | null> => {
@@ -102,7 +107,7 @@ const rpcPublic = async (slug: string): Promise<ContenuSite | null> => {
     body: JSON.stringify({ p_slug: slug }),
   });
   if (!r.ok) throw new Error(`site_club_public ${r.status}`);
-  return (await r.json()) as ContenuSite | null;
+  return normaliser((await r.json()) as ContenuSite | null);
 };
 
 // Côté public : sans compte (rendu serveur, pour Google), puis avec la session du DP (aperçu non publié)
@@ -116,19 +121,19 @@ export async function sitePublic(slug: string): Promise<ContenuSite | null> {
   if (typeof window === "undefined") return null;
   const { data, error } = await supabase.rpc("site_club_public", { p_slug: slug });
   if (error) throw error;
-  return (data as ContenuSite | null) ?? null;
+  return normaliser((data as ContenuSite | null) ?? null);
 }
 
 export async function chargerMonSite(centre: string): Promise<ContenuSite> {
   const { data, error } = await supabase.rpc("mon_site_club", { p_centre: centre });
   if (error) throw error;
-  return data as ContenuSite;
+  return normaliser(data as ContenuSite)!;
 }
 
 export async function enregistrerSite(centre: string, reglages: Partial<ReglagesSite>): Promise<ContenuSite> {
   const { data, error } = await supabase.rpc("enregistrer_site_club", { p_centre: centre, p: reglages });
   if (error) throw error;
-  return data as ContenuSite;
+  return normaliser(data as ContenuSite)!;
 }
 
 // Logo ou photo de couverture : rangés dans le dossier du centre, lisibles par tous

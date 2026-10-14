@@ -1,6 +1,6 @@
 -- Palanote — Le site internet du club (offre Starter)
 -- Un site vitrine public, généré depuis les données du back-office :
--- formations et tarifs, zones de plongée, bateau et matériel, équipe, infos pratiques.
+-- tarifs (baptême, niveaux, plongées), formations, zones de plongée, bateau et matériel, équipe, infos pratiques.
 -- Le DP règle l'apparence (modèle, couleurs, logo, photo) et les textes dans « Mon site ».
 -- Adresse publique : /clubs/<adresse-du-club>
 -- Script autonome et rejouable. À lancer dans le SQL Editor de Supabase.
@@ -32,7 +32,7 @@ create table if not exists public.club_sites (
   horaires text,
   saison text,
   infos text,
-  sections jsonb not null default '{"formations": true, "zones": true, "materiel": true, "equipe": true, "infos": true}'::jsonb,
+  sections jsonb not null default '{"tarifs": true, "formations": true, "zones": true, "materiel": true, "equipe": true, "infos": true}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint club_sites_slug_check check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and length(slug) between 3 and 60),
@@ -42,6 +42,15 @@ create table if not exists public.club_sites (
     and couleur_fond ~ '^#[0-9A-Fa-f]{6}$' and couleur_texte ~ '^#[0-9A-Fa-f]{6}$')
 );
 alter table public.club_sites enable row level security; -- lecture et écriture par les fonctions ci-dessous
+
+-- Les tarifs affichés en haut du site (ajout du 14 octobre) : le baptême à côté des niveaux,
+-- puis les plongées (encadrée, exploration, épave). Les prix des niveaux viennent du catalogue Formations.
+alter table public.club_sites add column if not exists tarifs jsonb not null default
+  '[{"libelle": "Baptême de plongée", "detail": "Votre première plongée, en mer, avec un moniteur. Matériel compris.", "prix": 60, "groupe": "formation"},
+    {"libelle": "Plongée encadrée", "detail": "Avec un guide de palanquée, pour les plongeurs N1 et plus.", "prix": 50, "groupe": "plongee"},
+    {"libelle": "Plongée d''exploration", "detail": "Pour les plongeurs autonomes, à partir du N2.", "prix": 40, "groupe": "plongee"},
+    {"libelle": "Plongée épave", "detail": "Les épaves de la région, selon votre niveau.", "prix": 55, "groupe": "plongee"}]'::jsonb;
+update public.club_sites set sections = jsonb_build_object('tarifs', true) || sections where not sections ? 'tarifs';
 
 drop trigger if exists club_sites_updated_at on public.club_sites;
 create trigger club_sites_updated_at before update on public.club_sites
@@ -301,6 +310,7 @@ begin
     horaires = case when p ? 'horaires' then nullif(btrim(p ->> 'horaires'), '') else horaires end,
     saison = case when p ? 'saison' then nullif(btrim(p ->> 'saison'), '') else saison end,
     infos = case when p ? 'infos' then nullif(btrim(p ->> 'infos'), '') else infos end,
+    tarifs = case when jsonb_typeof(p -> 'tarifs') = 'array' then p -> 'tarifs' else tarifs end,
     sections = case when jsonb_typeof(p -> 'sections') = 'object' then sections || (p -> 'sections') else sections end
   where centre_id = p_centre;
 

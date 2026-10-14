@@ -18,6 +18,7 @@ import {
   type ContenuSite,
   type ReglagesSite,
   type Sections,
+  type Tarif,
   type Zone,
 } from "@/lib/siteClub";
 
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/_dp/club_/site")({
   component: PageMonSite,
 });
 
-type Rubrique = "apparence" | "textes" | "sites" | "contact" | "rubriques";
+type Rubrique = "apparence" | "tarifs" | "textes" | "sites" | "contact" | "rubriques";
 
 const ZONE_VIDE: Zone = { nom: "", profondeur: "", niveau: "", description: "" };
 const NIVEAUX_ZONE = ["", "baptême", "N1", "N2", "N3"];
@@ -79,7 +80,13 @@ function PageMonSite() {
     setErreur(null);
     try {
       const { centre_id: _c, updated_at: _u, offre: _o, ...reglages } = brouillon;
-      const c = await enregistrerSite(centre.id, { ...reglages, zones: reglages.zones.filter((z) => z.nom.trim()), ...(publier === undefined ? {} : { publie: publier }) });
+      const c = await enregistrerSite(centre.id, {
+        ...reglages,
+        zones: reglages.zones.filter((z) => z.nom.trim()),
+        tarifs: (reglages.tarifs ?? [])
+          .filter((t) => t.libelle.trim())
+          .map((t) => ({ ...t, prix: t.prix === "" || t.prix === null ? null : Number(String(t.prix).replace(",", ".")) })),
+        ...(publier === undefined ? {} : { publie: publier }) });
       setContenu(c);
       setBrouillon(c.site);
       setMessage(publier === true ? "Site publié." : publier === false ? "Site retiré d'internet." : "Modifications enregistrées.");
@@ -226,6 +233,60 @@ function PageMonSite() {
                 </div>
               </Volet>
 
+              <Volet titre="Tarifs" texte="Baptême et plongées ; les niveaux viennent de Formations" ouvert={ouverte === "tarifs"} onClick={() => setOuverte("tarifs")}>
+                <div className="flex flex-col gap-[10px]">
+                  {b.tarifs.map((t, i) => {
+                    const majTarif = (champ: Partial<Tarif>) => maj("tarifs", b.tarifs.map((x, j) => (j === i ? { ...x, ...champ } : x)));
+                    return (
+                      <div key={i} className="rounded-[10px] border border-[#EDF2F7] p-[10px]">
+                        <div className="flex gap-[8px]">
+                          <input className={CHAMP} value={t.libelle} placeholder="Plongée épave" onChange={(e) => majTarif({ libelle: e.target.value })} />
+                          <div className="relative w-[96px] shrink-0">
+                            <input
+                              className={`${CHAMP} pr-[24px] text-right`}
+                              inputMode="decimal"
+                              value={t.prix ?? ""}
+                              placeholder="Prix"
+                              aria-label="Prix en euros"
+                              onChange={(e) => majTarif({ prix: e.target.value.replace(/[^\d,.]/g, "").slice(0, 7) })}
+                            />
+                            <span className="pointer-events-none absolute right-[10px] top-[12px] text-[13px] text-[#9DB0C0]">€</span>
+                          </div>
+                          <button type="button" aria-label="Retirer ce tarif" onClick={() => maj("tarifs", b.tarifs.filter((_, j) => j !== i))} className="shrink-0 px-[4px] text-[#9DB0C0] hover:text-[#C94957]">
+                            <Trash2 className="h-[16px] w-[16px]" aria-hidden="true" />
+                          </button>
+                        </div>
+                        <input className={`${CHAMP} mt-[8px]`} value={t.detail} placeholder="Une phrase : pour qui, ce qui est compris" onChange={(e) => majTarif({ detail: e.target.value })} />
+                        <div className="flex gap-[6px] pt-[8px]">
+                          {(
+                            [
+                              ["formation", "Avec le baptême et les niveaux"],
+                              ["plongee", "Avec les plongées"],
+                            ] as const
+                          ).map(([g, label]) => (
+                            <button
+                              key={g}
+                              type="button"
+                              aria-pressed={t.groupe === g}
+                              onClick={() => majTarif({ groupe: g })}
+                              className={`h-[30px] rounded-[8px] px-[10px] text-[12px] font-semibold ${t.groupe === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <button type="button" onClick={() => maj("tarifs", [...b.tarifs, { libelle: "", detail: "", prix: "", groupe: "plongee" }])} className={`${BOUTON_SECONDAIRE} h-[36px] w-fit`}>
+                    <Plus className="h-[15px] w-[15px]" aria-hidden="true" /> Ajouter un tarif
+                  </button>
+                  <p className="text-[12px] leading-normal text-[#7D93A8]">
+                    Les prix des niveaux ({contenu.formations.filter((f) => f.categorie === "niveau").map((f) => f.code).join(", ") || "aucun pour l'instant"}) viennent du catalogue Formations : modifie-les là-bas.
+                  </p>
+                </div>
+              </Volet>
+
               <Volet titre="Textes" texte="Accroche, présentation, points forts" ouvert={ouverte === "textes"} onClick={() => setOuverte("textes")}>
                 <div className="flex flex-col gap-[12px]">
                   <Libelle texte="Grand titre">
@@ -345,7 +406,8 @@ function PageMonSite() {
               <Volet titre="Rubriques et adresse" texte="Ce qui s'affiche, l'adresse du site" ouvert={ouverte === "rubriques"} onClick={() => setOuverte("rubriques")}>
                 {(
                   [
-                    ["formations", "Formations et tarifs", `${contenu.formations.length} dans le catalogue`],
+                    ["tarifs", "Tarifs", `${b.tarifs.length} tarif${b.tarifs.length > 1 ? "s" : ""} et les niveaux`],
+                    ["formations", "Formations", `${contenu.formations.length} dans le catalogue`],
                     ["zones", "Sites de plongée", `${b.zones.length} site${b.zones.length > 1 ? "s" : ""}`],
                     ["materiel", "Bateau et matériel", `${contenu.bateaux.length} bateau${contenu.bateaux.length > 1 ? "x" : ""}, ${contenu.equipement.reduce((n, e) => n + e.nb, 0)} pièces`],
                     ["equipe", "L'équipe", `${contenu.equipe.length} personne${contenu.equipe.length > 1 ? "s" : ""}`],

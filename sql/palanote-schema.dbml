@@ -841,6 +841,7 @@ Table club_sites {
   horaires text
   saison text
   infos text
+  tarifs jsonb [not null, note: 'baptême et plongées : libellé, détail, prix, groupe (formation | plongee)']
   sections jsonb [not null, note: 'rubriques affichées']
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]
