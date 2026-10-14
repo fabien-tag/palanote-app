@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import { Anchor, Clock, GraduationCap, LifeBuoy, Mail, MapPin, Phone, ShieldCheck, Ship, Sun, Users, Waves } from "lucide-react";
+import { Anchor, ArrowUpRight, Clock, GraduationCap, LifeBuoy, Mail, MapPin, Phone, ShieldCheck, Ship, Sun, Users, Waves } from "lucide-react";
 import {
   LIBELLE_EQUIPEMENT,
   LIBELLE_ROLE,
@@ -167,7 +167,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
           </section>
         )}
 
-        {voir.tarifs && <Tarifs tarifs={tarifs} niveaux={niveauxTarifs} contact={contact} />}
+        {voir.tarifs && <Tarifs tarifs={tarifs} niveaux={niveauxTarifs} contact={contact} image={site.couverture_url} />}
 
         {/* ——— Le club ——— */}
         <Section id="club" libelle="Le club" titre={centre.ville ? `Plonger à ${centre.ville}` : "Plonger avec nous"} texte={site.presentation}>
@@ -383,67 +383,159 @@ function CartesHeros({ zones, niveaux, bateau }: { zones: Zone[]; niveaux: Forma
   );
 }
 
-// Les prix en un coup d'œil : le baptême et les niveaux d'un côté, les plongées de l'autre
-function Tarifs({ tarifs, niveaux, contact }: { tarifs: Tarif[]; niveaux: FormationSite[]; contact: { href: string; texte: string } }) {
+// Les tarifs en cartes côte à côte : au survol (ou au toucher), la carte s'ouvre
+// et montre le détail, les autres se resserrent. Une transition CSS sur la largeur,
+// pas de bibliothèque : le plus léger possible.
+type CarteTarif = { cle: string; code: string | null; titre: string; detail: string | null; prix: string; infos: string[] };
+
+function Tarifs({ tarifs, niveaux, contact, image }: { tarifs: Tarif[]; niveaux: FormationSite[]; contact: { href: string; texte: string }; image: string | null }) {
   const prix = (p: Tarif["prix"]) => {
     const n = Number(String(p ?? "").replace(",", "."));
     return p === null || p === "" || !Number.isFinite(n) ? "Sur demande" : prixEuros(n)!;
   };
-  const progresser = [
-    ...tarifs.filter((t) => t.groupe !== "plongee").map((t) => ({ code: null as string | null, libelle: t.libelle, detail: t.detail, prix: prix(t.prix) })),
-    ...niveaux.map((n) => ({ code: n.code, libelle: n.intitule, detail: dureeTexte(n), prix: prixEuros(n.prix) ?? "Sur demande" })),
+  const progresser: CarteTarif[] = [
+    ...tarifs
+      .filter((t) => t.groupe !== "plongee")
+      .map((t, i) => ({ cle: `t${i}`, code: null, titre: t.libelle, detail: t.detail || null, prix: prix(t.prix), infos: [] })),
+    ...niveaux.map((n) => ({
+      cle: n.code,
+      code: n.code,
+      titre: n.intitule,
+      detail: n.description,
+      prix: prixEuros(n.prix) ?? "Sur demande",
+      infos: [n.nb_theorie > 0 ? `${n.nb_theorie} cours théoriques` : "", n.nb_pratique > 0 ? `${n.nb_pratique} plongées` : "", n.prerequis ? `Pour s'inscrire : ${n.prerequis}` : ""].filter(Boolean),
+    })),
   ];
-  const plonger = tarifs.filter((t) => t.groupe === "plongee");
+  const plonger: CarteTarif[] = tarifs
+    .filter((t) => t.groupe === "plongee")
+    .map((t, i) => ({ cle: `p${i}`, code: null, titre: t.libelle, detail: t.detail || null, prix: prix(t.prix), infos: [] }));
+
   return (
-    <Section id="tarifs" libelle="Tarifs" titre="Nos tarifs" texte="Tarifs par personne, susceptibles d'évoluer en cours de saison.">
-      <div className={`grid grid-cols-1 gap-[12px] ${progresser.length > 0 && plonger.length > 0 ? "@4xl:grid-cols-2" : ""}`}>
-        {progresser.length > 0 && (
-          <div className="rounded-[26px] bg-[var(--sec)] p-[24px] text-white @3xl:p-[32px]">
-            <h3 className="text-[22px] font-medium tracking-[-0.01em]">Découvrir et progresser</h3>
-            <p className="pt-[4px] text-[13.5px] text-white/65">Du baptême au niveau 4, à votre rythme.</p>
-            <ul className="mt-[18px]">
-              {progresser.map((t, i) => (
-                <li key={`${t.libelle}-${i}`} className="flex items-center gap-[14px] border-t border-white/12 py-[14px] first:border-t-0">
-                  <span className={`flex h-[38px] min-w-[38px] items-center justify-center rounded-full px-[6px] text-[12.5px] font-semibold ${t.code ? "bg-white/12" : "bg-[var(--acc)]"}`}>
-                    {t.code ?? <Waves className="h-[17px] w-[17px]" aria-hidden="true" />}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[15.5px] font-medium">{t.libelle}</span>
-                    {t.detail && <span className="block text-[12.5px] leading-snug text-white/60">{t.detail}</span>}
-                  </span>
-                  <span className="shrink-0 text-[22px] font-medium tracking-[-0.02em] [font-family:var(--titres)]">{t.prix}</span>
-                </li>
-              ))}
-            </ul>
-            {niveaux.length > 0 && (
-              <a href="#formations" className="mt-[10px] inline-block text-[13.5px] font-semibold text-white underline underline-offset-4">
-                Le programme de chaque niveau
-              </a>
-            )}
-          </div>
-        )}
-        {plonger.length > 0 && (
-          <div className="flex flex-col rounded-[26px] bg-[var(--surface)] p-[24px] ring-1 ring-[var(--ligne)] @3xl:p-[32px]">
-            <h3 className="text-[22px] font-medium tracking-[-0.01em]">Plonger avec nous</h3>
-            <p className="pt-[4px] text-[13.5px] text-[var(--doux)]">Pour les plongeurs déjà brevetés.</p>
-            <ul className="mt-[18px] grid grid-cols-1 gap-[10px]">
-              {plonger.map((t, i) => (
-                <li key={`${t.libelle}-${i}`} className="flex items-center gap-[16px] rounded-[18px] bg-[color-mix(in_srgb,var(--acc)_8%,transparent)] p-[16px]">
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[16px] font-semibold">{t.libelle}</span>
-                    {t.detail && <span className="block pt-[2px] text-[13px] leading-snug text-[var(--doux)]">{t.detail}</span>}
-                  </span>
-                  <span className="shrink-0 text-[28px] font-medium leading-none tracking-[-0.03em] text-[var(--acc)] [font-family:var(--titres)]">{prix(t.prix)}</span>
-                </li>
-              ))}
-            </ul>
-            <a href={contact.href} className="mt-auto w-fit pt-[20px]">
-              <span className="inline-block rounded-full bg-[var(--sec)] px-[22px] py-[13px] text-[14px] font-semibold text-white">Réserver une plongée</span>
-            </a>
-          </div>
-        )}
+    <Section id="tarifs" libelle="Tarifs" titre="Nos tarifs" texte="Tarifs par personne, susceptibles d'évoluer en cours de saison. Ouvrez une carte pour en savoir plus.">
+      <div className="flex flex-col gap-[34px]">
+        {progresser.length > 0 && <RangeeCartes titre="Découvrir et progresser" cartes={progresser} contact={contact} image={image} profondeurDepart={0} action="S'inscrire" />}
+        {plonger.length > 0 && <RangeeCartes titre="Plonger avec nous" cartes={plonger} contact={contact} image={image} profondeurDepart={0.55} action="Réserver" />}
       </div>
     </Section>
+  );
+}
+
+function RangeeCartes({
+  titre,
+  cartes,
+  contact,
+  image,
+  profondeurDepart,
+  action,
+}: {
+  titre: string;
+  cartes: CarteTarif[];
+  contact: { href: string; texte: string };
+  image: string | null;
+  profondeurDepart: number;
+  action: string;
+}) {
+  const [actif, setActif] = useState(0);
+  // Chaque carte descend un peu plus profond : du bleu clair du baptême au bleu nuit
+  const fond = (i: number) => {
+    const t = Math.min(1, profondeurDepart + (i / Math.max(1, cartes.length - 1)) * (1 - profondeurDepart) * 0.9);
+    if (!image)
+      return {
+        backgroundImage: `linear-gradient(180deg, color-mix(in srgb, var(--acc) ${Math.round(70 - t * 55)}%, var(--sec)) 0%, color-mix(in srgb, var(--sec) ${Math.round(60 + t * 40)}%, black) 100%)`,
+      };
+    // Avec la photo du club : un voile de plus en plus sombre, et un cadrage différent par carte
+    return {
+      backgroundImage: `linear-gradient(180deg, color-mix(in srgb, var(--sec) ${Math.round(15 + t * 45)}%, transparent) 0%, color-mix(in srgb, var(--sec) ${Math.round(75 + t * 20)}%, black) 100%), url("${image}")`,
+      backgroundSize: "cover",
+      backgroundPosition: `${(15 + i * 14) % 100}% center`,
+    };
+  };
+  return (
+    <div>
+      <h3 className="pb-[14px] text-[22px] font-medium tracking-[-0.01em]">{titre}</h3>
+      <ul className="flex flex-col gap-[10px] @3xl:h-[420px] @3xl:flex-row">
+        {cartes.map((c, i) => {
+          const ouvert = i === actif;
+          return (
+            <li
+              key={c.cle}
+              onMouseEnter={() => setActif(i)}
+              className={`relative min-w-0 overflow-hidden rounded-[28px] text-white transition-[flex-grow,min-height] duration-500 ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none @3xl:min-h-0 @3xl:basis-0 ${
+                ouvert ? "min-h-[320px] @3xl:grow-[4]" : "min-h-[76px] @3xl:grow"
+              }`}
+              style={fond(i)}
+            >
+              <button
+                type="button"
+                aria-expanded={ouvert}
+                onClick={() => setActif(i)}
+                onFocus={() => setActif(i)}
+                className="absolute inset-0 z-10 rounded-[28px] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
+              >
+                <span className="sr-only">
+                  {c.titre}, {c.prix}
+                </span>
+              </button>
+              {/* Pastille flèche, comme une invitation à ouvrir */}
+              <span
+                aria-hidden="true"
+                className={`absolute right-[16px] top-[16px] h-[44px] w-[44px] items-center justify-center rounded-full ring-1 ${ouvert ? "flex" : "hidden @3xl:flex"} ring-white/40 backdrop-blur-md transition-transform duration-500 [background:rgb(255_255_255/.12)] ${ouvert ? "rotate-45" : ""}`}
+              >
+                <ArrowUpRight className="h-[18px] w-[18px]" />
+              </span>
+              {c.code && (
+                <span className={`absolute left-[18px] top-[18px] rounded-full px-[12px] py-[6px] text-[13px] font-semibold backdrop-blur-md [background:rgb(255_255_255/.14)] transition-opacity duration-300 ${ouvert ? "opacity-100" : "opacity-0"}`}>
+                  {c.code}
+                </span>
+              )}
+
+              {/* Fermée (ordinateur) : le titre à la verticale */}
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-x-0 bottom-[22px] hidden flex-col items-center gap-[12px] transition-opacity duration-300 @3xl:flex ${ouvert ? "opacity-0" : "opacity-100 delay-150"}`}
+              >
+                <span className="max-h-[250px] truncate text-[16px] font-medium [font-family:var(--titres)] [transform:rotate(180deg)] [writing-mode:vertical-rl]">{c.titre}</span>
+                <span className="text-[13px] font-semibold text-white/85">{c.prix}</span>
+              </span>
+
+              {/* Fermée (téléphone) : titre et prix sur une ligne */}
+              <span aria-hidden="true" className={`pointer-events-none absolute inset-x-[20px] bottom-[20px] flex items-end justify-between gap-[12px] @3xl:hidden ${ouvert ? "hidden" : ""}`}>
+                <span className="text-[16.5px] font-medium leading-tight [font-family:var(--titres)]">
+                  {c.code && <span className="pr-[8px] text-[13px] font-semibold text-white/70">{c.code}</span>}
+                  {c.titre}
+                </span>
+                <span className="shrink-0 text-[17px] font-semibold">{c.prix}</span>
+              </span>
+
+              {/* Ouverte : tout le détail */}
+              <div
+                className={`pointer-events-none absolute inset-x-0 bottom-0 p-[22px] transition-[opacity,transform] duration-500 @3xl:p-[28px] ${
+                  ouvert ? "translate-y-0 opacity-100 delay-150" : "translate-y-[12px] opacity-0"
+                }`}
+              >
+                <p className="text-[clamp(26px,3cqw,38px)] font-medium leading-[1.05] tracking-[-0.02em] [color:color-mix(in_srgb,var(--ter)_45%,white)] [font-family:var(--titres)]">{c.titre}</p>
+                {c.detail && <p className="max-w-[44ch] pt-[8px] text-[14.5px] leading-[1.5] text-white/85">{c.detail}</p>}
+                {c.infos.length > 0 && (
+                  <ul className="flex flex-wrap gap-[6px] pt-[12px]">
+                    {c.infos.map((x) => (
+                      <li key={x} className="rounded-full px-[10px] py-[5px] text-[12px] font-medium backdrop-blur-md [background:rgb(255_255_255/.14)]">
+                        {x}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="flex flex-wrap items-end justify-between gap-[12px] pt-[16px]">
+                  <p className="text-[clamp(34px,4cqw,48px)] font-medium leading-none tracking-[-0.03em] [font-family:var(--titres)]">{c.prix}</p>
+                  <a href={contact.href} className="pointer-events-auto relative z-20 rounded-full bg-white px-[18px] py-[11px] text-[13.5px] font-semibold text-[var(--sec)]">
+                    {action}
+                  </a>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 
