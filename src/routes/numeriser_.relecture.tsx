@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
-import { BookOpen, Check, ChevronLeft, X } from "lucide-react";
+import { BookOpen, Check, ChevronLeft, Files, ScanSearch, X } from "lucide-react";
 import {
+  journalAgent,
+  type EtapeAgent,
   marquerPageRelue,
   prochaineARelire,
   rejeterExtraction,
@@ -129,6 +131,7 @@ function Relecture() {
   const [garderCommentaire, setGarderCommentaire] = useState<boolean | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
   const [agrandie, setAgrandie] = useState(false);
+  const [journal, setJournal] = useState<EtapeAgent[]>([]);
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
 
@@ -161,6 +164,12 @@ function Relecture() {
     setPhoto(null);
     void urlPhoto(page?.chemin ?? null).then(setPhoto);
   }, [page?.chemin]);
+
+  // Ce que l'agent a vérifié de lui-même sur cette page
+  useEffect(() => {
+    setJournal([]);
+    if (page?.id) void journalAgent(page.id).then((j) => setJournal(j.journal));
+  }, [page?.id]);
 
   if (ecran) return ecran;
   if (!lot) return <Navigate to="/numeriser" />;
@@ -296,6 +305,35 @@ function Relecture() {
           </p>
         </div>
 
+        {/* Le travail de l'agent : ses vérifications avant de te proposer la plongée */}
+        {journal.length > 0 && (
+          <div className="galet-c border border-[#BFE3F4] bg-[#E3F2FB] px-[14px] py-[12px]">
+            <p className="text-[13.5px] font-bold text-[#123A63]">
+              L'agent a vérifié {journal.length > 1 ? `${journal.length} doutes` : "un doute"} de lui-même
+            </p>
+            <ul className="flex flex-col gap-[7px] pt-[8px]">
+              {journal.map((e, i) => (
+                <li key={i} className="flex gap-[9px] text-[12.5px] leading-snug text-[#3F5B76]">
+                  {e.outil === "zoomer" ? (
+                    <ScanSearch className="mt-[1px] h-[15px] w-[15px] shrink-0 text-[#1176A8]" aria-hidden="true" />
+                  ) : (
+                    <Files className="mt-[1px] h-[15px] w-[15px] shrink-0 text-[#1176A8]" aria-hidden="true" />
+                  )}
+                  <span>
+                    <b className="text-[#123A63]">{e.outil === "zoomer" ? "Zoom sur la page" : `Comparé avec la page ${e.sens === "suivante" ? "suivante" : "précédente"}`}</b>
+                    {e.raison ? ` : ${e.raison}` : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {journal.some((e) => e.zone) && photo && (
+              <button type="button" onClick={() => setAgrandie(true)} className="pt-[8px] text-[12.5px] font-bold text-[#1176A8] underline underline-offset-4">
+                Voir les zones vérifiées sur la page
+              </button>
+            )}
+          </div>
+        )}
+
         {totalAVerifier > 0 && (
           <div className="flex items-center gap-[13px] galet-b border-[1.5px] border-[#F5A524] bg-[#FFF5E5] px-[14px] py-[12px]">
             <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[#FFC65C] text-[16px] font-bold text-[#6B4A14]">{totalAVerifier}</span>
@@ -410,7 +448,22 @@ function Relecture() {
 
       {agrandie && photo && (
         <div role="dialog" aria-label="Page agrandie" className="fixed inset-0 z-50 overflow-auto bg-black/90" onClick={() => setAgrandie(false)}>
-          <img src={photo} alt="Page du carnet" className="min-h-full w-full object-contain" />
+          {/* Les zones que l'agent a agrandies sont encadrées sur la page */}
+          <div className="relative">
+            <img src={photo} alt="Page du carnet" className="block h-auto w-full" />
+            {journal
+              .filter((e) => e.zone)
+              .map((e, i) => (
+                <span
+                  key={i}
+                  title={e.raison}
+                  className="pointer-events-none absolute rounded-[6px] border-[2.5px] border-[#3DEFBE]"
+                  style={{ left: `${e.zone!.x}%`, top: `${e.zone!.y}%`, width: `${e.zone!.largeur}%`, height: `${e.zone!.hauteur}%` }}
+                >
+                  <span className="absolute -top-[22px] left-0 whitespace-nowrap rounded-[6px] bg-[#3DEFBE] px-[6px] py-[1px] text-[11px] font-bold text-[#0B3B63]">{e.raison}</span>
+                </span>
+              ))}
+          </div>
           <button type="button" aria-label="Fermer" className="fixed right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white">
             <X className="h-5 w-5" />
           </button>

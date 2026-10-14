@@ -1,8 +1,9 @@
-import { AlertTriangle, GraduationCap, Hourglass, UserMinus, BadgeCheck, Bell, CalendarCheck, CalendarClock, CalendarX, ClipboardCheck, HeartHandshake, LifeBuoy, PenLine, ShieldAlert, Stamp, Star, UserPlus, Users } from "lucide-react";
+import { AlertTriangle, GraduationCap, Hourglass, UserMinus, BadgeCheck, Bell, CalendarCheck, CalendarClock, CalendarX, ClipboardCheck, HeartHandshake, LifeBuoy, PenLine, ShieldAlert, Stamp, Star, UserPlus, Users, ScanSearch } from "lucide-react";
 import { ilYA, type Notification } from "@/lib/notifications";
 
 // Une notification de la cloche (plongeur et directeur de plongée)
 export const ICONES_NOTIFICATION: Record<string, { Icone: typeof Bell; fond: string; couleur: string }> = {
+  lecture_terminee: { Icone: ScanSearch, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
   sortie_inscription: { Icone: CalendarCheck, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
   sortie_rejointe: { Icone: UserPlus, fond: "bg-[#E3F2FB]", couleur: "text-[#1176A8]" },
   sortie_a_completer: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },

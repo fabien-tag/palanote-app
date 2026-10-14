@@ -135,6 +135,25 @@ export async function chargerLot(lotId: string) {
   };
 }
 
+// ---------- Le journal de l'agent de lecture ----------
+
+export type EtapeAgent = {
+  etape: number;
+  outil: "zoomer" | "voir_page_voisine";
+  raison: string;
+  zone?: { x: number; y: number; largeur: number; hauteur: number };
+  sens?: "precedente" | "suivante";
+  resultat: string;
+};
+
+// Ce que l'agent a vérifié sur une page (vide si le script palanote-agent-lecture.sql n'est pas lancé)
+export async function journalAgent(pageId: string): Promise<{ etapes: number | null; journal: EtapeAgent[] }> {
+  const { data, error } = await supabase.from("ocr_pages").select("journal_agent, etapes_agent").eq("id", pageId).maybeSingle();
+  if (error || !data) return { etapes: null, journal: [] };
+  const d = data as { journal_agent: EtapeAgent[] | null; etapes_agent: number | null };
+  return { etapes: d.etapes_agent, journal: Array.isArray(d.journal_agent) ? d.journal_agent : [] };
+}
+
 // ---------- Pages ----------
 
 // Envoie une page dans le stockage, l'enregistre et lance sa lecture sur le serveur.

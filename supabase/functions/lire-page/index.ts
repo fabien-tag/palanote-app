@@ -1,6 +1,10 @@
 // ============================================================
 // Palanote — Edge Function « lire-page »
-// Lit une page de carnet photographiée et propose les plongées qu'elle contient.
+// L'agent de lecture : il lit une page de carnet photographiée et propose les plongées qu'elle contient.
+// C'est un agent (boucle courte et bornée) : après une première lecture, il décide lui-même
+// de vérifier ses doutes avec deux outils — zoomer sur une zone de la photo, ou comparer avec
+// la page voisine du même carnet — puis il enregistre. Au plus AGENT_ETAPES_MAX appels (4 par défaut).
+// Son journal (vérifications, étapes, jetons) est gardé sur la page (palanote-agent-lecture.sql).
 //
 // Appel : supabase.functions.invoke("lire-page", { body: { page_id } })
 // Répond tout de suite (202) puis travaille en arrière-plan : l'utilisateur
@@ -32,6 +36,8 @@ const CORS = {
 };
 
 const MODELE = Deno.env.get("ANTHROPIC_MODEL") ?? "claude-sonnet-5-5";
+// Nombre maximal d'appels au modèle par page : la première lecture + les vérifications + l'enregistrement
+const ETAPES_MAX = Math.min(6, Math.max(1, Number(Deno.env.get("AGENT_ETAPES_MAX") ?? 4)));
 
 // Champs lus sur une plongée. Chacun revient avec : valeur, texte lu, confiance.
 const CHAMPS = {
@@ -100,6 +106,38 @@ const OUTIL = {
   },
 };
 
+// Les deux outils de vérification de l'agent
+const OUTIL_ZOOM = {
+  name: "zoomer",
+  description:
+    "Agrandit une zone de la photo pour relire de près un chiffre ou un mot douteux. Coordonnées en pourcentage de l'image (0 = bord haut ou gauche, 100 = bord bas ou droit).",
+  input_schema: {
+    type: "object",
+    properties: {
+      x: { type: "number", description: "Bord gauche de la zone, en % de la largeur" },
+      y: { type: "number", description: "Bord haut de la zone, en % de la hauteur" },
+      largeur: { type: "number", description: "Largeur de la zone, en % (au moins 5)" },
+      hauteur: { type: "number", description: "Hauteur de la zone, en % (au moins 5)" },
+      raison: { type: "string", description: "Ce que tu veux vérifier, en quelques mots (ex. « température : 1g ou 19 ? »)" },
+    },
+    required: ["x", "y", "largeur", "hauteur", "raison"],
+  },
+};
+
+const OUTIL_VOISINE = {
+  name: "voir_page_voisine",
+  description:
+    "Montre ce qui a été lu sur la page précédente ou suivante du même carnet (dates, sites, lieux, profondeurs) pour vérifier la cohérence : dates qui se suivent, même site, même année.",
+  input_schema: {
+    type: "object",
+    properties: {
+      sens: { type: "string", enum: ["precedente", "suivante"] },
+      raison: { type: "string", description: "Ce que tu veux vérifier (ex. « l'année de la date : 87 ou 97 ? »)" },
+    },
+    required: ["sens", "raison"],
+  },
+};
+
 const CONSIGNE = `Tu lis une page photographiée d'un carnet de plongée papier (souvent un carnet français type FFESSM, parfois manuscrit, parfois ancien).
 Une page peut contenir une ou plusieurs plongées : renvoie-les toutes, dans l'ordre.
 
@@ -110,6 +148,17 @@ Règles :
 - « lu » contient toujours le texte brut tel qu'il apparaît sur la page (ou null si rien n'est écrit).
 - Si la page n'est pas lisible ou n'est pas une page de carnet, lisible = false, plongees = [] et explique en une phrase dans « raison ».
 Réponds uniquement en appelant l'outil enregistrer_page avec ton résultat, sans autre texte.`;
+
+// La méthode de l'agent : vérifier ses doutes avant d'enregistrer, sans gaspiller
+const METHODE = `
+Méthode (tu es un agent : tu décides toi-même des vérifications) :
+1. Lis toute la page.
+2. Si un champ important te fait hésiter (date, site, profondeur, durée, température, pressions), tu peux le vérifier AVANT d'enregistrer :
+   - zoomer sur la zone où il est écrit, pour le relire de près ;
+   - voir_page_voisine, pour vérifier la cohérence avec les autres plongées du carnet (l'année, le site, l'ordre des dates).
+3. Ne vérifie que ce qui peut changer une valeur : au plus ${Math.max(0, ETAPES_MAX - 2)} vérifications, une seule à la fois.
+4. Un champ ne passe de « a_verifier » à « sur » que si la vérification a vraiment levé le doute. Sinon il reste « a_verifier » : le plongeur tranchera.
+5. Termine toujours en appelant enregistrer_page.`;
 
 // Clé secrète du projet, quel que soit le système de clés utilisé.
 function cleSecrete(): string {
@@ -167,36 +216,8 @@ async function lirePage(admin: SupabaseClient, pageId: string) {
   const octets = new Uint8Array(await fichier.arrayBuffer());
   const type = fichier.type && fichier.type.startsWith("image/") ? fichier.type : "image/jpeg";
 
-  // Appel à l'IA de vision
-  const reponse = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "x-api-key": Deno.env.get("ANTHROPIC_API_KEY") ?? "",
-      "anthropic-version": "2023-06-01",
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      model: MODELE,
-      max_tokens: 4096,
-      tools: [OUTIL],
-      // Les modèles récents (Sonnet / Opus 5.5) refusent un outil imposé : on laisse le choix
-      // en « auto », la consigne demande d'appeler l'outil, et on sait aussi lire une réponse JSON.
-      tool_choice: { type: "auto" },
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "image", source: { type: "base64", media_type: type, data: encodeBase64(octets) } },
-            { type: "text", text: CONSIGNE },
-          ],
-        },
-      ],
-    }),
-  });
-  const corps = await reponse.json();
-  if (!reponse.ok) throw new Error(`IA : ${reponse.status} ${corps?.error?.message ?? JSON.stringify(corps)}`);
-
-  const resultat = extraireResultat(corps.content ?? []);
+  // ——— L'agent ———
+  const { resultat, journal, etapes, tokensEntree, tokensSortie } = await agentLecture(admin, page as { id: string; batch_id: string }, octets, type);
 
   // Une extraction par plongée lue
   const plongees = resultat.lisible ? resultat.plongees ?? [] : [];
@@ -229,20 +250,213 @@ async function lirePage(admin: SupabaseClient, pageId: string) {
     })
     .eq("id", pageId);
 
+  // Le journal de l'agent (sans bloquer si le script palanote-agent-lecture.sql n'est pas encore lancé)
+  const { error: errJournal } = await admin
+    .from("ocr_pages")
+    .update({ journal_agent: journal, etapes_agent: etapes, tokens_entree: tokensEntree, tokens_sortie: tokensSortie })
+    .eq("id", pageId);
+  if (errJournal) console.error("journal de l'agent non enregistré", errJournal.message);
+
   await majLot(admin, page.batch_id);
 }
 
-// Quand plus aucune page n'attend, le carnet passe « à relire ».
+type Bloc = { type: string; id?: string; name?: string; input?: Record<string, unknown>; text?: string };
+type Etape = { etape: number; outil: string; raison: string; zone?: { x: number; y: number; largeur: number; hauteur: number }; sens?: string; resultat: string };
+
+async function appelerModele(messages: unknown[], outils: unknown[]) {
+  const reponse = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "x-api-key": Deno.env.get("ANTHROPIC_API_KEY") ?? "",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      model: MODELE,
+      max_tokens: 4096,
+      tools: outils,
+      // Les modèles récents refusent un outil imposé : on laisse le choix en « auto »,
+      // la consigne demande d'appeler l'outil, et on sait aussi lire une réponse JSON.
+      tool_choice: { type: "auto" },
+      messages,
+    }),
+  });
+  const corps = await reponse.json();
+  if (!reponse.ok) throw new Error(`IA : ${reponse.status} ${corps?.error?.message ?? JSON.stringify(corps)}`);
+  return corps as { content: Bloc[]; usage?: { input_tokens?: number; output_tokens?: number; cache_read_input_tokens?: number; cache_creation_input_tokens?: number } };
+}
+
+// Zoom : découpe la zone demandée (avec une marge) et l'agrandit.
+// La bibliothèque d'images n'est chargée qu'au premier zoom : si elle manquait, seule la vérification
+// serait perdue, jamais la lecture de la page.
+type Img = {
+  width: number;
+  height: number;
+  clone(): Img;
+  crop(x: number, y: number, l: number, h: number): Img;
+  resize(l: number, h: number): Img;
+  encodeJPEG(qualite: number): Promise<Uint8Array>;
+};
+async function zoomer(octets: Uint8Array, cache: { image?: Img }, z: { x: number; y: number; largeur: number; hauteur: number }) {
+  if (!cache.image) {
+    const { Image } = await import("npm:imagescript@1.3.0");
+    cache.image = (await Image.decode(octets)) as unknown as Img;
+  }
+  const img = cache.image;
+  const borne = (v: number, min: number, max: number) => Math.min(max, Math.max(min, Number.isFinite(v) ? v : min));
+  const l = borne(z.largeur, 5, 100) + 4;
+  const h = borne(z.hauteur, 5, 100) + 4;
+  const x = borne(z.x - 2, 0, 100 - l);
+  const y = borne(z.y - 2, 0, 100 - h);
+  const px = (p: number, total: number) => Math.round((p / 100) * total);
+  const largeur = Math.max(16, px(l, img.width));
+  const hauteur = Math.max(16, px(h, img.height));
+  const decoupe = img.clone().crop(px(x, img.width), px(y, img.height), Math.min(largeur, img.width), Math.min(hauteur, img.height));
+  // Assez grand pour bien relire, sans dépasser 1 400 px
+  const cible = Math.min(1400, Math.max(700, decoupe.width * 2));
+  if (decoupe.width < cible) decoupe.resize(cible, Math.round((decoupe.height * cible) / decoupe.width));
+  return encodeBase64(await decoupe.encodeJPEG(88));
+}
+
+// Page voisine : ce qui y a été lu (ou « pas encore lue »)
+async function pageVoisine(admin: SupabaseClient, page: { id: string; batch_id: string }, sens: string) {
+  const { data: courante } = await admin.from("ocr_pages").select("ordre").eq("id", page.id).single();
+  if (!courante) return "Page introuvable.";
+  const requete = admin.from("ocr_pages").select("id, ordre, statut").eq("batch_id", page.batch_id);
+  const { data: voisine } = await (sens === "suivante"
+    ? requete.gt("ordre", courante.ordre).order("ordre", { ascending: true })
+    : requete.lt("ordre", courante.ordre).order("ordre", { ascending: false })
+  )
+    .limit(1)
+    .maybeSingle();
+  if (!voisine) return `Pas de page ${sens === "suivante" ? "suivante" : "précédente"} dans ce carnet.`;
+  const { data: ext } = await admin.from("ocr_extractions").select("ordre, champs").eq("page_id", voisine.id).order("ordre");
+  if (!ext || ext.length === 0) return `La page ${sens === "suivante" ? "suivante" : "précédente"} n'est pas encore lue (statut : ${voisine.statut}).`;
+  const garder = ["date", "heure", "site", "lieu", "profondeur_max", "duree", "club"];
+  const plongees = ext.map((e) => Object.fromEntries(garder.map((k) => [k, (e.champs as Record<string, string | null>)?.[k] ?? null])));
+  return `Plongées lues sur la page ${sens === "suivante" ? "suivante" : "précédente"} : ${JSON.stringify(plongees)}`;
+}
+
+// La boucle de l'agent : lire, vérifier ses doutes, enregistrer
+async function agentLecture(admin: SupabaseClient, page: { id: string; batch_id: string }, octets: Uint8Array, type: string) {
+  const messages: { role: string; content: unknown }[] = [
+    {
+      role: "user",
+      content: [
+        { type: "image", source: { type: "base64", media_type: type, data: encodeBase64(octets) } },
+        // La photo et la consigne sont relues à chaque étape : on les met en cache (10 % du prix)
+        { type: "text", text: CONSIGNE + "\n" + METHODE, cache_control: { type: "ephemeral" } },
+      ],
+    },
+  ];
+  const journal: Etape[] = [];
+  const cache: { image?: Img } = {};
+  let tokensEntree = 0;
+  let tokensSortie = 0;
+
+  for (let etape = 1; etape <= ETAPES_MAX; etape++) {
+    const derniere = etape === ETAPES_MAX;
+    const reponse = await appelerModele(messages, derniere ? [OUTIL] : [OUTIL_ZOOM, OUTIL_VOISINE, OUTIL]);
+    tokensEntree += (reponse.usage?.input_tokens ?? 0) + (reponse.usage?.cache_read_input_tokens ?? 0) + (reponse.usage?.cache_creation_input_tokens ?? 0);
+    tokensSortie += reponse.usage?.output_tokens ?? 0;
+    const contenu = reponse.content ?? [];
+    const appels = contenu.filter((c) => c.type === "tool_use");
+
+    // L'agent a fini : il enregistre
+    const final = appels.find((c) => c.name === "enregistrer_page");
+    if (final?.input) return { resultat: final.input as unknown as ResultatPage, journal, etapes: etape, tokensEntree, tokensSortie };
+
+    // Pas d'outil : peut-être un JSON écrit en texte, sinon on lui rappelle de conclure
+    if (appels.length === 0) {
+      try {
+        return { resultat: extraireResultat(contenu), journal, etapes: etape, tokensEntree, tokensSortie };
+      } catch {
+        messages.push({ role: "assistant", content: contenu });
+        messages.push({ role: "user", content: [{ type: "text", text: "Termine en appelant enregistrer_page avec ce que tu as lu." }] });
+        continue;
+      }
+    }
+
+    // Il veut vérifier : on exécute ses outils et on lui rend les résultats
+    messages.push({ role: "assistant", content: contenu });
+    const retours: unknown[] = [];
+    for (const appel of appels) {
+      const e = appel.input ?? {};
+      const raison = String(e["raison"] ?? "");
+      if (appel.name === "zoomer") {
+        const zone = { x: Number(e["x"]), y: Number(e["y"]), largeur: Number(e["largeur"]), hauteur: Number(e["hauteur"]) };
+        try {
+          const image = await zoomer(octets, cache, zone);
+          retours.push({
+            type: "tool_result",
+            tool_use_id: appel.id,
+            content: [
+              { type: "image", source: { type: "base64", media_type: "image/jpeg", data: image } },
+              { type: "text", text: "Zone agrandie." },
+            ],
+          });
+          journal.push({ etape, outil: "zoomer", raison, zone, resultat: "zone agrandie" });
+        } catch (err) {
+          retours.push({ type: "tool_result", tool_use_id: appel.id, content: "Zoom impossible sur cette photo : continue sans.", is_error: true });
+          journal.push({ etape, outil: "zoomer", raison, zone, resultat: `zoom impossible (${String((err as Error)?.message ?? err).slice(0, 80)})` });
+        }
+      } else if (appel.name === "voir_page_voisine") {
+        const sens = e["sens"] === "suivante" ? "suivante" : "precedente";
+        const texte = await pageVoisine(admin, page, sens);
+        retours.push({ type: "tool_result", tool_use_id: appel.id, content: texte });
+        journal.push({ etape, outil: "voir_page_voisine", raison, sens, resultat: texte.slice(0, 300) });
+      } else {
+        retours.push({ type: "tool_result", tool_use_id: appel.id, content: "Outil inconnu.", is_error: true });
+      }
+    }
+    if (etape + 1 === ETAPES_MAX) retours.push({ type: "text", text: "Dernière étape : enregistre maintenant ton résultat avec enregistrer_page." });
+    messages.push({ role: "user", content: retours });
+  }
+  throw new Error(`IA : l'agent n'a pas conclu en ${ETAPES_MAX} étapes`);
+}
+
+// Quand plus aucune page n'attend, le carnet passe « à relire »,
+// et le plongeur est prévenu dans sa cloche (s'il ne l'a pas désactivé dans ses réglages).
 async function majLot(admin: SupabaseClient, batchId: string) {
   const { count } = await admin
     .from("ocr_pages")
     .select("id", { count: "exact", head: true })
     .eq("batch_id", batchId)
     .in("statut", ["en_attente", "en_cours"]);
-  await admin
+  if ((count ?? 0) > 0) {
+    await admin.from("ocr_batches").update({ statut: "en_cours" }).eq("id", batchId);
+    return;
+  }
+  // Une seule notification : seulement au passage à « à relire »
+  const { data: fini } = await admin
     .from("ocr_batches")
-    .update({ statut: (count ?? 0) === 0 ? "a_relire" : "en_cours" })
-    .eq("id", batchId);
+    .update({ statut: "a_relire" })
+    .eq("id", batchId)
+    .neq("statut", "a_relire")
+    .select("id, user_id, libelle")
+    .maybeSingle();
+  if (!fini) return;
+  try {
+    const { data: profil } = await admin.from("profiles").select("notif_lecture").eq("id", fini.user_id).maybeSingle();
+    if (profil && profil.notif_lecture === false) return;
+    const { data: pages } = await admin.from("ocr_pages").select("id, journal_agent").eq("batch_id", batchId);
+    const ids = (pages ?? []).map((p) => p.id);
+    const { count: plongees } = await admin.from("ocr_extractions").select("id", { count: "exact", head: true }).in("page_id", ids).eq("statut", "a_relire");
+    const verifs = (pages ?? []).reduce((n, p) => n + (Array.isArray(p.journal_agent) ? p.journal_agent.length : 0), 0);
+    const nb = plongees ?? 0;
+    await admin.from("notifications").insert({
+      user_id: fini.user_id,
+      type: "lecture_terminee",
+      titre: fini.libelle ? `${fini.libelle} est lu` : "Ton carnet est lu",
+      texte:
+        (nb > 0 ? `${nb} plongée${nb > 1 ? "s" : ""} à relire` : "Aucune plongée trouvée") +
+        (verifs > 0 ? `, l'agent a vérifié ${verifs} doute${verifs > 1 ? "s" : ""} de lui-même.` : "."),
+      lien: `/numeriser/relecture?lot=${batchId}`,
+      donnees: { batch_id: batchId, plongees: nb, verifications: verifs },
+    });
+  } catch (e) {
+    console.error("notification de fin de lecture non envoyée", e);
+  }
 }
 
 Deno.serve(async (req) => {
