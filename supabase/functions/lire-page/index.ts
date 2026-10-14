@@ -320,6 +320,7 @@ async function zoomer(octets: Uint8Array, cache: { image?: Img }, z: { x: number
 
 // Page voisine : ce qui y a été lu (ou « pas encore lue »)
 async function pageVoisine(admin: SupabaseClient, page: { id: string; batch_id: string }, sens: string) {
+  if (page.id === "eval") return "Pas de page voisine pour cette page de test.";
   const { data: courante } = await admin.from("ocr_pages").select("ordre").eq("id", page.id).single();
   if (!courante) return "Page introuvable.";
   const requete = admin.from("ocr_pages").select("id, ordre, statut").eq("batch_id", page.batch_id);
@@ -338,14 +339,15 @@ async function pageVoisine(admin: SupabaseClient, page: { id: string; batch_id: 
 }
 
 // La boucle de l'agent : lire, vérifier ses doutes, enregistrer
-async function agentLecture(admin: SupabaseClient, page: { id: string; batch_id: string }, octets: Uint8Array, type: string) {
+async function agentLecture(admin: SupabaseClient, page: { id: string; batch_id: string }, octets: Uint8Array, type: string, etapesMax = ETAPES_MAX) {
   const messages: { role: string; content: unknown }[] = [
     {
       role: "user",
       content: [
         { type: "image", source: { type: "base64", media_type: type, data: encodeBase64(octets) } },
         // La photo et la consigne sont relues à chaque étape : on les met en cache (10 % du prix)
-        { type: "text", text: CONSIGNE + "\n" + METHODE, cache_control: { type: "ephemeral" } },
+        // En lecture directe (1 étape), pas de méthode de vérification : c'est la version « un seul appel »
+        { type: "text", text: etapesMax > 1 ? CONSIGNE + "\n" + METHODE : CONSIGNE, cache_control: { type: "ephemeral" } },
       ],
     },
   ];
@@ -354,8 +356,8 @@ async function agentLecture(admin: SupabaseClient, page: { id: string; batch_id:
   let tokensEntree = 0;
   let tokensSortie = 0;
 
-  for (let etape = 1; etape <= ETAPES_MAX; etape++) {
-    const derniere = etape === ETAPES_MAX;
+  for (let etape = 1; etape <= etapesMax; etape++) {
+    const derniere = etape === etapesMax;
     const reponse = await appelerModele(messages, derniere ? [OUTIL] : [OUTIL_ZOOM, OUTIL_VOISINE, OUTIL]);
     tokensEntree += (reponse.usage?.input_tokens ?? 0) + (reponse.usage?.cache_read_input_tokens ?? 0) + (reponse.usage?.cache_creation_input_tokens ?? 0);
     tokensSortie += reponse.usage?.output_tokens ?? 0;
@@ -409,10 +411,100 @@ async function agentLecture(admin: SupabaseClient, page: { id: string; batch_id:
         retours.push({ type: "tool_result", tool_use_id: appel.id, content: "Outil inconnu.", is_error: true });
       }
     }
-    if (etape + 1 === ETAPES_MAX) retours.push({ type: "text", text: "Dernière étape : enregistre maintenant ton résultat avec enregistrer_page." });
+    if (etape + 1 === etapesMax) retours.push({ type: "text", text: "Dernière étape : enregistre maintenant ton résultat avec enregistrer_page." });
     messages.push({ role: "user", content: retours });
   }
-  throw new Error(`IA : l'agent n'a pas conclu en ${ETAPES_MAX} étapes`);
+  throw new Error(`IA : l'agent n'a pas conclu en ${etapesMax} étapes`);
+}
+
+// ——— Banc d'essai (eval set) : noter la sortie de l'agent face à la bonne réponse ———
+const normal = (v: unknown) =>
+  String(v ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9.,:\- ]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+function egaux(attendu: unknown, lu: unknown) {
+  const a = normal(attendu);
+  const b = normal(lu);
+  if (!a || !b) return false;
+  const na = Number(a.replace(",", "."));
+  const nb = Number(b.replace(",", "."));
+  if (Number.isFinite(na) && Number.isFinite(nb) && /^[\d.,]+$/.test(a) && /^[\d.,]+$/.test(b)) return Math.abs(na - nb) < 0.01;
+  return a === b || (a.length > 3 && b.length > 3 && (a.includes(b) || b.includes(a)));
+}
+
+type Attendu = { lisible?: boolean; plongees?: Record<string, string | number | null>[] };
+function noter(attendu: Attendu, sortie: ResultatPage) {
+  const lues = sortie.lisible ? (sortie.plongees ?? []) : [];
+  // Cas hostile : la page n'est pas lisible, aucune plongée ne doit être inventée
+  if (attendu.lisible === false) {
+    return { reussi: lues.length === 0, details: { hostile: true, attendu_n: 0, lu_n: lues.length, inventees: lues.length } };
+  }
+  const prevues = attendu.plongees ?? [];
+  const champs: { plongee: number; champ: string; attendu: unknown; lu: unknown; confiance: string; verdict: string }[] = [];
+  let exact = 0, signale = 0, faux = 0, invente = 0;
+  prevues.forEach((att, i) => {
+    const p = lues[i] ?? {};
+    for (const [cle, valeur] of Object.entries(att)) {
+      const c = p[cle] as ChampLu | undefined;
+      const lu = c?.valeur ?? null;
+      const confiance = c?.confiance ?? "non_lu";
+      let verdict: string;
+      if (valeur === null || valeur === "") verdict = lu === null || lu === "" ? "exact" : "invente";
+      else if (egaux(valeur, lu)) verdict = confiance === "a_verifier" ? "exact_signale" : "exact";
+      else verdict = confiance === "a_verifier" || confiance === "non_lu" ? "signale" : "faux";
+      if (verdict === "exact" || verdict === "exact_signale") exact++;
+      else if (verdict === "signale") signale++;
+      else if (verdict === "faux") faux++;
+      else invente++;
+      champs.push({ plongee: i + 1, champ: cle, attendu: valeur, lu, confiance, verdict });
+    }
+  });
+  const structure = lues.length === prevues.length;
+  return {
+    // Réussi : le bon nombre de plongées, aucun champ inventé, aucune valeur fausse donnée comme « sûre »
+    reussi: structure && invente === 0 && faux === 0,
+    details: { structure, attendu_n: prevues.length, lu_n: lues.length, exact, signale, faux, invente, champs },
+  };
+}
+
+async function evaluer(admin: SupabaseClient, userId: string, corps: { cas_id?: string; run_id?: string; mode?: string }) {
+  const { data: estAdmin } = await admin.from("app_admins").select("user_id").eq("user_id", userId).maybeSingle();
+  if (!estAdmin) return json({ erreur: "réservé à l'administrateur" }, 403);
+  const { data: cas } = await admin.from("agent_eval_cas").select("id, chemin, attendu").eq("id", corps.cas_id ?? "").maybeSingle();
+  if (!cas) return json({ erreur: "cas introuvable" }, 404);
+  const { data: fichier, error } = await admin.storage.from("evals").download(cas.chemin);
+  if (error || !fichier) return json({ erreur: `photo de test illisible : ${error?.message}` }, 404);
+  const octets = new Uint8Array(await fichier.arrayBuffer());
+  const type = fichier.type && fichier.type.startsWith("image/") ? fichier.type : "image/jpeg";
+  const etapesMax = corps.mode === "direct" ? 1 : ETAPES_MAX;
+  const debut = Date.now();
+  let ligne: Record<string, unknown>;
+  try {
+    const r = await agentLecture(admin, { id: "eval", batch_id: "eval" }, octets, type, etapesMax);
+    const note = noter(cas.attendu as Attendu, r.resultat);
+    ligne = {
+      reussi: note.reussi,
+      details: note.details,
+      sortie: r.resultat,
+      journal: r.journal,
+      etapes: r.etapes,
+      tokens_entree: r.tokensEntree,
+      tokens_sortie: r.tokensSortie,
+      duree_ms: Date.now() - debut,
+      erreur: null,
+    };
+  } catch (e) {
+    ligne = { reussi: false, details: {}, duree_ms: Date.now() - debut, erreur: String((e as Error)?.message ?? e).slice(0, 500) };
+  }
+  const { error: errIns } = await admin
+    .from("agent_eval_resultats")
+    .upsert({ run_id: corps.run_id, cas_id: cas.id, ...ligne }, { onConflict: "run_id,cas_id" });
+  if (errIns) return json({ erreur: `résultat non enregistré : ${errIns.message}` }, 500);
+  return json({ ok: true, ...ligne });
 }
 
 // Quand plus aucune page n'attend, le carnet passe « à relire »,
@@ -464,13 +556,13 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ erreur: "méthode non autorisée" }, 405);
   if (!Deno.env.get("ANTHROPIC_API_KEY")) return json({ erreur: "secret ANTHROPIC_API_KEY manquant" }, 500);
 
-  let pageId = "";
+  let corpsRequete: { page_id?: string; eval?: { cas_id?: string; run_id?: string; mode?: string } } = {};
   try {
-    pageId = (await req.json())?.page_id ?? "";
+    corpsRequete = (await req.json()) ?? {};
   } catch {
     /* corps vide */
   }
-  if (!pageId) return json({ erreur: "page_id manquant" }, 400);
+  const pageId = corpsRequete.page_id ?? "";
 
   const url = Deno.env.get("SUPABASE_URL")!;
   const admin = createClient(url, cleSecrete(), { auth: { persistSession: false } });
@@ -479,6 +571,10 @@ Deno.serve(async (req) => {
   const jeton = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
   const { data: auth } = jeton ? await admin.auth.getUser(jeton) : { data: { user: null } };
   if (!auth?.user) return json({ erreur: "connexion requise" }, 401);
+
+  // Banc d'essai : un cas de l'eval set, noté tout de suite (administrateur seulement)
+  if (corpsRequete.eval) return await evaluer(admin, auth.user.id, corpsRequete.eval);
+  if (!pageId) return json({ erreur: "page_id manquant" }, 400);
 
   const { data: possedee } = await admin
     .from("ocr_pages")

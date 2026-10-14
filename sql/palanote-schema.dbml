@@ -885,6 +885,44 @@ Ref: formations_eleves.moniteur_id > centre_equipe.id [delete: set null]
 Ref: formations_seances.formation_id > formations_eleves.id [delete: cascade]
 Ref: formations_seances.moniteur_id > centre_equipe.id [delete: set null]
 
+Table agent_eval_cas {
+  id uuid [pk, default: `gen_random_uuid()`]
+  titre text [not null]
+  type text [not null, default: 'nominal', note: 'nominal | bordure | hostile (règle 60-20-20)']
+  chemin text [not null, note: 'photo dans le seau privé evals']
+  attendu jsonb [not null, note: '{lisible, plongees: [{date, site, profondeur_max, duree, temperature}]} ; null = rien d\'écrit']
+  note text
+  created_at timestamptz [not null, default: `now()`]
+  Note: 'Eval set de l\'agent de lecture (administrateur seulement)'
+}
+
+Table agent_eval_runs {
+  id uuid [pk, default: `gen_random_uuid()`]
+  mode text [not null, note: 'direct | agent']
+  modele text
+  etapes_max integer
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table agent_eval_resultats {
+  id uuid [pk, default: `gen_random_uuid()`]
+  run_id uuid [not null]
+  cas_id uuid [not null]
+  reussi boolean [not null]
+  details jsonb [not null, default: '{}']
+  sortie jsonb
+  journal jsonb [not null, default: '[]']
+  etapes integer
+  tokens_entree integer
+  tokens_sortie integer
+  duree_ms integer
+  erreur text
+  created_at timestamptz [not null, default: `now()`]
+  indexes {
+    (run_id, cas_id) [unique]
+  }
+}
+
 TableGroup Compte_et_profil [color: #57D4F5] {
   auth.users
   profiles
@@ -902,6 +940,9 @@ TableGroup Numerisation_IA [color: #FFC65C] {
   ocr_batches
   ocr_pages
   ocr_extractions
+  agent_eval_cas
+  agent_eval_runs
+  agent_eval_resultats
 }
 
 TableGroup Binomes [color: #FF8A75] {
@@ -951,3 +992,5 @@ TableGroup Sorties_club [color: #FF8A75] {
 }
 
 Ref: club_sites.centre_id - centres.id [delete: cascade]
+Ref: agent_eval_resultats.run_id > agent_eval_runs.id [delete: cascade]
+Ref: agent_eval_resultats.cas_id > agent_eval_cas.id [delete: cascade]

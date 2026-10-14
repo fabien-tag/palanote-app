@@ -1,3 +1,4 @@
+import { SectionAgent } from "@/components/admin/BancAgent";
 import { Fragment, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight, ChevronDown, Mail, RefreshCw, Search, Trash2 } from "lucide-react";
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/admin")({
   component: TableauDeBord,
 });
 
-type Section = "apercu" | "finances" | "lettre" | "retours" | "erreurs" | "utilisateurs";
+type Section = "apercu" | "agent" | "finances" | "lettre" | "retours" | "erreurs" | "utilisateurs";
 type Donnees = Awaited<ReturnType<typeof chargerTableauDeBord>>;
 
 // ---------- Outils ----------
@@ -457,6 +458,7 @@ function TableauDeBord() {
   const nbErreurs = s?.erreurs_24h ?? 0;
   const sections: { id: Section; label: string; badge?: number | undefined; couleur?: Couleur }[] = [
     { id: "apercu", label: "Vue d'ensemble" },
+    { id: "agent", label: "Agent IA" },
     { id: "retours", label: "Retours", badge: nbRetours, couleur: "orange" },
     { id: "erreurs", label: "Erreurs", badge: nbErreurs, couleur: nbErreurs > 5 ? "rouge" : "orange" },
     { id: "utilisateurs", label: "Utilisateurs" },
@@ -571,6 +573,7 @@ function TableauDeBord() {
         {donnees && (
           <div className="mt-[28px]">
             {section === "apercu" && <Apercu d={donnees} aller={setSection} />}
+            {section === "agent" && <SectionAgent />}
             {section === "retours" && <SectionRetours retours={donnees.retours} onChange={changerRetour} />}
             {section === "erreurs" && <SectionErreurs erreurs={donnees.erreurs} onEffacer={effacer} />}
             {section === "utilisateurs" && <SectionUtilisateurs utilisateurs={donnees.utilisateurs} />}
