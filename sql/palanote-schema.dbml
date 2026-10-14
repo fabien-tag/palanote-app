@@ -842,6 +842,12 @@ Table club_sites {
   saison text
   infos text
   tarifs jsonb [not null, note: 'baptême et plongées : libellé, détail, prix, groupe (formation | plongee)']
+  annee_creation integer
+  satisfaction integer [note: 'pourcentage de plongeurs satisfaits, déclaré par le club']
+  note_google "numeric(2,1)" [note: 'saisie par le club, avec le lien vers sa fiche']
+  nb_avis_google integer
+  lien_google text
+  chiffres jsonb [not null, note: 'chiffres clés affichés, 4 au plus, dans l’ordre']
   sections jsonb [not null, note: 'rubriques affichées']
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]

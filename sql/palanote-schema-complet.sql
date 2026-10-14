@@ -6080,6 +6080,22 @@ alter table public.club_sites add column if not exists tarifs jsonb not null def
     {"libelle": "Plongée épave", "detail": "Les épaves de la région, selon votre niveau.", "prix": 55, "groupe": "plongee"}]'::jsonb;
 update public.club_sites set sections = jsonb_build_object('tarifs', true) || sections where not sections ? 'tarifs';
 
+-- Les chiffres clés et la note Google (ajout du 14 octobre).
+-- La note Google est saisie par le club (avec le lien vers sa fiche, pour que chacun vérifie).
+alter table public.club_sites add column if not exists annee_creation integer;
+alter table public.club_sites add column if not exists satisfaction integer;
+alter table public.club_sites add column if not exists note_google numeric(2,1);
+alter table public.club_sites add column if not exists nb_avis_google integer;
+alter table public.club_sites add column if not exists lien_google text;
+alter table public.club_sites add column if not exists chiffres jsonb not null default '["annees", "encadrants", "satisfaction", "sites"]'::jsonb;
+alter table public.club_sites drop constraint if exists club_sites_chiffres_check;
+alter table public.club_sites add constraint club_sites_chiffres_check check (
+  (annee_creation is null or annee_creation between 1900 and 2100)
+  and (satisfaction is null or satisfaction between 0 and 100)
+  and (note_google is null or note_google between 1 and 5)
+  and (nb_avis_google is null or nb_avis_google >= 0)
+  and (lien_google is null or lien_google ~* '^https?://'));
+
 drop trigger if exists club_sites_updated_at on public.club_sites;
 create trigger club_sites_updated_at before update on public.club_sites
   for each row execute function public.update_updated_at_column();
@@ -6339,6 +6355,12 @@ begin
     saison = case when p ? 'saison' then nullif(btrim(p ->> 'saison'), '') else saison end,
     infos = case when p ? 'infos' then nullif(btrim(p ->> 'infos'), '') else infos end,
     tarifs = case when jsonb_typeof(p -> 'tarifs') = 'array' then p -> 'tarifs' else tarifs end,
+    annee_creation = case when p ? 'annee_creation' then nullif(p ->> 'annee_creation', '')::integer else annee_creation end,
+    satisfaction = case when p ? 'satisfaction' then nullif(p ->> 'satisfaction', '')::integer else satisfaction end,
+    note_google = case when p ? 'note_google' then nullif(replace(p ->> 'note_google', ',', '.'), '')::numeric(2,1) else note_google end,
+    nb_avis_google = case when p ? 'nb_avis_google' then nullif(p ->> 'nb_avis_google', '')::integer else nb_avis_google end,
+    lien_google = case when p ? 'lien_google' then nullif(btrim(p ->> 'lien_google'), '') else lien_google end,
+    chiffres = case when jsonb_typeof(p -> 'chiffres') = 'array' then p -> 'chiffres' else chiffres end,
     sections = case when jsonb_typeof(p -> 'sections') = 'object' then sections || (p -> 'sections') else sections end
   where centre_id = p_centre;
 

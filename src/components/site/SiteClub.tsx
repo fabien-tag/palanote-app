@@ -1,6 +1,8 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import { Anchor, ArrowUpRight, Clock, GraduationCap, LifeBuoy, Mail, MapPin, Phone, ShieldCheck, Ship, Sun, Users, Waves } from "lucide-react";
+import { Anchor, ArrowUpRight, Clock, Smile, Star, GraduationCap, LifeBuoy, Mail, MapPin, Phone, ShieldCheck, Ship, Sun, Users, Waves } from "lucide-react";
 import {
+  CHIFFRES_DEFAUT,
+  nombre,
   LIBELLE_EQUIPEMENT,
   LIBELLE_ROLE,
   modeleDe,
@@ -88,15 +90,28 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
     voir.infos && { href: "#contact", texte: "Infos pratiques" },
   ].filter(Boolean) as { href: string; texte: string }[];
 
-  const chiffres = [
-    formations.length > 0 && { Icone: GraduationCap, valeur: String(formations.length), texte: formations.length > 1 ? "formations, du baptême à l'encadrement" : "formation proposée" },
-    zones.length > 0 && { Icone: MapPin, valeur: String(zones.length), texte: zones.length > 1 ? "sites de plongée explorés" : "site de plongée" },
-    profMax > 0 && { Icone: Waves, valeur: `${profMax} m`, texte: "de profondeur sur nos sites les plus profonds" },
-    places.length > 0 && { Icone: Ship, valeur: String(Math.max(...places)), texte: "places à bord de notre bateau" },
-    places.length === 0 && encadrants.length > 0 && { Icone: Users, valeur: String(encadrants.length), texte: encadrants.length > 1 ? "encadrants diplômés" : "encadrant diplômé" },
-  ]
-    .filter(Boolean)
-    .slice(0, 4) as { Icone: typeof Waves; valeur: string; texte: string }[];
+  const annee = nombre(site.annee_creation);
+  const satisfaits = nombre(site.satisfaction);
+  const note = nombre(site.note_google);
+  const avis = nombre(site.nb_avis_google);
+  const disponibles: Record<string, { Icone: typeof Waves; valeur: string; texte: string } | null> = {
+    annees:
+      annee && new Date().getFullYear() - annee > 0
+        ? { Icone: Anchor, valeur: `${new Date().getFullYear() - annee} ans`, texte: `d'expérience, le club est né en ${annee}` }
+        : null,
+    encadrants: encadrants.length > 0 ? { Icone: Users, valeur: String(encadrants.length), texte: encadrants.length > 1 ? "encadrants diplômés à vos côtés" : "encadrant diplômé" } : null,
+    satisfaction: satisfaits !== null ? { Icone: Smile, valeur: `${satisfaits} %`, texte: "de plongeurs satisfaits" } : null,
+    google: note !== null ? { Icone: Star, valeur: `${note.toLocaleString("fr-FR")}/5`, texte: avis ? `note Google, sur ${avis} avis` : "note Google" } : null,
+    sites: zones.length > 0 ? { Icone: MapPin, valeur: String(zones.length), texte: zones.length > 1 ? "sites de plongée explorés" : "site de plongée" } : null,
+    formations: formations.length > 0 ? { Icone: GraduationCap, valeur: String(formations.length), texte: formations.length > 1 ? "formations, du baptême à l'encadrement" : "formation proposée" } : null,
+    profondeur: profMax > 0 ? { Icone: Waves, valeur: `${profMax} m`, texte: "de profondeur sur nos sites les plus profonds" } : null,
+    places: places.length > 0 ? { Icone: Ship, valeur: String(Math.max(...places)), texte: "places à bord de notre bateau" } : null,
+  };
+  const choisis = site.chiffres && site.chiffres.length > 0 ? site.chiffres : CHIFFRES_DEFAUT;
+  const chiffres = choisis
+    .map((c) => disponibles[c])
+    .filter((c): c is { Icone: typeof Waves; valeur: string; texte: string } => Boolean(c))
+    .slice(0, 4);
 
   return (
     <div id="haut" style={style} className="@container min-h-full bg-[var(--fond)] text-[var(--txt)] antialiased [&_h1,&_h2,&_h3]:font-[family-name:var(--titres)]">
@@ -135,6 +150,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
                 {site.accroche || `Plongez avec ${centre.nom}`}
               </h1>
               <div className="mt-auto pt-[40px]">
+                {note !== null && <BadgeGoogle note={note} avis={avis} lien={site.lien_google ?? null} />}
                 {site.sous_titre && <p className="max-w-[46ch] text-[16px] leading-[1.55] text-white/80 @3xl:text-[17px]">{site.sous_titre}</p>}
                 <div className="flex flex-wrap gap-[10px] pt-[20px]">
                   {voir.formations && (
@@ -156,7 +172,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
       <main>
         {/* ——— Chiffres clés ——— */}
         {chiffres.length > 0 && (
-          <section aria-label="Le club en chiffres" className="mx-auto grid max-w-[1240px] grid-cols-2 px-[22px] pt-[44px] @4xl:grid-cols-4 @4xl:px-[40px]">
+          <section aria-label="Le club en chiffres" className={`mx-auto grid max-w-[1240px] grid-cols-2 px-[22px] pt-[44px] @4xl:px-[40px] ${["", "@4xl:grid-cols-1", "@4xl:grid-cols-2", "@4xl:grid-cols-3", "@4xl:grid-cols-4"][chiffres.length]}`}>
             {chiffres.map((c, i) => (
               <div key={c.texte} className={`py-[14px] pr-[16px] @4xl:pl-[22px] ${i > 0 ? "@4xl:border-l @4xl:border-[var(--ligne)]" : "@4xl:pl-0"} ${i % 2 === 1 ? "border-l border-[var(--ligne)] pl-[18px]" : ""}`}>
                 <c.Icone className="h-[22px] w-[22px] text-[var(--acc)]" strokeWidth={1.8} aria-hidden="true" />
@@ -300,6 +316,31 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
 }
 
 // ——— Briques ———
+
+// La note Google du club, en verre dépoli dans le haut de page ; le lien mène à sa fiche Google
+function BadgeGoogle({ note, avis, lien }: { note: number; avis: number | null; lien: string | null }) {
+  const contenu = (
+    <>
+      <span className="flex gap-[2px]" aria-hidden="true">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Star key={i} className="h-[15px] w-[15px]" strokeWidth={0} fill={i <= Math.round(note) ? "#FFC65C" : "rgb(255 255 255 / .35)"} />
+        ))}
+      </span>
+      <span className="text-[14px] font-semibold">{note.toLocaleString("fr-FR")}</span>
+      <span className="text-[13px] text-white/75">sur Google{avis ? `, ${avis} avis` : ""}</span>
+    </>
+  );
+  const classe = "mb-[18px] inline-flex items-center gap-[8px] rounded-full px-[14px] py-[8px] ring-1 ring-white/25 backdrop-blur-md [background:rgb(255_255_255/.12)]";
+  return lien ? (
+    <a href={lien} target="_blank" rel="noreferrer" className={`${classe} hover:[background:rgb(255_255_255/.2)]`} aria-label={`Note Google : ${note} sur 5${avis ? `, ${avis} avis` : ""}`}>
+      {contenu}
+    </a>
+  ) : (
+    <span className={classe} aria-label={`Note Google : ${note} sur 5`}>
+      {contenu}
+    </span>
+  );
+}
 
 function Section({ id, libelle, titre, texte, children }: { id: string; libelle: string; titre: string; texte?: string | null; children?: ReactNode }) {
   return (

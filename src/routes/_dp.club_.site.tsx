@@ -8,11 +8,14 @@ import { useCentre } from "@/components/club/useCentre";
 import { BOUTON_PRINCIPAL, BOUTON_SECONDAIRE, Bascule, CHAMP, Libelle } from "@/components/club/parametres/Commun";
 import { SiteClub } from "@/components/site/SiteClub";
 import {
+  CHIFFRES_DEFAUT,
+  CHIFFRES_SITE,
   chargerMonSite,
   enregistrerSite,
   envoyerImageSite,
   lienSite,
   MODELES,
+  nombre,
   PALETTES,
   POLICES_SITE,
   type ContenuSite,
@@ -33,7 +36,7 @@ export const Route = createFileRoute("/_dp/club_/site")({
   component: PageMonSite,
 });
 
-type Rubrique = "apparence" | "tarifs" | "textes" | "sites" | "contact" | "rubriques";
+type Rubrique = "apparence" | "tarifs" | "chiffres" | "textes" | "sites" | "contact" | "rubriques";
 
 const ZONE_VIDE: Zone = { nom: "", profondeur: "", niveau: "", description: "" };
 const NIVEAUX_ZONE = ["", "baptême", "N1", "N2", "N3"];
@@ -285,6 +288,65 @@ function PageMonSite() {
                     Les prix des niveaux ({contenu.formations.filter((f) => f.categorie === "niveau").map((f) => f.code).join(", ") || "aucun pour l'instant"}) viennent du catalogue Formations : modifie-les là-bas.
                   </p>
                 </div>
+              </Volet>
+
+              <Volet titre="Chiffres clés et avis Google" texte="4 chiffres sous le haut de page, la note Google" ouvert={ouverte === "chiffres"} onClick={() => setOuverte("chiffres")}>
+                <div className="grid grid-cols-2 gap-[10px]">
+                  <Libelle texte="Année de création du club">
+                    <input className={CHAMP} inputMode="numeric" placeholder="1984" value={b.annee_creation ?? ""} onChange={(e) => maj("annee_creation", e.target.value.replace(/\D/g, "").slice(0, 4))} />
+                  </Libelle>
+                  <Libelle texte="Plongeurs satisfaits (%)">
+                    <input className={CHAMP} inputMode="numeric" placeholder="98" value={b.satisfaction ?? ""} onChange={(e) => maj("satisfaction", e.target.value.replace(/\D/g, "").slice(0, 3))} />
+                  </Libelle>
+                  <Libelle texte="Note Google (sur 5)">
+                    <input className={CHAMP} inputMode="decimal" placeholder="4,8" value={b.note_google ?? ""} onChange={(e) => maj("note_google", e.target.value.replace(/[^\d,.]/g, "").slice(0, 3))} />
+                  </Libelle>
+                  <Libelle texte="Nombre d'avis Google">
+                    <input className={CHAMP} inputMode="numeric" placeholder="126" value={b.nb_avis_google ?? ""} onChange={(e) => maj("nb_avis_google", e.target.value.replace(/\D/g, "").slice(0, 6))} />
+                  </Libelle>
+                  <div className="col-span-2">
+                    <Libelle texte="Lien vers la fiche Google du club">
+                      <input className={CHAMP} type="url" placeholder="https://g.page/…" value={b.lien_google ?? ""} onChange={(e) => maj("lien_google", e.target.value)} />
+                    </Libelle>
+                  </div>
+                </div>
+                <p className="pt-[8px] text-[12px] leading-normal text-[#7D93A8]">
+                  La note s'affiche en haut du site et mène à ta fiche Google : recopie-la de temps en temps. Le pourcentage de satisfaits est déclaré par le club.
+                </p>
+                <p className="pb-[6px] pt-[16px] text-[12.5px] font-semibold text-[#5B7189]">Les chiffres affichés (4 au plus, dans l'ordre choisi)</p>
+                {(() => {
+                  const choisis = b.chiffres && b.chiffres.length > 0 ? b.chiffres : CHIFFRES_DEFAUT;
+                  const profondeurs = b.zones.map((z) => nombre(z.profondeur) ?? 0);
+                  const valeur: Record<string, string | null> = {
+                    annees: nombre(b.annee_creation) ? `${new Date().getFullYear() - nombre(b.annee_creation)!} ans` : null,
+                    encadrants: contenu.equipe.filter((e) => e.role !== "pilote").length > 0 ? String(contenu.equipe.filter((e) => e.role !== "pilote").length) : null,
+                    satisfaction: nombre(b.satisfaction) !== null ? `${nombre(b.satisfaction)} %` : null,
+                    google: nombre(b.note_google) !== null ? `${nombre(b.note_google)!.toLocaleString("fr-FR")}/5` : null,
+                    sites: b.zones.length > 0 ? String(b.zones.length) : null,
+                    formations: contenu.formations.length > 0 ? String(contenu.formations.length) : null,
+                    profondeur: Math.max(0, ...profondeurs) > 0 ? `${Math.max(0, ...profondeurs)} m` : null,
+                    places: contenu.bateaux.some((x) => parseInt(x.places ?? "", 10) > 0) ? String(Math.max(...contenu.bateaux.map((x) => parseInt(x.places ?? "", 10) || 0))) : null,
+                  };
+                  return CHIFFRES_SITE.map((c) => {
+                    const rang = choisis.indexOf(c.cle);
+                    const coche = rang >= 0;
+                    const plein = !coche && choisis.length >= 4;
+                    return (
+                      <button
+                        key={c.cle}
+                        type="button"
+                        disabled={plein}
+                        aria-pressed={coche}
+                        onClick={() => maj("chiffres", coche ? choisis.filter((x) => x !== c.cle) : [...choisis, c.cle])}
+                        className="flex w-full items-center gap-[10px] border-t border-[#EDF2F7] py-[9px] text-left first-of-type:border-t-0 disabled:opacity-40"
+                      >
+                        <span className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[6px] text-[11.5px] font-bold ${coche ? "bg-[#0F3D70] text-white" : "border border-[#C9D9E5]"}`}>{coche ? rang + 1 : ""}</span>
+                        <span className="min-w-0 flex-1 text-[13.5px] font-bold">{c.nom}</span>
+                        <span className={`text-[12.5px] ${valeur[c.cle] ? "font-semibold text-[#1176A8]" : "text-[#C9A15A]"}`}>{valeur[c.cle] ?? "à renseigner"}</span>
+                      </button>
+                    );
+                  });
+                })()}
               </Volet>
 
               <Volet titre="Textes" texte="Accroche, présentation, points forts" ouvert={ouverte === "textes"} onClick={() => setOuverte("textes")}>

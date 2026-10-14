@@ -32,6 +32,12 @@ export type ReglagesSite = {
   saison: string | null;
   infos: string | null;
   tarifs: Tarif[];
+  annee_creation?: number | string | null;
+  satisfaction?: number | string | null;
+  note_google?: number | string | null;
+  nb_avis_google?: number | string | null;
+  lien_google?: string | null;
+  chiffres?: string[];
   sections: Sections;
   updated_at?: string;
 };
@@ -97,6 +103,24 @@ export const PALETTES = [
 
 // Un site enregistré avant l'ajout des tarifs : liste vide plutôt qu'absente
 const normaliser = (c: ContenuSite | null): ContenuSite | null => (c ? { ...c, site: { ...c.site, tarifs: c.site.tarifs ?? [] } } : c);
+
+// Les chiffres clés que le DP peut afficher sous le haut de page (4 au plus)
+export const CHIFFRES_SITE: { cle: string; nom: string }[] = [
+  { cle: "annees", nom: "Années d'existence" },
+  { cle: "encadrants", nom: "Encadrants" },
+  { cle: "satisfaction", nom: "Plongeurs satisfaits" },
+  { cle: "google", nom: "Note Google" },
+  { cle: "sites", nom: "Sites de plongée" },
+  { cle: "formations", nom: "Formations" },
+  { cle: "profondeur", nom: "Profondeur max" },
+  { cle: "places", nom: "Places sur le bateau" },
+];
+export const CHIFFRES_DEFAUT = ["annees", "encadrants", "satisfaction", "sites"];
+
+export const nombre = (v: number | string | null | undefined) => {
+  const n = Number(String(v ?? "").replace(",", "."));
+  return v === null || v === undefined || v === "" || !Number.isFinite(n) ? null : n;
+};
 
 export const modeleDe = (id: string) => MODELES.find((m) => m.id === id) ?? MODELES[0];
 
