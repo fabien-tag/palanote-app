@@ -121,7 +121,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
         <div className="relative isolate flex min-h-[560px] flex-col overflow-hidden rounded-[26px] text-white @3xl:min-h-[700px] @3xl:rounded-[36px]">
           <FondHeros image={site.couverture_url} />
           <Bulles />
-          <nav className="relative z-10 flex items-center gap-[12px] p-[14px] @3xl:p-[20px]">
+          <nav className="relative z-10 flex items-center gap-[12px] p-[16px] @3xl:px-[32px] @3xl:pt-[28px]">
             <a href="#haut" className="flex min-w-0 items-center gap-[10px] rounded-full py-[4px] pl-[4px] pr-[14px] backdrop-blur-md [background:rgb(255_255_255/.12)]">
               {site.logo_url ? (
                 <img src={site.logo_url} alt="" className="h-[38px] w-[38px] shrink-0 rounded-full bg-white object-contain p-[3px]" />
@@ -146,7 +146,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
             </a>
           </nav>
 
-          <div className="relative z-10 grid flex-1 grid-cols-1 gap-[28px] px-[22px] pb-[26px] pt-[30px] @3xl:px-[44px] @3xl:pb-[44px] @5xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
+          <div className="relative z-10 grid flex-1 grid-cols-1 gap-[32px] px-[26px] pb-[34px] pt-[40px] @3xl:px-[64px] @3xl:pb-[64px] @3xl:pt-[56px] @5xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
             <div className="flex flex-col">
               <h1 className="max-w-[12ch] text-[clamp(40px,7.5cqw,88px)] font-medium leading-[1.02] tracking-[-0.03em]">
                 {site.accroche || `Plongez avec ${centre.nom}`}
@@ -551,13 +551,13 @@ function Section({
   return (
     <section id={id} className="relative mx-auto max-w-[1240px] scroll-mt-[20px] px-[22px] pt-[84px] @4xl:px-[40px] @4xl:pt-[120px]">
       {meduse && <Meduse className="right-[28px] top-[70px] h-[70px] w-[38px] @4xl:right-[60px] @4xl:top-[110px] @4xl:h-[96px] @4xl:w-[52px]" />}
-      <div className="grid grid-cols-1 gap-[14px] pb-[34px] @4xl:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] @4xl:pb-[44px]">
-        <p className="flex items-center gap-[8px] text-[13.5px] font-medium text-[var(--acc)] @4xl:pt-[14px]">
+      <div className="flex flex-col gap-[12px] pb-[34px] @4xl:pb-[44px]">
+        <p className="flex items-center gap-[8px] text-[13.5px] font-medium text-[var(--acc)]">
           <span className="goutte inline-block h-[10px] w-[10px] bg-[var(--acc)]" aria-hidden="true" />
           {libelle}
         </p>
         <div>
-          <h2 className="max-w-[18ch] text-[clamp(32px,4.6cqw,54px)] font-medium leading-[1.06] tracking-[-0.03em]">{titre}</h2>
+          <h2 className="max-w-[22ch] text-[clamp(32px,4.6cqw,54px)] font-medium leading-[1.06] tracking-[-0.03em]">{titre}</h2>
           {texte && <p className="max-w-[62ch] pt-[16px] text-[16px] leading-[1.6] text-[var(--doux)]">{texte}</p>}
         </div>
       </div>
