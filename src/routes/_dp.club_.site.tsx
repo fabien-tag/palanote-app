@@ -90,8 +90,26 @@ function PageMonSite() {
           .filter((t) => t.libelle.trim())
           .map((t) => ({ ...t, prix: t.prix === "" || t.prix === null ? null : Number(String(t.prix).replace(",", ".")) })),
         ...(publier === undefined ? {} : { publie: publier }) });
+      // Base pas à jour : les chiffres clés et la note Google ne sont pas enregistrés (on garde la saisie)
+      const manque = !("chiffres" in c.site);
       setContenu(c);
-      setBrouillon(c.site);
+      setBrouillon(
+        manque
+          ? {
+              ...c.site,
+              annee_creation: brouillon.annee_creation ?? null,
+              satisfaction: brouillon.satisfaction ?? null,
+              note_google: brouillon.note_google ?? null,
+              nb_avis_google: brouillon.nb_avis_google ?? null,
+              lien_google: brouillon.lien_google ?? null,
+              chiffres: brouillon.chiffres ?? [],
+            }
+          : c.site,
+      );
+      if (manque) {
+        setErreur("Les chiffres clés et la note Google n'ont pas été enregistrés : relance le script « palanote-site-club.sql » dans Supabase.");
+        return;
+      }
       setMessage(publier === true ? "Site publié." : publier === false ? "Site retiré d'internet." : "Modifications enregistrées.");
     } catch (e) {
       setErreur(detailErreur(e, "Le site n'a pas pu être enregistré."));
@@ -313,7 +331,8 @@ function PageMonSite() {
                 <p className="pt-[8px] text-[12px] leading-normal text-[#7D93A8]">
                   La note s'affiche en haut du site et mène à ta fiche Google : recopie-la de temps en temps. Le pourcentage de satisfaits est déclaré par le club.
                 </p>
-                <p className="pb-[6px] pt-[16px] text-[12.5px] font-semibold text-[#5B7189]">Les chiffres affichés (4 au plus, dans l'ordre choisi)</p>
+                <p className="pt-[16px] text-[12.5px] font-semibold text-[#5B7189]">Les chiffres affichés (4 au plus, dans l'ordre choisi)</p>
+                <p className="pb-[6px] text-[11.5px] text-[#9DB0C0]">Touche un chiffre pour l'ajouter ou le retirer ; quand il y en a déjà 4, il remplace le dernier.</p>
                 {(() => {
                   const choisis = b.chiffres && b.chiffres.length > 0 ? b.chiffres : CHIFFRES_DEFAUT;
                   const profondeurs = b.zones.map((z) => nombre(z.profondeur) ?? 0);
@@ -330,14 +349,15 @@ function PageMonSite() {
                   return CHIFFRES_SITE.map((c) => {
                     const rang = choisis.indexOf(c.cle);
                     const coche = rang >= 0;
-                    const plein = !coche && choisis.length >= 4;
                     return (
                       <button
                         key={c.cle}
                         type="button"
-                        disabled={plein}
                         aria-pressed={coche}
-                        onClick={() => maj("chiffres", coche ? choisis.filter((x) => x !== c.cle) : [...choisis, c.cle])}
+                        onClick={() =>
+                          // 4 au plus : un 5e chiffre prend la place du dernier choisi
+                          maj("chiffres", coche ? choisis.filter((x) => x !== c.cle) : [...choisis.slice(0, 3), c.cle])
+                        }
                         className="flex w-full items-center gap-[10px] border-t border-[#EDF2F7] py-[9px] text-left first-of-type:border-t-0 disabled:opacity-40"
                       >
                         <span className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[6px] text-[11.5px] font-bold ${coche ? "bg-[#0F3D70] text-white" : "border border-[#C9D9E5]"}`}>{coche ? rang + 1 : ""}</span>
