@@ -474,6 +474,7 @@ function PageMonSite() {
                     ["materiel", "Bateau et matériel", `${contenu.bateaux.length} bateau${contenu.bateaux.length > 1 ? "x" : ""}, ${contenu.equipement.reduce((n, e) => n + e.nb, 0)} pièces`],
                     ["equipe", "L'équipe", `${contenu.equipe.length} personne${contenu.equipe.length > 1 ? "s" : ""}`],
                     ["infos", "Infos pratiques et contact", ""],
+                    ["palanote", "Bloc Palanote", "L'app du club, en bas de page"],
                   ] as [keyof Sections, string, string][]
                 ).map(([cle, titre, texte]) => (
                   <div key={cle} className="flex items-center gap-[12px] border-t border-[#EDF2F7] py-[11px] first:border-t-0">

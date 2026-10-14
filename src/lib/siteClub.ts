@@ -5,7 +5,7 @@ import { supabase, SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase
 export type Zone = { nom: string; profondeur: number | string | null; niveau: string; description: string };
 export type Atout = { titre: string; texte: string };
 export type Tarif = { libelle: string; detail: string; prix: number | string | null; groupe: "formation" | "plongee" };
-export type Sections = { tarifs?: boolean; formations: boolean; zones: boolean; materiel: boolean; equipe: boolean; infos: boolean };
+export type Sections = { palanote?: boolean; tarifs?: boolean; formations: boolean; zones: boolean; materiel: boolean; equipe: boolean; infos: boolean };
 
 export type ReglagesSite = {
   centre_id: string;

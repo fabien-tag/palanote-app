@@ -1,5 +1,6 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import { Anchor, ArrowUpRight, Clock, Smile, Star, GraduationCap, LifeBuoy, Mail, MapPin, Phone, ShieldCheck, Ship, Sun, Users, Waves } from "lucide-react";
+import logoPalanote from "@/assets/palanote-logo-cigle.png";
+import { Anchor, ArrowUpRight, Bell, Camera, ClipboardCheck, Clock, Smile, Stamp, Star, GraduationCap, LifeBuoy, Mail, MapPin, Phone, ShieldCheck, Ship, Sun, Users, Waves } from "lucide-react";
 import {
   CHIFFRES_DEFAUT,
   nombre,
@@ -114,11 +115,12 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
     .slice(0, 4);
 
   return (
-    <div id="haut" style={style} className="@container min-h-full bg-[var(--fond)] text-[var(--txt)] antialiased [&_h1,&_h2,&_h3]:font-[family-name:var(--titres)]">
+    <div id="haut" style={style} className="site-club @container min-h-full bg-[var(--fond)] text-[var(--txt)] antialiased [&_h1,&_h2,&_h3]:font-[family-name:var(--titres)]">
       {/* ——— Héros ——— */}
       <header className="p-[10px] @3xl:p-[14px]">
         <div className="relative isolate flex min-h-[560px] flex-col overflow-hidden rounded-[26px] text-white @3xl:min-h-[700px] @3xl:rounded-[36px]">
           <FondHeros image={site.couverture_url} />
+          <Bulles />
           <nav className="relative z-10 flex items-center gap-[12px] p-[14px] @3xl:p-[20px]">
             <a href="#haut" className="flex min-w-0 items-center gap-[10px] rounded-full py-[4px] pl-[4px] pr-[14px] backdrop-blur-md [background:rgb(255_255_255/.12)]">
               {site.logo_url ? (
@@ -154,11 +156,11 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
                 {site.sous_titre && <p className="max-w-[46ch] text-[16px] leading-[1.55] text-white/80 @3xl:text-[17px]">{site.sous_titre}</p>}
                 <div className="flex flex-wrap gap-[10px] pt-[20px]">
                   {voir.formations && (
-                    <a href="#formations" className="rounded-full bg-white px-[22px] py-[13px] text-[14px] font-semibold text-[var(--sec)]">
+                    <a href="#formations" className="galet-moyen bg-white px-[22px] py-[13px] text-[14px] font-semibold text-[var(--sec)]">
                       Passer un niveau
                     </a>
                   )}
-                  <a href={contact.href} className="rounded-full px-[22px] py-[13px] text-[14px] font-semibold text-white ring-1 ring-white/35 backdrop-blur-md [background:rgb(255_255_255/.1)]">
+                  <a href={contact.href} className="galet-moyen px-[22px] py-[13px] text-[14px] font-semibold text-white ring-1 ring-white/35 backdrop-blur-md [background:rgb(255_255_255/.1)]">
                     {contact.texte}
                   </a>
                 </div>
@@ -175,7 +177,9 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
           <section aria-label="Le club en chiffres" className={`mx-auto grid max-w-[1240px] grid-cols-2 px-[22px] pt-[44px] @4xl:px-[40px] ${["", "@4xl:grid-cols-1", "@4xl:grid-cols-2", "@4xl:grid-cols-3", "@4xl:grid-cols-4"][chiffres.length]}`}>
             {chiffres.map((c, i) => (
               <div key={c.texte} className={`py-[14px] pr-[16px] @4xl:pl-[22px] ${i > 0 ? "@4xl:border-l @4xl:border-[var(--ligne)]" : "@4xl:pl-0"} ${i % 2 === 1 ? "border-l border-[var(--ligne)] pl-[18px]" : ""}`}>
-                <c.Icone className="h-[22px] w-[22px] text-[var(--acc)]" strokeWidth={1.8} aria-hidden="true" />
+                <span className="goutte flex h-[46px] w-[46px] items-center justify-center bg-[color-mix(in_srgb,var(--acc)_14%,transparent)]">
+                  <c.Icone className="h-[21px] w-[21px] text-[var(--acc)]" strokeWidth={1.9} aria-hidden="true" />
+                </span>
                 <p className="pt-[18px] text-[clamp(36px,5cqw,52px)] font-medium leading-none tracking-[-0.03em] [font-family:var(--titres)]">{c.valeur}</p>
                 <p className="max-w-[24ch] pt-[10px] text-[13.5px] leading-[1.45] text-[var(--doux)]">{c.texte}</p>
               </div>
@@ -186,14 +190,14 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
         {voir.tarifs && <Tarifs tarifs={tarifs} niveaux={niveauxTarifs} contact={contact} image={site.couverture_url} />}
 
         {/* ——— Le club ——— */}
-        <Section id="club" libelle="Le club" titre={centre.ville ? `Plonger à ${centre.ville}` : "Plonger avec nous"} texte={site.presentation}>
+        <Section id="club" meduse libelle="Le club" titre={centre.ville ? `Plonger à ${centre.ville}` : "Plonger avec nous"} texte={site.presentation}>
           {site.atouts.length > 0 && (
             <div className="grid grid-cols-1 gap-[12px] @2xl:grid-cols-3">
               {site.atouts.map((a, i) => {
                 const Icone = ICONES_ATOUTS[i % ICONES_ATOUTS.length]!;
                 return (
-                  <div key={i} className="rounded-[22px] bg-[var(--surface)] p-[24px] ring-1 ring-[var(--ligne)]">
-                    <span className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-[var(--acc)] text-white">
+                  <div key={i} className={`${["galet", "galet-b", "galet-c"][i % 3]} bg-[var(--surface)] p-[26px] ring-1 ring-[var(--ligne)]`}>
+                    <span className="goutte flex h-[50px] w-[50px] items-center justify-center bg-[var(--acc)] text-white">
                       <Icone className="h-[20px] w-[20px]" strokeWidth={2} aria-hidden="true" />
                     </span>
                     <h3 className="pt-[22px] text-[19px] font-semibold tracking-[-0.01em]">{a.titre}</h3>
@@ -239,10 +243,10 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
         )}
 
         {voir.equipe && (
-          <Section id="equipe" libelle="L'équipe" titre="Ceux qui vous encadrent" texte="Directeurs de plongée, moniteurs et pilote : une équipe diplômée, présente à chaque sortie.">
+          <Section id="equipe" meduse libelle="L'équipe" titre="Ceux qui vous encadrent" texte="Directeurs de plongée, moniteurs et pilote : une équipe diplômée, présente à chaque sortie.">
             <ul className="grid grid-cols-1 gap-[12px] @xl:grid-cols-2 @4xl:grid-cols-4">
               {equipe.map((e, i) => (
-                <li key={`${e.nom}-${i}`} className="flex items-center gap-[14px] rounded-[22px] bg-[var(--surface)] p-[18px] ring-1 ring-[var(--ligne)]">
+                <li key={`${e.nom}-${i}`} className={`flex items-center gap-[14px] ${["galet-b", "galet-c", "galet"][i % 3]} bg-[var(--surface)] p-[18px] ring-1 ring-[var(--ligne)]`}>
                   <span
                     className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full text-[17px] font-semibold text-white"
                     style={{ background: i % 3 === 0 ? "var(--sec)" : i % 3 === 1 ? "var(--acc)" : "var(--ter)" }}
@@ -263,6 +267,8 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
         {voir.infos && <Infos contenu={contenu} contact={contact} />}
       </main>
       <div className="h-[84px] @4xl:h-[110px]" aria-hidden="true" />
+
+      {s.palanote !== false && <PromoPalanote club={centre.nom} />}
 
       {/* ——— Pied de page ——— */}
       <footer className="p-[10px] @3xl:p-[14px]">
@@ -317,6 +323,191 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
 
 // ——— Briques ———
 
+// Le bloc qui présente Palanote, l'app du club : aux couleurs de Palanote, avec un téléphone en maquette
+const PALANOTE = { nuit: "#0A2A50", marine: "#0F3D70", menthe: "#3DEFBE", corail: "#FF8A75", ciel: "#57D4F5" };
+
+function PromoPalanote({ club }: { club: string }) {
+  const atouts = [
+    { Icone: ClipboardCheck, titre: "Votre fiche arrive préremplie", texte: "Après la sortie : site, durée, palanquée. Il ne reste que votre profondeur." },
+    { Icone: Stamp, titre: "Le tampon du club, en un geste", texte: "Le directeur de plongée valide toute la sortie, sur votre téléphone." },
+    { Icone: Camera, titre: "Vos vieux carnets, d'une photo", texte: "L'IA lit vos pages papier, vous relisez, tout est rangé." },
+    { Icone: Users, titre: "Vos binômes, des deux côtés", texte: "Une plongée notée par l'un se propose à l'autre." },
+  ];
+  return (
+    <section aria-labelledby="titre-palanote" className="mx-auto max-w-[1240px] px-[10px] pt-[84px] @3xl:px-[14px] @4xl:pt-[110px]">
+      <div className="relative isolate overflow-hidden rounded-[30px] px-[24px] pb-[0px] pt-[36px] text-white @3xl:rounded-[40px] @3xl:px-[48px] @3xl:pt-[52px]" style={{ background: `linear-gradient(150deg, ${PALANOTE.marine} 0%, ${PALANOTE.nuit} 70%)` }}>
+        {/* Lumière et galets en fond */}
+        <span aria-hidden="true" className="goutte absolute -right-[80px] -top-[120px] -z-10 h-[360px] w-[360px] opacity-25 blur-[60px]" style={{ background: PALANOTE.ciel }} />
+        <span aria-hidden="true" className="galet absolute -bottom-[60px] left-[30%] -z-10 h-[200px] w-[280px] opacity-20 blur-[50px]" style={{ background: PALANOTE.menthe }} />
+        <Meduse couleur="#6FD7BF" className="left-[46%] top-[34px] hidden h-[64px] w-[36px] @5xl:block" />
+
+        <div className="grid grid-cols-1 items-end gap-[30px] @5xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+          <div className="pb-[36px] @3xl:pb-[52px]">
+            <p className="flex items-center gap-[10px] text-[14px] font-semibold" style={{ color: PALANOTE.menthe }}>
+              <span className="goutte flex h-[34px] w-[34px] items-center justify-center bg-white/10 p-[7px]">
+                <img src={logoPalanote} alt="" className="h-full w-auto" />
+              </span>
+              Palanote, l'app de {club}
+            </p>
+            <h2 id="titre-palanote" className="max-w-[16ch] pt-[18px] text-[clamp(32px,4.8cqw,56px)] font-semibold leading-[1.04] tracking-[-0.03em]">
+              Ne perdez plus de temps à remplir vos carnets.
+            </h2>
+            <p className="max-w-[48ch] pt-[14px] text-[16px] leading-[1.6] text-white/75">
+              Palanote est le carnet de plongée numérique de votre club. Gratuit et sans publicité, il se remplit presque tout seul.
+            </p>
+            <ul className="grid grid-cols-1 gap-[10px] pt-[26px] @xl:grid-cols-2">
+              {atouts.map((a, i) => (
+                <li key={a.titre} className={`${["galet-b", "galet-c", "galet", "galet-b"][i]} flex gap-[12px] bg-white/[.07] p-[16px] ring-1 ring-white/10`}>
+                  <span className="goutte flex h-[40px] w-[40px] shrink-0 items-center justify-center" style={{ background: PALANOTE.menthe, color: PALANOTE.nuit }}>
+                    <a.Icone className="h-[19px] w-[19px]" strokeWidth={2.2} aria-hidden="true" />
+                  </span>
+                  <span>
+                    <span className="block text-[15px] font-semibold leading-snug">{a.titre}</span>
+                    <span className="block pt-[3px] text-[13px] leading-[1.45] text-white/65">{a.texte}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap items-center gap-[14px] pt-[28px]">
+              <a href="/creer-un-compte" className="galet-moyen px-[24px] py-[15px] text-[14.5px] font-bold" style={{ background: PALANOTE.menthe, color: PALANOTE.nuit }}>
+                CRÉER MON CARNET GRATUIT
+              </a>
+              <span className="text-[13px] text-white/60">Sur iPhone et Android, depuis le navigateur.</span>
+            </div>
+          </div>
+          <Telephone club={club} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Un téléphone dessiné en CSS : l'accueil du carnet et une plongée tamponnée par le club
+function Telephone({ club }: { club: string }) {
+  const date = new Date();
+  const jour = date.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+  return (
+    <div className="relative mx-auto w-[280px] self-end @5xl:mr-[20px]">
+      {/* Notification qui déborde du téléphone */}
+      <div className="absolute -left-[110px] -top-[34px] z-20 hidden w-[220px] items-center gap-[10px] galet-moyen bg-white/95 p-[12px] text-[#123A63] shadow-[0_18px_40px_rgb(0_0_0/.3)] @3xl:flex">
+        <span className="goutte flex h-[34px] w-[34px] shrink-0 items-center justify-center" style={{ background: PALANOTE.menthe }}>
+          <Stamp className="h-[16px] w-[16px]" aria-hidden="true" />
+        </span>
+        <span className="min-w-0 text-[12px] leading-tight">
+          <b className="block text-[12.5px]">Plongée tamponnée</b>
+          <span className="block truncate text-[#5B7189]">{club} a validé ta sortie</span>
+        </span>
+      </div>
+      <div className="relative h-[540px] overflow-hidden rounded-t-[46px] border-[10px] border-b-0 border-[#0B1626] bg-[#F1F6FC] text-[#123A63] shadow-[0_-10px_60px_rgb(0_0_0/.35)]">
+        <span aria-hidden="true" className="absolute left-1/2 top-[8px] z-10 h-[24px] w-[86px] -translate-x-1/2 rounded-full bg-[#0B1626]" />
+        {/* En-tête du carnet */}
+        <div className="rounded-b-[26px] px-[18px] pb-[16px] pt-[46px] text-white" style={{ background: `linear-gradient(180deg, ${PALANOTE.marine}, ${PALANOTE.nuit})` }}>
+          <div className="flex items-center justify-between">
+            <img src={logoPalanote} alt="" className="h-[22px] w-auto" />
+            <Bell className="h-[17px] w-[17px]" aria-hidden="true" />
+          </div>
+          <p className="pt-[22px] text-[22px] font-bold leading-tight">Mes plongées</p>
+          <p className="text-[11.5px] text-white/70">dernière plongée hier</p>
+          <div className="mt-[12px] grid grid-cols-4 border-t border-white/15 pt-[10px] text-center">
+            {[
+              ["N2", "niveau"],
+              ["61", "plongées"],
+              ["28 m", "prof. max"],
+              ["51 h", "sous l'eau"],
+            ].map(([v, l]) => (
+              <span key={l}>
+                <b className="block text-[14px]">{v}</b>
+                <span className="block text-[9.5px] text-white/60">{l}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+        {/* La dernière plongée, tamponnée par le club */}
+        <div className="px-[12px] pt-[14px]">
+          <div className="galet relative bg-white p-[14px] shadow-[0_4px_14px_rgb(18_58_99/.08)]">
+            <p className="text-[10.5px] font-semibold text-[#7D93A8]">Hier, 9 h 30</p>
+            <p className="pt-[2px] text-[15px] font-bold">La Gabinière</p>
+            <p className="text-[11px] text-[#5B7189]">avec {club}</p>
+            <div className="mt-[10px] flex gap-[6px]">
+              {["32 m", "48 min", "18 °C"].map((x) => (
+                <span key={x} className="galet-petit bg-[#EEF4F9] px-[8px] py-[4px] text-[11px] font-bold">
+                  {x}
+                </span>
+              ))}
+            </div>
+            {/* Le tampon numérique */}
+            <span
+              className="absolute right-[8px] top-[8px] flex h-[70px] w-[70px] rotate-[-14deg] flex-col items-center justify-center rounded-full border-[2.5px] text-center leading-tight"
+              style={{ borderColor: PALANOTE.corail, color: PALANOTE.corail }}
+            >
+              <span className="max-w-[54px] truncate text-[6.5px] font-bold uppercase">{club}</span>
+              <span className="text-[10px] font-black">VALIDÉE</span>
+              <span className="text-[7px] font-semibold">{jour}</span>
+            </span>
+          </div>
+          <div className="galet-b mt-[10px] bg-white p-[14px] opacity-80">
+            <p className="text-[10.5px] font-semibold text-[#7D93A8]">Samedi</p>
+            <p className="pt-[2px] text-[14px] font-bold">Épave du Togo</p>
+            <div className="mt-[8px] flex gap-[6px]">
+              {["40 m", "42 min"].map((x) => (
+                <span key={x} className="galet-petit bg-[#EEF4F9] px-[8px] py-[4px] text-[11px] font-bold">
+                  {x}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="galet-c mt-[10px] flex items-center gap-[10px] p-[12px]" style={{ background: "#E2F8EF" }}>
+            <span className="goutte flex h-[30px] w-[30px] items-center justify-center" style={{ background: PALANOTE.menthe }}>
+              <ClipboardCheck className="h-[15px] w-[15px]" aria-hidden="true" />
+            </span>
+            <span className="text-[11.5px] font-semibold leading-tight">Ta fiche est prête : ajoute ta profondeur</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// La méduse de Palanote, aux couleurs du club
+function Meduse({ className = "", couleur = "color-mix(in srgb, var(--acc) 55%, white)" }: { className?: string; couleur?: string }) {
+  return (
+    <span aria-hidden="true" className={`pointer-events-none absolute ${className}`}>
+      <svg viewBox="0 0 48 87" className="h-full w-full">
+        <path d="M5 26C5 11 13 4 24 4S43 12 43 26Q39 29 35 26Q30 31 25 26Q20 30 15 26Q9 30 5 26" style={{ fill: couleur }} />
+        <g fill="none" style={{ stroke: couleur }} strokeWidth={3.6} strokeLinecap="round">
+          <path d="M12 27C12 44 3 44 8 59S11 69 6 79" />
+          <path d="M20 28C23 45 12 48 17 64S17 76 15 84" />
+          <path d="M28 28C33 44 22 47 28 62S34 72 30 80" />
+          <path d="M36 28C42 38 31 47 38 55S42 65 40 69" />
+        </g>
+      </svg>
+    </span>
+  );
+}
+
+// Quelques bulles qui remontent dans le haut de page (coupées si l'on réduit les animations)
+const BULLES = [
+  { g: 6, t: 8, x: 8, d: 0, r: 10 },
+  { g: 22, t: 11, x: 4, d: 3, r: 7 },
+  { g: 38, t: 9, x: 6, d: 6, r: 12 },
+  { g: 55, t: 12, x: 3, d: 1.5, r: 6 },
+  { g: 71, t: 10, x: 5, d: 4.5, r: 9 },
+  { g: 88, t: 13, x: 7, d: 2, r: 8 },
+];
+function Bulles() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 -z-0 h-full overflow-hidden">
+      {BULLES.map((b, i) => (
+        <span
+          key={i}
+          className="bulle absolute bottom-[-20px] rounded-full ring-1 ring-white/50 [background:radial-gradient(circle_at_30%_30%,rgb(255_255_255/.55),rgb(255_255_255/.08))]"
+          style={{ left: `${b.g}%`, width: b.r, height: b.r, ["--duree" as string]: `${b.t}s`, ["--delai" as string]: `${b.d}s` }}
+        />
+      ))}
+    </div>
+  );
+}
+
 // La note Google du club, en verre dépoli dans le haut de page ; le lien mène à sa fiche Google
 function BadgeGoogle({ note, avis, lien }: { note: number; avis: number | null; lien: string | null }) {
   const contenu = (
@@ -342,11 +533,29 @@ function BadgeGoogle({ note, avis, lien }: { note: number; avis: number | null; 
   );
 }
 
-function Section({ id, libelle, titre, texte, children }: { id: string; libelle: string; titre: string; texte?: string | null; children?: ReactNode }) {
+function Section({
+  id,
+  libelle,
+  titre,
+  texte,
+  meduse = false,
+  children,
+}: {
+  id: string;
+  libelle: string;
+  titre: string;
+  texte?: string | null;
+  meduse?: boolean;
+  children?: ReactNode;
+}) {
   return (
-    <section id={id} className="mx-auto max-w-[1240px] scroll-mt-[20px] px-[22px] pt-[84px] @4xl:px-[40px] @4xl:pt-[120px]">
+    <section id={id} className="relative mx-auto max-w-[1240px] scroll-mt-[20px] px-[22px] pt-[84px] @4xl:px-[40px] @4xl:pt-[120px]">
+      {meduse && <Meduse className="right-[28px] top-[70px] h-[70px] w-[38px] @4xl:right-[60px] @4xl:top-[110px] @4xl:h-[96px] @4xl:w-[52px]" />}
       <div className="grid grid-cols-1 gap-[14px] pb-[34px] @4xl:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] @4xl:pb-[44px]">
-        <p className="text-[13.5px] font-medium text-[var(--acc)] @4xl:pt-[14px]">{libelle}</p>
+        <p className="flex items-center gap-[8px] text-[13.5px] font-medium text-[var(--acc)] @4xl:pt-[14px]">
+          <span className="goutte inline-block h-[10px] w-[10px] bg-[var(--acc)]" aria-hidden="true" />
+          {libelle}
+        </p>
         <div>
           <h2 className="max-w-[18ch] text-[clamp(32px,4.6cqw,54px)] font-medium leading-[1.06] tracking-[-0.03em]">{titre}</h2>
           {texte && <p className="max-w-[62ch] pt-[16px] text-[16px] leading-[1.6] text-[var(--doux)]">{texte}</p>}
@@ -387,7 +596,7 @@ function CartesHeros({ zones, niveaux, bateau }: { zones: Zone[]; niveaux: Forma
     <div className="hidden items-end justify-end gap-[14px] @5xl:flex">
       <div className="flex flex-col gap-[14px]">
         {avecProf.length > 0 && (
-          <div className="w-[230px] rounded-[22px] p-[18px] ring-1 ring-white/25 backdrop-blur-xl [background:rgb(255_255_255/.14)]">
+          <div className="galet w-[230px] p-[18px] ring-1 ring-white/25 backdrop-blur-xl [background:rgb(255_255_255/.14)]">
             <p className="text-[34px] font-medium leading-none tracking-[-0.03em] [font-family:var(--titres)]">{max} m</p>
             <p className="pt-[6px] text-[12.5px] leading-snug text-white/75">profondeur max sur {avecProf.length > 1 ? `nos ${zones.length} sites` : "notre site"}</p>
             {/* Une barre par site, qui descend selon sa profondeur */}
@@ -399,7 +608,7 @@ function CartesHeros({ zones, niveaux, bateau }: { zones: Zone[]; niveaux: Forma
           </div>
         )}
         {bateau && (
-          <div className="flex w-[230px] items-center gap-[12px] rounded-[18px] bg-white p-[12px] text-[var(--sec)]">
+          <div className="galet-moyen flex w-[230px] items-center gap-[12px] bg-white p-[12px] text-[var(--sec)]">
             <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full bg-[var(--acc)] text-white">
               <Ship className="h-[19px] w-[19px]" aria-hidden="true" />
             </span>
@@ -411,7 +620,7 @@ function CartesHeros({ zones, niveaux, bateau }: { zones: Zone[]; niveaux: Forma
         )}
       </div>
       {premier && (
-        <div className="w-[210px] rounded-[22px] bg-white p-[20px] text-[var(--sec)] shadow-[0_24px_60px_rgb(0_0_0/.25)]">
+        <div className="galet-b w-[210px] bg-white p-[20px] text-[var(--sec)] shadow-[0_24px_60px_rgb(0_0_0/.25)]">
           <span className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[var(--acc)] text-white">
             <GraduationCap className="h-[19px] w-[19px]" aria-hidden="true" />
           </span>
@@ -630,7 +839,7 @@ function Parcours({ niveaux, contact }: { niveaux: FormationSite[]; contact: { h
           </p>
         )}
         <div className="mt-auto pt-[26px]">
-          <a href={contact.href} className="inline-block rounded-full bg-[var(--sec)] px-[22px] py-[13px] text-[14px] font-semibold text-white">
+          <a href={contact.href} className="inline-block galet-moyen bg-[var(--sec)] px-[22px] py-[13px] text-[14px] font-semibold text-white">
             S'inscrire au {f.code}
           </a>
         </div>
@@ -807,14 +1016,14 @@ function Infos({ contenu, contact }: { contenu: ContenuSite; contact: { href: st
             )}
             {!site.telephone && !site.email && !site.adresse && <p className="text-[14px] text-white/80">Les coordonnées du club arrivent bientôt.</p>}
           </div>
-          <a href={contact.href} className="mt-[28px] w-fit rounded-full bg-white px-[22px] py-[13px] text-[14px] font-semibold text-[var(--sec)]">
+          <a href={contact.href} className="mt-[28px] w-fit galet-moyen bg-white px-[22px] py-[13px] text-[14px] font-semibold text-[var(--sec)]">
             {contact.texte}
           </a>
         </div>
         {blocs.length > 0 && (
           <div className="grid grid-cols-1 gap-[12px]">
             {blocs.map((b) => (
-              <div key={b.titre} className="flex gap-[14px] rounded-[22px] bg-[var(--surface)] p-[20px] ring-1 ring-[var(--ligne)]">
+              <div key={b.titre} className="galet-c flex gap-[14px] bg-[var(--surface)] p-[20px] ring-1 ring-[var(--ligne)]">
                 <b.Icone className="mt-[2px] h-[20px] w-[20px] shrink-0 text-[var(--acc)]" aria-hidden="true" />
                 <div>
                   <p className="text-[15.5px] font-semibold">{b.titre}</p>
