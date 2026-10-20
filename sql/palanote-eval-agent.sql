@@ -79,3 +79,10 @@ create policy "Evals : dépôt admin" on storage.objects for insert to authentic
 drop policy if exists "Evals : suppression admin" on storage.objects;
 create policy "Evals : suppression admin" on storage.objects for delete to authenticated
   using (bucket_id = 'evals' and public.est_admin());
+
+-- ------------------------------------------------------------
+-- 4. Les droits d'accès aux tables (RLS les réserve ensuite à l'administrateur)
+--    Sans ces droits, Supabase refuse toute lecture : « permission denied ».
+-- ------------------------------------------------------------
+grant select, insert, update, delete on public.agent_eval_cas, public.agent_eval_runs, public.agent_eval_resultats to authenticated;
+grant all on public.agent_eval_cas, public.agent_eval_runs, public.agent_eval_resultats to service_role;
