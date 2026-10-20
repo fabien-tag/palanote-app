@@ -1,23 +1,19 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BadgeCheck, Check, Lock, Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ChampTexte, detailErreur, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
+import { LigneCentre, RechercheCentre } from "@/components/club/RechercheCentre";
 import {
-  chercherCentres,
   choisirCentre,
   creerCentre,
   garderOngletSorties,
   mesCentres,
   oublierVerificationDp,
-  rejoindreCentre,
   type Centre,
 } from "@/lib/club";
 
 // Choisir ou créer son centre de plongée (parcours 15, écran 2)
-// Un centre qui a déjà un directeur de plongée ne se rejoint pas en un clic (il protège les données de ses plongeurs).
-const MESSAGE_CENTRE_GERE =
-  "Ce centre a déjà un directeur de plongée. Pour protéger les données de ses plongeurs, on ne peut pas le rejoindre seul : demande à son directeur de plongée d'écrire à Palanote (Paramètres › Aide) pour t'ajouter.";
 export const Route = createFileRoute("/_dp/club_/centre")({
   head: () => ({ meta: [{ title: "Palanote — Mon centre" }] }),
   component: ChoixCentre,
@@ -27,7 +23,6 @@ function ChoixCentre() {
   const navigate = useNavigate();
   const { pret, ecran } = useConnexionRequise();
   const [q, setQ] = useState("");
-  const [resultats, setResultats] = useState<Centre[]>([]);
   const [miens, setMiens] = useState<Centre[]>([]);
   const [creation, setCreation] = useState(false);
   const [nom, setNom] = useState("");
@@ -42,17 +37,6 @@ function ChoixCentre() {
       .catch((e) => setErreur(detailErreur(e, "Tes centres n'ont pas pu être chargés.")));
   }, [pret]);
 
-  // Recherche au fil de la frappe
-  useEffect(() => {
-    if (!pret) return;
-    const t = setTimeout(() => {
-      void chercherCentres(q)
-        .then(setResultats)
-        .catch(() => setResultats([]));
-    }, 220);
-    return () => clearTimeout(t);
-  }, [q, pret]);
-
   if (ecran) return ecran;
 
   const fini = (c: Centre) => {
@@ -61,21 +45,6 @@ function ChoixCentre() {
     garderOngletSorties(true);
     oublierVerificationDp();
     navigate({ to: "/club" });
-  };
-
-  const rejoindre = async (c: Centre) => {
-    if (c.membre) return fini(c);
-    if ((c.nb_dp ?? 0) > 0) return setErreur(MESSAGE_CENTRE_GERE);
-    setEnCours(true);
-    setErreur(null);
-    try {
-      fini(await rejoindreCentre(c.id));
-    } catch (e) {
-      const m = e && typeof e === "object" && "message" in e ? String((e as { message: unknown }).message) : "";
-      setErreur(m.includes("centre_deja_gere") ? MESSAGE_CENTRE_GERE : detailErreur(e, "Tu n'as pas pu rejoindre ce centre."));
-    } finally {
-      setEnCours(false);
-    }
   };
 
   const creer = async () => {
@@ -91,8 +60,6 @@ function ChoixCentre() {
       setEnCours(false);
     }
   };
-
-  const autres = resultats.filter((r) => !miens.some((m) => m.id === r.id));
 
   return (
     <PageClub titre="Mon centre" large onRetour={() => navigate({ to: "/club" })}>
@@ -116,26 +83,7 @@ function ChoixCentre() {
           )}
 
           <Titre>Trouver ton centre</Titre>
-          <label className="flex h-[52px] items-center gap-[10px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] focus-within:border-[#57D4F5]">
-            <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Nom du club ou ville"
-              aria-label="Rechercher un centre"
-              className="min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-[#B5C4D1]"
-            />
-          </label>
-          <div className="grid grid-cols-1 gap-[8px] pt-[10px] lg:grid-cols-2">
-            {autres.map((c) => (
-              <LigneCentre key={c.id} c={c} onClick={() => void rejoindre(c)} desactive={enCours} gere={(c.nb_dp ?? 0) > 0} />
-            ))}
-            {autres.length === 0 && q.trim().length >= 2 && (
-              <p className="px-[4px] text-[13px] text-[#9DB0C0] lg:col-span-2">
-                Aucun centre ne s'appelle comme ça pour l'instant.
-              </p>
-            )}
-          </div>
+          <RechercheCentre onFini={fini} exclure={miens.map((m) => m.id)} onRecherche={setQ} />
         </div>
 
         <div className="lg:sticky lg:top-[150px] lg:pt-[22px]">
@@ -184,62 +132,5 @@ function ChoixCentre() {
         </div>
       </div>
     </PageClub>
-  );
-}
-
-function LigneCentre({
-  c,
-  onClick,
-  membre = false,
-  desactive = false,
-  gere = false,
-}: {
-  c: Centre;
-  onClick: () => void;
-  membre?: boolean;
-  desactive?: boolean;
-  gere?: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={desactive}
-      className="flex w-full items-center gap-[12px] galet-b border border-[#E4EBF1] bg-white px-[13px] py-[11px] text-left disabled:opacity-60"
-    >
-      <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte bg-[#E3F2FB]">
-        <Anchor className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2.1} aria-hidden="true" />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-[5px] text-[15px] font-bold">
-          <span className="truncate">{c.nom}</span>
-          {c.verifie && (
-            <BadgeCheck
-              className="h-[15px] w-[15px] shrink-0 text-[#1176A8]"
-              aria-label="Centre vérifié"
-            />
-          )}
-        </span>
-        <span className="block truncate text-[12.5px] text-[#5B7189]">
-          {[c.ville, `${c.nb_dp ?? 0} directeur${(c.nb_dp ?? 0) > 1 ? "s" : ""} de plongée`]
-            .filter(Boolean)
-            .join(" · ")}
-        </span>
-      </span>
-      {membre || c.membre ? (
-        <Check
-          className="h-[18px] w-[18px] shrink-0 text-[#14805F]"
-          strokeWidth={2.6}
-          aria-label="Ton centre"
-        />
-      ) : gere ? (
-        <span className="flex shrink-0 items-center gap-[4px] text-[12.5px] font-semibold text-[#7D93A8]">
-          <Lock className="h-[13px] w-[13px]" strokeWidth={2.4} aria-hidden="true" />
-          Déjà géré
-        </span>
-      ) : (
-        <span className="shrink-0 text-[13px] font-bold text-[#1176A8]">Rejoindre</span>
-      )}
-    </button>
   );
 }

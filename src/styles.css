@@ -297,6 +297,26 @@
   }
 }
 
+/* Vitrine de l'espace club : les écrans du tableau de bord remontent une fois, à l'ouverture */
+@keyframes vitrine-ecrans {
+  from {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.vitrine-ecrans {
+  animation: vitrine-ecrans 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vitrine-ecrans {
+    animation: none;
+  }
+}
+
 /* Palanote — pile de plongées (carnet) : les cartes sortent de la pile une à une,
    comme les notifications empilées de l'iPhone. */
 @keyframes sortie-de-pile {

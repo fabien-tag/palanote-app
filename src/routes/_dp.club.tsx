@@ -26,13 +26,16 @@ import { ClocheDp } from "@/components/club/ClocheDp";
 import { BoutonRecherche } from "@/components/club/RechercheDp";
 import { useNouvelleSortie } from "@/components/club/PanneauNouvelleSortie";
 import { NavigationDpMobile } from "@/components/club/NavigationDp";
+import { VitrineClub } from "@/components/club/VitrineClub";
 import { Avatar, detailErreur, LigneSortie, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import {
   accueilDp,
   centreChoisi,
   choisirCentre,
+  garderOngletSorties,
   heureCourte,
   mesCentres,
+  oublierVerificationDp,
   relanceRecente,
   relancerFiches,
   scriptManquant,
@@ -133,6 +136,19 @@ function EspaceClub() {
   const passees = duCentre.filter((s) => s.statut === "validee" || s.statut === "annulee");
   const ouvrir = (s: SortieResume) => navigate({ to: "/club/sortie", search: { id: s.id } });
 
+  // Pas encore de centre : la vitrine de l'espace club, avec la recherche de son club
+  if (centres && centres.length === 0 && !erreur)
+    return (
+      <VitrineClub
+        onFini={(c) => {
+          choisirCentre(c.id);
+          garderOngletSorties(true);
+          oublierVerificationDp();
+          window.location.reload();
+        }}
+      />
+    );
+
   return (
     <PageClub
       titre={prenom ? `Bonjour ${prenom}` : "Tableau de bord"}
@@ -160,42 +176,6 @@ function EspaceClub() {
       }
     >
       <MessageErreur texte={erreur} />
-
-      {centres && centres.length === 0 && !erreur && (
-        <>
-          <div className="pt-[18px]">
-            <h2 className="text-[24px] font-bold leading-tight">Tes sorties de club, sans papier</h2>
-            <p className="pt-[8px] text-[14px] leading-normal text-[#5B7189]">
-              Tu es directeur de plongée ? Prépare la sortie, ajoute tes plongeurs en un scan, et valide leurs carnets d'un geste.
-            </p>
-          </div>
-          <div className="flex flex-col gap-[14px] pt-[22px]">
-            {[
-              { Icone: QrCode, t: "Ajoute les plongeurs à la volée", x: "Ils scannent le QR sur le bateau, ou tu les cherches par leur nom." },
-              { Icone: Users, t: "Ils reçoivent la sortie dans l'app", x: "Date, heure, site, bateau, consignes. Et leur palanquée." },
-              { Icone: Stamp, t: "Tu poses le tampon numérique", x: "Leurs fiches arrivent préremplies ; tu valides toute la sortie d'un geste." },
-            ].map(({ Icone, t, x }) => (
-              <div key={t} className="flex items-start gap-[13px]">
-                <span className="flex h-[42px] w-[42px] shrink-0 items-center justify-center goutte bg-[#E3F2FB]">
-                  <Icone className="h-[20px] w-[20px] text-[#1176A8]" strokeWidth={2.1} aria-hidden="true" />
-                </span>
-                <span>
-                  <span className="block text-[14.5px] font-bold leading-snug">{t}</span>
-                  <span className="block pt-[2px] text-[13px] leading-normal text-[#5B7189]">{x}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="flex-grow" />
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/club/centre" })}
-            className="mt-[28px] flex h-14 w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold text-[#0B3B63]"
-          >
-            CHOISIR MON CENTRE
-          </button>
-        </>
-      )}
 
       {centre && (
         <>
