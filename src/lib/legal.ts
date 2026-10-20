@@ -23,14 +23,16 @@ export const EDITEUR = {
 };
 
 export const HEBERGEURS = [
-  { nom: "Lovable Labs Incorporated", role: "hébergement de l'application", lieu: "Stockholm, Suède", site: "lovable.dev" },
+  { nom: "Vercel Inc.", role: "hébergement de l'application", lieu: "440 N Barranca Ave #4133, Covina, CA 91723, États-Unis", site: "vercel.com" },
+  { nom: "Lovable Labs Incorporated", role: "hébergement de l'application (version de développement)", lieu: "Stockholm, Suède", site: "lovable.dev" },
   { nom: "Supabase Pte. Ltd.", role: "base de données, comptes et photos", lieu: "serveurs en Irlande (Union européenne)", site: "supabase.com" },
 ];
 
 // Ceux qui traitent des données pour le compte de Palanote
 export const PRESTATAIRES = [
   { nom: "Supabase", role: "stockage du carnet, des comptes et des photos", lieu: "Irlande (UE)" },
-  { nom: "Lovable", role: "hébergement de l'application", lieu: "Suède" },
+  { nom: "Vercel", role: "hébergement de l'application", lieu: "États-Unis" },
+  { nom: "Lovable", role: "hébergement de la version de développement", lieu: "Suède" },
   { nom: "Anthropic (Claude)", role: "lecture des carnets papier et des photos, uniquement à ta demande", lieu: "États-Unis" },
   { nom: "Resend", role: "envoi des e-mails (lettre annuelle)", lieu: "États-Unis" },
   { nom: "Google", role: "connexion avec Google, si tu la choisis", lieu: "États-Unis" },
@@ -40,8 +42,8 @@ export const PRESTATAIRES = [
 // Rappel affiché dans le tableau de bord tant que tout n'est pas fait
 export const AVANT_MISE_EN_LIGNE: { tache: string; fait: boolean }[] = [
   { tache: "Ajouter l'e-mail de contact dans src/lib/legal.ts (EDITEUR.email)", fait: EDITEUR.email !== null },
-  { tache: "Vérifier l'hébergeur final (Lovable ou autre) dans les mentions légales", fait: false },
-  { tache: "Retirer « Se souvenir de moi » de la page Connexion", fait: false },
+  { tache: "Vérifier l'hébergeur final (Lovable ou autre) dans les mentions légales", fait: true },
+  { tache: "Retirer « Se souvenir de moi » de la page Connexion", fait: true },
   { tache: "Configurer la connexion Google (Google Cloud + Supabase)", fait: false },
   { tache: "Ajouter le domaine final dans Supabase › Authentication › URL Configuration", fait: false },
   { tache: "Brancher le paiement des forfaits (Stripe), avec conditions de vente et médiateur de la consommation", fait: false },

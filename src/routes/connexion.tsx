@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check } from "lucide-react";
 import { choisirSeSouvenir, seSouvenirDeMoi } from "@/lib/supabase";
 import { signInWithEmail, signInWithGoogle } from "@/lib/auth";
 import { BoutonRetour } from "@/components/BoutonRetour";
@@ -38,8 +37,8 @@ function memoriserChoix(souvenir: boolean, email: string) {
 
 function Connexion() {
   const navigate = useNavigate();
-  // « Se souvenir de moi » : garde la session et préremplit l'adresse e-mail la prochaine fois.
-  const [souvenir, setSouvenir] = useState(() => seSouvenirDeMoi());
+  // La session est toujours gardée (comme une app mobile) ; l'adresse e-mail est préremplie la prochaine fois.
+  const souvenir = true;
   const [email, setEmail] = useState(() => {
     try {
       return (seSouvenirDeMoi() && localStorage.getItem(CLE_EMAIL)) || "";
@@ -130,7 +129,6 @@ function Connexion() {
               onChange={setPassword}
               placeholder="Mot de passe"
             />
-            {/* Rattaché au champ mot de passe, pour ne pas le confondre avec « Se souvenir de moi » */}
             <div className="flex justify-end">
               <Link
                 to="/mot-de-passe-oublie"
@@ -139,21 +137,6 @@ function Connexion() {
                 Mot de passe oublié ?
               </Link>
             </div>
-          </div>
-
-          <div className="-my-[clamp(0px,0.6svh,4px)] flex items-center">
-            <label className="inline-flex min-h-[clamp(34px,5.5svh,44px)] cursor-pointer items-center gap-[10px] text-sm font-medium text-blanc">
-              <input type="checkbox" checked={souvenir} onChange={(e) => setSouvenir(e.target.checked)} className="peer sr-only" />
-              <span
-                aria-hidden="true"
-                className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[7px] border-[1.5px] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-lagon ${
-                  souvenir ? "border-menthe bg-menthe" : "border-blanc/50 bg-blanc/10"
-                }`}
-              >
-                {souvenir && <Check className="h-[15px] w-[15px] text-abyss" strokeWidth={3} />}
-              </span>
-              Se souvenir de moi
-            </label>
           </div>
 
           {error && (
