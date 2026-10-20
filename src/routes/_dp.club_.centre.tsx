@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BadgeCheck, Check, Plus, Search } from "lucide-react";
+import { Anchor, BadgeCheck, Check, Lock, Plus, Search } from "lucide-react";
 import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { ChampTexte, detailErreur, MessageErreur, PageClub, Titre } from "@/components/club/Ui";
 import {
@@ -15,6 +15,9 @@ import {
 } from "@/lib/club";
 
 // Choisir ou créer son centre de plongée (parcours 15, écran 2)
+// Un centre qui a déjà un directeur de plongée ne se rejoint pas en un clic (il protège les données de ses plongeurs).
+const MESSAGE_CENTRE_GERE =
+  "Ce centre a déjà un directeur de plongée. Pour protéger les données de ses plongeurs, on ne peut pas le rejoindre seul : demande à son directeur de plongée d'écrire à Palanote (Paramètres › Aide) pour t'ajouter.";
 export const Route = createFileRoute("/_dp/club_/centre")({
   head: () => ({ meta: [{ title: "Palanote — Mon centre" }] }),
   component: ChoixCentre,
@@ -62,12 +65,14 @@ function ChoixCentre() {
 
   const rejoindre = async (c: Centre) => {
     if (c.membre) return fini(c);
+    if ((c.nb_dp ?? 0) > 0) return setErreur(MESSAGE_CENTRE_GERE);
     setEnCours(true);
     setErreur(null);
     try {
       fini(await rejoindreCentre(c.id));
     } catch (e) {
-      setErreur(detailErreur(e, "Tu n'as pas pu rejoindre ce centre."));
+      const m = e && typeof e === "object" && "message" in e ? String((e as { message: unknown }).message) : "";
+      setErreur(m.includes("centre_deja_gere") ? MESSAGE_CENTRE_GERE : detailErreur(e, "Tu n'as pas pu rejoindre ce centre."));
     } finally {
       setEnCours(false);
     }
@@ -123,7 +128,7 @@ function ChoixCentre() {
           </label>
           <div className="grid grid-cols-1 gap-[8px] pt-[10px] lg:grid-cols-2">
             {autres.map((c) => (
-              <LigneCentre key={c.id} c={c} onClick={() => void rejoindre(c)} desactive={enCours} />
+              <LigneCentre key={c.id} c={c} onClick={() => void rejoindre(c)} desactive={enCours} gere={(c.nb_dp ?? 0) > 0} />
             ))}
             {autres.length === 0 && q.trim().length >= 2 && (
               <p className="px-[4px] text-[13px] text-[#9DB0C0] lg:col-span-2">
@@ -163,8 +168,8 @@ function ChoixCentre() {
                 placeholder="Hyères"
               />
               <p className="text-[12px] leading-snug text-[#9DB0C0]">
-                Les autres directeurs de plongée de ton club pourront le rejoindre. Palanote vérifie
-                les centres ajoutés.
+                Tu en deviens le directeur de plongée. Pour protéger les données de tes plongeurs,
+                personne d'autre ne peut le rejoindre seul : l'ajout passe par Palanote.
               </p>
               <button
                 type="button"
@@ -187,11 +192,13 @@ function LigneCentre({
   onClick,
   membre = false,
   desactive = false,
+  gere = false,
 }: {
   c: Centre;
   onClick: () => void;
   membre?: boolean;
   desactive?: boolean;
+  gere?: boolean;
 }) {
   return (
     <button
@@ -225,6 +232,11 @@ function LigneCentre({
           strokeWidth={2.6}
           aria-label="Ton centre"
         />
+      ) : gere ? (
+        <span className="flex shrink-0 items-center gap-[4px] text-[12.5px] font-semibold text-[#7D93A8]">
+          <Lock className="h-[13px] w-[13px]" strokeWidth={2.4} aria-hidden="true" />
+          Déjà géré
+        </span>
       ) : (
         <span className="shrink-0 text-[13px] font-bold text-[#1176A8]">Rejoindre</span>
       )}
