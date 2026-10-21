@@ -74,7 +74,7 @@ function MesEspeces() {
         {aAnalyser.length > 0 && (
           <button
             type="button"
-            onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: aAnalyser[0]!.id } })}
+            onClick={() => navigate({ to: "/especes/analyser" })}
             className="relative mt-[16px] flex items-center gap-[12px] galet border border-[#BFE6F5] bg-[#E3F4FC] px-[15px] py-[13px] text-left"
           >
             <Meduse className="-right-[4px] -top-[14px]" />
@@ -86,7 +86,7 @@ function MesEspeces() {
                 {aAnalyser.length} plongée{aAnalyser.length > 1 ? "s" : ""} avec photos à analyser
               </span>
               <span className="block truncate text-[12.5px] text-[#5B7189]">
-                Commencer par {aAnalyser[0]!.site} ({aAnalyser[0]!.n} photo{aAnalyser[0]!.n > 1 ? "s" : ""})
+                Voir les photos et lancer l'analyse
               </span>
             </span>
             <ChevronRight className="h-[17px] w-[17px] text-[#1176A8]" aria-hidden="true" />

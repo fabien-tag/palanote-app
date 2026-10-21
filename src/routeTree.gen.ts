@@ -47,6 +47,7 @@ import { Route as AmisPropositionRouteImport } from './routes/amis_.proposition'
 import { Route as AmisRechercherRouteImport } from './routes/amis_.rechercher'
 import { Route as ClubFicheSecuriteRouteImport } from './routes/club_.fiche-securite'
 import { Route as ClubsSlugRouteImport } from './routes/clubs.$slug'
+import { Route as EspecesAnalyserRouteImport } from './routes/especes_.analyser'
 import { Route as MoiAideRouteImport } from './routes/moi_.aide'
 import { Route as MoiAvisRouteImport } from './routes/moi_.avis'
 import { Route as MoiConfidentialiteRouteImport } from './routes/moi_.confidentialite'
@@ -268,6 +269,11 @@ const ClubsSlugRoute = ClubsSlugRouteImport.update({
   path: '/clubs/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspecesAnalyserRoute = EspecesAnalyserRouteImport.update({
+  id: '/especes_/analyser',
+  path: '/especes/analyser',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MoiAideRoute = MoiAideRouteImport.update({
   id: '/moi_/aide',
   path: '/moi/aide',
@@ -457,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
   '/clubs/$slug': typeof ClubsSlugRoute
+  '/especes/analyser': typeof EspecesAnalyserRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
@@ -526,6 +533,7 @@ export interface FileRoutesByTo {
   '/amis/rechercher': typeof AmisRechercherRoute
   '/club/fiche-securite': typeof ClubFicheSecuriteRoute
   '/clubs/$slug': typeof ClubsSlugRoute
+  '/especes/analyser': typeof EspecesAnalyserRoute
   '/moi/aide': typeof MoiAideRoute
   '/moi/avis': typeof MoiAvisRoute
   '/moi/confidentialite': typeof MoiConfidentialiteRoute
@@ -597,6 +605,7 @@ export interface FileRoutesById {
   '/amis_/rechercher': typeof AmisRechercherRoute
   '/club_/fiche-securite': typeof ClubFicheSecuriteRoute
   '/clubs/$slug': typeof ClubsSlugRoute
+  '/especes_/analyser': typeof EspecesAnalyserRoute
   '/moi_/aide': typeof MoiAideRoute
   '/moi_/avis': typeof MoiAvisRoute
   '/moi_/confidentialite': typeof MoiConfidentialiteRoute
@@ -668,6 +677,7 @@ export interface FileRouteTypes {
     | '/amis/rechercher'
     | '/club/fiche-securite'
     | '/clubs/$slug'
+    | '/especes/analyser'
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
@@ -737,6 +747,7 @@ export interface FileRouteTypes {
     | '/amis/rechercher'
     | '/club/fiche-securite'
     | '/clubs/$slug'
+    | '/especes/analyser'
     | '/moi/aide'
     | '/moi/avis'
     | '/moi/confidentialite'
@@ -807,6 +818,7 @@ export interface FileRouteTypes {
     | '/amis_/rechercher'
     | '/club_/fiche-securite'
     | '/clubs/$slug'
+    | '/especes_/analyser'
     | '/moi_/aide'
     | '/moi_/avis'
     | '/moi_/confidentialite'
@@ -877,6 +889,7 @@ export interface RootRouteChildren {
   AmisRechercherRoute: typeof AmisRechercherRoute
   ClubFicheSecuriteRoute: typeof ClubFicheSecuriteRoute
   ClubsSlugRoute: typeof ClubsSlugRoute
+  EspecesAnalyserRoute: typeof EspecesAnalyserRoute
   MoiAideRoute: typeof MoiAideRoute
   MoiAvisRoute: typeof MoiAvisRoute
   MoiConfidentialiteRoute: typeof MoiConfidentialiteRoute
@@ -1161,6 +1174,13 @@ declare module '@tanstack/react-router' {
       path: '/clubs/$slug'
       fullPath: '/clubs/$slug'
       preLoaderRoute: typeof ClubsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/especes_/analyser': {
+      id: '/especes_/analyser'
+      path: '/especes/analyser'
+      fullPath: '/especes/analyser'
+      preLoaderRoute: typeof EspecesAnalyserRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/moi_/aide': {
@@ -1452,6 +1472,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmisRechercherRoute: AmisRechercherRoute,
   ClubFicheSecuriteRoute: ClubFicheSecuriteRoute,
   ClubsSlugRoute: ClubsSlugRoute,
+  EspecesAnalyserRoute: EspecesAnalyserRoute,
   MoiAideRoute: MoiAideRoute,
   MoiAvisRoute: MoiAvisRoute,
   MoiConfidentialiteRoute: MoiConfidentialiteRoute,

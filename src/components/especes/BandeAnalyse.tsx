@@ -181,7 +181,7 @@ export function BandeAnalyse({ diveId, nbPhotos }: { diveId: string; nbPhotos: n
 }
 
 // Écran 45 : consentement à l'analyse, demandé une seule fois.
-function FeuilleAccord({ nbPhotos, onAccepter, onFermer }: { nbPhotos: number; onAccepter: () => void; onFermer: () => void }) {
+export function FeuilleAccord({ nbPhotos, onAccepter, onFermer }: { nbPhotos: number; onAccepter: () => void; onFermer: () => void }) {
   const point = (Icone: typeof Eye, titre: string, texte: string) => (
     <div className="flex gap-[12px] py-[8px]">
       <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center goutte bg-[#E3F4FC]">
