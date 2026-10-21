@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, ImagePlus, Play, Plus, Trash2, XCircle } from "lucide-react";
 import { carte } from "@/components/admin/Bento";
+import { SuiviProduction } from "@/components/admin/SuiviAgent";
 import {
   ajouterCas,
   CHAMPS_EVAL,
@@ -84,6 +85,7 @@ export function SectionAgent() {
 
   return (
     <div className="flex flex-col gap-[18px]">
+      <SuiviProduction />
       <div className={`${carte} p-[20px]`}>
         <div className="flex flex-wrap items-start gap-[14px]">
           <div className="min-w-0 flex-1">

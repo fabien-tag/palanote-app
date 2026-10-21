@@ -121,3 +121,39 @@ export function resume(resultats: ResultatEval[]) {
     dureeMoyenne: n ? Math.round(somme((r) => r.duree_ms ?? 0) / n / 100) / 10 : 0,
   };
 }
+
+// ---------- L'agent en production (sql/palanote-suivi-agent.sql) ----------
+export type ChiffresMode = {
+  pages: number;
+  lues: number;
+  illisibles: number;
+  erreurs: number;
+  en_cours: number;
+  avec_verification: number;
+  verifications: number;
+  zooms: number;
+  pages_voisines: number;
+  etapes_moyennes: number | null;
+  tokens_entree: number;
+  tokens_sortie: number;
+  pages_avec_tokens: number;
+  champs_proposes: number;
+  champs_corriges: number;
+  faux_surs: number;
+  champs_surs: number;
+  champs_completes: number;
+};
+export type SuiviAgent = {
+  jours: number;
+  modes: { agent: ChiffresMode; direct: ChiffresMode };
+  plongees_validees: number;
+  plongees_rejetees: number;
+  par_jour: { jour: string; agent: number; direct: number }[];
+  dernieres: { le: string; mode: "agent" | "direct"; statut: string; etapes: number | null; verifications: string[]; tokens: number; erreur: string | null }[];
+};
+
+export async function chargerSuiviAgent(jours: number): Promise<SuiviAgent> {
+  const { data, error } = await supabase.rpc("admin_suivi_agent", { p_jours: jours });
+  if (error) throw error;
+  return data as SuiviAgent;
+}
