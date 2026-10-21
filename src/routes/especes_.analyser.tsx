@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronLeft, ChevronRight, Eye, Fish, RefreshCw } from "lucide-react";
-import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
+import { useConnexionRequise } from "@/components/numerisation/Ui";
 import { FeuilleAccord } from "@/components/especes/BandeAnalyse";
 import {
   accordAnalyse,
@@ -238,7 +238,6 @@ function AnalyserPhotos() {
               key={l.id}
               className="relative galet-b border border-[#DCE7F0] bg-white p-[14px] shadow-[0_4px_14px_#123A6308]"
             >
-              {l.etat === "trouvees" && <Meduse className="-right-[4px] -top-[14px]" />}
               <button
                 type="button"
                 onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: l.id } })}

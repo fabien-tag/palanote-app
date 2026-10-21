@@ -1,0 +1,12 @@
+{
+  "name": "palanote-tests-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "rapport": "playwright show-report rapport"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.0"
+  }
+}

@@ -116,7 +116,7 @@ function Fin() {
       </div>
 
       <div className="flex flex-col gap-[11px] px-[22px] pb-[24px] pt-[20px]">
-        <BoutonPrincipal onClick={voirPlongees}>{nb > 0 ? `Voir mes ${nb > 1 ? `${nb} plongées` : "plongée"}` : "Voir mon carnet"}</BoutonPrincipal>
+        <BoutonPrincipal onClick={voirPlongees}>{nb > 0 ? nb > 1 ? `Voir mes ${nb} plongées` : "Voir ma plongée" : "Voir mon carnet"}</BoutonPrincipal>
         <BoutonSecondaire onClick={() => navigate({ to: "/numeriser/capture" })}>Numériser le carnet suivant</BoutonSecondaire>
         <div className="pt-2">
           <LienDiscret onClick={() => navigate({ to: "/carnet" })}>Revenir à l'accueil</LienDiscret>
