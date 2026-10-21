@@ -206,3 +206,43 @@ export async function urlPhotoMedia(mediaId: string): Promise<string | null> {
   const { data: s } = await supabase.storage.from("photos").createSignedUrl(chemin, 60 * 60 * 6);
   return s?.signedUrl ?? null;
 }
+
+// ---------- Image de référence d'une espèce (pour comparer avec sa propre photo avant de valider) ----------
+// Tirée de Wikipédia (résumé de page, image libre) : d'abord le nom latin, puis le nom courant.
+export type ImageReference = { url: string; page: string; titre: string };
+const cacheReferences = new Map<string, Promise<ImageReference | null>>();
+
+async function resumeWikipedia(langue: "fr" | "en", titre: string): Promise<ImageReference | null> {
+  const r = await fetch(`https://${langue}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(titre.trim().replace(/ /g, "_"))}`, {
+    headers: { accept: "application/json" },
+  });
+  if (!r.ok) return null;
+  const d = (await r.json()) as { type?: string; title?: string; thumbnail?: { source?: string }; content_urls?: { desktop?: { page?: string } } };
+  if (d.type === "disambiguation" || !d.thumbnail?.source) return null;
+  return { url: d.thumbnail.source, page: d.content_urls?.desktop?.page ?? `https://${langue}.wikipedia.org/wiki/${encodeURIComponent(titre)}`, titre: d.title ?? titre };
+}
+
+export function imageReference(nom: string, nomLatin: string | null): Promise<ImageReference | null> {
+  const latin = nomLatin ?? latinDe(nom);
+  const cle = `${latin ?? ""}|${nom}`;
+  let p = cacheReferences.get(cle);
+  if (!p) {
+    p = (async () => {
+      const essais: ["fr" | "en", string][] = [];
+      if (latin) essais.push(["fr", latin]);
+      essais.push(["fr", nom]);
+      if (latin) essais.push(["en", latin]);
+      for (const [langue, titre] of essais) {
+        try {
+          const ref = await resumeWikipedia(langue, titre);
+          if (ref) return ref;
+        } catch {
+          /* hors ligne ou page absente : essai suivant */
+        }
+      }
+      return null;
+    })();
+    cacheReferences.set(cle, p);
+  }
+  return p;
+}

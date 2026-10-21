@@ -33,6 +33,7 @@ type Ligne = {
   nbPhotos: number;
   etat: Etat;
   proposees: number;
+  validees: number;
 };
 
 function etatDe(statut: StatutAnalyse, proposees: number): Etat {
@@ -97,6 +98,7 @@ function AnalyserPhotos() {
             chargerEspeces(p.id).catch(() => []),
           ]);
           const proposees = especes.filter((e) => e.statut === "proposee").length;
+          const validees = especes.filter((e) => e.statut === "validee").length;
           return {
             id: p.id,
             site: p.siteNom || "Plongée sans site",
@@ -105,6 +107,7 @@ function AnalyserPhotos() {
             nbPhotos: nb.get(p.id) ?? 0,
             etat: etatDe(statut.get(p.id) ?? null, proposees),
             proposees,
+            validees,
           } satisfies Ligne;
         }),
       );
@@ -140,7 +143,8 @@ function AnalyserPhotos() {
     try {
       const [statut, especes] = await Promise.all([statutAnalyse(id), chargerEspeces(id)]);
       const proposees = especes.filter((e) => e.statut === "proposee").length;
-      if (actif.current) majLigne(id, { etat: etatDe(statut, proposees), proposees });
+      const validees = especes.filter((e) => e.statut === "validee").length;
+      if (actif.current) majLigne(id, { etat: etatDe(statut, proposees), proposees, validees });
     } catch {
       /* on réessaie au prochain tour */
     }
@@ -265,7 +269,7 @@ function AnalyserPhotos() {
                 <ActionLigne
                   l={l}
                   onAnalyser={() => void analyser([l.id])}
-                  onValider={() => navigate({ to: "/plongee/especes", search: { id: l.id } })}
+                  onValider={() => navigate({ to: "/plongee/especes", search: { id: l.id, depuis: "analyser" } })}
                 />
               </div>
             </article>
@@ -330,7 +334,7 @@ function ActionLigne({
     return (
       <div className="flex items-center gap-[8px] text-[13px] text-[#5B7189]">
         <Check className="h-[15px] w-[15px] text-[#14805F]" strokeWidth={2.6} aria-hidden="true" />
-        <span className="flex-1">Déjà analysée</span>
+        <span className="flex-1">{l.validees > 0 ? `${l.validees} espèce${l.validees > 1 ? "s" : ""} validée${l.validees > 1 ? "s" : ""}` : "Analysée, aucune espèce gardée"}</span>
         <button
           type="button"
           onClick={onValider}

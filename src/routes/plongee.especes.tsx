@@ -3,15 +3,16 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronLeft, Eye, Plus, X } from "lucide-react";
 import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
 import { dateCourte } from "@/lib/amis";
-import { chargerEspeces, ESPECES_COURANTES, validerEspeces, type EspecePlongee } from "@/lib/especes";
+import { chargerEspeces, ESPECES_COURANTES, imageReference, validerEspeces, type EspecePlongee, type ImageReference } from "@/lib/especes";
 import { chargerGalerie, type PhotoGalerie } from "@/lib/galerie";
 import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { chargerPlongee } from "@/lib/plongees";
 
 // Écran 46 : espèces détectées, à valider. L'app propose, tu valides.
 export const Route = createFileRoute("/plongee/especes")({
-  validateSearch: (search: Record<string, unknown>): { id?: string | undefined } => ({
+  validateSearch: (search: Record<string, unknown>): { id?: string | undefined; depuis?: "analyser" | undefined } => ({
     id: typeof search["id"] === "string" ? search["id"] : undefined,
+    depuis: search["depuis"] === "analyser" ? "analyser" : undefined,
   }),
   head: () => ({ meta: [{ title: "Palanote — Espèces détectées" }] }),
   component: EspecesDetectees,
@@ -29,9 +30,46 @@ function Pastille({ e }: { e: EspecePlongee }) {
   );
 }
 
+// L'image de référence de l'espèce proposée (Wikipédia), avec le lien vers sa fiche
+function Reference({ nom, latin }: { nom: string; latin: string | null }) {
+  const [ref, setRef] = useState<ImageReference | null | undefined>(undefined);
+  useEffect(() => {
+    let actif = true;
+    void imageReference(nom, latin).then((r) => actif && setRef(r));
+    return () => {
+      actif = false;
+    };
+  }, [nom, latin]);
+  return (
+    <figure>
+      <div className="flex h-[132px] items-center justify-center overflow-hidden rounded-[14px] bg-[#EEF4F9]">
+        {ref === undefined ? (
+          <span className="h-full w-full animate-pulse bg-[#E3EDF6]" />
+        ) : ref ? (
+          <img src={ref.url} alt={`Image de référence : ${nom}`} className="h-full w-full object-cover" />
+        ) : (
+          <span className="px-[10px] text-center text-[12px] leading-snug text-[#9DB0C0]">Pas d'image de référence pour cette espèce</span>
+        )}
+      </div>
+      <figcaption className="px-[2px] pt-[5px] text-[11.5px] font-semibold text-[#5B7189]">
+        {ref ? (
+          <a href={ref.page} target="_blank" rel="noreferrer" className="text-[#1176A8] underline-offset-2 hover:underline">
+            Référence (Wikipédia)
+          </a>
+        ) : (
+          "Référence"
+        )}
+      </figcaption>
+    </figure>
+  );
+}
+
 function EspecesDetectees() {
   const navigate = useNavigate();
-  const { id } = Route.useSearch();
+  const { id, depuis } = Route.useSearch();
+  // On revient là d'où l'on vient : l'écran « Analyser mes photos », ou la fiche de la plongée (en lecture)
+  const revenir = () =>
+    depuis === "analyser" ? navigate({ to: "/especes/analyser" }) : id ? navigate({ to: "/nouvelle-plongee", search: { id } }) : navigate({ to: "/carnet" });
   const { pret, ecran } = useConnexionRequise();
   const [especes, setEspeces] = useState<EspecePlongee[] | null>(null);
   const [choix, setChoix] = useState<Record<string, Choix>>({});
@@ -87,7 +125,7 @@ function EspecesDetectees() {
         .map(([eid, c]) => ({ id: eid, garder: c === "garder" }));
       await validerEspeces(id, decisions, ajouts);
       annoncerSurAccueil(nbGardees > 0 ? `${nbGardees} espèce${nbGardees > 1 ? "s" : ""} ajoutée${nbGardees > 1 ? "s" : ""} à ta plongée` : "C'est noté");
-      navigate({ to: "/nouvelle-plongee", search: { id } });
+      revenir();
     } catch (e) {
       console.error(e);
       setErreur("Ta sélection n'a pas pu être enregistrée. Réessaie.");
@@ -126,12 +164,12 @@ function EspecesDetectees() {
           <button
             type="button"
             aria-label="Retour"
-            onClick={() => (id ? navigate({ to: "/nouvelle-plongee", search: { id } }) : navigate({ to: "/carnet" }))}
+            onClick={revenir}
             className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]"
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
-          <button type="button" onClick={() => (id ? navigate({ to: "/nouvelle-plongee", search: { id } }) : navigate({ to: "/carnet" }))} className="px-[2px] py-[8px] text-[14.5px] font-medium text-[#5B7189]">
+          <button type="button" onClick={revenir} className="px-[2px] py-[8px] text-[14.5px] font-medium text-[#5B7189]">
             Passer
           </button>
         </div>
@@ -161,23 +199,32 @@ function EspecesDetectees() {
           {liste.map((e, i) => {
             const ph = photoDe(e.media_id);
             return (
-              <div key={e.id} className={`relative flex items-center gap-[12px] ${["galet", "galet-b", "galet-c"][i % 3]} border border-[#DCE7F0] bg-white px-[12px] py-[12px] shadow-[0_4px_14px_#123A6308]`}>
-                {i === 0 && <Meduse className="right-[52px] -top-[14px]" />}
-                <span className="flex h-[58px] w-[58px] shrink-0 items-center justify-center overflow-hidden goutte bg-[#E3F4FC]">
-                  {ph ? <img src={ph.url} alt="" className="h-full w-full object-cover" /> : <Eye className="h-[20px] w-[20px] text-[#8FBAD4]" strokeWidth={1.8} />}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[16px] font-bold">{e.nom}</span>
-                  {e.nom_latin && <span className="block truncate text-[12.5px] italic text-[#5B7189]">{e.nom_latin}</span>}
-                  <span className="flex flex-wrap items-center gap-[6px] pt-[5px]">
-                    <Pastille e={e} />
-                    {e.alternative && <span className="truncate text-[11.5px] text-[#9DB0C0]">ou {e.alternative}</span>}
+              <div key={e.id} className={`relative ${["galet", "galet-b", "galet-c"][i % 3]} border border-[#DCE7F0] bg-white p-[10px] shadow-[0_4px_14px_#123A6308]`}>
+                {i === 0 && <Meduse className="-right-[6px] -top-[18px]" />}
+                {/* Ta photo et une image de référence, côte à côte, pour comparer avant de valider */}
+                <div className="grid grid-cols-2 gap-[8px]">
+                  <figure>
+                    <div className="flex h-[132px] items-center justify-center overflow-hidden rounded-[14px] bg-[#E3F4FC]">
+                      {ph ? <img src={ph.url} alt={`Ta photo, où l'IA voit : ${e.nom}`} className="h-full w-full object-cover" /> : <Eye className="h-[22px] w-[22px] text-[#8FBAD4]" strokeWidth={1.8} />}
+                    </div>
+                    <figcaption className="px-[2px] pt-[5px] text-[11.5px] font-semibold text-[#5B7189]">Ta photo</figcaption>
+                  </figure>
+                  <Reference nom={e.nom} latin={e.nom_latin} />
+                </div>
+                <div className="flex items-center gap-[12px] px-[4px] pt-[10px]">
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[16px] font-bold">{e.nom}</span>
+                    {e.nom_latin && <span className="block truncate text-[12.5px] italic text-[#5B7189]">{e.nom_latin}</span>}
+                    <span className="flex flex-wrap items-center gap-[6px] pt-[5px]">
+                      <Pastille e={e} />
+                      {e.alternative && <span className="truncate text-[11.5px] text-[#9DB0C0]">ou {e.alternative}</span>}
+                    </span>
                   </span>
-                </span>
-                <span className="flex flex-col gap-[6px]">
-                  {boutonChoix(e, "garder")}
-                  {boutonChoix(e, "retirer")}
-                </span>
+                  <span className="flex gap-[6px]">
+                    {boutonChoix(e, "garder")}
+                    {boutonChoix(e, "retirer")}
+                  </span>
+                </div>
               </div>
             );
           })}
