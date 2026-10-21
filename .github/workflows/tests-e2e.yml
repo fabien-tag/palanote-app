@@ -1,0 +1,53 @@
+# Vérification automatique de Palanote à chaque push (et chaque modification venue de Lovable).
+# Lance les tests Playwright de tests/e2e (faux Supabase en mémoire : aucune vraie donnée, aucun crédit IA).
+# Résultat : coche verte ou croix rouge sur le commit, e-mail de GitHub en cas d'échec,
+# et le rapport avec les captures d'écran à télécharger dans l'onglet Actions.
+name: Tests de bout en bout
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: tests-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Dépendances de l'app
+        run: bun install
+
+      - name: Dépendances des tests
+        working-directory: tests/e2e
+        run: npm ci
+
+      - name: Navigateur de test
+        working-directory: tests/e2e
+        run: npx playwright install --with-deps chromium
+
+      - name: Tests Playwright
+        working-directory: tests/e2e
+        run: npx playwright test
+
+      - name: Rapport et captures d'écran
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-playwright
+          path: |
+            tests/e2e/rapport
+            tests/e2e/resultats
+          retention-days: 14
