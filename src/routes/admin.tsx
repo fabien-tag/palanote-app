@@ -1,4 +1,5 @@
 import { SectionAgent } from "@/components/admin/BancAgent";
+import { SectionAudience } from "@/components/admin/Audience";
 import { Fragment, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight, ChevronDown, Mail, RefreshCw, Search, Trash2 } from "lucide-react";
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/admin")({
   component: TableauDeBord,
 });
 
-type Section = "apercu" | "agent" | "finances" | "lettre" | "retours" | "erreurs" | "utilisateurs";
+type Section = "apercu" | "audience" | "agent" | "finances" | "lettre" | "retours" | "erreurs" | "utilisateurs";
 type Donnees = Awaited<ReturnType<typeof chargerTableauDeBord>>;
 
 // ---------- Outils ----------
@@ -399,7 +400,7 @@ function TableauDeBord() {
   const [section, setSection] = useState<Section>("apercu");
   // Un titre de page par onglet (WCAG 2.4.2) : le lecteur d'écran et l'onglet du navigateur disent où l'on est
   useEffect(() => {
-    const noms: Record<Section, string> = { apercu: "Vue d'ensemble", agent: "Agent IA", retours: "Retours", erreurs: "Erreurs", utilisateurs: "Utilisateurs", finances: "Finances", lettre: "Lettre annuelle" };
+    const noms: Record<Section, string> = { apercu: "Vue d'ensemble", audience: "Audience", agent: "Agent IA", retours: "Retours", erreurs: "Erreurs", utilisateurs: "Utilisateurs", finances: "Finances", lettre: "Lettre annuelle" };
     document.title = `Palanote — Admin · ${noms[section]}`;
   }, [section]);
   const [chargement, setChargement] = useState(false);
@@ -463,6 +464,7 @@ function TableauDeBord() {
   const nbErreurs = s?.erreurs_24h ?? 0;
   const sections: { id: Section; label: string; badge?: number | undefined; couleur?: Couleur }[] = [
     { id: "apercu", label: "Vue d'ensemble" },
+    { id: "audience", label: "Audience" },
     { id: "agent", label: "Agent IA" },
     { id: "retours", label: "Retours", badge: nbRetours, couleur: "orange" },
     { id: "erreurs", label: "Erreurs", badge: nbErreurs, couleur: nbErreurs > 5 ? "rouge" : "orange" },
@@ -578,6 +580,7 @@ function TableauDeBord() {
         {donnees && (
           <div className="mt-[28px]">
             {section === "apercu" && <Apercu d={donnees} aller={setSection} />}
+            {section === "audience" && <SectionAudience />}
             {section === "agent" && <SectionAgent />}
             {section === "retours" && <SectionRetours retours={donnees.retours} onChange={changerRetour} />}
             {section === "erreurs" && <SectionErreurs erreurs={donnees.erreurs} onEffacer={effacer} />}

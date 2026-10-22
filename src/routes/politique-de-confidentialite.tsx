@@ -124,7 +124,9 @@ function PolitiqueConfidentialite() {
 
       <Bloc titre="Cookies">
         <p>
-          Palanote n'utilise ni cookies publicitaires ni outils de mesure d'audience tiers. Ton navigateur garde seulement ce qui est
+          Palanote n'utilise aucun cookie publicitaire. Pour savoir combien de personnes utilisent l'app, on se sert de la mesure
+          d'audience de Vercel, notre hébergeur : elle ne dépose aucun cookie, ne te suit pas d'un site à l'autre et ne garde que des
+          chiffres anonymes (pages vues, sans les paramètres de l'adresse, type d'appareil, pays). Ton navigateur garde seulement ce qui est
           nécessaire au fonctionnement : ta session de connexion, quelques préférences, et une copie de ton carnet pour l'ouvrir sans
           réseau (avec les plongées notées hors ligne, en attente d'envoi). Cette copie reste sur ton téléphone et s'efface quand tu te
           déconnectes. C'est pour ça qu'on ne te demande rien à l'ouverture.

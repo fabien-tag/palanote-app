@@ -1,4 +1,5 @@
 import { LienEvitement } from "@/components/LienEvitement";
+import { Analytics } from "@vercel/analytics/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -156,6 +157,9 @@ function RootComponent() {
       <Outlet />
       {/* Accord aux conditions d'utilisation, demandé une fois par version */}
       <FeuilleConditions />
+      {/* Mesure d'audience Vercel, sans cookie. On n'envoie que le chemin de la page :
+          les paramètres (?token=…, ?lot=…) et le # (jetons de connexion) restent dans le navigateur. */}
+      <Analytics beforeSend={(e) => ({ ...e, url: e.url.split(/[?#]/)[0]! })} />
     </QueryClientProvider>
   );
 }

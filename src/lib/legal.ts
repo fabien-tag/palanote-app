@@ -31,7 +31,7 @@ export const HEBERGEURS = [
 // Ceux qui traitent des données pour le compte de Palanote
 export const PRESTATAIRES = [
   { nom: "Supabase", role: "stockage du carnet, des comptes et des photos", lieu: "Irlande (UE)" },
-  { nom: "Vercel", role: "hébergement de l'application", lieu: "États-Unis" },
+  { nom: "Vercel", role: "hébergement de l'application et mesure d'audience anonyme, sans cookie (pages vues, type d'appareil, pays)", lieu: "États-Unis" },
   { nom: "Lovable", role: "hébergement de la version de développement", lieu: "Suède" },
   { nom: "Anthropic (Claude)", role: "lecture des carnets papier et des photos, uniquement à ta demande", lieu: "États-Unis" },
   { nom: "Resend", role: "envoi des e-mails (lettre annuelle)", lieu: "États-Unis" },
