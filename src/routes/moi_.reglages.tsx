@@ -14,7 +14,7 @@ export const Route = createFileRoute("/moi_/reglages")({
 });
 
 const champ =
-  "block h-[48px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]";
+  "block h-[48px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[14px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]";
 const boutonPetit = "flex h-[44px] flex-1 items-center justify-center galet-moyen text-[13px] font-bold disabled:opacity-50";
 
 function Reglages() {
@@ -184,13 +184,13 @@ function Reglages() {
         {ouvert === "email" && (
           <div className="flex flex-col gap-[10px] pb-[14px]">
             {compte?.avecGoogle && !compte.avecMotDePasse ? (
-              <p className="text-[12.5px] leading-normal text-[#5B7189]">Tu te connectes avec Google : ton adresse e-mail est celle de ton compte Google.</p>
+              <p className="text-[12.5px] leading-normal text-[#566B82]">Tu te connectes avec Google : ton adresse e-mail est celle de ton compte Google.</p>
             ) : (
               <>
                 <input className={champ} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Nouvelle adresse" autoComplete="email" />
-                <p className="text-[12px] text-[#9DB0C0]">Un lien de confirmation part vers la nouvelle adresse. L'ancienne reste active d'ici là.</p>
+                <p className="text-[12px] text-[#566B82]">Un lien de confirmation part vers la nouvelle adresse. L'ancienne reste active d'ici là.</p>
                 <div className="flex gap-[10px]">
-                  <button type="button" className={`${boutonPetit} bg-[#EEF4F9] text-[#5B7189]`} onClick={() => setOuvert(null)}>
+                  <button type="button" className={`${boutonPetit} bg-[#EEF4F9] text-[#566B82]`} onClick={() => setOuvert(null)}>
                     Annuler
                   </button>
                   <button type="button" disabled={enCours} className={`${boutonPetit} bg-[#3DEFBE] text-[#0B3B63]`} onClick={() => void validerEmail()}>
@@ -205,14 +205,14 @@ function Reglages() {
         {ouvert === "mdp" && (
           <div className="flex flex-col gap-[10px] pb-[14px]">
             {compte?.avecGoogle && !compte.avecMotDePasse && (
-              <p className="text-[12.5px] leading-normal text-[#5B7189]">
+              <p className="text-[12.5px] leading-normal text-[#566B82]">
                 Tu te connectes avec Google. Tu peux aussi définir un mot de passe pour te connecter avec ton adresse e-mail.
               </p>
             )}
             <input className={champ} type="password" value={mdp} onChange={(e) => setMdp(e.target.value)} placeholder="Nouveau mot de passe" autoComplete="new-password" />
             <input className={champ} type="password" value={mdp2} onChange={(e) => setMdp2(e.target.value)} placeholder="Encore une fois" autoComplete="new-password" />
             <div className="flex gap-[10px]">
-              <button type="button" className={`${boutonPetit} bg-[#EEF4F9] text-[#5B7189]`} onClick={() => setOuvert(null)}>
+              <button type="button" className={`${boutonPetit} bg-[#EEF4F9] text-[#566B82]`} onClick={() => setOuvert(null)}>
                 Annuler
               </button>
               <button type="button" disabled={enCours} className={`${boutonPetit} bg-[#3DEFBE] text-[#0B3B63]`} onClick={() => void validerMdp()}>
@@ -231,7 +231,7 @@ function Reglages() {
       >
         Se déconnecter
       </button>
-      <button type="button" onClick={() => setSuppression(true)} className="mx-auto mt-[22px] text-[14px] font-bold text-[#C94957]">
+      <button type="button" onClick={() => setSuppression(true)} className="mx-auto mt-[22px] text-[14px] font-bold text-[#B8432F]">
         Supprimer mon compte
       </button>
 

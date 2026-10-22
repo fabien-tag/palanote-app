@@ -170,7 +170,7 @@ export function VitrineClub({ onFini }: { onFini: (c: Centre) => void }) {
               className="grid grid-cols-1 items-center gap-[28px] lg:grid-cols-2 lg:gap-[72px]"
             >
               <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                <p className="text-[14px] font-bold text-[#1176A8]">{m.quand}</p>
+                <p className="text-[14px] font-bold text-[#106F9F]">{m.quand}</p>
                 <h3 className="max-w-[24ch] pt-[8px] text-[24px] font-bold leading-tight lg:text-[28px]">
                   {m.titre}
                 </h3>
@@ -202,7 +202,7 @@ export function VitrineClub({ onFini }: { onFini: (c: Centre) => void }) {
           <div className="flex gap-[16px]">
             <span className="flex h-[48px] w-[48px] shrink-0 items-center justify-center goutte bg-white">
               <Lock
-                className="h-[22px] w-[22px] text-[#1176A8]"
+                className="h-[22px] w-[22px] text-[#106F9F]"
                 strokeWidth={2.2}
                 aria-hidden="true"
               />

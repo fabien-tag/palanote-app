@@ -94,7 +94,7 @@ function Organiser() {
           <Avatar id={estMoi ? null : id} prenom={prenom} taille={38} />
           <span className="min-w-0 flex-1">
             <span className="block truncate text-[15px] font-bold">{estMoi ? `${prenom} (toi)` : prenom}</span>
-            <span className="block truncate text-[12px] text-[#5B7189]">{sousTitre}</span>
+            <span className="block truncate text-[12px] text-[#566B82]">{sousTitre}</span>
           </span>
           <span className={`flex h-[26px] w-[26px] items-center justify-center rounded-[8px] ${choisi ? "bg-[#3DEFBE]" : "border-2 border-[#D5E1EC]"}`}>
             {choisi && <Check className="h-[16px] w-[16px] text-[#0B3B63]" strokeWidth={3} />}
@@ -109,7 +109,7 @@ function Organiser() {
                 role="radio"
                 aria-checked={choix[id] === p}
                 onClick={() => placer(id, p)}
-                className={`h-[30px] w-[42px] rounded-[15px] text-[12.5px] font-bold ${choix[id] === p ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                className={`h-[30px] w-[42px] rounded-[15px] text-[12.5px] font-bold ${choix[id] === p ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
               >
                 P{p}
               </button>
@@ -135,7 +135,7 @@ function Organiser() {
         </button>
       }
     >
-      <p className="pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">
+      <p className="pt-[4px] text-[13.5px] leading-normal text-[#566B82]">
         Tes binômes reçoivent la sortie dans leur app. Après la plongée, chacun a sa fiche préremplie.
       </p>
 
@@ -165,7 +165,7 @@ function Organiser() {
         {moi && ligne("moi", moi.prenom || "Moi", "Tu organises, tu plonges aussi")}
         {(binomes ?? []).map((b) => ligne(b.id, b.prenom, [b.niveau, b.club].filter(Boolean).join(" · ") || "Binôme"))}
         {binomes && binomes.length === 0 && (
-          <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] leading-normal text-[#566B82]">
             Ajoute d'abord tes binômes dans Amis (QR code ou recherche). Tu pourras aussi montrer le QR de la sortie sur place.
           </p>
         )}
@@ -178,9 +178,9 @@ function Organiser() {
         rows={2}
         placeholder="On part du port à 9h, je prends le bateau de Marc…"
         aria-label="Un mot pour tes binômes"
-        className="w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] py-[12px] text-[15px] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+        className="w-full galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] py-[12px] text-[15px] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
       />
-      <p className="pt-[8px] text-[12px] leading-snug text-[#9DB0C0]">
+      <p className="pt-[8px] text-[12px] leading-snug text-[#566B82]">
         Une sortie entre amis n'a pas de tampon : seul le directeur de plongée d'un centre peut en poser un.
       </p>
       <MessageErreur texte={erreur} />

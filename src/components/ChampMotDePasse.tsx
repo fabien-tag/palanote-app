@@ -7,12 +7,15 @@ export function ChampMotDePasse({
   onChange,
   placeholder,
   autoComplete = "current-password",
+  erreurId,
 }: {
   id: string;
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
   autoComplete?: string;
+  // id du message d'erreur affiché sous le formulaire : le champ est alors signalé invalide
+  erreurId?: string | undefined;
 }) {
   const [visible, setVisible] = useState(false);
   return (
@@ -25,6 +28,8 @@ export function ChampMotDePasse({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        aria-invalid={erreurId ? true : undefined}
+        aria-describedby={erreurId}
         className="min-h-[clamp(46px,6.6vh,52px)] w-full galet-moyen border-0 bg-blanc px-4 pr-12 text-base text-foreground outline-none focus:border-lagon"
       />
       <button

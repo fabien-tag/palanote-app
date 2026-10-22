@@ -66,14 +66,14 @@ function Reprendre() {
     <FondNumerisation>
       <div className="flex items-center justify-between px-[22px] pt-[18px]">
         <BoutonRetourCarre onClick={() => navigate({ to: "/numeriser" })} />
-        <button type="button" onClick={() => navigate({ to: "/carnet" })} className="text-[14.5px] font-bold text-[#1176A8]">
+        <button type="button" onClick={() => navigate({ to: "/carnet" })} className="text-[14.5px] font-bold text-[#106F9F]">
           Revenir à l'accueil
         </button>
       </div>
 
       <div className="px-[22px] pt-[22px]">
         <h1 className="text-[28px] font-bold leading-tight">Reprendre</h1>
-        <p className="pt-[4px] text-[14px] text-[#5B7189]">
+        <p className="pt-[4px] text-[14px] text-[#566B82]">
           {l.libelle ?? "Ton carnet"} · {commence(l.created_at)}
         </p>
         <p className="pt-[20px] text-[18px] font-bold leading-snug">
@@ -119,14 +119,14 @@ function Reprendre() {
             )}
             {e === "reprendre" && (
               <span className="absolute right-[8px] top-[8px] flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#E3EDF6]">
-                <RefreshCw className="h-[11px] w-[11px] text-[#5B7189]" strokeWidth={2.6} />
+                <RefreshCw className="h-[11px] w-[11px] text-[#566B82]" strokeWidth={2.6} />
               </span>
             )}
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 gap-y-[6px] px-[22px] pt-[14px] text-[12.5px] text-[#5B7189]">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-[6px] px-[22px] pt-[14px] text-[12.5px] text-[#566B82]">
         <span className="flex items-center gap-2">
           <span className="h-[12px] w-[12px] rounded-[4px] border border-[#3DEFBE] bg-[#D2F6EC]" />
           {r.relues.length} relue{r.relues.length > 1 ? "s" : ""}, dans ton carnet
@@ -168,12 +168,12 @@ function Reprendre() {
             <div className="text-[14px] font-bold">
               La page {p.ordre} {p.statut === "erreur" ? "n'a pas pu être lue" : "est trop floue"}
             </div>
-            <div className="text-[12.5px] text-[#5B7189]">Rephotographie-la quand tu veux.</div>
+            <div className="text-[12.5px] text-[#566B82]">Rephotographie-la quand tu veux.</div>
           </div>
           <button
             type="button"
             onClick={() => navigate({ to: "/numeriser/capture", search: { lot, ordre: p.ordre } })}
-            className="h-[38px] shrink-0 rounded-[19px] bg-[#E3EDF6] px-[16px] text-[13.5px] font-bold text-[#1176A8]"
+            className="h-[38px] shrink-0 rounded-[19px] bg-[#E3EDF6] px-[16px] text-[13.5px] font-bold text-[#106F9F]"
           >
             Reprendre
           </button>

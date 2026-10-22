@@ -125,7 +125,7 @@ function PageEquipe() {
           <button
             type="button"
             onClick={() => setImporter(true)}
-            className="flex h-[42px] items-center gap-2 rounded-[12px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#14805F] lg:px-[16px]"
+            className="flex h-[42px] items-center gap-2 rounded-[12px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#137758] lg:px-[16px]"
           >
             <FileSpreadsheet className="h-[17px] w-[17px]" aria-hidden="true" />
             <span className="hidden sm:inline">IMPORTER (EXCEL)</span>
@@ -145,13 +145,13 @@ function PageEquipe() {
       <MessageErreur texte={erreurCentre ?? erreur} />
       {centre && equipe && (
         <>
-          <p className="pt-[4px] text-[13.5px] text-[#5B7189]">
+          <p className="pt-[4px] text-[13.5px] text-[#566B82]">
             {centre.nom} · {actifs.length} personne{actifs.length > 1 ? "s" : ""}
             {parRole.length > 0 && ` : ${parRole.map((r) => `${r.nb} ${r.court}`).join(", ")}`}
           </p>
 
           <div className="flex flex-wrap items-center gap-[8px] pt-[16px]">
-            <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Qui encadre quoi</h2>
+            <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#566B82]">Qui encadre quoi</h2>
             <span className="text-[13px] font-semibold">
               {a.getDate()} {a.toLocaleDateString("fr-FR", { month: "short" })} – {b.getDate()} {b.toLocaleDateString("fr-FR", { month: "short" })}
             </span>
@@ -164,18 +164,18 @@ function PageEquipe() {
           </div>
 
           {actifs.length === 0 ? (
-            <p className="mt-[10px] galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#5B7189]">
+            <p className="mt-[10px] galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#566B82]">
               Ajoute tes guides de palanquée et ton pilote : tu pourras les affecter aux sorties depuis le planning.
             </p>
           ) : (
             <div className="mt-[10px] overflow-x-auto galet-b border border-[#E4EBF1] bg-white">
               <table className="w-full min-w-[760px] border-collapse text-[13px]">
                 <thead>
-                  <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#7D93A8]">
+                  <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#566B82]">
                     <th className="px-[14px] py-[10px] font-bold">Équipier</th>
                     <th className="px-[6px] font-bold">Rôle</th>
                     {jours.map((d, i) => (
-                      <th key={d} className={`px-[4px] text-center font-bold ${d === aujourdhui() ? "text-[#1176A8]" : ""}`}>
+                      <th key={d} className={`px-[4px] text-center font-bold ${d === aujourdhui() ? "text-[#106F9F]" : ""}`}>
                         {JOURS[i]} {depuisIso(d).getDate()}
                       </th>
                     ))}
@@ -191,12 +191,12 @@ function PageEquipe() {
                           <span className="min-w-0">
                             <span className="flex items-center gap-[5px] truncate font-bold">
                               {e.nom}
-                              {e.user_id && <UserCheck className="h-[13px] w-[13px] text-[#14805F]" aria-label="Sur Palanote" />}
+                              {e.user_id && <UserCheck className="h-[13px] w-[13px] text-[#137758]" aria-label="Sur Palanote" />}
                             </span>
-                            <span className="flex items-center gap-[6px] text-[11.5px] text-[#7D93A8]">
+                            <span className="flex items-center gap-[6px] text-[11.5px] text-[#566B82]">
                               {e.niveau ?? "—"}
                               {e.telephone && (
-                                <a href={`tel:${e.telephone}`} className="flex items-center gap-[3px] text-[#1176A8]">
+                                <a href={`tel:${e.telephone}`} className="flex items-center gap-[3px] text-[#106F9F]">
                                   <Phone className="h-[11px] w-[11px]" /> {e.telephone}
                                 </a>
                               )}
@@ -219,7 +219,7 @@ function PageEquipe() {
                                   type="button"
                                   onClick={() => navigate({ to: "/club/formations" })}
                                   title={`Formation ${x.code} · ${x.eleve} · ${x.type === "theorie" ? "théorie" : "pratique"}`}
-                                  className={`mb-[3px] block w-full truncate rounded-[7px] px-[5px] py-[2px] text-left text-[10.5px] font-bold ${x.type === "theorie" ? "bg-[#EEE8FB] text-[#5B3FA8]" : "bg-[#E3F2FB] text-[#1176A8]"}`}
+                                  className={`mb-[3px] block min-h-[24px] w-full truncate rounded-[7px] px-[5px] py-[4px] text-left text-[10.5px] font-bold ${x.type === "theorie" ? "bg-[#EEE8FB] text-[#5B3FA8]" : "bg-[#E3F2FB] text-[#106F9F]"}`}
                                 >
                                   {x.heure_debut.replace(":", "h")} {x.code}
                                 </button>
@@ -230,8 +230,8 @@ function PageEquipe() {
                                 type="button"
                                 onClick={() => navigate({ to: "/club/planning", search: { semaine: d, sortie: s.id } })}
                                 title={`${s.site} · ${libelleRole(role)}`}
-                                className={`mb-[3px] block w-full truncate rounded-[7px] px-[5px] py-[2px] text-left text-[10.5px] font-bold ${
-                                  m.some((x) => x.s.id !== s.id && enConflit(x.s, s)) ? "bg-[#FFE9E2] text-[#D9573F]" : "bg-[#D5FAF0] text-[#0B3B63]"
+                                className={`mb-[3px] block min-h-[24px] w-full truncate rounded-[7px] px-[5px] py-[4px] text-left text-[10.5px] font-bold ${
+                                  m.some((x) => x.s.id !== s.id && enConflit(x.s, s)) ? "bg-[#FFE9E2] text-[#B8432F]" : "bg-[#D5FAF0] text-[#0B3B63]"
                                 }`}
                               >
                                 {heureCourte(s.heure)} {roleCourt(role)}
@@ -245,7 +245,7 @@ function PageEquipe() {
                           type="button"
                           aria-label={`Modifier ${e.nom}`}
                           onClick={() => setFiche({ id: e.id, nom: e.nom, role: e.role, niveau: e.niveau ?? "", telephone: e.telephone ?? "", actif: true, compte: Boolean(e.user_id) })}
-                          className="flex h-[30px] w-[30px] items-center justify-center goutte text-[#7D93A8] hover:bg-[#F1F6FC]"
+                          className="flex h-[30px] w-[30px] items-center justify-center goutte text-[#566B82] hover:bg-[#F1F6FC]"
                         >
                           <Pencil className="h-[14px] w-[14px]" />
                         </button>
@@ -256,7 +256,7 @@ function PageEquipe() {
               </table>
             </div>
           )}
-          <p className="pt-[8px] text-[12px] text-[#9DB0C0]">Un clic sur une case ouvre la sortie dans le planning. En corail : deux sorties à moins de 3 h d'écart.</p>
+          <p className="pt-[8px] text-[12px] text-[#566B82]">Un clic sur une case ouvre la sortie dans le planning. En corail : deux sorties à moins de 3 h d'écart.</p>
 
           {anciens.length > 0 && (
             <>
@@ -267,9 +267,9 @@ function PageEquipe() {
                     key={e.id}
                     type="button"
                     onClick={() => void enregistrer({ id: e.id, nom: e.nom, role: e.role, niveau: e.niveau ?? "", telephone: e.telephone ?? "", actif: true, compte: false })}
-                    className="rounded-[16px] border border-[#D8E5EE] bg-white px-[12px] py-[6px] text-[12.5px] font-semibold text-[#5B7189]"
+                    className="rounded-[16px] border border-[#D8E5EE] bg-white px-[12px] py-[6px] text-[12.5px] font-semibold text-[#566B82]"
                   >
-                    {e.nom} · <span className="text-[#1176A8]">Réintégrer</span>
+                    {e.nom} · <span className="text-[#106F9F]">Réintégrer</span>
                   </button>
                 ))}
               </div>
@@ -298,14 +298,14 @@ function PageEquipe() {
           <div className="flex flex-col gap-[12px]">
             <ChampTexte label="Prénom et nom" value={fiche.nom} disabled={fiche.compte} onChange={(e) => setFiche({ ...fiche, nom: e.target.value })} placeholder="Sophie Martin" />
             <div>
-              <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">Rôle habituel</span>
+              <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">Rôle habituel</span>
               <div className="flex flex-wrap gap-[6px]">
                 {ROLES_EQUIPE.map((r) => (
                   <button
                     key={r.id}
                     type="button"
                     onClick={() => setFiche({ ...fiche, role: r.id })}
-                    className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${fiche.role === r.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                    className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${fiche.role === r.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
                   >
                     {r.libelle}
                   </button>
@@ -316,7 +316,7 @@ function PageEquipe() {
               <ChampTexte label="Niveau" value={fiche.niveau} onChange={(e) => setFiche({ ...fiche, niveau: e.target.value })} placeholder="E2, N4, permis côtier…" />
               <ChampTexte label="Téléphone" type="tel" value={fiche.telephone} onChange={(e) => setFiche({ ...fiche, telephone: e.target.value })} placeholder="06…" />
             </div>
-            {fiche.compte && <p className="text-[12px] text-[#7D93A8]">Son prénom vient de son compte Palanote.</p>}
+            {fiche.compte && <p className="text-[12px] text-[#566B82]">Son prénom vient de son compte Palanote.</p>}
           </div>
           <button
             type="button"
@@ -330,7 +330,7 @@ function PageEquipe() {
             <button
               type="button"
               onClick={() => void enregistrer({ ...fiche, actif: false })}
-              className="mx-auto mt-[14px] block text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+              className="mx-auto mt-[14px] block text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
             >
               Retirer de l'équipe
             </button>

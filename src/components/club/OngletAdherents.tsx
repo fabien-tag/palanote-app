@@ -76,7 +76,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
               <div key={t.l} className={`rounded-[10px] border bg-white px-[14px] py-[12px] ${t.alerte ? "border-[#F5B544]" : "border-[#E4EBF1]"}`}>
                 <span className="block text-[26px] font-bold leading-none">{t.v}</span>
                 <span className="block pt-[4px] text-[13px] font-semibold">{t.l}</span>
-                <span className="block text-[11.5px] text-[#7D93A8]">{t.d}</span>
+                <span className="block text-[11.5px] text-[#566B82]">{t.d}</span>
               </div>
             ))}
           </div>
@@ -99,14 +99,14 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
             <button
               type="button"
               onClick={() => setImporter("historique")}
-              className="flex h-[42px] items-center gap-[8px] rounded-[10px] border border-[#D8E5EE] bg-white px-[14px] text-[13px] font-bold text-[#14805F]"
+              className="flex h-[42px] items-center gap-[8px] rounded-[10px] border border-[#D8E5EE] bg-white px-[14px] text-[13px] font-bold text-[#137758]"
             >
               <FileSpreadsheet className="h-[16px] w-[16px]" /> Importer l'historique des plongées
             </button>
           </div>
 
           {tous.length === 0 ? (
-            <div className="mt-[14px] rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[18px] py-[18px] text-[13.5px] leading-normal text-[#5B7189]">
+            <div className="mt-[14px] rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[18px] py-[18px] text-[13.5px] leading-normal text-[#566B82]">
               <p className="font-bold text-[#123A63]">Ton club a déjà ses fichiers Excel ? Commence par là.</p>
               <p className="pt-[4px]">
                 Importe la liste des adhérents (niveaux, licences, certificats médicaux), puis l'historique de leurs plongées. Quand un adhérent crée son compte
@@ -117,11 +117,11 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
             <>
               <div className="flex flex-wrap items-center gap-[10px] pt-[14px]">
                 <label className="flex h-[40px] min-w-[220px] flex-1 items-center gap-[8px] rounded-[10px] border border-[#E4EBF1] bg-white px-[12px] focus-within:border-[#57D4F5] lg:max-w-[340px]">
-                  <Search className="h-[16px] w-[16px] text-[#9DB0C0]" />
+                  <Search className="h-[16px] w-[16px] text-[#566B82]" />
                   <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nom, niveau, licence, e-mail…" aria-label="Chercher un adhérent" className="min-w-0 flex-1 bg-transparent text-[14px] outline-none" />
                   {q && (
                     <button type="button" aria-label="Effacer" onClick={() => setQ("")}>
-                      <X className="h-[14px] w-[14px] text-[#9DB0C0]" />
+                      <X className="h-[14px] w-[14px] text-[#566B82]" />
                     </button>
                   )}
                 </label>
@@ -138,7 +138,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                       key={id}
                       type="button"
                       onClick={() => setFiltre(id)}
-                      className={`h-[34px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${filtre === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+                      className={`h-[34px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${filtre === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
                     >
                       {l}
                     </button>
@@ -149,7 +149,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
               <div className="mt-[12px] overflow-x-auto rounded-[10px] border border-[#E4EBF1] bg-white">
                 <table className="w-full min-w-[900px] border-collapse text-[13px]">
                   <thead>
-                    <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#7D93A8]">
+                    <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#566B82]">
                       <th className="w-[40px] pl-[10px]" aria-label="Privilégié" />
                       <th className="px-[10px] py-[10px] font-bold">Adhérent</th>
                       <th className="px-[8px] font-bold">Niveau</th>
@@ -195,17 +195,17 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                                 <span className="block font-bold">
                                   {a.prenom} {a.nom ? a.nom.toUpperCase() : ""}
                                 </span>
-                                <span className="block max-w-[220px] truncate text-[11.5px] text-[#7D93A8]">{a.email ?? a.telephone ?? "—"}</span>
+                                <span className="block max-w-[220px] truncate text-[11.5px] text-[#566B82]">{a.email ?? a.telephone ?? "—"}</span>
                               </span>
                             </span>
                           </td>
                           <td className="px-[8px] font-semibold">{a.niveau ?? <span className="text-[#C9D5E0]">—</span>}</td>
-                          <td className="px-[8px] text-[#5B7189]">{a.licence ?? <span className="text-[#C9D5E0]">—</span>}</td>
+                          <td className="px-[8px] text-[#566B82]">{a.licence ?? <span className="text-[#C9D5E0]">—</span>}</td>
                           <td className="px-[8px]">
                             {a.certificat_fin ? (
                               <span
                                 className={`inline-flex items-center gap-[4px] rounded-[6px] px-[6px] py-[2px] text-[12px] font-bold ${
-                                  cert === "depasse" ? "bg-[#FFE9E2] text-[#D9573F]" : cert === "proche" ? "bg-[#FFF1D6] text-[#8A5A10]" : "text-[#5B7189]"
+                                  cert === "depasse" ? "bg-[#FFE9E2] text-[#B8432F]" : cert === "proche" ? "bg-[#FFF1D6] text-[#8A5A10]" : "text-[#566B82]"
                                 }`}
                               >
                                 {cert && <AlertTriangle className="h-[12px] w-[12px]" />}
@@ -219,19 +219,19 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                           <td className="px-[8px]">
                             {a.plongees > 0 ? (
                               <span>
-                                <b>{a.plongees}</b> <span className="text-[11.5px] text-[#7D93A8]">· dernière {dateCourte(a.derniere)}</span>
+                                <b>{a.plongees}</b> <span className="text-[11.5px] text-[#566B82]">· dernière {dateCourte(a.derniere)}</span>
                               </span>
                             ) : (
                               <span className="text-[#C9D5E0]">—</span>
                             )}
-                            {a.sorties > 0 && <span className="block text-[11.5px] text-[#1176A8]">+ {a.sorties} sortie{a.sorties > 1 ? "s" : ""} Palanote</span>}
+                            {a.sorties > 0 && <span className="block text-[11.5px] text-[#106F9F]">+ {a.sorties} sortie{a.sorties > 1 ? "s" : ""} Palanote</span>}
                           </td>
                           <td className="px-[8px]">{a.prof_max ? `${String(a.prof_max).replace(".0", "").replace(".", ",")} m` : <span className="text-[#C9D5E0]">—</span>}</td>
                           <td className="px-[8px]">
                             {a.sur_palanote ? (
-                              <span className="flex items-center gap-[4px] text-[12px] font-bold text-[#14805F]">
+                              <span className="flex items-center gap-[4px] text-[12px] font-bold text-[#137758]">
                                 <UserCheck className="h-[14px] w-[14px]" /> Inscrit
-                                {a.recuperees > 0 && <span className="font-semibold text-[#7D93A8]">· {a.recuperees} au carnet</span>}
+                                {a.recuperees > 0 && <span className="font-semibold text-[#566B82]">· {a.recuperees} au carnet</span>}
                               </span>
                             ) : (
                               <button
@@ -241,7 +241,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                                     .then(setInvite)
                                     .catch(() => (a.email ? window.open(invitation(a), "_self") : undefined))
                                 }
-                                className="inline-flex items-center gap-[4px] rounded-[8px] border border-[#57D4F5] px-[8px] py-[3px] text-[12px] font-bold text-[#1176A8]"
+                                className="inline-flex items-center gap-[4px] rounded-[8px] border border-[#57D4F5] px-[8px] py-[3px] text-[12px] font-bold text-[#106F9F]"
                               >
                                 <Mail className="h-[13px] w-[13px]" /> Inviter
                               </button>
@@ -252,7 +252,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                               type="button"
                               aria-label={`Retirer ${a.prenom} de la liste`}
                               onClick={() => setASupprimer(a)}
-                              className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] text-[#9DB0C0] hover:bg-[#FFF1EE] hover:text-[#D9573F]"
+                              className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] text-[#566B82] hover:bg-[#FFF1EE] hover:text-[#B8432F]"
                             >
                               <Trash2 className="h-[14px] w-[14px]" />
                             </button>
@@ -262,7 +262,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                     })}
                   </tbody>
                 </table>
-                {liste.length === 0 && <p className="px-[14px] py-[14px] text-[13px] text-[#7D93A8]">Aucun adhérent ne correspond.</p>}
+                {liste.length === 0 && <p className="px-[14px] py-[14px] text-[13px] text-[#566B82]">Aucun adhérent ne correspond.</p>}
               </div>
             </>
           )}
@@ -276,11 +276,11 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
             <p className="text-[16px] font-bold">
               Retirer {aSupprimer.prenom} {aSupprimer.nom ?? ""} de la liste ?
             </p>
-            <p className="pt-[6px] text-[13.5px] leading-normal text-[#5B7189]">
+            <p className="pt-[6px] text-[13.5px] leading-normal text-[#566B82]">
               Son historique de plongées avec le club est effacé aussi. Les plongées déjà ajoutées à son carnet Palanote restent dans son carnet.
             </p>
             <div className="flex justify-end gap-[10px] pt-[16px]">
-              <button type="button" onClick={() => setASupprimer(null)} className="h-[40px] rounded-[10px] px-[14px] text-[13px] font-bold text-[#5B7189]">
+              <button type="button" onClick={() => setASupprimer(null)} className="h-[40px] rounded-[10px] px-[14px] text-[13px] font-bold text-[#566B82]">
                 Annuler
               </button>
               <button

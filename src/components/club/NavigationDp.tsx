@@ -114,7 +114,7 @@ export function NavigationDp() {
         to={to}
         aria-current={actif(to) ? "page" : undefined}
         className={`flex h-[44px] items-center gap-[12px] rounded-[10px] px-[12px] text-[14.5px] transition-colors ${
-          actif(to) ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#63809A] hover:bg-[#F1F6FC]"
+          actif(to) ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#566B82] hover:bg-[#F1F6FC]"
         }`}
       >
         <Icone className="h-[20px] w-[20px] shrink-0" strokeWidth={2} />
@@ -144,13 +144,13 @@ export function NavigationDp() {
         </span>
         <span>
           <span className="block text-[19px] font-bold leading-tight tracking-[-.01em] text-[#123A63]">Palanote</span>
-          <span className="block text-[11px] font-bold uppercase tracking-[.1em] text-[#1176A8]">Club</span>
+          <span className="block text-[11px] font-bold uppercase tracking-[.1em] text-[#106F9F]">Club</span>
         </span>
       </span>
       <div className="flex flex-col gap-[18px]">
         {SECTIONS.map((sec) => (
           <div key={sec.titre}>
-            <p className="px-[12px] pb-[6px] text-[11px] font-bold uppercase tracking-[.14em] text-[#9DB0C0]">{sec.titre}</p>
+            <p className="px-[12px] pb-[6px] text-[11px] font-bold uppercase tracking-[.14em] text-[#566B82]">{sec.titre}</p>
             <div className="flex flex-col gap-[2px]">{sec.entrees.map((e) => entree(e.to, e.label, e.Icone, e.voyant))}</div>
           </div>
         ))}
@@ -177,7 +177,7 @@ export function NavigationDp() {
             to="/club/parametres"
             search={{ onglet: "aide" }}
             aria-current={aide ? "page" : undefined}
-            className={`flex h-[40px] items-center gap-[12px] rounded-[10px] px-[12px] text-[14px] ${aide ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#63809A] hover:bg-[#F1F6FC]"}`}
+            className={`flex h-[40px] items-center gap-[12px] rounded-[10px] px-[12px] text-[14px] ${aide ? "bg-[#D5FAF0] font-bold text-[#123A63]" : "font-medium text-[#566B82] hover:bg-[#F1F6FC]"}`}
           >
             <CircleHelp className="h-[20px] w-[20px] shrink-0" strokeWidth={2} />
             Aide
@@ -238,7 +238,7 @@ export function NavigationDpMobile() {
               key={to}
               to={to}
               aria-current={actif(to) ? "page" : undefined}
-              className={`flex flex-1 flex-col items-center gap-[3px] text-[11px] leading-[17px] ${actif(to) ? "font-semibold text-[#123A63]" : "font-medium text-[#63809A]"}`}
+              className={`flex flex-1 flex-col items-center gap-[3px] text-[11px] leading-[17px] ${actif(to) ? "font-semibold text-[#123A63]" : "font-medium text-[#566B82]"}`}
             >
               <span className={`relative flex h-[33px] w-[52px] items-center justify-center galet-petit ${actif(to) ? "bg-[#D5FAF0]" : ""}`}>
                 <Icone className="h-[22px] w-[22px]" strokeWidth={1.9} />
@@ -252,7 +252,7 @@ export function NavigationDpMobile() {
           type="button"
           onClick={() => setPlus(true)}
           aria-current={secondaireActif ? "page" : undefined}
-          className={`flex flex-1 flex-col items-center gap-[3px] text-[11px] leading-[17px] ${secondaireActif ? "font-semibold text-[#123A63]" : "font-medium text-[#63809A]"}`}
+          className={`flex flex-1 flex-col items-center gap-[3px] text-[11px] leading-[17px] ${secondaireActif ? "font-semibold text-[#123A63]" : "font-medium text-[#566B82]"}`}
         >
           <span className={`relative flex h-[33px] w-[52px] items-center justify-center galet-petit ${secondaireActif ? "bg-[#D5FAF0]" : ""}`}>
             <MoreHorizontal className="h-[22px] w-[22px]" strokeWidth={1.9} />
@@ -282,11 +282,11 @@ export function NavigationDpMobile() {
                     className={`flex items-center gap-[12px] galet-b border px-[14px] py-[12px] ${actif(to) ? "border-[#3DEFBE] bg-[#F2FDF9]" : "border-[#E4EBF1] bg-white"}`}
                   >
                     <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte bg-[#E3F2FB]">
-                      <Icone className="h-[20px] w-[20px] text-[#1176A8]" strokeWidth={2} />
+                      <Icone className="h-[20px] w-[20px] text-[#106F9F]" strokeWidth={2} />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-[15px] font-bold">{label}</span>
-                      <span className="block text-[12.5px] text-[#5B7189]">{texte}</span>
+                      <span className="block text-[12.5px] text-[#566B82]">{texte}</span>
                     </span>
                     {nb > 0 && (
                       <span className={`rounded-[10px] px-[7px] py-[1px] text-[11.5px] font-bold ${voyants?.materielDepasse ? "bg-[#FF8A75] text-white" : "bg-[#F5B544] text-[#4A3000]"}`}>{nb}</span>

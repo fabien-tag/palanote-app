@@ -370,17 +370,17 @@ function Carnet() {
             className="relative flex items-center gap-[13px] galet-moyen bg-white p-[13px] text-left shadow-sm"
           >
             <div className="flex h-14 w-14 shrink-0 items-center justify-center goutte bg-[#57D4F5]/[0.18]">
-              <Watch className="h-[30px] w-[30px] text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
+              <Watch className="h-[30px] w-[30px] text-[#106F9F]" strokeWidth={1.9} aria-hidden="true" />
             </div>
             <div className="flex min-w-0 flex-grow flex-col gap-0.5">
               <span className="text-[15px] font-semibold text-[#123A63]">
                 Tes plongées sont ailleurs&nbsp;?
               </span>
-              <span className="text-[12.5px] leading-snug text-[#5B7189]">
+              <span className="text-[12.5px] leading-snug text-[#566B82]">
                 Importe le fichier exporté par Subsurface, MacDive, Shearwater…
               </span>
             </div>
-            <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#9DB0C0]" strokeWidth={2.4} aria-hidden="true" />
+            <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#566B82]" strokeWidth={2.4} aria-hidden="true" />
             <span
               aria-hidden="true"
               className="pointer-events-none absolute right-[-10px] top-[-13px] h-[44px] w-[24px]"
@@ -423,7 +423,7 @@ function Carnet() {
                 <div className="flex items-center justify-between gap-3 pb-4 pt-[34px]">
                   <div className="flex min-w-0 items-baseline gap-2">
                     <span className="text-[15px] font-bold text-[#123A63]">{g.annee}</span>
-                    <span className="text-[12px] text-[#9DB0C0]">
+                    <span className="text-[12px] text-[#566B82]">
                       {g.plongees.length} plongée{g.plongees.length > 1 ? "s" : ""}
                     </span>
                   </div>
@@ -431,7 +431,7 @@ function Carnet() {
                     <button
                       type="button"
                       onClick={() => basculer(false)}
-                      className="flex shrink-0 items-center gap-[4px] rounded-full bg-[#E7EFF6] px-[11px] py-[5px] text-[12.5px] font-semibold text-[#5B7189]"
+                      className="flex shrink-0 items-center gap-[4px] rounded-full bg-[#E7EFF6] px-[11px] py-[5px] text-[12.5px] font-semibold text-[#566B82]"
                     >
                       Réduire
                       <ChevronUp className="h-[14px] w-[14px]" strokeWidth={2.4} aria-hidden="true" />
@@ -477,7 +477,7 @@ function Carnet() {
                     <span className="relative block">
                       {vue === "liste" ? <LigneDePlongee p={premiere.p} numero={premiere.numero} /> : <CarteDePlongee p={premiere.p} />}
                     </span>
-                    <span className="absolute bottom-[-4px] right-[30px] flex translate-y-full items-center gap-[4px] pt-[6px] text-[12px] font-semibold text-[#1176A8]">
+                    <span className="absolute bottom-[-4px] right-[30px] flex translate-y-full items-center gap-[4px] pt-[6px] text-[12px] font-semibold text-[#106F9F]">
                       + {g.plongees.length - 1} plongée{g.plongees.length - 1 > 1 ? "s" : ""}
                       <ChevronDown className="h-[13px] w-[13px]" strokeWidth={2.6} aria-hidden="true" />
                     </span>
@@ -501,7 +501,7 @@ function Carnet() {
                       type="button"
                       onClick={() => setAnneesDepliees((a) => [...a, g.annee])}
                       style={{ borderRadius: "30px 18px 32px 16px / 20px 28px 18px 30px" }}
-                      className={`flex w-full items-center justify-center gap-[8px] border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] shadow-[0_4px_14px_#123A6308] ${
+                      className={`flex w-full items-center justify-center gap-[8px] border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F] shadow-[0_4px_14px_#123A6308] ${
                         vue === "liste" ? "h-[56px]" : "h-[64px]"
                       }`}
                     >
@@ -517,7 +517,7 @@ function Carnet() {
             })}
             {groupes.length === 0 && <div className="pt-[18px]">{filtresListe}</div>}
             {groupes.length === 0 && (
-              <p className="pt-8 text-center text-[13px] text-[#5B7189]">Aucune plongée pour ce filtre.</p>
+              <p className="pt-8 text-center text-[13px] text-[#566B82]">Aucune plongée pour ce filtre.</p>
             )}
             <div className="h-[120px]" aria-hidden="true" />
           </div>

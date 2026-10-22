@@ -47,11 +47,11 @@ const SECONDAIRES: Def[] = [
 function Badge({ c, modifie, confirme = false }: { c: Confiance; modifie: boolean; confirme?: boolean }) {
   if (confirme && !modifie)
     return <span className="rounded-[10px] bg-[#3DEFBE] px-[9px] py-[3px] text-[11.5px] font-bold text-[#0B3B63]">Vérifié</span>;
-  if (modifie) return <span className="rounded-[10px] bg-[#DCEEF8] px-[9px] py-[3px] text-[11.5px] font-bold text-[#1176A8]">Corrigé</span>;
+  if (modifie) return <span className="rounded-[10px] bg-[#DCEEF8] px-[9px] py-[3px] text-[11.5px] font-bold text-[#106F9F]">Corrigé</span>;
   if (c === "sur") return <span className="rounded-[10px] bg-[#3DEFBE] px-[9px] py-[3px] text-[11.5px] font-bold text-[#0B3B63]">Sûr</span>;
   if (c === "a_verifier")
     return <span className="rounded-[10px] bg-[#FFC65C] px-[9px] py-[3px] text-[11.5px] font-bold text-[#6B4A14]">! À vérifier</span>;
-  return <span className="rounded-[10px] bg-[#E6ECF2] px-[9px] py-[3px] text-[11.5px] font-semibold text-[#7D93A8]">Non lu</span>;
+  return <span className="rounded-[10px] bg-[#E6ECF2] px-[9px] py-[3px] text-[11.5px] font-semibold text-[#566B82]">Non lu</span>;
 }
 
 function Champ({
@@ -78,7 +78,7 @@ function Champ({
   return (
     <div className="flex flex-col gap-[7px]">
       <div className="flex items-center justify-between">
-        <label htmlFor={`champ-${def.cle}`} className={`text-[13.5px] font-bold ${verifier ? "text-[#8A5A10]" : "text-[#5B7189]"}`}>
+        <label htmlFor={`champ-${def.cle}`} className={`text-[13.5px] font-bold ${verifier ? "text-[#8A5A10]" : "text-[#566B82]"}`}>
           {def.label}
         </label>
         <Badge c={confiance} modifie={modifie} confirme={confirme} />
@@ -89,7 +89,7 @@ function Champ({
             ? "border-2 border-[#F5A524] bg-[#FFF5E5]"
             : vide
               ? "border-[1.5px] border-dashed border-[#D5E1EC] bg-white/60"
-              : "border-[1.5px] border-[#E4EBF1] bg-white"
+              : "border-[1.5px] border-[#7B8FA3] bg-white"
         }`}
       >
         <input
@@ -101,7 +101,7 @@ function Champ({
           onChange={(e) => onChange(def.type === "nombre" ? e.target.value.replace(",", ".") : e.target.value)}
           className="w-full min-w-0 bg-transparent text-[19px] font-bold text-[#123A63] outline-none placeholder:font-normal placeholder:text-[#9AAAB9]"
         />
-        {def.unite && <span className="shrink-0 text-[15px] text-[#9DB0C0]">{def.unite}</span>}
+        {def.unite && <span className="shrink-0 text-[15px] text-[#566B82]">{def.unite}</span>}
         {verifier && lu && lu !== valeur && <span className="shrink-0 pl-2 text-[12.5px] font-bold text-[#6B4A14]">lu : « {lu} »</span>}
         {/* La valeur lue est bonne : un geste pour la valider, sans la retaper */}
         {verifier && valeur.trim() !== "" && (
@@ -266,14 +266,14 @@ function Relecture() {
           <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
         </button>
         <div className="text-center leading-tight">
-          <div className="text-[16px] font-bold">
+          <h1 className="text-[16px] font-bold">
             Page {page?.ordre} sur {pages.length}
-          </div>
-          <div className="text-[12.5px] text-[#5B7189]">
+          </h1>
+          <div className="text-[12.5px] text-[#566B82]">
             plongée {rangSurPage} sur {surLaPage.length}
           </div>
         </div>
-        <button type="button" onClick={() => void suivante(true)} className="text-[14.5px] font-bold text-[#1176A8]">
+        <button type="button" onClick={() => void suivante(true)} className="text-[14.5px] font-bold text-[#106F9F]">
           Passer
         </button>
       </div>
@@ -300,7 +300,7 @@ function Relecture() {
               </span>
             )}
           </button>
-          <p className="px-[10px] pb-[6px] pt-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+          <p className="px-[10px] pb-[6px] pt-[10px] text-[12.5px] leading-snug text-[#566B82]">
             Garde-la sous les yeux : c'est elle qui fait foi, pas ce que l'app a lu.
           </p>
         </div>
@@ -315,9 +315,9 @@ function Relecture() {
               {journal.map((e, i) => (
                 <li key={i} className="flex gap-[9px] text-[12.5px] leading-snug text-[#3F5B76]">
                   {e.outil === "zoomer" ? (
-                    <ScanSearch className="mt-[1px] h-[15px] w-[15px] shrink-0 text-[#1176A8]" aria-hidden="true" />
+                    <ScanSearch className="mt-[1px] h-[15px] w-[15px] shrink-0 text-[#106F9F]" aria-hidden="true" />
                   ) : (
-                    <Files className="mt-[1px] h-[15px] w-[15px] shrink-0 text-[#1176A8]" aria-hidden="true" />
+                    <Files className="mt-[1px] h-[15px] w-[15px] shrink-0 text-[#106F9F]" aria-hidden="true" />
                   )}
                   <span>
                     <b className="text-[#123A63]">{e.outil === "zoomer" ? "Zoom sur la page" : `Comparé avec la page ${e.sens === "suivante" ? "suivante" : "précédente"}`}</b>
@@ -327,7 +327,7 @@ function Relecture() {
               ))}
             </ul>
             {journal.some((e) => e.zone) && photo && (
-              <button type="button" onClick={() => setAgrandie(true)} className="pt-[8px] text-[12.5px] font-bold text-[#1176A8] underline underline-offset-4">
+              <button type="button" onClick={() => setAgrandie(true)} className="pt-[8px] text-[12.5px] font-bold text-[#106F9F] underline underline-offset-4">
                 Voir les zones vérifiées sur la page
               </button>
             )}
@@ -363,7 +363,7 @@ function Relecture() {
         {/* Signature et tampon */}
         <div className={`relative galet-c p-[16px] ${signatureAVerifier ? "border-2 border-[#F5A524] bg-[#FFF5E5]" : "border border-[#E4EBF1] bg-white"}`}>
           <div className="flex items-center justify-between pb-[12px]">
-            <span className={`text-[14px] font-bold ${signatureAVerifier ? "text-[#8A5A10]" : "text-[#5B7189]"}`}>Signature et tampon</span>
+            <span className={`text-[14px] font-bold ${signatureAVerifier ? "text-[#8A5A10]" : "text-[#566B82]"}`}>Signature et tampon</span>
             <Badge
               c={signatureLue ? (confiance("signee") === "a_verifier" || confiance("tamponnee") === "a_verifier" ? "a_verifier" : "sur") : "non_lu"}
               modifie={signatureModifiee}
@@ -382,7 +382,7 @@ function Relecture() {
                 type="button"
                 aria-pressed={on}
                 onClick={() => changer(cle, on ? "non" : "oui")}
-                className={`flex h-[36px] items-center gap-[6px] rounded-[18px] px-[14px] text-[14px] font-bold ${on ? "bg-[#DDF8EF] text-[#0B3B63]" : "border border-[#D8E5EE] bg-white text-[#9DB0C0]"}`}
+                className={`flex h-[36px] items-center gap-[6px] rounded-[18px] px-[14px] text-[14px] font-bold ${on ? "bg-[#DDF8EF] text-[#0B3B63]" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
               >
                 {on && <Check className="h-[14px] w-[14px]" strokeWidth={3} />}
                 {label}
@@ -407,21 +407,21 @@ function Relecture() {
         {/* Commentaire manuscrit */}
         {commentaire && (
           <div className="flex flex-col gap-[7px]">
-            <span className="text-[13.5px] font-bold text-[#5B7189]">Commentaire manuscrit</span>
+            <span className="text-[13.5px] font-bold text-[#566B82]">Commentaire manuscrit</span>
             <div className="galet border border-[#E4EBF1] bg-white p-[16px]">
-              <p className={`text-[15px] italic leading-snug ${garderCommentaire === false ? "text-[#B8C5D2] line-through" : "text-[#5B7189]"}`}>« {commentaire} »</p>
+              <p className={`text-[15px] italic leading-snug ${garderCommentaire === false ? "text-[#B8C5D2] line-through" : "text-[#566B82]"}`}>« {commentaire} »</p>
               <div className="flex gap-2 pt-[12px]">
                 <button
                   type="button"
                   onClick={() => setGarderCommentaire(true)}
-                  className={`h-[38px] rounded-[19px] px-[18px] text-[14px] font-bold ${garderCommentaire !== false ? "bg-[#3DEFBE] text-[#0B3B63]" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                  className={`h-[38px] rounded-[19px] px-[18px] text-[14px] font-bold ${garderCommentaire !== false ? "bg-[#3DEFBE] text-[#0B3B63]" : "border border-[#D8E5EE] text-[#566B82]"}`}
                 >
                   Garder ce texte
                 </button>
                 <button
                   type="button"
                   onClick={() => setGarderCommentaire(false)}
-                  className={`h-[38px] rounded-[19px] px-[18px] text-[14px] font-bold ${garderCommentaire === false ? "bg-[#123A63] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                  className={`h-[38px] rounded-[19px] px-[18px] text-[14px] font-bold ${garderCommentaire === false ? "bg-[#123A63] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
                 >
                   Ignorer
                 </button>
@@ -440,7 +440,7 @@ function Relecture() {
           <BoutonPrincipal onClick={() => void valider()} disabled={enCours}>
             {enCours ? "Enregistrement…" : libelleValider}
           </BoutonPrincipal>
-          <button type="button" disabled={enCours} onClick={() => void rejeter()} className="mx-auto text-[13.5px] font-semibold text-[#5B7189] underline underline-offset-4">
+          <button type="button" disabled={enCours} onClick={() => void rejeter()} className="mx-auto text-[13.5px] font-semibold text-[#566B82] underline underline-offset-4">
             Cette plongée n'en est pas une
           </button>
         </div>

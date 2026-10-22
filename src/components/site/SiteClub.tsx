@@ -37,7 +37,18 @@ const profondeur = (z: Zone) => {
   return Number.isFinite(n) && n > 0 ? n : null;
 };
 
-export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; apercu?: boolean }) {
+export function SiteClub({
+  contenu,
+  apercu = false,
+  integre = false,
+}: {
+  contenu: ContenuSite;
+  apercu?: boolean;
+  // Affiché dans l'éditeur de l'espace club : pas de second <main> ni de second titre de niveau 1
+  integre?: boolean;
+}) {
+  const Principal = integre ? "div" : "main";
+  const Titre = integre ? "h2" : "h1";
   const { site, centre, formations, bateaux, equipement, equipe } = contenu;
   const modele = modeleDe(site.modele);
   const sombre = !clair(site.couleur_fond);
@@ -70,7 +81,9 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
     "--fond": site.couleur_fond,
     "--txt": site.couleur_texte,
     "--surface": sombre ? `color-mix(in srgb, ${site.couleur_fond} 88%, white)` : "#FFFFFF",
-    "--doux": `color-mix(in srgb, ${site.couleur_texte} 64%, ${site.couleur_fond})`,
+    // Texte secondaire et texte d'accent sur fond teinté : assez contrastés (WCAG 1.4.3), quelle que soit la palette du club
+    "--doux": `color-mix(in srgb, ${site.couleur_texte} 76%, ${site.couleur_fond})`,
+    "--acc-texte": sombre ? `color-mix(in srgb, ${site.couleur_accent} 70%, white)` : `color-mix(in srgb, ${site.couleur_accent} 78%, black)`,
     "--ligne": `color-mix(in srgb, ${site.couleur_texte} 12%, transparent)`,
     "--titres": modele.titres,
     fontFamily: modele.corps,
@@ -148,9 +161,9 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
 
           <div className="relative z-10 grid flex-1 grid-cols-1 gap-[32px] px-[26px] pb-[34px] pt-[40px] @3xl:px-[64px] @3xl:pb-[64px] @3xl:pt-[56px] @5xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
             <div className="flex flex-col">
-              <h1 className="max-w-[12ch] text-[clamp(40px,7.5cqw,88px)] font-medium leading-[1.02] tracking-[-0.03em]">
+              <Titre className="max-w-[12ch] text-[clamp(40px,7.5cqw,88px)] font-medium leading-[1.02] tracking-[-0.03em]">
                 {site.accroche || `Plongez avec ${centre.nom}`}
-              </h1>
+              </Titre>
               <div className="mt-auto pt-[40px]">
                 {note !== null && <BadgeGoogle note={note} avis={avis} lien={site.lien_google ?? null} />}
                 {site.sous_titre && <p className="max-w-[46ch] text-[16px] leading-[1.55] text-white/80 @3xl:text-[17px]">{site.sous_titre}</p>}
@@ -171,7 +184,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
         </div>
       </header>
 
-      <main>
+      <Principal>
         {/* ——— Chiffres clés ——— */}
         {chiffres.length > 0 && (
           <section aria-label="Le club en chiffres" className={`mx-auto grid max-w-[1240px] grid-cols-2 px-[22px] pt-[44px] @4xl:px-[40px] ${["", "@4xl:grid-cols-1", "@4xl:grid-cols-2", "@4xl:grid-cols-3", "@4xl:grid-cols-4"][chiffres.length]}`}>
@@ -248,15 +261,19 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
               {equipe.map((e, i) => (
                 <li key={`${e.nom}-${i}`} className={`flex items-center gap-[14px] ${["galet-b", "galet-c", "galet"][i % 3]} bg-[var(--surface)] p-[18px] ring-1 ring-[var(--ligne)]`}>
                   <span
-                    className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full text-[17px] font-semibold text-white"
-                    style={{ background: i % 3 === 0 ? "var(--sec)" : i % 3 === 1 ? "var(--acc)" : "var(--ter)" }}
+                    className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full text-[17px] font-semibold"
+                    style={{
+                      background: i % 3 === 0 ? "var(--sec)" : i % 3 === 1 ? "var(--acc)" : "var(--ter)",
+                      // initiales foncées sur une couleur claire, blanches sur une couleur foncée
+                      color: clair([site.couleur_secondaire, site.couleur_accent, site.couleur_tertiaire][i % 3] ?? "#000000") ? "#0B2540" : "#FFFFFF",
+                    }}
                   >
                     {initiales(e.nom)}
                   </span>
                   <span className="min-w-0">
                     <span className="block truncate text-[16px] font-semibold">{e.nom}</span>
                     <span className="block truncate text-[13px] text-[var(--doux)]">{LIBELLE_ROLE[e.role] ?? "Encadrant"}</span>
-                    {e.niveau && <span className="mt-[6px] inline-block rounded-full bg-[color-mix(in_srgb,var(--acc)_14%,transparent)] px-[9px] py-[3px] text-[11.5px] font-semibold text-[var(--acc)]">{e.niveau}</span>}
+                    {e.niveau && <span className="mt-[6px] inline-block rounded-full bg-[color-mix(in_srgb,var(--acc)_14%,transparent)] px-[9px] py-[3px] text-[11.5px] font-semibold text-[var(--acc-texte)]">{e.niveau}</span>}
                   </span>
                 </li>
               ))}
@@ -265,7 +282,7 @@ export function SiteClub({ contenu, apercu = false }: { contenu: ContenuSite; ap
         )}
 
         {voir.infos && <Infos contenu={contenu} contact={contact} />}
-      </main>
+      </Principal>
       <div className="h-[84px] @4xl:h-[110px]" aria-hidden="true" />
 
       {s.palanote !== false && <PromoPalanote club={centre.nom} />}
@@ -395,7 +412,7 @@ function Telephone({ club }: { club: string }) {
         </span>
         <span className="min-w-0 text-[12px] leading-tight">
           <b className="block text-[12.5px]">Plongée tamponnée</b>
-          <span className="block truncate text-[#5B7189]">{club} a validé ta sortie</span>
+          <span className="block truncate text-[#566B82]">{club} a validé ta sortie</span>
         </span>
       </div>
       <div className="relative h-[540px] overflow-hidden rounded-t-[46px] border-[10px] border-b-0 border-[#0B1626] bg-[#F1F6FC] text-[#123A63] shadow-[0_-10px_60px_rgb(0_0_0/.35)]">
@@ -425,9 +442,9 @@ function Telephone({ club }: { club: string }) {
         {/* La dernière plongée, tamponnée par le club */}
         <div className="px-[12px] pt-[14px]">
           <div className="galet relative bg-white p-[14px] shadow-[0_4px_14px_rgb(18_58_99/.08)]">
-            <p className="text-[10.5px] font-semibold text-[#7D93A8]">Hier, 9 h 30</p>
+            <p className="text-[10.5px] font-semibold text-[#566B82]">Hier, 9 h 30</p>
             <p className="pt-[2px] text-[15px] font-bold">La Gabinière</p>
-            <p className="text-[11px] text-[#5B7189]">avec {club}</p>
+            <p className="text-[11px] text-[#566B82]">avec {club}</p>
             <div className="mt-[10px] flex gap-[6px]">
               {["32 m", "48 min", "18 °C"].map((x) => (
                 <span key={x} className="galet-petit bg-[#EEF4F9] px-[8px] py-[4px] text-[11px] font-bold">
@@ -438,7 +455,7 @@ function Telephone({ club }: { club: string }) {
             {/* Le tampon numérique */}
             <span
               className="absolute right-[8px] top-[8px] flex h-[70px] w-[70px] rotate-[-14deg] flex-col items-center justify-center rounded-full border-[2.5px] text-center leading-tight"
-              style={{ borderColor: PALANOTE.corail, color: PALANOTE.corail }}
+              style={{ borderColor: "#C2412D", color: "#C2412D" }}
             >
               <span className="max-w-[54px] truncate text-[6.5px] font-bold uppercase">{club}</span>
               <span className="text-[10px] font-black">VALIDÉE</span>
@@ -446,7 +463,7 @@ function Telephone({ club }: { club: string }) {
             </span>
           </div>
           <div className="galet-b mt-[10px] bg-white p-[14px] opacity-80">
-            <p className="text-[10.5px] font-semibold text-[#7D93A8]">Samedi</p>
+            <p className="text-[10.5px] font-semibold text-[#566B82]">Samedi</p>
             <p className="pt-[2px] text-[14px] font-bold">Épave du Togo</p>
             <div className="mt-[8px] flex gap-[6px]">
               {["40 m", "42 min"].map((x) => (
@@ -803,7 +820,7 @@ function Parcours({ niveaux, contact }: { niveaux: FormationSite[]; contact: { h
       {/* Les niveaux se suivent : c'est un vrai parcours */}
       <div className="rounded-[26px] bg-[var(--acc)] p-[24px] text-white @3xl:p-[32px]">
         <p className="text-[21px] font-medium tracking-[-0.01em] [font-family:var(--titres)]">Votre parcours</p>
-        <p className="pt-[4px] text-[13.5px] text-white/75">Du premier niveau à l'autonomie, un niveau après l'autre.</p>
+        <p className="pt-[4px] text-[13.5px] text-white">Du premier niveau à l'autonomie, un niveau après l'autre.</p>
         <ol className="relative mt-[24px] space-y-[8px] before:absolute before:bottom-[22px] before:left-[21px] before:top-[22px] before:w-px before:bg-white/35">
           {niveaux.map((n, i) => {
             const actif = i === choisi;
@@ -815,15 +832,15 @@ function Parcours({ niveaux, contact }: { niveaux: FormationSite[]; contact: { h
                   aria-pressed={actif}
                   className={`flex w-full items-center gap-[14px] rounded-full py-[5px] pl-[5px] pr-[18px] text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${actif ? "bg-white text-[var(--sec)]" : "text-white hover:bg-white/12"}`}
                 >
-                  <span className={`flex h-[34px] min-w-[34px] items-center justify-center rounded-full px-[6px] text-[12.5px] font-semibold ${actif ? "bg-[var(--acc)] text-white" : "bg-white/20"}`}>{n.code}</span>
+                  <span className={`flex h-[34px] min-w-[34px] items-center justify-center rounded-full px-[6px] text-[12.5px] font-semibold ${actif ? "bg-[var(--acc)] text-white" : "bg-black/15"}`}>{n.code}</span>
                   <span className="min-w-0 flex-1 truncate text-[14.5px] font-medium">{n.intitule}</span>
-                  <span className={`text-[13.5px] font-semibold ${actif ? "" : "text-white/80"}`}>{prixEuros(n.prix)}</span>
+                  <span className={`text-[13.5px] font-semibold ${actif ? "" : "text-white"}`}>{prixEuros(n.prix)}</span>
                 </button>
               </li>
             );
           })}
         </ol>
-        <p className="pt-[20px] text-[12.5px] text-white/70">Choisissez un niveau pour voir son programme et son tarif.</p>
+        <p className="pt-[20px] text-[12.5px] text-white">Choisissez un niveau pour voir son programme et son tarif.</p>
       </div>
       <article className="galet flex flex-col bg-[var(--surface)] p-[24px] ring-1 ring-[var(--ligne)] @3xl:p-[34px]">
         <div className="flex flex-wrap items-start justify-between gap-[16px]">
@@ -853,7 +870,7 @@ function Parcours({ niveaux, contact }: { niveaux: FormationSite[]; contact: { h
 
         {f.prerogatives && (
           <p className="galet-moyen mt-[20px] bg-[color-mix(in_srgb,var(--acc)_12%,transparent)] px-[16px] py-[12px] text-[14.5px] leading-snug">
-            <span className="font-semibold text-[var(--acc)]">Après la formation : </span>
+            <span className="font-semibold text-[var(--acc-texte)]">Après la formation : </span>
             {f.prerogatives}
           </p>
         )}
@@ -1042,7 +1059,7 @@ function Infos({ contenu, contact }: { contenu: ContenuSite; contact: { href: st
       <div className="grid grid-cols-1 gap-[12px] @4xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
         <div className="flex flex-col rounded-[26px] bg-[var(--acc)] p-[26px] text-white @3xl:p-[34px]">
           <p className="text-[21px] font-medium [font-family:var(--titres)]">Une question, une réservation ?</p>
-          <p className="pt-[4px] text-[14px] text-white/80">Appelez-nous ou écrivez-nous, on vous répond vite.</p>
+          <p className="pt-[4px] text-[14px] text-white">Appelez-nous ou écrivez-nous, on vous répond vite.</p>
           <div className="mt-[26px] space-y-[12px]">
             {site.telephone && (
               <a href={`tel:${site.telephone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-[12px] text-[clamp(24px,3cqw,34px)] font-medium tracking-[-0.02em] [font-family:var(--titres)]">

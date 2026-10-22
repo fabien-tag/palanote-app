@@ -194,7 +194,7 @@ function EspaceClub() {
                       onFiche={() => navigate({ to: "/club/fiche-securite", search: { id: accueil.prochaine!.id } })}
                     />
                   ) : (
-                    <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#5B7189]">
+                    <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#566B82]">
                       Aucune sortie prévue. Crée la prochaine : tes plongeurs la recevront dans leur app.
                     </p>
                   )}
@@ -221,7 +221,7 @@ function EspaceClub() {
 
                   <Titre aide={accueil.a_faire.length > 0 ? `${accueil.a_faire.length} action${accueil.a_faire.length > 1 ? "s" : ""}` : undefined}>À faire</Titre>
                   {accueil.a_faire.length === 0 ? (
-                    <div className="flex items-center gap-[11px] galet-b bg-[#E2F8EF] px-[14px] py-[13px] text-[13.5px] font-semibold text-[#14805F]">
+                    <div className="flex items-center gap-[11px] galet-b bg-[#E2F8EF] px-[14px] py-[13px] text-[13.5px] font-semibold text-[#137758]">
                       <CheckCircle2 className="h-[19px] w-[19px] shrink-0" aria-hidden="true" />
                       Rien en attente : tout est tamponné.
                     </div>
@@ -278,7 +278,7 @@ function EspaceClub() {
                             <span className="absolute -bottom-[3px] -right-[8px] rounded-[9px] bg-[#0F3D70] px-[6px] py-[1px] text-[11px] font-bold text-white">×{h.nb}</span>
                           </span>
                           <span className="block w-full truncate pt-[7px] text-[13.5px] font-bold">{h.prenom}</span>
-                          <span className="block w-full truncate text-[11.5px] text-[#5B7189]">{h.niveau ?? "—"}</span>
+                          <span className="block w-full truncate text-[11.5px] text-[#566B82]">{h.niveau ?? "—"}</span>
                         </div>
                       ))}
                     </div>
@@ -295,9 +295,9 @@ function EspaceClub() {
                           <span className="min-w-0 flex-1">
                             <span className="block truncate text-[14px] font-bold">
                               {n.prenom}
-                              {n.niveau ? <span className="font-semibold text-[#5B7189]"> · {n.niveau}</span> : null}
+                              {n.niveau ? <span className="font-semibold text-[#566B82]"> · {n.niveau}</span> : null}
                             </span>
-                            <span className="block truncate text-[12px] text-[#5B7189]">1re sortie : {n.premiere ? dateCourte(n.premiere) : ""}{n.site ? ` · ${n.site}` : ""}</span>
+                            <span className="block truncate text-[12px] text-[#566B82]">1re sortie : {n.premiere ? dateCourte(n.premiere) : ""}{n.site ? ` · ${n.site}` : ""}</span>
                           </span>
                           <span className="shrink-0 rounded-[9px] bg-[#FFF1D6] px-[7px] py-[2px] text-[11px] font-bold text-[#8A5A10]">Nouveau</span>
                         </div>
@@ -314,7 +314,7 @@ function EspaceClub() {
                         <div key={t.site}>
                           <div className="flex items-baseline justify-between gap-2">
                             <span className="truncate text-[14px] font-bold">{t.site}</span>
-                            <span className="shrink-0 text-[12px] text-[#5B7189]">
+                            <span className="shrink-0 text-[12px] text-[#566B82]">
                               {t.nb} sortie{t.nb > 1 ? "s" : ""}
                               {t.duree_moy ? ` · ${t.duree_moy} min` : ""}
                               {t.prof_max ? ` · ${String(t.prof_max).replace(".0", "").replace(".", ",")} m` : ""}
@@ -335,7 +335,7 @@ function EspaceClub() {
             <div className="lg:col-start-1 lg:row-start-2">
               <Titre>À venir</Titre>
               {aVenir.length === 0 ? (
-                <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#5B7189]">
+                <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] leading-normal text-[#566B82]">
                   Aucune sortie prévue. Crée la prochaine : tes plongeurs la recevront dans leur app.
                 </p>
               ) : (
@@ -355,7 +355,7 @@ function EspaceClub() {
                     ))}
                   </div>
                   {passees.length > 5 && !toutVoir && (
-                    <button type="button" onClick={() => setToutVoir(true)} className="mx-auto mt-[12px] block text-[13px] font-bold text-[#1176A8]">
+                    <button type="button" onClick={() => setToutVoir(true)} className="mx-auto mt-[12px] block text-[13px] font-bold text-[#106F9F]">
                       Voir les {passees.length} sorties passées
                     </button>
                   )}
@@ -399,9 +399,9 @@ function CarteProchaine({ p, onOuvrir, onQr, onFiche }: { p: ProchaineSortie; on
   return (
     <div className="galet border border-[#E4EBF1] bg-white p-[16px] shadow-[0_4px_14px_#123A6306]">
       <button type="button" onClick={onOuvrir} className="block w-full text-left">
-        <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#1176A8]">{quand(p)}</p>
+        <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#106F9F]">{quand(p)}</p>
         <h3 className="pt-[3px] text-[23px] font-bold leading-tight">{p.site}</h3>
-        <p className="truncate text-[13.5px] text-[#5B7189]">{[p.lieu, p.bateau, p.mienne ? null : "un autre DP"].filter(Boolean).join(" · ")}</p>
+        <p className="truncate text-[13.5px] text-[#566B82]">{[p.lieu, p.bateau, p.mienne ? null : "un autre DP"].filter(Boolean).join(" · ")}</p>
         <div className="grid grid-cols-3 gap-[8px] pt-[13px]">
           {[
             { v: p.nb_inscrits, l: `inscrit${p.nb_inscrits > 1 ? "s" : ""}` },
@@ -410,7 +410,7 @@ function CarteProchaine({ p, onOuvrir, onQr, onFiche }: { p: ProchaineSortie; on
           ].map(({ v, l }) => (
             <span key={l} className="galet-petit bg-[#F1F6FC] px-[10px] py-[8px]">
               <span className="block text-[20px] font-bold leading-none">{v}</span>
-              <span className="block pt-[3px] text-[11.5px] text-[#5B7189]">{l}</span>
+              <span className="block pt-[3px] text-[11.5px] text-[#566B82]">{l}</span>
             </span>
           ))}
         </div>
@@ -418,7 +418,7 @@ function CarteProchaine({ p, onOuvrir, onQr, onFiche }: { p: ProchaineSortie; on
       {alertes.length > 0 && (
         <div className="mt-[10px] flex flex-wrap gap-[6px]">
           {alertes.map((a) => (
-            <span key={a} className="flex items-center gap-[5px] rounded-[10px] bg-[#FFE9E2] px-[9px] py-[4px] text-[12px] font-bold text-[#D9573F]">
+            <span key={a} className="flex items-center gap-[5px] rounded-[10px] bg-[#FFE9E2] px-[9px] py-[4px] text-[12px] font-bold text-[#B8432F]">
               <AlertTriangle className="h-[13px] w-[13px]" strokeWidth={2.4} aria-hidden="true" />
               {a}
             </span>
@@ -430,12 +430,12 @@ function CarteProchaine({ p, onOuvrir, onQr, onFiche }: { p: ProchaineSortie; on
           <QrCode className="h-[17px] w-[17px]" strokeWidth={2.2} aria-hidden="true" />
           QR CODE
         </button>
-        <button type="button" onClick={onOuvrir} className="flex h-[46px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[13px] font-bold text-[#1176A8]">
+        <button type="button" onClick={onOuvrir} className="flex h-[46px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[13px] font-bold text-[#106F9F]">
           <Users className="h-[17px] w-[17px]" strokeWidth={2.2} aria-hidden="true" />
           PALANQUÉES
         </button>
       </div>
-      <button type="button" onClick={onFiche} className="mt-[10px] flex w-full items-center justify-center gap-[6px] text-[12.5px] font-bold text-[#5B7189]">
+      <button type="button" onClick={onFiche} className="mt-[10px] flex w-full items-center justify-center gap-[6px] text-[12.5px] font-bold text-[#566B82]">
         <FileText className="h-[14px] w-[14px]" aria-hidden="true" />
         Fiche de sécurité
       </button>
@@ -444,9 +444,9 @@ function CarteProchaine({ p, onOuvrir, onQr, onFiche }: { p: ProchaineSortie; on
 }
 
 const STYLE_ACTION = {
-  tampon: { Icone: Stamp, fond: "bg-[#FFE9E2]", couleur: "text-[#D9573F]" },
-  fiches: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#14805F]" },
-  noms: { Icone: UserRound, fond: "bg-[#EEF2F6]", couleur: "text-[#5B7189]" },
+  tampon: { Icone: Stamp, fond: "bg-[#FFE9E2]", couleur: "text-[#B8432F]" },
+  fiches: { Icone: PenLine, fond: "bg-[#E2F8EF]", couleur: "text-[#137758]" },
+  noms: { Icone: UserRound, fond: "bg-[#EEF2F6]", couleur: "text-[#566B82]" },
 } as const;
 
 function LigneAction({ a, relance, onOuvrir, onRelancer }: { a: ActionDp; relance: string | undefined; onOuvrir: () => void; onRelancer: () => void }) {
@@ -474,18 +474,18 @@ function LigneAction({ a, relance, onOuvrir, onRelancer }: { a: ActionDp; relanc
         </span>
         <span className="min-w-0 flex-1">
           <span className="block truncate text-[14.5px] font-bold">{titre}</span>
-          <span className="block truncate text-[12px] text-[#5B7189]">{detail}</span>
+          <span className="block truncate text-[12px] text-[#566B82]">{detail}</span>
         </span>
       </button>
       {aRelancer > 0 &&
         (etat ? (
-          <span className="shrink-0 text-right text-[11.5px] font-semibold leading-tight text-[#14805F]">{etat === "envoi" ? "Envoi…" : etat}</span>
+          <span className="shrink-0 text-right text-[11.5px] font-semibold leading-tight text-[#137758]">{etat === "envoi" ? "Envoi…" : etat}</span>
         ) : (
-          <button type="button" onClick={onRelancer} className="shrink-0 rounded-[14px] border border-[#57D4F5] px-[11px] py-[6px] text-[12px] font-bold text-[#1176A8]">
+          <button type="button" onClick={onRelancer} className="shrink-0 rounded-[14px] border border-[#57D4F5] px-[11px] py-[6px] text-[12px] font-bold text-[#106F9F]">
             Relancer
           </button>
         ))}
-      {aRelancer === 0 && <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />}
+      {aRelancer === 0 && <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#566B82]" aria-hidden="true" />}
     </div>
   );
 }
@@ -493,10 +493,10 @@ function LigneAction({ a, relance, onOuvrir, onRelancer }: { a: ActionDp; relanc
 function Tuile({ Icone, valeur, libelle, detail, corail = false }: { Icone: typeof Anchor; valeur: number | string; libelle: string; detail: string; corail?: boolean }) {
   return (
     <div className="galet-b border border-[#E4EBF1] bg-white px-[13px] py-[12px]">
-      <Icone className={`h-[18px] w-[18px] ${corail ? "text-[#FF8A75]" : "text-[#1176A8]"}`} strokeWidth={2.2} aria-hidden="true" />
+      <Icone className={`h-[18px] w-[18px] ${corail ? "text-[#FF8A75]" : "text-[#106F9F]"}`} strokeWidth={2.2} aria-hidden="true" />
       <span className="block pt-[7px] text-[26px] font-bold leading-none">{valeur}</span>
       <span className="block pt-[3px] text-[13px] font-semibold leading-tight">{libelle}</span>
-      <span className="block pt-[2px] text-[11.5px] text-[#7D93A8]">{detail}</span>
+      <span className="block pt-[2px] text-[11.5px] text-[#566B82]">{detail}</span>
     </div>
   );
 }
@@ -528,8 +528,8 @@ function FriseSemaine({ plan, onOuvrir, onPlanning }: { plan: Planning; onOuvrir
   return (
     <div className="hidden lg:block">
       <div className="flex items-baseline justify-between pb-[9px] pt-[22px]">
-        <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Cette semaine</h2>
-        <button type="button" onClick={onPlanning} className="flex items-center gap-[4px] text-[12.5px] font-bold text-[#1176A8]">
+        <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#566B82]">Cette semaine</h2>
+        <button type="button" onClick={onPlanning} className="flex items-center gap-[4px] text-[12.5px] font-bold text-[#106F9F]">
           Ouvrir le planning <ArrowUpRight className="h-[14px] w-[14px]" />
         </button>
       </div>
@@ -540,10 +540,10 @@ function FriseSemaine({ plan, onOuvrir, onPlanning }: { plan: Planning; onOuvrir
           return (
             <div key={d} className={`flex min-h-[112px] flex-col gap-[4px] rounded-[10px] p-[6px] ${d === auj ? "bg-[#E3F2FB]" : d < auj ? "bg-[#F7FAFD]" : ""}`}>
               <div className="flex items-baseline justify-between">
-                <span className={`text-[12px] font-bold ${d === auj ? "text-[#1176A8]" : d < auj ? "text-[#9DB0C0]" : ""}`}>
+                <span className={`text-[12px] font-bold ${d === auj ? "text-[#106F9F]" : d < auj ? "text-[#566B82]" : ""}`}>
                   {JOURS_COURTS[i]} {depuisIso(d).getDate()}
                 </span>
-                {pal > 0 && <span className="text-[10.5px] font-bold text-[#5B7189]">{pal} pal.</span>}
+                {pal > 0 && <span className="text-[10.5px] font-bold text-[#566B82]">{pal} pal.</span>}
               </div>
               {liste.map((s) => {
                 const alerte = alertesSortie(s, plan.sorties, plan.materiel).length > 0;
@@ -556,12 +556,12 @@ function FriseSemaine({ plan, onOuvrir, onPlanning }: { plan: Planning; onOuvrir
                       s.statut === "prevue" ? "border-l-[#57D4F5]" : s.statut === "terminee" ? "border-l-[#FF8A75]" : "border-l-[#3DEFBE]"
                     }`}
                   >
-                    <span className="flex items-center gap-[4px] text-[10.5px] font-bold text-[#1176A8]">
+                    <span className="flex items-center gap-[4px] text-[10.5px] font-bold text-[#106F9F]">
                       {heureCourte(s.heure)}
                       {alerte && <span className="h-[6px] w-[6px] rounded-full bg-[#FF8A75]" aria-label="point à régler" />}
                     </span>
                     <span className="block truncate text-[11.5px] font-bold">{s.site}</span>
-                    <span className="block text-[10.5px] text-[#7D93A8]">{s.nb_inscrits + s.nb_prevus} plong.</span>
+                    <span className="block text-[10.5px] text-[#566B82]">{s.nb_inscrits + s.nb_prevus} plong.</span>
                   </button>
                 );
               })}
@@ -624,7 +624,7 @@ function PointsAttention({ plan, accueil, certificats }: { plan: Planning; accue
     <>
       <Titre aide={voyants.length > 0 ? `${voyants.length} point${voyants.length > 1 ? "s" : ""}` : undefined}>Points d'attention</Titre>
       {voyants.length === 0 ? (
-        <div className="flex items-center gap-[11px] galet-b bg-[#E2F8EF] px-[14px] py-[13px] text-[13.5px] font-semibold text-[#14805F]">
+        <div className="flex items-center gap-[11px] galet-b bg-[#E2F8EF] px-[14px] py-[13px] text-[13.5px] font-semibold text-[#137758]">
           <CheckCircle2 className="h-[19px] w-[19px] shrink-0" aria-hidden="true" />
           Tout est en ordre pour les deux semaines à venir.
         </div>
@@ -643,12 +643,12 @@ function PointsAttention({ plan, accueil, certificats }: { plan: Planning; accue
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[13.5px] font-bold leading-snug">{v.titre}</span>
-                <span className="block text-[12px] text-[#7D93A8] first-letter:uppercase">{v.sous}</span>
+                <span className="block text-[12px] text-[#566B82] first-letter:uppercase">{v.sous}</span>
               </span>
-              <ArrowUpRight className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[#9DB0C0]" />
+              <ArrowUpRight className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[#566B82]" />
             </button>
           ))}
-          {voyants.length > 8 && <p className="border-t border-[#EEF3F8] px-[14px] py-[9px] text-[12px] text-[#7D93A8]">et {voyants.length - 8} de plus dans le planning</p>}
+          {voyants.length > 8 && <p className="border-t border-[#EEF3F8] px-[14px] py-[9px] text-[12px] text-[#566B82]">et {voyants.length - 8} de plus dans le planning</p>}
         </div>
       )}
     </>

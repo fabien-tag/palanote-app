@@ -110,13 +110,13 @@ function GaleriePlongee() {
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
           {liste.some((p) => p.moi) && id && (
-            <button type="button" onClick={() => navigate({ to: "/plongee/partage", search: { id } })} className="px-[2px] py-[8px] text-[14px] font-bold text-[#1176A8]">
+            <button type="button" onClick={() => navigate({ to: "/plongee/partage", search: { id } })} className="px-[2px] py-[8px] text-[14px] font-bold text-[#106F9F]">
               Ce que je partage
             </button>
           )}
         </div>
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">Les photos de la plongée</h1>
-        <p className="pt-[2px] text-[13.5px] text-[#5B7189]">{[site.nom, site.date ? dateCourte(site.date) : null].filter(Boolean).join(" · ")}</p>
+        <p className="pt-[2px] text-[13.5px] text-[#566B82]">{[site.nom, site.date ? dateCourte(site.date) : null].filter(Boolean).join(" · ")}</p>
 
         {photos === null && <div className="mt-[18px] h-[260px] animate-pulse galet bg-white" />}
 
@@ -135,7 +135,7 @@ function GaleriePlongee() {
                 <span className="block text-[14px] font-bold">
                   {liste.length} photo{liste.length > 1 ? "s" : ""}, {auteurs.length} plongeur{auteurs.length > 1 ? "s" : ""}.
                 </span>
-                <span className="block truncate text-[12.5px] text-[#5B7189]">{auteurs.map((a) => `${a.nom} ${a.n}`).join(" · ")}</span>
+                <span className="block truncate text-[12.5px] text-[#566B82]">{auteurs.map((a) => `${a.nom} ${a.n}`).join(" · ")}</span>
               </span>
             </div>
 
@@ -149,7 +149,7 @@ function GaleriePlongee() {
                 </button>
               ))}
               {reste > 0 && (
-                <button type="button" onClick={() => setTout(true)} className="flex aspect-square items-center justify-center galet-petit bg-[#DCEEF8] text-[18px] font-bold text-[#5B7189]">
+                <button type="button" onClick={() => setTout(true)} className="flex aspect-square items-center justify-center galet-petit bg-[#DCEEF8] text-[18px] font-bold text-[#566B82]">
                   +{reste}
                 </button>
               )}
@@ -158,7 +158,7 @@ function GaleriePlongee() {
         )}
 
         {photos && liste.length === 0 && (
-          <p className="pt-[16svh] text-center text-[14.5px] leading-normal text-[#5B7189]">
+          <p className="pt-[16svh] text-center text-[14.5px] leading-normal text-[#566B82]">
             {erreur ?? "Pas encore de photos pour cette plongée. Ajoute les tiennes : tes binômes pourront les voir si tu les partages."}
           </p>
         )}

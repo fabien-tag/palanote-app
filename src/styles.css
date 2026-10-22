@@ -367,3 +367,23 @@
     top: 72px;
   }
 }
+
+/* Lien « Aller au contenu » (WCAG 2.4.1) : caché hors écran, visible au focus clavier. */
+.lien-evitement {
+  position: fixed;
+  left: 12px;
+  top: -80px;
+  z-index: 1000;
+  border-radius: 12px;
+  background: #0b3b63;
+  color: #ffffff;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.45);
+}
+.lien-evitement:focus {
+  top: 12px;
+  outline: 3px solid #3defbe;
+  outline-offset: 2px;
+}

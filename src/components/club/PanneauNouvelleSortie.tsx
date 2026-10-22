@@ -64,12 +64,12 @@ export function PanneauNouvelleSortie() {
         }`}
       >
         <header className="flex items-center gap-[12px] border-b border-[#DFEAF2] px-[44px] py-[16px]">
-          <span className="flex h-[40px] w-[40px] items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#1176A8]">
+          <span className="flex h-[40px] w-[40px] items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#106F9F]">
             <CalendarPlus className="h-[20px] w-[20px]" />
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-[19px] font-bold leading-tight">Nouvelle sortie</span>
-            <span className="block text-[12.5px] text-[#7D93A8]">Les plongeurs s'inscrivent ensuite par QR code ou par lien.</span>
+            <span className="block text-[12.5px] text-[#566B82]">Les plongeurs s'inscrivent ensuite par QR code ou par lien.</span>
           </span>
           <button type="button" aria-label="Fermer" onClick={fermer} className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] bg-[#EEF3F8]">
             <X className="h-[18px] w-[18px]" />
@@ -89,7 +89,7 @@ export function PanneauNouvelleSortie() {
               }}
             />
           ) : (
-            <p className="pt-[20px] text-[14px] text-[#5B7189]">Chargement…</p>
+            <p className="pt-[20px] text-[14px] text-[#566B82]">Chargement…</p>
           )}
         </div>
       </aside>

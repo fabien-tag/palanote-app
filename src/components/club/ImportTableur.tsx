@@ -146,11 +146,11 @@ export function ImportTableur({
       <div className="relative flex max-h-[94svh] w-full max-w-[900px] flex-col overflow-hidden rounded-t-[30px] bg-white text-[#123A63] shadow-[0_-10px_30px_rgba(6,32,63,.18)] lg:rounded-[10px]">
         <div className="flex items-start gap-3 border-b border-[#EEF3F8] px-[24px] pb-[14px] pt-[20px]">
           <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[10px] bg-[#E2F8EF]">
-            <FileSpreadsheet className="h-[20px] w-[20px] text-[#14805F]" />
+            <FileSpreadsheet className="h-[20px] w-[20px] text-[#137758]" />
           </span>
           <div className="min-w-0 flex-1">
             <h2 className="text-[19px] font-bold leading-tight">{titre}</h2>
-            <p className="pt-[2px] text-[13px] leading-snug text-[#5B7189]">{description}</p>
+            <p className="pt-[2px] text-[13px] leading-snug text-[#566B82]">{description}</p>
           </div>
           <button type="button" aria-label="Fermer" onClick={() => onFermer(Boolean(resultat))} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-[#EEF3F8]">
             <X className="h-[17px] w-[17px]" />
@@ -160,9 +160,9 @@ export function ImportTableur({
         <div className="flex-1 overflow-y-auto px-[24px] pb-[20px] pt-[16px]">
           {resultat ? (
             <div className="flex flex-col items-center gap-[10px] py-[30px] text-center">
-              <CheckCircle2 className="h-[40px] w-[40px] text-[#14805F]" />
+              <CheckCircle2 className="h-[40px] w-[40px] text-[#137758]" />
               <p className="text-[17px] font-bold">Import terminé</p>
-              <p className="max-w-[460px] text-[14px] leading-normal text-[#5B7189]">{resultat}</p>
+              <p className="max-w-[460px] text-[14px] leading-normal text-[#566B82]">{resultat}</p>
             </div>
           ) : !feuillets ? (
             <>
@@ -175,9 +175,9 @@ export function ImportTableur({
                 onDrop={deposer}
                 className={`flex flex-col items-center gap-[10px] rounded-[10px] border-2 border-dashed px-[20px] py-[34px] text-center ${survol ? "border-[#3DEFBE] bg-[#E2F8EF]" : "border-[#C9DCEA] bg-[#F7FAFD]"}`}
               >
-                <FileSpreadsheet className="h-[34px] w-[34px] text-[#1176A8]" />
+                <FileSpreadsheet className="h-[34px] w-[34px] text-[#106F9F]" />
                 <p className="text-[15px] font-bold">Dépose ton fichier Excel ici</p>
-                <p className="text-[12.5px] text-[#7D93A8]">.xlsx ou .csv · le fichier est lu sur cet appareil, il n'est envoyé nulle part</p>
+                <p className="text-[12.5px] text-[#566B82]">.xlsx ou .csv · le fichier est lu sur cet appareil, il n'est envoyé nulle part</p>
                 <button
                   type="button"
                   onClick={() => entree.current?.click()}
@@ -189,7 +189,7 @@ export function ImportTableur({
                 <input ref={entree} type="file" accept={EXTENSIONS_TABLEUR} className="hidden" onChange={(e) => void ouvrir(e.target.files?.[0])} />
               </div>
               <div className="pt-[16px]">
-                <p className="text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Colonnes reconnues</p>
+                <p className="text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">Colonnes reconnues</p>
                 <div className="flex flex-wrap gap-[6px] pt-[8px]">
                   {champs.map((c) => (
                     <span key={c.id} className={`rounded-[8px] px-[8px] py-[3px] text-[12px] font-semibold ${c.requis ? "bg-[#0F3D70] text-white" : "bg-[#EEF3F8] text-[#3F5B76]"}`}>
@@ -198,13 +198,13 @@ export function ImportTableur({
                     </span>
                   ))}
                 </div>
-                <p className="pt-[8px] text-[12px] leading-normal text-[#7D93A8]">
+                <p className="pt-[8px] text-[12px] leading-normal text-[#566B82]">
                   Les titres de colonnes n'ont pas besoin d'être exacts : « Nom de famille », « NIVEAU FFESSM » ou « Date plongée » sont reconnus, et tu pourras corriger avant d'importer.
                 </p>
                 <button
                   type="button"
                   onClick={() => telechargerModele(modele.nom, modele.lignes)}
-                  className="mt-[10px] flex items-center gap-[6px] text-[13px] font-bold text-[#1176A8]"
+                  className="mt-[10px] flex items-center gap-[6px] text-[13px] font-bold text-[#106F9F]"
                 >
                   <Download className="h-[15px] w-[15px]" /> Télécharger un modèle à remplir
                 </button>
@@ -220,7 +220,7 @@ export function ImportTableur({
                     setFeuillets(null);
                     setFichier(null);
                   }}
-                  className="text-[12.5px] font-bold text-[#1176A8]"
+                  className="text-[12.5px] font-bold text-[#106F9F]"
                 >
                   Changer de fichier
                 </button>
@@ -228,14 +228,14 @@ export function ImportTableur({
 
               {feuillets.length > 1 && (
                 <div className="pt-[14px]">
-                  <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Feuillet</p>
+                  <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">Feuillet</p>
                   <div className="flex flex-wrap gap-[6px]">
                     {feuillets.map((f, i) => (
                       <button
                         key={f.nom + i}
                         type="button"
                         onClick={() => choisirFeuillet(feuillets, i)}
-                        className={`h-[34px] rounded-[10px] px-[12px] text-[12.5px] font-bold ${i === feuillet ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                        className={`h-[34px] rounded-[10px] px-[12px] text-[12.5px] font-bold ${i === feuillet ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
                       >
                         {f.nom} <span className="font-semibold opacity-70">· {f.lignes.length} lignes</span>
                       </button>
@@ -246,8 +246,8 @@ export function ImportTableur({
 
               <div className="pt-[16px]">
                 <div className="flex flex-wrap items-baseline justify-between gap-2 pb-[6px]">
-                  <p className="text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Quelle colonne va où</p>
-                  <label className="flex items-center gap-[6px] text-[12px] text-[#5B7189]">
+                  <p className="text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">Quelle colonne va où</p>
+                  <label className="flex items-center gap-[6px] text-[12px] text-[#566B82]">
                     Titres en ligne
                     <select
                       value={entete}
@@ -271,12 +271,12 @@ export function ImportTableur({
                     <label key={c.id} className="block rounded-[10px] border border-[#E4EBF1] px-[10px] py-[7px]">
                       <span className="block text-[12px] font-bold">
                         {c.libelle}
-                        {c.requis && <span className="text-[#D9573F]"> *</span>}
+                        {c.requis && <span className="text-[#B8432F]"> *</span>}
                       </span>
                       <select
                         value={colonnes[c.id] ?? -1}
                         onChange={(e) => setColonnes({ ...colonnes, [c.id]: Number(e.target.value) })}
-                        className={`mt-[3px] h-[30px] w-full rounded-[8px] border px-[6px] text-[12.5px] outline-none ${(colonnes[c.id] ?? -1) >= 0 ? "border-[#3DEFBE] bg-[#F2FDF9]" : "border-[#D8E5EE] text-[#9DB0C0]"}`}
+                        className={`mt-[3px] h-[30px] w-full rounded-[8px] border px-[6px] text-[12.5px] outline-none ${(colonnes[c.id] ?? -1) >= 0 ? "border-[#3DEFBE] bg-[#F2FDF9]" : "border-[#D8E5EE] text-[#566B82]"}`}
                       >
                         <option value={-1}>— pas dans le fichier</option>
                         {Array.from({ length: nbColonnes }, (_, i) => (
@@ -289,20 +289,20 @@ export function ImportTableur({
                   ))}
                 </div>
                 {manquants.length > 0 && (
-                  <p className="flex items-center gap-[6px] pt-[8px] text-[12.5px] font-bold text-[#D9573F]">
+                  <p className="flex items-center gap-[6px] pt-[8px] text-[12.5px] font-bold text-[#B8432F]">
                     <AlertTriangle className="h-[14px] w-[14px]" /> Choisis la colonne : {manquants.map((m) => m.libelle).join(", ")}
                   </p>
                 )}
               </div>
 
               <div className="pt-[16px]">
-                <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">
+                <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">
                   Aperçu · {analyse.ok.length} ligne{analyse.ok.length > 1 ? "s" : ""} à importer
                 </p>
                 <div className="overflow-x-auto rounded-[10px] border border-[#E4EBF1]">
                   <table className="w-full border-collapse text-[12.5px]">
                     <thead>
-                      <tr className="bg-[#F7FAFD] text-left text-[11px] uppercase tracking-[.05em] text-[#7D93A8]">
+                      <tr className="bg-[#F7FAFD] text-left text-[11px] uppercase tracking-[.05em] text-[#566B82]">
                         {champs
                           .filter((c) => (colonnes[c.id] ?? -1) >= 0)
                           .map((c) => (
@@ -327,13 +327,13 @@ export function ImportTableur({
                     </tbody>
                   </table>
                 </div>
-                {analyse.ok.length > 6 && <p className="pt-[4px] text-[12px] text-[#7D93A8]">et {analyse.ok.length - 6} autres lignes</p>}
+                {analyse.ok.length > 6 && <p className="pt-[4px] text-[12px] text-[#566B82]">et {analyse.ok.length - 6} autres lignes</p>}
                 {analyse.ecartees.length > 0 && (
                   <details className="pt-[10px] text-[12.5px]">
                     <summary className="cursor-pointer font-bold text-[#8A5A10]">
                       {analyse.ecartees.length} ligne{analyse.ecartees.length > 1 ? "s" : ""} écartée{analyse.ecartees.length > 1 ? "s" : ""}
                     </summary>
-                    <ul className="max-h-[140px] overflow-y-auto pt-[6px] text-[#5B7189]">
+                    <ul className="max-h-[140px] overflow-y-auto pt-[6px] text-[#566B82]">
                       {analyse.ecartees.slice(0, 100).map((e) => (
                         <li key={e.n}>
                           Ligne {e.n} : {e.raison}
@@ -359,7 +359,7 @@ export function ImportTableur({
             </button>
           ) : (
             <>
-              <button type="button" onClick={() => onFermer(false)} className="h-[44px] rounded-[10px] px-[16px] text-[13.5px] font-bold text-[#5B7189]">
+              <button type="button" onClick={() => onFermer(false)} className="h-[44px] rounded-[10px] px-[16px] text-[13.5px] font-bold text-[#566B82]">
                 Annuler
               </button>
               <button

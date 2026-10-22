@@ -65,7 +65,7 @@ function MesEspeces() {
           </button>
         </div>
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">Qui as-tu croisé sous l'eau ?</h1>
-        <p className="pt-[4px] text-[13.5px] leading-snug text-[#5B7189]">
+        <p className="pt-[4px] text-[13.5px] leading-snug text-[#566B82]">
           {especes.length
             ? `${especes.length} espèce${especes.length > 1 ? "s" : ""} dans ton carnet.`
             : "Ajoute des photos à tes plongées : l'IA te propose les espèces, tu valides."}
@@ -79,17 +79,17 @@ function MesEspeces() {
           >
             <Meduse className="-right-[4px] -top-[14px]" />
             <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-white/80">
-              <Eye className="h-[17px] w-[17px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+              <Eye className="h-[17px] w-[17px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-[14.5px] font-bold">
                 {aAnalyser.length} plongée{aAnalyser.length > 1 ? "s" : ""} avec photos à analyser
               </span>
-              <span className="block truncate text-[12.5px] text-[#5B7189]">
+              <span className="block truncate text-[12.5px] text-[#566B82]">
                 Voir les photos et lancer l'analyse
               </span>
             </span>
-            <ChevronRight className="h-[17px] w-[17px] text-[#1176A8]" aria-hidden="true" />
+            <ChevronRight className="h-[17px] w-[17px] text-[#106F9F]" aria-hidden="true" />
           </button>
         )}
 
@@ -103,16 +103,16 @@ function MesEspeces() {
                 className="flex w-full items-center gap-[12px] border-t border-[#EDF2F7] px-[14px] py-[12px] text-left first:border-t-0"
               >
                 <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte bg-[#E3F4FC]">
-                  <Fish className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
+                  <Fish className="h-[18px] w-[18px] text-[#106F9F]" strokeWidth={1.9} aria-hidden="true" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[15px] font-bold">{e.nom}</span>
-                  {estProtegee(e.nom) && <span className="text-[11.5px] font-semibold text-[#1176A8]">Espèce protégée</span>}
+                  {estProtegee(e.nom) && <span className="text-[11.5px] font-semibold text-[#106F9F]">Espèce protégée</span>}
                 </span>
-                <span className="text-[12.5px] font-bold text-[#5B7189]">
+                <span className="text-[12.5px] font-bold text-[#566B82]">
                   {e.n} plongée{e.n > 1 ? "s" : ""}
                 </span>
-                <ChevronRight className="h-[16px] w-[16px] text-[#9DB0C0]" aria-hidden="true" />
+                <ChevronRight className="h-[16px] w-[16px] text-[#566B82]" aria-hidden="true" />
               </button>
             ))}
           </div>

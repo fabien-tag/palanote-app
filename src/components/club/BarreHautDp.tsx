@@ -59,7 +59,7 @@ export function BarreHautDp() {
     <header className="sticky top-0 z-30 hidden h-[72px] items-center gap-[12px] border-b border-[#DFEAF2] bg-white/95 px-[32px] backdrop-blur lg:flex">
       <div className="flex min-w-0 flex-1 items-center gap-[18px]">
         <RechercheBarre />
-        <span className="hidden whitespace-nowrap text-[13px] font-semibold text-[#7D93A8] xl:inline">{date}</span>
+        <span className="hidden whitespace-nowrap text-[13px] font-semibold text-[#566B82] xl:inline">{date}</span>
       </div>
 
       <ClocheDp />
@@ -71,7 +71,7 @@ export function BarreHautDp() {
           to="/club/parametres"
           search={{ onglet: "centre" }}
           title="Le club que tu représentes"
-          className="flex h-[34px] max-w-[220px] items-center gap-[7px] rounded-[10px] bg-[#E3F2FB] px-[10px] text-[12.5px] font-bold text-[#1176A8] hover:bg-[#D5EBF8]"
+          className="flex h-[34px] max-w-[220px] items-center gap-[7px] rounded-[10px] bg-[#E3F2FB] px-[10px] text-[12.5px] font-bold text-[#106F9F] hover:bg-[#D5EBF8]"
         >
           <Anchor className="h-[14px] w-[14px] shrink-0" strokeWidth={2.4} aria-hidden="true" />
           <span className="truncate">{centre.nom}</span>
@@ -83,7 +83,7 @@ export function BarreHautDp() {
           <Avatar id={moi.id} prenom={moi.prenom} taille={40} />
           <span className="min-w-0 leading-tight">
             <span className="block max-w-[180px] truncate text-[14px] font-bold text-[#123A63]">{[moi.prenom, moi.nom].filter(Boolean).join(" ")}</span>
-            <span className="block max-w-[180px] truncate text-[12px] text-[#7D93A8]">
+            <span className="block max-w-[180px] truncate text-[12px] text-[#566B82]">
               {["Directeur de plongée", moi.niveau].filter(Boolean).join(" · ")}
             </span>
           </span>

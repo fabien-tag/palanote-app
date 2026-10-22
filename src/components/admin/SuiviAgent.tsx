@@ -37,7 +37,7 @@ export function SuiviProduction() {
       <div className="flex flex-wrap items-start gap-[12px]">
         <div className="min-w-0 flex-1">
           <h2 className="text-[19px] font-bold">L'agent en production</h2>
-          <p className="max-w-[70ch] pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="max-w-[70ch] pt-[4px] text-[13.5px] leading-normal text-[#566B82]">
             Ce que l'agent a vraiment fait sur les carnets des plongeurs. Le taux de correction
             compare chaque champ proposé par l'IA à la valeur que le plongeur a validée.
           </p>
@@ -49,7 +49,7 @@ export function SuiviProduction() {
               type="button"
               aria-pressed={jours === p}
               onClick={() => setJours(p)}
-              className={`h-[32px] rounded-[9px] px-[12px] text-[12.5px] font-bold ${jours === p ? "bg-white text-[#0F3D70] shadow-sm" : "text-[#7D93A8]"}`}
+              className={`h-[32px] rounded-[9px] px-[12px] text-[12.5px] font-bold ${jours === p ? "bg-white text-[#0F3D70] shadow-sm" : "text-[#566B82]"}`}
             >
               {p} jours
             </button>
@@ -85,7 +85,7 @@ export function SuiviProduction() {
           <div className="grid grid-cols-1 gap-[16px] pt-[18px] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             {/* Pages lues par jour, sur 14 jours */}
             <div>
-              <p className="pb-[8px] text-[12.5px] font-semibold text-[#7D93A8]">
+              <p className="pb-[8px] text-[12.5px] font-semibold text-[#566B82]">
                 Pages lues, 14 derniers jours
               </p>
               <div
@@ -111,7 +111,7 @@ export function SuiviProduction() {
                   </div>
                 ))}
               </div>
-              <p className="flex gap-[12px] pt-[8px] text-[11.5px] text-[#7D93A8]">
+              <p className="flex gap-[12px] pt-[8px] text-[11.5px] text-[#566B82]">
                 <span className="flex items-center gap-[5px]">
                   <span className="h-[8px] w-[8px] rounded-full bg-[#3DEFBE]" /> avec l'agent
                 </span>
@@ -128,11 +128,11 @@ export function SuiviProduction() {
 
             {/* Les dernières pages lues */}
             <div>
-              <p className="pb-[8px] text-[12.5px] font-semibold text-[#7D93A8]">
+              <p className="pb-[8px] text-[12.5px] font-semibold text-[#566B82]">
                 Dernières pages lues
               </p>
               {suivi.dernieres.length === 0 ? (
-                <p className="text-[13px] text-[#9DB0C0]">Aucune page sur cette période.</p>
+                <p className="text-[13px] text-[#566B82]">Aucune page sur cette période.</p>
               ) : (
                 <ul className="flex max-h-[180px] flex-col gap-[6px] overflow-y-auto pr-[4px]">
                   {suivi.dernieres.map((d, i) => (
@@ -158,12 +158,12 @@ export function SuiviProduction() {
                           · {d.statut}
                         </span>
                         {d.verifications.length > 0 && (
-                          <span className="block truncate text-[#5B7189]">
+                          <span className="block truncate text-[#566B82]">
                             Vérifié : {d.verifications.join(" ; ")}
                           </span>
                         )}
                         {d.erreur && (
-                          <span className="block truncate text-[#C94957]">{d.erreur}</span>
+                          <span className="block truncate text-[#B8432F]">{d.erreur}</span>
                         )}
                       </span>
                     </li>
@@ -199,9 +199,9 @@ function Colonne({
       className={`rounded-[16px] border p-[16px] ${accent ? "border-[#3DEFBE] bg-[#F3FEFA]" : "border-[#E9EEF3] bg-white"}`}
     >
       <p className="text-[14px] font-bold">{titre}</p>
-      <p className="text-[12px] text-[#7D93A8]">{sous}</p>
+      <p className="text-[12px] text-[#566B82]">{sous}</p>
       {c.pages === 0 ? (
-        <p className="pt-[12px] text-[13px] text-[#9DB0C0]">Aucune page sur cette période.</p>
+        <p className="pt-[12px] text-[13px] text-[#566B82]">Aucune page sur cette période.</p>
       ) : (
         <dl className="grid grid-cols-2 gap-[8px] pt-[12px] text-[13px]">
           <Mesure
@@ -264,9 +264,9 @@ function Mesure({
 }) {
   return (
     <div className="rounded-[12px] bg-white/70 px-[10px] py-[8px] ring-1 ring-[#EEF2F6]">
-      <dt className="text-[11.5px] text-[#7D93A8]">{label}</dt>
-      <dd className={`text-[17px] font-bold ${alerte ? "text-[#C94957]" : ""}`}>{valeur}</dd>
-      <dd className="text-[11px] leading-snug text-[#9DB0C0]">{aide}</dd>
+      <dt className="text-[11.5px] text-[#566B82]">{label}</dt>
+      <dd className={`text-[17px] font-bold ${alerte ? "text-[#B8432F]" : ""}`}>{valeur}</dd>
+      <dd className="text-[11px] leading-snug text-[#566B82]">{aide}</dd>
     </div>
   );
 }

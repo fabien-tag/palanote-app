@@ -128,7 +128,7 @@ export function ChoisirLieu({
       <div className="relative flex h-full w-full max-w-[430px] flex-col bg-[#F5F9FC]">
         {/* Haut */}
         <div className="z-[1000] flex shrink-0 items-center justify-between gap-3 bg-[#F5F9FC] px-[18px] pb-[10px] pt-[max(14px,env(safe-area-inset-top))]">
-          <button type="button" onClick={onFermer} className="text-[14.5px] font-medium text-[#5B7189]">
+          <button type="button" onClick={onFermer} className="text-[14.5px] font-medium text-[#566B82]">
             Annuler
           </button>
           <div className="text-[16px] font-bold text-[#123A63]">Lieu de la plongée</div>
@@ -137,8 +137,8 @@ export function ChoisirLieu({
 
         {/* Recherche */}
         <div className="relative z-[1000] shrink-0 px-[18px] pb-[12px]">
-          <div className="flex h-[48px] items-center gap-2 galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px]">
-            <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
+          <div className="flex h-[48px] items-center gap-2 galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[14px]">
+            <Search className="h-[18px] w-[18px] shrink-0 text-[#566B82]" strokeWidth={2.2} aria-hidden="true" />
             <input
               value={recherche}
               onChange={(e) => setRecherche(e.target.value)}
@@ -148,19 +148,19 @@ export function ChoisirLieu({
               className="w-full min-w-0 bg-transparent text-[15px] text-[#123A63] outline-none placeholder:text-[#9AAAB9]"
             />
             {recherche && (
-              <button type="button" aria-label="Effacer" onClick={() => setRecherche("")} className="text-[#9DB0C0]">
+              <button type="button" aria-label="Effacer" onClick={() => setRecherche("")} className="text-[#566B82]">
                 <X className="h-[17px] w-[17px]" />
               </button>
             )}
           </div>
           {(resultats.length > 0 || (chercheEnCours && recherche.trim().length >= 3)) && (
             <ul className="absolute inset-x-[18px] top-[54px] overflow-hidden galet-moyen border border-[#E4EBF1] bg-white shadow-[0_10px_28px_rgba(7,26,48,.18)]">
-              {chercheEnCours && resultats.length === 0 && <li className="px-[14px] py-[12px] text-[13.5px] text-[#9DB0C0]">Recherche…</li>}
+              {chercheEnCours && resultats.length === 0 && <li className="px-[14px] py-[12px] text-[13.5px] text-[#566B82]">Recherche…</li>}
               {resultats.map((r, i) => (
                 <li key={`${r.coords.lat}-${r.coords.lng}-${i}`} className="border-t border-[#EDF2F7] first:border-t-0">
                   <button type="button" onClick={() => choisirResultat(r)} className="flex w-full flex-col items-start px-[14px] py-[10px] text-left">
                     <span className="text-[14.5px] font-semibold text-[#123A63]">{r.nom}</span>
-                    <span className="text-[12.5px] text-[#5B7189]">{r.lieu}</span>
+                    <span className="text-[12.5px] text-[#566B82]">{r.lieu}</span>
                   </button>
                 </li>
               ))}
@@ -188,7 +188,7 @@ export function ChoisirLieu({
             type="button"
             onClick={() => void maPosition()}
             disabled={localisation}
-            className="absolute bottom-[14px] right-[14px] z-[500] flex h-[46px] items-center gap-2 rounded-[23px] bg-white px-[16px] text-[13.5px] font-bold text-[#1176A8] shadow-[0_4px_14px_rgba(7,26,48,.22)] disabled:opacity-70"
+            className="absolute bottom-[14px] right-[14px] z-[500] flex h-[46px] items-center gap-2 rounded-[23px] bg-white px-[16px] text-[13.5px] font-bold text-[#106F9F] shadow-[0_4px_14px_rgba(7,26,48,.22)] disabled:opacity-70"
           >
             <LocateFixed className={`h-[18px] w-[18px] ${localisation ? "animate-pulse" : ""}`} strokeWidth={2.2} aria-hidden="true" />
             {localisation ? "Localisation…" : "Ma position"}
@@ -207,12 +207,12 @@ export function ChoisirLieu({
           {message && <p className="pb-[10px] text-[13px] text-[#8A5A10]">{message}</p>}
           <div className="pb-[12px]">
             <div className="text-[15.5px] font-bold text-[#123A63]">{nomChoisi ?? libelle ?? (aBouge ? "Lieu sélectionné" : "Aucun lieu choisi")}</div>
-            <div className="text-[12.5px] text-[#5B7189]">
+            <div className="text-[12.5px] text-[#566B82]">
               {nomChoisi && libelle ? `${libelle} · ` : ""}
               {aBouge ? coordsLisibles(centre) : "Cherche un lieu ou déplace la carte"}
             </div>
           </div>
-          <p className="pb-[10px] text-[11.5px] leading-snug text-[#7D93A8]">
+          <p className="pb-[10px] text-[11.5px] leading-snug text-[#566B82]">
             Pour respecter les spots des clubs, le point enregistré est volontairement décalé de {DECALAGE_MIN_M} à {DECALAGE_MAX_M} m.
           </p>
           <button

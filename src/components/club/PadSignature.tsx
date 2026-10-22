@@ -65,10 +65,10 @@ export function PadSignature({ onChange }: { onChange: (png: string | null) => v
           }}
         />
         {vide && (
-          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[13px] text-[#9DB0C0]">Signe ici avec le doigt ou la souris</span>
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[13px] text-[#566B82]">Signe ici avec le doigt ou la souris</span>
         )}
       </div>
-      <button type="button" onClick={effacer} className="mt-[8px] flex items-center gap-[5px] text-[12.5px] font-semibold text-[#5B7189]">
+      <button type="button" onClick={effacer} className="mt-[8px] flex items-center gap-[5px] text-[12.5px] font-semibold text-[#566B82]">
         <Eraser className="h-[14px] w-[14px]" /> Effacer
       </button>
     </div>

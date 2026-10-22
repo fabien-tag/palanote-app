@@ -105,18 +105,18 @@ export function BandeauHistoriqueClub({ onAjoute }: { onAjoute: () => void }) {
 
       {ouvert && (
         <Feuille titre={`Tes plongées avec ${ouvert.centre}`} onFermer={() => setOuvert(null)}>
-          <p className="text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="text-[13.5px] leading-normal text-[#566B82]">
             Ton club les avait notées avant que tu sois sur Palanote. Elles arrivent dans ton carnet avec la date, le site, la profondeur et la durée ; tu pourras
             compléter chacune ensuite.
           </p>
           <div className="mt-[12px] max-h-[34svh] overflow-y-auto rounded-[14px] border border-[#E4EBF1]">
             {ouvert.plongees.map((p, i) => (
               <div key={p.id} className={`flex items-center gap-[10px] px-[12px] py-[8px] ${i > 0 ? "border-t border-[#EEF3F8]" : ""}`}>
-                <span className="w-[74px] shrink-0 text-[12px] font-bold text-[#1176A8]">
+                <span className="w-[74px] shrink-0 text-[12px] font-bold text-[#106F9F]">
                   {depuisIso(p.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "2-digit" })}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-[13.5px] font-semibold">{p.site ?? "Site non noté"}</span>
-                <span className="shrink-0 text-[12px] text-[#5B7189]">
+                <span className="shrink-0 text-[12px] text-[#566B82]">
                   {[p.profondeur ? `${String(p.profondeur).replace(".0", "").replace(".", ",")} m` : null, p.duree ? `${p.duree} min` : null].filter(Boolean).join(" · ")}
                 </span>
               </div>
@@ -127,7 +127,7 @@ export function BandeauHistoriqueClub({ onAjoute }: { onAjoute: () => void }) {
               <input type="checkbox" checked={ajuster} onChange={(e) => setAjuster(e.target.checked)} className="mt-[2px] h-[17px] w-[17px] accent-[#0F3D70]" />
               <span>
                 Ces plongées faisaient partie de mes {avant} plongées d'avant Palanote
-                <span className="block text-[12px] text-[#7D93A8]">Ton total ne les comptera pas deux fois.</span>
+                <span className="block text-[12px] text-[#566B82]">Ton total ne les comptera pas deux fois.</span>
               </span>
             </label>
           )}
@@ -140,7 +140,7 @@ export function BandeauHistoriqueClub({ onAjoute }: { onAjoute: () => void }) {
           >
             {enCours ? "AJOUT…" : `AJOUTER ${ouvert.plongees.length} PLONGÉE${ouvert.plongees.length > 1 ? "S" : ""} À MON CARNET`}
           </button>
-          <button type="button" onClick={() => ecarter(ouvert)} className="mx-auto mt-[12px] block text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4">
+          <button type="button" onClick={() => ecarter(ouvert)} className="mx-auto mt-[12px] block text-[13px] font-semibold text-[#566B82] underline underline-offset-4">
             Non merci, ne plus me les proposer
           </button>
         </Feuille>

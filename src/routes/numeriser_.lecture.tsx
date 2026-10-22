@@ -29,7 +29,7 @@ function CasePage({ p, onRelancer }: { p: Page; onRelancer: () => void }) {
         ? "border-[1.5px] border-[#F5A524] bg-[#FFF5E5] text-[#6B4A14]"
         : p.statut === "en_cours"
           ? "bg-white text-[#9DB9CF] shadow-[0_2px_10px_rgba(18,58,99,.10)]"
-          : "border border-dashed border-[#D5E1EC] bg-white/40 text-[#9DB0C0]";
+          : "border border-dashed border-[#D5E1EC] bg-white/40 text-[#566B82]";
   return (
     <button
       type="button"
@@ -84,7 +84,7 @@ function Lecture() {
       <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
         <h1 className="text-[20px] font-bold">Lecture des pages</h1>
         {donnees?.lot.libelle && (
-          <span className="galet-moyen bg-[#E3EDF6] px-3 py-[6px] text-[12.5px] font-bold text-[#5B7189]">{donnees.lot.libelle}</span>
+          <span className="galet-moyen bg-[#E3EDF6] px-3 py-[6px] text-[12.5px] font-bold text-[#566B82]">{donnees.lot.libelle}</span>
         )}
       </div>
 
@@ -94,9 +94,9 @@ function Lecture() {
         <div className="flex items-baseline justify-between">
           <div className="flex items-baseline gap-2">
             <span className="text-[30px] font-bold leading-none">{r.lues}</span>
-            <span className="text-[17px] font-bold text-[#5B7189]">pages sur {r.total}</span>
+            <span className="text-[17px] font-bold text-[#566B82]">pages sur {r.total}</span>
           </div>
-          <span className="text-[13.5px] text-[#5B7189]">
+          <span className="text-[13.5px] text-[#566B82]">
             {restantes > 0 ? `encore ~${minutes} min` : r.total > 0 ? "lecture terminée" : ""}
           </span>
         </div>
@@ -115,7 +115,7 @@ function Lecture() {
       </div>
 
       {pages.length > 0 && (
-        <div className="flex flex-wrap gap-x-4 gap-y-1 px-[22px] pt-[12px] text-[12px] text-[#5B7189]">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 px-[22px] pt-[12px] text-[12px] text-[#566B82]">
           {[
             ["#3DEFBE", "lue"],
             ["#57D4F5", "en cours"],
@@ -138,14 +138,14 @@ function Lecture() {
           <div key={p.id} className="mx-[22px] mt-[10px] galet-moyen border border-[#F5C9A0] bg-[#FFF5E5] px-[12px] py-[10px] text-[12.5px] text-[#6B4A14]">
             <div className="flex items-center justify-between gap-3">
               <b>{p.erreur === "quota_atteint" ? `Page ${p.ordre} en attente : tes pages lues par l'IA sont épuisées.` : `La lecture de la page ${p.ordre} a échoué.`}</b>
-              <button type="button" onClick={() => void relancer(p)} className="shrink-0 font-bold text-[#1176A8] underline underline-offset-2">
+              <button type="button" onClick={() => void relancer(p)} className="shrink-0 font-bold text-[#106F9F] underline underline-offset-2">
                 Relancer
               </button>
             </div>
             {p.erreur === "quota_atteint" ? (
               <p className="pt-1 text-[12px] text-[#8A6A3A]">
                 La photo est gardée : elle sera lue dès que tu as un forfait. Touche « Relancer » ensuite.{" "}
-                <button type="button" onClick={() => navigate({ to: "/forfait" })} className="font-bold text-[#1176A8] underline underline-offset-2">
+                <button type="button" onClick={() => navigate({ to: "/forfait" })} className="font-bold text-[#106F9F] underline underline-offset-2">
                   Voir les forfaits
                 </button>
               </p>
@@ -160,7 +160,7 @@ function Lecture() {
 
       <div className="relative mx-[22px] flex items-start gap-3 galet-b border border-[#CFE6F3] bg-[#E3F2FB]/80 p-[14px]">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center goutte bg-[#C7EAF8]">
-          <Cloud className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
+          <Cloud className="h-[18px] w-[18px] text-[#106F9F]" strokeWidth={2} aria-hidden="true" />
         </span>
         <p className="text-[13px] leading-normal text-[#123A63]">
           <b>Tu peux fermer l'app.</b> La lecture ne tourne pas sur ton téléphone, elle tourne sur le serveur — elle continue sans toi et rien ne se perd.

@@ -39,10 +39,10 @@ function PageNotifications() {
       {liste && liste.length === 0 && (
         <div className="flex flex-col items-center gap-[10px] pt-[16svh] text-center">
           <span className="flex h-[56px] w-[56px] items-center justify-center goutte bg-[#E3EDF6]">
-            <Bell className="h-[24px] w-[24px] text-[#9DB0C0]" aria-hidden="true" />
+            <Bell className="h-[24px] w-[24px] text-[#566B82]" aria-hidden="true" />
           </span>
           <p className="text-[16px] font-bold">Rien de neuf pour l'instant</p>
-          <p className="max-w-[280px] text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="max-w-[280px] text-[13.5px] leading-normal text-[#566B82]">
             Tes inscriptions aux sorties, tes fiches à compléter et les tampons de ton club arriveront ici.
           </p>
         </div>

@@ -90,7 +90,7 @@ function PageSite() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-[10px] bg-[#F3F6F9] px-[24px] text-center text-[#0E2238]">
         <Anchor className="h-[34px] w-[34px] text-[#14B8C4]" aria-hidden="true" />
         <h1 className="text-[24px] font-semibold">Ce site n'est pas en ligne</h1>
-        <p className="max-w-[40ch] text-[15px] text-[#5B7189]">L'adresse est peut-être mal tapée, ou le club n'a pas encore publié son site.</p>
+        <p className="max-w-[40ch] text-[15px] text-[#566B82]">L'adresse est peut-être mal tapée, ou le club n'a pas encore publié son site.</p>
       </div>
     );
 

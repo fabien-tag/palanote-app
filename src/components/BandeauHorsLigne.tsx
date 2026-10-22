@@ -42,16 +42,16 @@ export function BandeauHorsLigne() {
       <div className="flex items-start gap-[12px]">
         <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte bg-[#E3EDF6]">
           {horsLigne ? (
-            <CloudOff className="h-[18px] w-[18px] text-[#5B7189]" strokeWidth={2} aria-hidden="true" />
+            <CloudOff className="h-[18px] w-[18px] text-[#566B82]" strokeWidth={2} aria-hidden="true" />
           ) : (
-            <UploadCloud className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
+            <UploadCloud className="h-[18px] w-[18px] text-[#106F9F]" strokeWidth={2} aria-hidden="true" />
           )}
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-[14.5px] font-bold text-[#123A63]">
             {horsLigne ? "Pas de réseau" : `${n} plongée${n > 1 ? "s" : ""} à envoyer`}
           </p>
-          <p className="pt-[2px] text-[12.5px] leading-snug text-[#5B7189]">
+          <p className="pt-[2px] text-[12.5px] leading-snug text-[#566B82]">
             {horsLigne
               ? n > 0
                 ? `${n} plongée${n > 1 ? "s" : ""} gardée${n > 1 ? "s" : ""} sur ton téléphone. Elle${n > 1 ? "s" : ""} partir${n > 1 ? "ont" : "a"} toute${n > 1 ? "s" : ""} seule${n > 1 ? "s" : ""} au retour du réseau.`
@@ -66,7 +66,7 @@ export function BandeauHorsLigne() {
           {attente.map((p) => (
             <li key={p.id} className="flex items-baseline justify-between gap-2 text-[13px]">
               <span className="min-w-0 truncate font-semibold text-[#123A63]">{p.ligne.site_name || "Plongée sans site"}</span>
-              <span className="shrink-0 text-[12px] text-[#9DB0C0]">
+              <span className="shrink-0 text-[12px] text-[#566B82]">
                 {p.ligne.dive_date ? new Date(p.ligne.dive_date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : ""}
                 {p.photos.length ? ` · ${p.photos.length} photo${p.photos.length > 1 ? "s" : ""}` : ""}
                 {p.erreur ? " · refusée" : " · en attente"}

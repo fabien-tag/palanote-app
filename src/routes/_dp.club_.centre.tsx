@@ -65,7 +65,7 @@ function ChoixCentre() {
     <PageClub titre="Mon centre" large onRetour={() => navigate({ to: "/club" })}>
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-[40px] xl:max-w-[1200px]">
         <div className="min-w-0">
-          <p className="pt-[6px] text-[14px] leading-normal text-[#5B7189]">
+          <p className="pt-[6px] text-[14px] leading-normal text-[#566B82]">
             Choisis le club ou le centre où tu organises les sorties. Tes plongeurs le verront sur
             leur tampon.
           </p>
@@ -94,7 +94,7 @@ function ChoixCentre() {
                 setCreation(true);
                 setNom(q.trim());
               }}
-              className="mt-[16px] flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] lg:mt-0"
+              className="mt-[16px] flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F] lg:mt-0"
             >
               <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
               MON CENTRE N'EST PAS DANS LA LISTE
@@ -115,7 +115,7 @@ function ChoixCentre() {
                 onChange={(e) => setVille(e.target.value)}
                 placeholder="Hyères"
               />
-              <p className="text-[12px] leading-snug text-[#9DB0C0]">
+              <p className="text-[12px] leading-snug text-[#566B82]">
                 Tu en deviens le directeur de plongée. Pour protéger les données de tes plongeurs,
                 personne d'autre ne peut le rejoindre seul : l'ajout passe par Palanote.
               </p>

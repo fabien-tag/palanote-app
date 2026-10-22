@@ -121,17 +121,17 @@ function useLignes(q: string, centre: string | null, r: Recherche | null, fermer
 // Liste des résultats (commune à la barre et au plein écran)
 function Resultats({ lignes, actif, setActif, q, enCours }: { lignes: Ligne[]; actif: number; setActif: (i: number) => void; q: string; enCours: boolean }) {
   if (q.trim().length < 2 && lignes.length === 0) {
-    return <p className="px-[16px] py-[14px] text-[13px] text-[#7D93A8]">Cherche un plongeur, un équipier, du matériel, une sortie ou un site.</p>;
+    return <p className="px-[16px] py-[14px] text-[13px] text-[#566B82]">Cherche un plongeur, un équipier, du matériel, une sortie ou un site.</p>;
   }
   if (lignes.length === 0) {
-    return <p className="px-[16px] py-[14px] text-[13px] text-[#7D93A8]">{enCours ? "Recherche…" : `Rien trouvé pour « ${q.trim()} ».`}</p>;
+    return <p className="px-[16px] py-[14px] text-[13px] text-[#566B82]">{enCours ? "Recherche…" : `Rien trouvé pour « ${q.trim()} ».`}</p>;
   }
   return (
     <ul role="listbox" className="py-[6px]">
       {lignes.map((l, i) => (
         <li key={l.cle} role="option" aria-selected={i === actif}>
           {(i === 0 || lignes[i - 1]!.groupe !== l.groupe) && (
-            <p className="px-[16px] pb-[4px] pt-[10px] text-[11px] font-bold uppercase tracking-[.08em] text-[#9DB0C0]">{l.groupe}</p>
+            <p className="px-[16px] pb-[4px] pt-[10px] text-[11px] font-bold uppercase tracking-[.08em] text-[#566B82]">{l.groupe}</p>
           )}
           <button
             type="button"
@@ -139,14 +139,14 @@ function Resultats({ lignes, actif, setActif, q, enCours }: { lignes: Ligne[]; a
             onClick={l.aller}
             className={`flex w-full items-center gap-[12px] px-[16px] py-[8px] text-left ${i === actif ? "bg-[#EEF6FC]" : ""}`}
           >
-            <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#1176A8]">
+            <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#106F9F]">
               <l.Icone className="h-[16px] w-[16px]" strokeWidth={2.2} />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[14px] font-bold text-[#123A63]">{l.titre}</span>
-              {l.texte && <span className="block truncate text-[12px] text-[#7D93A8]">{l.texte}</span>}
+              {l.texte && <span className="block truncate text-[12px] text-[#566B82]">{l.texte}</span>}
             </span>
-            {i === actif && <CornerDownLeft className="h-[14px] w-[14px] shrink-0 text-[#9DB0C0]" />}
+            {i === actif && <CornerDownLeft className="h-[14px] w-[14px] shrink-0 text-[#566B82]" />}
           </button>
         </li>
       ))}
@@ -216,7 +216,7 @@ export function RechercheBarre() {
   return (
     <div ref={boite} className="relative w-full max-w-[520px]">
       <label className="flex h-[42px] items-center gap-[10px] rounded-[10px] border border-[#E4EBF1] bg-[#F7FAFD] px-[12px] focus-within:border-[#57D4F5] focus-within:bg-white">
-        <Search className="h-[17px] w-[17px] shrink-0 text-[#7D93A8]" />
+        <Search className="h-[17px] w-[17px] shrink-0 text-[#566B82]" />
         <input
           ref={champ}
           value={q}
@@ -231,11 +231,11 @@ export function RechercheBarre() {
           className="min-w-0 flex-1 bg-transparent text-[14px] text-[#123A63] outline-none placeholder:text-[#9DB0C0]"
         />
         {q ? (
-          <button type="button" aria-label="Effacer" onClick={() => setQ("")} className="text-[#9DB0C0]">
+          <button type="button" aria-label="Effacer" onClick={() => setQ("")} className="text-[#566B82]">
             <X className="h-[15px] w-[15px]" />
           </button>
         ) : (
-          <kbd className="rounded-[6px] border border-[#E4EBF1] bg-white px-[6px] py-[1px] text-[11px] font-semibold text-[#7D93A8]">{mac ? "⌘ K" : "Ctrl K"}</kbd>
+          <kbd className="rounded-[6px] border border-[#E4EBF1] bg-white px-[6px] py-[1px] text-[11px] font-semibold text-[#566B82]">{mac ? "⌘ K" : "Ctrl K"}</kbd>
         )}
       </label>
       {ouvert && (q.trim().length > 0 || lignes.length > 0) && (
@@ -274,7 +274,7 @@ function RecherchePleinEcran({ onFermer }: { onFermer: () => void }) {
     <div className="bureau fixed inset-0 z-[70] flex flex-col bg-white text-[#123A63]" role="dialog" aria-modal="true" aria-label="Recherche">
       <div className="flex items-center gap-[10px] border-b border-[#DFEAF2] px-[16px] pb-[12px] pt-[max(14px,env(safe-area-inset-top))]">
         <label className="flex h-[44px] flex-1 items-center gap-[10px] rounded-[10px] border border-[#57D4F5] px-[12px]">
-          <Search className="h-[17px] w-[17px] shrink-0 text-[#7D93A8]" />
+          <Search className="h-[17px] w-[17px] shrink-0 text-[#566B82]" />
           <input
             autoFocus
             value={q}
@@ -285,7 +285,7 @@ function RecherchePleinEcran({ onFermer }: { onFermer: () => void }) {
             className="min-w-0 flex-1 bg-transparent text-[16px] outline-none"
           />
         </label>
-        <button type="button" onClick={onFermer} className="text-[14px] font-semibold text-[#1176A8]">
+        <button type="button" onClick={onFermer} className="text-[14px] font-semibold text-[#106F9F]">
           Fermer
         </button>
       </div>

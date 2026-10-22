@@ -116,7 +116,7 @@ function PageFormations() {
                 role="tab"
                 aria-selected={onglet === id}
                 onClick={() => setOnglet(id)}
-                className={`h-[36px] rounded-[8px] px-[14px] text-[13px] font-bold ${onglet === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+                className={`h-[36px] rounded-[8px] px-[14px] text-[13px] font-bold ${onglet === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
               >
                 {l}
               </button>
@@ -137,7 +137,7 @@ function PageFormations() {
                       key={id}
                       type="button"
                       onClick={() => setFiltre(id)}
-                      className={`h-[32px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${filtre === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+                      className={`h-[32px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${filtre === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
                     >
                       {l}
                     </button>
@@ -145,7 +145,7 @@ function PageFormations() {
                 </div>
               </div>
               {liste.length === 0 ? (
-                <div className="mt-[12px] rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[18px] py-[18px] text-[13.5px] leading-normal text-[#5B7189]">
+                <div className="mt-[12px] rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[18px] py-[18px] text-[13.5px] leading-normal text-[#566B82]">
                   <p className="font-bold text-[#123A63]">Aucun élève en formation.</p>
                   <p className="pt-[4px]">
                     {catalogue?.length
@@ -157,7 +157,7 @@ function PageFormations() {
                 <div className="mt-[12px] overflow-x-auto rounded-[10px] border border-[#E4EBF1] bg-white">
                   <table className="w-full min-w-[820px] border-collapse text-[13px]">
                     <thead>
-                      <tr className="border-b border-[#E4EBF1] text-left text-[11px] font-bold uppercase tracking-[.06em] text-[#7D93A8]">
+                      <tr className="border-b border-[#E4EBF1] text-left text-[11px] font-bold uppercase tracking-[.06em] text-[#566B82]">
                         <th className="px-[14px] py-[10px]">Élève</th>
                         <th className="px-[8px] py-[10px]">Formation</th>
                         <th className="px-[8px] py-[10px]">Moniteur</th>
@@ -174,13 +174,13 @@ function PageFormations() {
                           <tr key={f.id} onClick={() => setDetail(f.id)} className="cursor-pointer border-b border-[#F0F4F8] last:border-0 hover:bg-[#F5F9FD]">
                             <td className="px-[14px] py-[11px]">
                               <b>{f.eleve_nom}</b>
-                              {f.eleve_niveau && <span className="block text-[11.5px] text-[#7D93A8]">{f.eleve_niveau}{f.eleve_id ? " · sur Palanote" : ""}</span>}
+                              {f.eleve_niveau && <span className="block text-[11.5px] text-[#566B82]">{f.eleve_niveau}{f.eleve_id ? " · sur Palanote" : ""}</span>}
                             </td>
                             <td className="px-[8px]">
                               <span className="mr-[6px] rounded-[6px] bg-[#0F3D70] px-[6px] py-[1px] text-[11px] font-bold text-white">{f.code ?? "—"}</span>
                               {f.intitule}
                             </td>
-                            <td className="px-[8px]">{f.moniteur?.nom ?? <span className="font-semibold text-[#D9573F]">À désigner</span>}</td>
+                            <td className="px-[8px]">{f.moniteur?.nom ?? <span className="font-semibold text-[#B8432F]">À désigner</span>}</td>
                             <td className="whitespace-nowrap px-[8px]">
                               {jourCourt(f.date_debut)} → {jourCourt(f.date_fin)}
                             </td>
@@ -189,7 +189,7 @@ function PageFormations() {
                                 <span className="h-[6px] w-[80px] overflow-hidden rounded-full bg-[#E3EDF6]">
                                   <span className="block h-full bg-[#3DEFBE]" style={{ width: `${f.seances.length ? (faites / f.seances.length) * 100 : 0}%` }} />
                                 </span>
-                                <span className="text-[12px] text-[#5B7189]">
+                                <span className="text-[12px] text-[#566B82]">
                                   {faites}/{f.seances.length}
                                 </span>
                               </span>
@@ -211,7 +211,7 @@ function PageFormations() {
           {onglet === "catalogue" && catalogue && (
             <>
               {catalogue.length === 0 && (
-                <div className="mt-[14px] rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[18px] py-[18px] text-[13.5px] text-[#5B7189]">
+                <div className="mt-[14px] rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[18px] py-[18px] text-[13.5px] text-[#566B82]">
                   <p className="font-bold text-[#123A63]">Le catalogue est vide.</p>
                   <p className="pt-[4px]">Ajoute tes formations une par une, ou pars du catalogue type d'un club FFESSM (tarifs indicatifs à adapter).</p>
                   <button
@@ -228,7 +228,7 @@ function PageFormations() {
                 if (l.length === 0) return null;
                 return (
                   <div key={cat.id}>
-                    <p className="pb-[8px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.12em] text-[#7D93A8]">{cat.libelle}</p>
+                    <p className="pb-[8px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.12em] text-[#566B82]">{cat.libelle}</p>
                     <div className="grid gap-[10px] sm:grid-cols-2 xl:grid-cols-3">
                       {l.map((f) => (
                         <button
@@ -241,15 +241,15 @@ function PageFormations() {
                             <span className="flex h-[40px] min-w-[44px] items-center justify-center rounded-[10px] bg-[#0F3D70] px-[6px] text-[13px] font-bold text-white">{f.code}</span>
                             <span className="min-w-0 flex-1">
                               <span className="block text-[14.5px] font-bold leading-tight">{f.intitule}</span>
-                              <span className="block text-[12px] text-[#7D93A8]">{f.organisme}</span>
+                              <span className="block text-[12px] text-[#566B82]">{f.organisme}</span>
                             </span>
-                            <span className="text-[16px] font-bold text-[#14805F]">{prixTexte(f.prix)}</span>
+                            <span className="text-[16px] font-bold text-[#137758]">{prixTexte(f.prix)}</span>
                           </span>
                           <span className="flex flex-wrap gap-[6px] pt-[10px] text-[12px] font-semibold">
                             <span className="flex items-center gap-[4px] rounded-[8px] bg-[#EEF4F9] px-[8px] py-[3px] text-[#3F5B76]">
                               <BookOpen className="h-[13px] w-[13px]" /> {f.nb_theorie} cours théoriques
                             </span>
-                            <span className="flex items-center gap-[4px] rounded-[8px] bg-[#E2F8EF] px-[8px] py-[3px] text-[#14805F]">
+                            <span className="flex items-center gap-[4px] rounded-[8px] bg-[#E2F8EF] px-[8px] py-[3px] text-[#137758]">
                               <Waves className="h-[13px] w-[13px]" /> {f.nb_pratique} séances pratiques
                             </span>
                             {f.en_cours > 0 && (
@@ -258,7 +258,7 @@ function PageFormations() {
                               </span>
                             )}
                           </span>
-                          {f.prerequis && <span className="pt-[8px] text-[12px] text-[#5B7189]">Prérequis : {f.prerequis}</span>}
+                          {f.prerequis && <span className="pt-[8px] text-[12px] text-[#566B82]">Prérequis : {f.prerequis}</span>}
                         </button>
                       ))}
                     </div>
@@ -356,14 +356,14 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
         <ChampTexte label="Code" value={b.code} onChange={(e) => setB({ ...b, code: e.target.value })} placeholder="N2" />
         <ChampTexte label="Intitulé" value={b.intitule} onChange={(e) => setB({ ...b, intitule: e.target.value })} placeholder="Plongeur Niveau 2" />
       </div>
-      <p className="pb-[6px] text-[12px] font-bold text-[#5B7189]">Famille</p>
+      <p className="pb-[6px] text-[12px] font-bold text-[#566B82]">Famille</p>
       <div className="flex flex-wrap gap-[6px] pb-[10px]">
         {CATEGORIES_FORMATION.map((c) => (
           <button
             key={c.id}
             type="button"
             onClick={() => setB({ ...b, categorie: c.id })}
-            className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${b.categorie === c.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+            className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${b.categorie === c.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
           >
             {c.libelle}
           </button>
@@ -381,9 +381,9 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
       <button type="button" aria-expanded={fiche} onClick={() => setFiche(!fiche)} className="mt-[6px] flex w-full items-center justify-between rounded-[10px] border border-[#D8E5EE] bg-[#F7FAFC] px-[12px] py-[10px] text-left">
         <span>
           <span className="block text-[13px] font-bold">Fiche détaillée (site du club)</span>
-          <span className="block text-[11.5px] text-[#7D93A8]">Objectifs, âge, profondeur, programme, ce qui est compris, documents</span>
+          <span className="block text-[11.5px] text-[#566B82]">Objectifs, âge, profondeur, programme, ce qui est compris, documents</span>
         </span>
-        <span className="text-[18px] font-bold text-[#1176A8]">{fiche ? "−" : "+"}</span>
+        <span className="text-[18px] font-bold text-[#106F9F]">{fiche ? "−" : "+"}</span>
       </button>
       {fiche && (
         <div className="flex flex-col gap-[2px] pt-[8px]">
@@ -420,7 +420,7 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
         <button
           type="button"
           onClick={() => void retirerFormationCatalogue(f.id!).then(() => (onFait(), onFermer())).catch((e) => setErreur(detailErreur(e, "Retrait impossible.")))}
-          className="mx-auto mt-[12px] flex items-center gap-[5px] text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+          className="mx-auto mt-[12px] flex items-center gap-[5px] text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
         >
           <Trash2 className="h-[13px] w-[13px]" /> Retirer du catalogue
         </button>
@@ -432,13 +432,13 @@ function FeuilleCatalogue({ centre, f, onFermer, onFait }: { centre: string; f: 
 function ZoneTexte({ label, value, onChange, lignes, placeholder }: { label: string; value: string; onChange: (v: string) => void; lignes: number; placeholder?: string }) {
   return (
     <label className="block pb-[10px]">
-      <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
+      <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">{label}</span>
       <textarea
         value={value}
         rows={lignes}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="block w-full resize-y rounded-[10px] border-[1.5px] border-[#E4EBF1] bg-white px-[14px] py-[10px] text-[14px] leading-normal text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+        className="block w-full resize-y rounded-[10px] border-[1.5px] border-[#7B8FA3] bg-white px-[14px] py-[10px] text-[14px] leading-normal text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
       />
     </label>
   );
@@ -504,7 +504,7 @@ function PanneauProgramme({
       setEnCours(false);
     }
   };
-  const puce = (actif: boolean) => `h-[34px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${actif ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`;
+  const puce = (actif: boolean) => `h-[34px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${actif ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`;
 
   return (
     <PanneauLateral
@@ -523,7 +523,7 @@ function PanneauProgramme({
       }
     >
       <MessageErreur texte={erreur} />
-      <p className="pb-[6px] pt-[16px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Formation</p>
+      <p className="pb-[6px] pt-[16px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Formation</p>
       <div className="flex flex-wrap gap-[6px]">
         {catalogue.map((c) => (
           <button
@@ -539,23 +539,23 @@ function PanneauProgramme({
             {c.code}
           </button>
         ))}
-        {catalogue.length === 0 && <p className="text-[13px] text-[#7D93A8]">Ajoute d'abord des formations au catalogue.</p>}
+        {catalogue.length === 0 && <p className="text-[13px] text-[#566B82]">Ajoute d'abord des formations au catalogue.</p>}
       </div>
       {cat && (
-        <p className="pt-[8px] text-[12.5px] text-[#5B7189]">
+        <p className="pt-[8px] text-[12.5px] text-[#566B82]">
           {cat.intitule} · {cat.nb_theorie} cours théoriques · {cat.nb_pratique} séances pratiques · {prixTexte(cat.prix)}
         </p>
       )}
 
-      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Élève</p>
+      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Élève</p>
       {eleve ? (
         <div className="flex items-center gap-[10px] rounded-[10px] border border-[#57D4F5] bg-[#F3FAFE] px-[12px] py-[9px]">
           <span className="min-w-0 flex-1">
             <b>{[eleve.prenom, eleve.nom].filter(Boolean).join(" ")}</b>
-            <span className="block text-[12px] text-[#7D93A8]">{[eleve.niveau, eleve.sur_palanote ? "sur Palanote, sera prévenu" : "pas encore sur Palanote"].filter(Boolean).join(" · ")}</span>
+            <span className="block text-[12px] text-[#566B82]">{[eleve.niveau, eleve.sur_palanote ? "sur Palanote, sera prévenu" : "pas encore sur Palanote"].filter(Boolean).join(" · ")}</span>
           </span>
           {!existante && (
-            <button type="button" aria-label="Changer d'élève" onClick={() => setAdhId("")} className="text-[#9DB0C0]">
+            <button type="button" aria-label="Changer d'élève" onClick={() => setAdhId("")} className="text-[#566B82]">
               <X className="h-[16px] w-[16px]" />
             </button>
           )}
@@ -563,7 +563,7 @@ function PanneauProgramme({
       ) : (
         <>
           <label className="flex h-[42px] items-center gap-[8px] rounded-[10px] border border-[#E4EBF1] px-[12px] focus-within:border-[#57D4F5]">
-            <Search className="h-[16px] w-[16px] text-[#9DB0C0]" />
+            <Search className="h-[16px] w-[16px] text-[#566B82]" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Chercher parmi les membres du club…" className="min-w-0 flex-1 bg-transparent text-[14px] outline-none" />
           </label>
           <div className="flex flex-col gap-[4px] pt-[6px]">
@@ -578,17 +578,17 @@ function PanneauProgramme({
                 className="flex items-center justify-between rounded-[10px] px-[10px] py-[7px] text-left text-[13.5px] hover:bg-[#F1F6FC]"
               >
                 <span>
-                  <b>{[a.prenom, a.nom].filter(Boolean).join(" ")}</b> <span className="text-[#7D93A8]">{a.niveau ?? ""}</span>
+                  <b>{[a.prenom, a.nom].filter(Boolean).join(" ")}</b> <span className="text-[#566B82]">{a.niveau ?? ""}</span>
                 </span>
-                <Plus className="h-[15px] w-[15px] text-[#1176A8]" />
+                <Plus className="h-[15px] w-[15px] text-[#106F9F]" />
               </button>
             ))}
-            {q.trim() && trouves.length === 0 && <p className="px-[4px] text-[12.5px] text-[#9DB0C0]">Personne de ce nom. Ajoute-le d'abord dans Membres du club.</p>}
+            {q.trim() && trouves.length === 0 && <p className="px-[4px] text-[12.5px] text-[#566B82]">Personne de ce nom. Ajoute-le d'abord dans Membres du club.</p>}
           </div>
         </>
       )}
 
-      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Moniteur en charge</p>
+      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Moniteur en charge</p>
       <div className="flex flex-wrap gap-[6px]">
         {moniteurs.map((m) => (
           <button key={m.id} type="button" onClick={() => setMoniteur(moniteur === m.id ? "" : m.id)} className={puce(moniteur === m.id)}>
@@ -596,7 +596,7 @@ function PanneauProgramme({
             {m.niveau ? ` · ${m.niveau}` : ""}
           </button>
         ))}
-        {moniteurs.length === 0 && <p className="text-[13px] text-[#7D93A8]">Ajoute tes moniteurs dans Équipe (rôle DP ou guide).</p>}
+        {moniteurs.length === 0 && <p className="text-[13px] text-[#566B82]">Ajoute tes moniteurs dans Équipe (rôle DP ou guide).</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-x-[10px] pt-[16px]">
@@ -613,14 +613,14 @@ function PanneauProgramme({
       </div>
 
       <div className="flex items-baseline justify-between pt-[10px]">
-        <p className="text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Programme · {seances.length} séances</p>
+        <p className="text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Programme · {seances.length} séances</p>
         {cat && (
-          <button type="button" onClick={() => regenerer(cat, debut)} className="text-[12px] font-semibold text-[#1176A8]">
+          <button type="button" onClick={() => regenerer(cat, debut)} className="text-[12px] font-semibold text-[#106F9F]">
             Recalculer le programme type
           </button>
         )}
       </div>
-      <p className="pb-[8px] text-[12px] text-[#7D93A8]">Pratique le matin et l'après-midi, théorie entre midi et deux. Modifie les horaires si besoin.</p>
+      <p className="pb-[8px] text-[12px] text-[#566B82]">Pratique le matin et l'après-midi, théorie entre midi et deux. Modifie les horaires si besoin.</p>
       <div className="flex flex-col gap-[12px]">
         {jours.map((j, n) => (
           <div key={j} className="rounded-[10px] border border-[#E4EBF1]">
@@ -633,7 +633,7 @@ function PanneauProgramme({
                   <button
                     type="button"
                     onClick={() => setSeances((l) => l.map((x, k) => (k === i ? { ...x, type: x.type === "theorie" ? "pratique" : "theorie" } : x)))}
-                    className={`h-[28px] w-[78px] rounded-[8px] text-[11.5px] font-bold ${s.type === "theorie" ? "bg-[#EEF4F9] text-[#3F5B76]" : "bg-[#E2F8EF] text-[#14805F]"}`}
+                    className={`h-[28px] w-[78px] rounded-[8px] text-[11.5px] font-bold ${s.type === "theorie" ? "bg-[#EEF4F9] text-[#3F5B76]" : "bg-[#E2F8EF] text-[#137758]"}`}
                     title="Changer le type"
                   >
                     {s.type === "theorie" ? "Théorie" : "Pratique"}
@@ -658,7 +658,7 @@ function PanneauProgramme({
                     className="h-[30px] rounded-[8px] border border-[#E4EBF1] px-[6px] text-[12.5px]"
                     aria-label="Jour"
                   />
-                  <button type="button" aria-label="Retirer la séance" onClick={() => setSeances((l) => l.filter((_, k) => k !== i))} className="text-[#9DB0C0]">
+                  <button type="button" aria-label="Retirer la séance" onClick={() => setSeances((l) => l.filter((_, k) => k !== i))} className="text-[#566B82]">
                     <Trash2 className="h-[14px] w-[14px]" />
                   </button>
                 </div>
@@ -671,7 +671,7 @@ function PanneauProgramme({
           onClick={() =>
             setSeances((l) => [...l, { type: "pratique", jour: jours[jours.length - 1] ?? debut, heure_debut: "09:00", heure_fin: "12:00", intitule: null }])
           }
-          className="flex items-center gap-[6px] self-start text-[13px] font-bold text-[#1176A8]"
+          className="flex items-center gap-[6px] self-start text-[13px] font-bold text-[#106F9F]"
         >
           <Plus className="h-[14px] w-[14px]" /> Ajouter une séance
         </button>
@@ -734,12 +734,12 @@ function PanneauDetail({
         <span className="h-[8px] flex-1 overflow-hidden rounded-full bg-[#E3EDF6]">
           <span className="block h-full bg-[#3DEFBE]" style={{ width: `${f.seances.length ? (faites / f.seances.length) * 100 : 0}%` }} />
         </span>
-        <span className="text-[12.5px] font-semibold text-[#5B7189]">
+        <span className="text-[12.5px] font-semibold text-[#566B82]">
           {faites}/{f.seances.length} séances faites
         </span>
       </div>
 
-      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Moniteur en charge</p>
+      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Moniteur en charge</p>
       <select
         value={f.moniteur_id ?? ""}
         onChange={(e) => e.target.value && void agir(() => modifierFormation(f.id, null, e.target.value))}
@@ -757,7 +757,7 @@ function PanneauDetail({
       </select>
       {!f.eleve_id && <p className="pt-[8px] text-[12px] text-[#8A5A10]">L'élève n'a pas encore de compte Palanote : invite-le depuis Membres du club pour qu'il reçoive son programme.</p>}
 
-      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Séances</p>
+      <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Séances</p>
       <div className="flex flex-col gap-[10px]">
         {jours.map((j, n) => (
           <div key={j} className="rounded-[10px] border border-[#E4EBF1]">
@@ -775,11 +775,11 @@ function PanneauDetail({
                     className="h-[17px] w-[17px] accent-[#14805F]"
                   />
                   <span className="w-[46px] font-mono text-[12.5px] font-bold">{s.heure_debut}</span>
-                  <span className={`rounded-[8px] px-[7px] py-[1px] text-[11.5px] font-bold ${s.type === "theorie" ? "bg-[#EEF4F9] text-[#3F5B76]" : "bg-[#E2F8EF] text-[#14805F]"}`}>
+                  <span className={`rounded-[8px] px-[7px] py-[1px] text-[11.5px] font-bold ${s.type === "theorie" ? "bg-[#EEF4F9] text-[#3F5B76]" : "bg-[#E2F8EF] text-[#137758]"}`}>
                     {s.type === "theorie" ? "Théorie" : "Pratique"}
                   </span>
-                  <span className={`min-w-0 flex-1 truncate ${s.faite ? "text-[#9DB0C0] line-through" : ""}`}>{s.intitule ?? ""}</span>
-                  {s.faite && <Check className="h-[15px] w-[15px] text-[#14805F]" />}
+                  <span className={`min-w-0 flex-1 truncate ${s.faite ? "text-[#566B82] line-through" : ""}`}>{s.intitule ?? ""}</span>
+                  {s.faite && <Check className="h-[15px] w-[15px] text-[#137758]" />}
                 </label>
               ))}
           </div>
@@ -788,14 +788,14 @@ function PanneauDetail({
 
       <div className="flex flex-wrap gap-[6px] pt-[18px]">
         {STATUTS_FORMATION.filter((s) => s.id !== f.statut && s.id !== "validee").map((s) => (
-          <button key={s.id} type="button" onClick={() => void agir(() => modifierFormation(f.id, s.id))} className="h-[32px] rounded-[10px] border border-[#D8E5EE] px-[10px] text-[12px] font-bold text-[#5B7189]">
+          <button key={s.id} type="button" onClick={() => void agir(() => modifierFormation(f.id, s.id))} className="h-[32px] rounded-[10px] border border-[#D8E5EE] px-[10px] text-[12px] font-bold text-[#566B82]">
             Passer en « {s.libelle} »
           </button>
         ))}
         <button
           type="button"
           onClick={() => void agir(() => supprimerFormation(f.id)).then(onFermer)}
-          className="ml-auto flex h-[32px] items-center gap-[5px] px-[6px] text-[12px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+          className="ml-auto flex h-[32px] items-center gap-[5px] px-[6px] text-[12px] font-semibold text-[#566B82] underline underline-offset-4"
         >
           <Trash2 className="h-[13px] w-[13px]" /> Supprimer
         </button>

@@ -1,0 +1,2663 @@
+[
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 10,
+    "nodes": [
+     {
+      "t": "h1",
+      "html": "<h1 class=\"text-[24px] font-bold leading-[1.2] text-white\" data-tsd-source=\"/src/components/AccueilCarnet.tsx:98:11\">Mes plongées</h1>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "18.0pt (24px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "p",
+      "html": "<p class=\"pt-1 text-[14px] leading-normal text-white/90\" data-tsd-source=\"/src/components/AccueilCarnet.tsx:99:25\">dernière plongée il y a 24 jours</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[6px\\].pb-\\[8px\\].pt-\\[12px\\]:nth-child(1) > .max-w-full.text-\\[20px\\].leading-tight",
+      "html": "<div class=\"max-w-full truncate whitespace-nowrap text-[20px] font-semibold leading-tight text-white\" data-tsd-source=\"/src/components/AccueilCarnet.tsx:110:17\">N2</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "15.0pt (20px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[6px\\].pb-\\[8px\\].pt-\\[12px\\]:nth-child(1) > .text-white\\/70.whitespace-nowrap.text-\\[10px\\]",
+      "html": "<div class=\"whitespace-nowrap text-[10px] text-white/70\" data-tsd-source=\"/src/components/AccueilCarnet.tsx:111:17\">niveau</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "7.5pt (10px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[6px\\].pb-\\[8px\\].pt-\\[12px\\]:nth-child(2) > .max-w-full.text-\\[20px\\].leading-tight",
+      "html": "<div class=\"max-w-full truncate whitespace-nowrap text-[20px] font-semibold leading-tight text-white\" data-tsd-source=\"/src/components/AccueilCarnet.tsx:110:17\">13</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "15.0pt (20px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[6px\\].pb-\\[8px\\].pt-\\[12px\\]:nth-child(2) > .text-white\\/70.whitespace-nowrap.text-\\[10px\\]",
+      "html": "<div class=\"whitespace-nowrap text-[10px] text-white/70\" data-tsd-source=\"/src/components/AccueilCarnet.tsx:111:17\">plongées</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "7.5pt (10px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Carnet",
+  "lang": "fr",
+  "h1": [
+   "Mes plongées"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/carnet",
+  "espace": "plongeur",
+  "nom": "Carnet"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": ".text-\\[17\\.5px\\]",
+      "html": "<div class=\"text-[17.5px] font-bold leading-tight text-[#123A63]\" data-tsd-source=\"/src/routes/nouvelle-plongee.tsx:893:25\">La Gabinière</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "13.1pt (17.5px)",
+       "fontWeight": "bold",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".gap-1 > .text-\\[13px\\].text-\\[\\#566B82\\]",
+      "html": "<div class=\"text-[13px] text-[#566B82]\" data-tsd-source=\"/src/routes/nouvelle-plongee.tsx:896:25\">Port-Cros, Var</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.8pt (13px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".gap-4.flex-col.flex:nth-child(2) > .gap-3.flex:nth-child(3) > .basis-0.min-w-0.gap-\\[7px\\]:nth-child(1) > .tracking-\\[0\\.06em\\].text-\\[12px\\].font-bold",
+      "html": "<div class=\"text-[12px] font-bold tracking-[0.06em] text-[#566B82]\" data-tsd-source=\"/src/routes/nouvelle-plongee.tsx:230:10\">Profondeur max</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "bold",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-\\[\\#0A2A50\\]\\/70",
+      "html": "<span class=\"absolute inset-x-0 bottom-0 bg-[#0A2A50]/70 py-[2px] text-center text-[9.5px] font-bold uppercase tracking-[.06em] text-white\" data-tsd-source=\"/src/routes/nouvelle-pl",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because element contains an image node",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "7.1pt (9.5px)",
+       "fontWeight": "bold",
+       "messageKey": "imgNode",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Nouvelle plongée",
+  "lang": "fr",
+  "h1": [
+   "Ma plongée"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/nouvelle-plongee?id=d0",
+  "espace": "plongeur",
+  "nom": "Fiche plongée"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Plongée express",
+  "lang": "fr",
+  "h1": [
+   "Nouvelle plongée"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/plongee-express",
+  "espace": "plongeur",
+  "nom": "Plongée express"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 3,
+    "nodes": [
+     {
+      "t": "div[data-tsd-source=\"/src/routes/carte.tsx:297:21\"]",
+      "html": "<div class=\"text-[15px] font-bold text-[#123A63]\" data-tsd-source=\"/src/routes/carte.tsx:297:21\">13 plongées · 10 sites</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "11.3pt (15px)",
+       "fontWeight": "bold",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".truncate",
+      "html": "<div class=\"truncate text-[12.5px] text-[#566B82]\" data-tsd-source=\"/src/routes/carte.tsx:302:21\">2 pays, de 2024 à aujourd'hui</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.4pt (12.5px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".h-\\[36px\\]",
+      "html": "<button type=\"button\" class=\"flex h-[36px] shrink-0 items-center gap-1 rounded-[18px] bg-[#E7EFF6] px-[14px] text-[13px] font-bold text-[#123A63]\" data-tsd-source=\"/src/routes/cart",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.8pt (13px)",
+       "fontWeight": "bold",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Carte",
+  "lang": "fr",
+  "h1": [
+   "Carte"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/carte",
+  "espace": "plongeur",
+  "nom": "Carte"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 17,
+    "nodes": [
+     {
+      "t": "h1",
+      "html": "<h1 style=\"animation-delay:260ms\" class=\"apparition mt-[clamp(6px,1.8svh,16px)] text-center text-[clamp(22px,3.9svh,27px)] font-bold leading-[1.22] text-white\" data-tsd-source=\"/sr",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "20.3pt (27px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".mt-\\[clamp\\(4px\\,1\\.2svh\\,10px\\)\\]",
+      "html": "<p style=\"animation-delay:350ms\" class=\"apparition mt-[clamp(4px,1.2svh,10px)] text-center text-[clamp(13.5px,2.1svh,14.5px)] leading-normal text-white/90\" data-tsd-source=\"/src/ro",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.9pt (14.5px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "li:nth-child(1) > .h-\\[26px\\].w-\\[26px\\].border-\\[1\\.5px\\]",
+      "html": "<span class=\"flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[#3DEFBE] bg-[#3DEFBE]/[0.18] text-[12.5px] font-bold text-[#3DEFBE]\" da",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.4pt (12.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "li:nth-child(1) > .gap-0\\.5.flex-col > .text-\\[clamp\\(14\\.5px\\,2\\.2svh\\,15\\.5px\\)\\].leading-\\[1\\.3\\].text-white",
+      "html": "<span class=\"text-[clamp(14.5px,2.2svh,15.5px)] font-bold leading-[1.3] text-white\" data-tsd-source=\"/src/routes/numeriser.tsx:123:19\">Tu photographies</span>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "11.6pt (15.5px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "li:nth-child(1) > .gap-0\\.5.flex-col > .text-\\[clamp\\(13px\\,2svh\\,14px\\)\\].leading-snug.text-white\\/85",
+      "html": "<span class=\"text-[clamp(13px,2svh,14px)] leading-snug text-white/85\" data-tsd-source=\"/src/routes/numeriser.tsx:124:19\">Une page à la fois — ou tu choisis des photos déjà prises. ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "li:nth-child(2) > .h-\\[26px\\].w-\\[26px\\].border-\\[1\\.5px\\]",
+      "html": "<span class=\"flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[#3DEFBE] bg-[#3DEFBE]/[0.18] text-[12.5px] font-bold text-[#3DEFBE]\" da",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.4pt (12.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Numériser mes carnets",
+  "lang": "fr",
+  "h1": [
+   "Tes carnets papier,page par page"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/numeriser",
+  "espace": "plongeur",
+  "nom": "Numériser"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 53,
+    "nodes": [
+     {
+      "t": "h1",
+      "html": "<h1 class=\"text-[16px] font-bold\" data-tsd-source=\"/src/routes/numeriser_.relecture.tsx:269:11\">Page 1 sur 1</h1>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because element contains an image node",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "12.0pt (16px)",
+       "fontWeight": "bold",
+       "messageKey": "imgNode",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight > .text-\\[12\\.5px\\].text-\\[\\#566B82\\]",
+      "html": "<div class=\"text-[12.5px] text-[#566B82]\" data-tsd-source=\"/src/routes/numeriser_.relecture.tsx:272:11\">plongée 1 sur 1</div>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because element contains an image node",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.4pt (12.5px)",
+       "fontWeight": "normal",
+       "messageKey": "imgNode",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-\\[14\\.5px\\]",
+      "html": "<button type=\"button\" class=\"text-[14.5px] font-bold text-[#106F9F]\" data-tsd-source=\"/src/routes/numeriser_.relecture.tsx:276:9\">Passer</button>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because element contains an image node",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.9pt (14.5px)",
+       "fontWeight": "bold",
+       "messageKey": "imgNode",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".left-\\[10px\\]",
+      "html": "<span class=\"absolute left-[10px] top-[10px] rounded-[10px] bg-white px-[10px] py-[4px] text-[12px] font-bold text-[#123A63] shadow-sm\" data-tsd-source=\"/src/routes/numeriser_.rele",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "bold",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pb-\\[6px\\]",
+      "html": "<p class=\"px-[10px] pb-[6px] pt-[10px] text-[12.5px] leading-snug text-[#566B82]\" data-tsd-source=\"/src/routes/numeriser_.relecture.tsx:303:11\">Garde-la sous les yeux : c'est elle ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.4pt (12.5px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".border-\\[\\#BFE3F4\\] > p",
+      "html": "<p class=\"text-[13.5px] font-bold text-[#123A63]\" data-tsd-source=\"/src/routes/numeriser_.relecture.tsx:311:13\">L'agent a vérifié un doute de lui-même</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "bold",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Relecture d'une page",
+  "lang": "fr",
+  "h1": [
+   "Page 1 sur 1"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/numeriser/relecture?lot=L1",
+  "espace": "plongeur",
+  "nom": "Relecture"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": ".border-\\[\\#0F3D70\\] > .items-start.gap-\\[12px\\][data-tsd-source=\"/src/routes/forfait.tsx:184:7\"] > .min-w-0.flex-1[data-tsd-source=\"/src/routes/forfait.tsx:188:9\"] > h2[data-tsd-source=\"/src/routes/forfait.tsx:189:11\"]",
+      "html": "<h2 class=\"text-[16px] font-bold\" data-tsd-source=\"/src/routes/forfait.tsx:189:11\">Palanote+</h2>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "12.0pt (16px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-white\\/75",
+      "html": "<p class=\"text-[13px] text-white/75\" data-tsd-source=\"/src/routes/forfait.tsx:190:11\"><b class=\"text-[18px] text-white\" data-tsd-source=\"/src/routes/forfait.tsx:191:13\">19 €</b> <!",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.8pt (13px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-\\[18px\\].text-white[data-tsd-source=\"/src/routes/forfait.tsx:191:13\"]",
+      "html": "<b class=\"text-[18px] text-white\" data-tsd-source=\"/src/routes/forfait.tsx:191:13\">19 €</b>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "13.5pt (18px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-white\\/85",
+      "html": "<p class=\"pt-[10px] text-[13.5px] leading-snug text-white/85\" data-tsd-source=\"/src/routes/forfait.tsx:195:7\">Numérisation sans limite pendant un an. Pour ceux qui ont beaucoup de ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Ton forfait",
+  "lang": "fr",
+  "h1": [
+   "Ton forfait"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/forfait",
+  "espace": "plongeur",
+  "nom": "Forfait"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Qui as-tu croisé sous l'eau ?",
+  "lang": "fr",
+  "h1": [
+   "Qui as-tu croisé sous l'eau ?"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/especes",
+  "espace": "plongeur",
+  "nom": "Espèces"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Analyser mes photos",
+  "lang": "fr",
+  "h1": [
+   "Analyser mes photos"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/especes/analyser",
+  "espace": "plongeur",
+  "nom": "Analyser mes photos"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Espèces détectées",
+  "lang": "fr",
+  "h1": [
+   "Espèces détectées"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/plongee/especes?id=d0",
+  "espace": "plongeur",
+  "nom": "Espèces détectées"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Amis",
+  "lang": "fr",
+  "h1": [
+   "Amis"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/amis",
+  "espace": "plongeur",
+  "nom": "Amis"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Ajouter un binôme",
+  "lang": "fr",
+  "h1": [
+   "Ajouter un binôme"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/amis/ajouter",
+  "espace": "plongeur",
+  "nom": "Ajouter un binôme"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Moi",
+  "lang": "fr",
+  "h1": [
+   "Moi"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/moi",
+  "espace": "plongeur",
+  "nom": "Moi"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Mon profil",
+  "lang": "fr",
+  "h1": [
+   "Mon profil"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/moi/profil",
+  "espace": "plongeur",
+  "nom": "Profil"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Réglages",
+  "lang": "fr",
+  "h1": [
+   "Réglages"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/moi/reglages",
+  "espace": "plongeur",
+  "nom": "Réglages"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Confidentialité",
+  "lang": "fr",
+  "h1": [
+   "Confidentialité"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/moi/confidentialite",
+  "espace": "plongeur",
+  "nom": "Confidentialité (Moi)"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Notifications",
+  "lang": "fr",
+  "h1": [
+   "Notifications"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/notifications",
+  "espace": "plongeur",
+  "nom": "Notifications"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 2,
+    "nodes": [
+     {
+      "t": "h1",
+      "html": "<h1 class=\"pt-[14px] text-[27px] font-bold leading-tight text-white\" data-tsd-source=\"/src/routes/recif.tsx:71:13\">Rejoins le Récif</h1>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "20.3pt (27px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[6px\\]",
+      "html": "<p class=\"pt-[6px] text-[14px] leading-normal text-white/85\" data-tsd-source=\"/src/routes/recif.tsx:72:13\">Le carnet restera gratuit pour tout le monde.<br data-tsd-source=\"/src/ro",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Rejoins le Récif",
+  "lang": "fr",
+  "h1": [
+   "Rejoins le Récif"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/recif",
+  "espace": "plongeur",
+  "nom": "Récif"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": null,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 0,
+    "nodes": []
+   }
+  ],
+  "titre": "Palanote — Ton carnet de plongée dans la poche",
+  "lang": "fr",
+  "h1": [
+   "Ton carnet de plongéedans la poche"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/",
+  "espace": "public",
+  "nom": "Accueil"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": null,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 0,
+    "nodes": []
+   }
+  ],
+  "titre": "Palanote — Connexion",
+  "lang": "fr",
+  "h1": [
+   "Content de te revoir"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/connexion",
+  "espace": "public",
+  "nom": "Connexion"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": null,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 0,
+    "nodes": []
+   }
+  ],
+  "titre": "Palanote — Créer un compte",
+  "lang": "fr",
+  "h1": [
+   "Bienvenue à bord"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/creer-un-compte",
+  "espace": "public",
+  "nom": "Créer un compte"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": null,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 0,
+    "nodes": []
+   }
+  ],
+  "titre": "Palanote — Mot de passe oublié",
+  "lang": "fr",
+  "h1": [
+   "On te renvoie une clé"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/mot-de-passe-oublie",
+  "espace": "public",
+  "nom": "Mot de passe oublié"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Mentions légales",
+  "lang": "fr",
+  "h1": [
+   "Mentions légales"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/mentions-legales",
+  "espace": "public",
+  "nom": "Mentions légales"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Politique de confidentialité",
+  "lang": "fr",
+  "h1": [
+   "Tes données"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/politique-de-confidentialite",
+  "espace": "public",
+  "nom": "Confidentialité"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Conditions d'utilisation",
+  "lang": "fr",
+  "h1": [
+   "Conditions d'utilisation"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/conditions-utilisation",
+  "espace": "public",
+  "nom": "CGU"
+ },
+ {
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": ".mb-\\[18px\\] > .text-\\[14px\\].font-semibold",
+      "html": "<span class=\"text-[14px] font-semibold\" data-tsd-source=\"/src/components/site/SiteClub.tsx:537:7\">4,8</span>",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #ffffff, background color: #f5f9fb, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-white\\/75.text-\\[13px\\]",
+      "html": "<span class=\"text-[13px] text-white/75\" data-tsd-source=\"/src/components/site/SiteClub.tsx:538:7\">sur Google, 126 avis</span>",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.04 (foreground color: #fdfdfe, background color: #f5f9fb, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fdfdfe",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.04,
+       "fontSize": "9.8pt (13px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".max-w-\\[46ch\\]",
+      "html": "<p class=\"max-w-[46ch] text-[16px] leading-[1.55] text-white/80 @3xl:text-[17px]\" data-tsd-source=\"/src/components/site/SiteClub.tsx:169:37\">Club de plongée à Hyères · baptêmes, fo",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #fdfefe, background color: #f4f8fb, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fdfefe",
+       "bgColor": "#f4f8fb",
+       "contrastRatio": 1.05,
+       "fontSize": "12.0pt (16px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".ring-white\\/35",
+      "html": "<a href=\"tel:0494001234\" class=\"galet-moyen px-[22px] py-[13px] text-[14px] font-semibold text-white ring-1 ring-white/35 backdrop-blur-md [background:rgb(255_255_255/.1)]\" data-ts",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #ffffff, background color: #f5f9fb, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 75,
+    "nodes": [
+     {
+      "t": ".text-\\[15px\\].truncate.font-semibold",
+      "html": "<span class=\"truncate text-[15px] font-semibold\" data-tsd-source=\"/src/components/site/SiteClub.tsx:146:15\">Aqua Club Hyères</span>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "11.3pt (15px)",
+       "fontWeight": "normal",
+       "messageKey": "elmPartiallyObscuring",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "h1",
+      "html": "<h1 class=\"max-w-[12ch] text-[clamp(40px,7.5cqw,88px)] font-medium leading-[1.02] tracking-[-0.03em]\" data-tsd-source=\"/src/components/site/SiteClub.tsx:164:15\">Plongez avec Aqua C",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "30.0pt (40px)",
+       "fontWeight": "normal",
+       "messageKey": "elmPartiallyObscuring",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "div:nth-child(1) > .\\@3xl\\:h-\\[420px\\].\\@3xl\\:flex-row.gap-\\[10px\\] > .min-h-\\[320px\\].\\@3xl\\:grow-\\[4\\].transition-\\[flex-grow\\,min-height\\] > .translate-y-0.p-\\[22px\\].transition-\\[opacity\\,transform\\] > .text-\\[clamp\\(26px\\,3cqw\\,38px\\)\\].\\[color\\:color-mix\\(in_srgb\\,var\\(--ter\\)_45\\%\\,white\\)\\].leading-\\[1\\.05\\]",
+      "html": "<p class=\"text-[clamp(26px,3cqw,38px)] font-medium leading-[1.05] tracking-[-0.02em] [color:color-mix(in_srgb,var(--ter)_45%,white)] [font-family:var(--titres)]\" data-tsd-source=\"/",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "19.5pt (26px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "div:nth-child(1) > .\\@3xl\\:h-\\[420px\\].\\@3xl\\:flex-row.gap-\\[10px\\] > .min-h-\\[320px\\].\\@3xl\\:grow-\\[4\\].transition-\\[flex-grow\\,min-height\\] > .translate-y-0.p-\\[22px\\].transition-\\[opacity\\,transform\\] > .max-w-\\[44ch\\].leading-\\[1\\.5\\].pt-\\[8px\\]",
+      "html": "<p class=\"max-w-[44ch] pt-[8px] text-[14.5px] leading-[1.5] text-white/85\" data-tsd-source=\"/src/components/site/SiteClub.tsx:790:30\">Votre première plongée, en mer, avec un monite",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.9pt (14.5px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "div:nth-child(1) > .\\@3xl\\:h-\\[420px\\].\\@3xl\\:flex-row.gap-\\[10px\\] > .min-h-\\[320px\\].\\@3xl\\:grow-\\[4\\].transition-\\[flex-grow\\,min-height\\] > .translate-y-0.p-\\[22px\\].transition-\\[opacity\\,transform\\] > .pt-\\[16px\\].flex-wrap.justify-between > .text-\\[clamp\\(34px\\,4cqw\\,48px\\)\\].leading-none.tracking-\\[-0\\.03em\\]",
+      "html": "<p class=\"text-[clamp(34px,4cqw,48px)] font-medium leading-none tracking-[-0.03em] [font-family:var(--titres)]\" data-tsd-source=\"/src/components/site/SiteClub.tsx:801:19\">60 €</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "25.5pt (34px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "div:nth-child(1) > .\\@3xl\\:h-\\[420px\\].\\@3xl\\:flex-row.gap-\\[10px\\] > .min-h-\\[76px\\].\\@3xl\\:grow.transition-\\[flex-grow\\,min-height\\]:nth-child(2) > .inset-x-\\[20px\\].bottom-\\[20px\\].\\@3xl\\:hidden > .text-\\[16\\.5px\\].leading-tight.\\[font-family\\:var\\(--titres\\)\\]",
+      "html": "<span class=\"text-[16.5px] font-medium leading-tight [font-family:var(--titres)]\" data-tsd-source=\"/src/components/site/SiteClub.tsx:776:17\">",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "12.4pt (16.5px)",
+       "fontWeight": "normal",
+       "messageKey": "bgOverlap",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Aqua Club Hyères, club de plongée à Hyères",
+  "lang": "fr",
+  "h1": [
+   "Plongez avec Aqua Club Hyères"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/clubs/aqua-club-hyeres",
+  "espace": "public",
+  "nom": "Site d'un club"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 10,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > p:nth-child(1)",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > .pb-\\[10px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[20px\\].py-\\[16px\\][data-tsd-source=\"/src/routes/_dp.club.tsx:507:5\"]:nth-child(1) > .items-start.gap-2[data-tsd-source=\"/src/routes/_dp.club.tsx:508:7\"] > .text-\\[14px\\].leading-snug[data-tsd-source=\"/src/routes/_dp.club.tsx:509:9\"]",
+      "html": "<span class=\"text-[14px] font-semibold leading-snug\" data-tsd-source=\"/src/routes/_dp.club.tsx:509:9\">Sorties encadrées en 2026</span>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[20px\\].py-\\[16px\\][data-tsd-source=\"/src/routes/_dp.club.tsx:507:5\"]:nth-child(1) > .pt-\\[10px\\][data-tsd-source=\"/src/routes/_dp.club.tsx:514:7\"] > .text-\\[44px\\].tracking-\\[-\\.02em\\][data-tsd-source=\"/src/routes/_dp.club.tsx:515:9\"]",
+      "html": "<span class=\"block text-[44px] font-bold leading-none tracking-[-.02em]\" data-tsd-source=\"/src/routes/_dp.club.tsx:515:9\">3</span>",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "33.0pt (44px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "3:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Espace club",
+  "lang": "fr",
+  "h1": [
+   "Bonjour MarcBonjour Marc"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club",
+  "espace": "club",
+  "nom": "Tableau de bord"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > .leading-tight",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Planning",
+  "lang": "fr",
+  "h1": [
+   "Planning"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/planning",
+  "espace": "club",
+  "nom": "Planning"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > .leading-tight",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-white\\/75",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Sortie",
+  "lang": "fr",
+  "h1": [
+   "Sortie"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/sortie?id=e900c878-2c88-4656-b4a9-e26a07d892d7",
+  "espace": "club",
+  "nom": "Sortie / palanquées"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Fiche de sécurité",
+  "lang": "fr",
+  "h1": [
+   "Fiche de sécurité"
+  ],
+  "skip": true,
+  "main": false,
+  "url": "/club/fiche-securite?id=e900c878-2c88-4656-b4a9-e26a07d892d7",
+  "espace": "club",
+  "nom": "Fiche de sécurité"
+ },
+ {
+  "violations": [
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "help": "All touch targets must be 24px large, or leave sufficient space",
+    "tags": [
+     "wcag22aa",
+     "wcag258"
+    ],
+    "n": 1,
+    "nodes": [
+     {
+      "t": "input[aria-label=\"Prénoms de la palanquée 2\"]",
+      "html": "<input placeholder=\"Léa, Paul…\" aria-label=\"Prénoms de la palanquée 2\" class=\"h-[36px] min-w-[90px] flex-1 bg-transparent text-[14px] outline-none placeholder:text-[#B5C4D1]\" data-",
+      "msg": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 360px by 19.9px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.8px instead of at least 24px.",
+      "data": {
+       "messageKey": "partiallyObscured",
+       "minSize": 24,
+       "width": 360,
+       "height": 19.9
+      }
+     }
+    ]
+   }
+  ],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 5,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight.text-\\[14px\\]",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "textarea",
+      "html": "<textarea rows=\"3\" placeholder=\"Rendez-vous au ponton à 8h45, Nitrox disponible…\" aria-label=\"Consignes pour les plongeurs\" class=\"w-full galet-moyen border-[1.5px] border-[#7B8FA3",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "11.3pt (15px)",
+       "fontWeight": "normal",
+       "messageKey": "elmPartiallyObscured",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Nouvelle sortie",
+  "lang": "fr",
+  "h1": [
+   "Nouvelle sortie"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/nouvelle-sortie?centre=8c705b01-3d00-45aa-86e3-a201e7ce90a1",
+  "espace": "club",
+  "nom": "Nouvelle sortie"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > .leading-tight",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Membres du club",
+  "lang": "fr",
+  "h1": [
+   "Membres du club"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/membres",
+  "espace": "club",
+  "nom": "Membres"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight.text-\\[14px\\]",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Équipe",
+  "lang": "fr",
+  "h1": [
+   "Équipe"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/equipe",
+  "espace": "club",
+  "nom": "Équipe"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight.text-\\[14px\\]",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Matériel",
+  "lang": "fr",
+  "h1": [
+   "Matériel"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/materiel",
+  "espace": "club",
+  "nom": "Matériel"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight.text-\\[14px\\]",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Formations",
+  "lang": "fr",
+  "h1": [
+   "Formations"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/formations",
+  "espace": "club",
+  "nom": "Formations"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > p:nth-child(1)",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Membres privilégiés",
+  "lang": "fr",
+  "h1": [
+   "Membres privilégiés"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/privilegies",
+  "espace": "club",
+  "nom": "Privilégiés"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > .leading-tight",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Carte du club",
+  "lang": "fr",
+  "h1": [
+   "Carte du club"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/carte",
+  "espace": "club",
+  "nom": "Carte du club"
+ },
+ {
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 13,
+    "nodes": [
+     {
+      "t": ".text-\\[15px\\].truncate.font-semibold",
+      "html": "<span class=\"truncate text-[15px] font-semibold\" data-tsd-source=\"/src/components/site/SiteClub.tsx:146:15\">Aqua Club Hyères</span>",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #ffffff, background color: #f5f9fb, font size: 11.3pt (15px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "11.3pt (15px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[15px\\].hover\\:bg-white\\/15[href$=\"#tarifs\"]",
+      "html": "<a href=\"#tarifs\" class=\"block rounded-full px-[15px] py-[8px] text-white/85 hover:bg-white/15 hover:text-white\" data-tsd-source=\"/src/components/site/SiteClub.tsx:151:19\">Tarifs</",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #fefefe, background color: #f5f9fb, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fefefe",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[15px\\].hover\\:bg-white\\/15[href$=\"#formations\"]",
+      "html": "<a href=\"#formations\" class=\"block rounded-full px-[15px] py-[8px] text-white/85 hover:bg-white/15 hover:text-white\" data-tsd-source=\"/src/components/site/SiteClub.tsx:151:19\">Form",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #fefefe, background color: #f5f9fb, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fefefe",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[15px\\].hover\\:bg-white\\/15[href$=\"#sites\"]",
+      "html": "<a href=\"#sites\" class=\"block rounded-full px-[15px] py-[8px] text-white/85 hover:bg-white/15 hover:text-white\" data-tsd-source=\"/src/components/site/SiteClub.tsx:151:19\">Sites de ",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #fefefe, background color: #f5f9fb, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fefefe",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[15px\\].hover\\:bg-white\\/15[href$=\"#materiel\"]",
+      "html": "<a href=\"#materiel\" class=\"block rounded-full px-[15px] py-[8px] text-white/85 hover:bg-white/15 hover:text-white\" data-tsd-source=\"/src/components/site/SiteClub.tsx:151:19\">Matéri",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #fefefe, background color: #f5f9fb, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fefefe",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".px-\\[15px\\].hover\\:bg-white\\/15[href$=\"#equipe\"]",
+      "html": "<a href=\"#equipe\" class=\"block rounded-full px-[15px] py-[8px] text-white/85 hover:bg-white/15 hover:text-white\" data-tsd-source=\"/src/components/site/SiteClub.tsx:151:19\">Équipe</",
+      "msg": "Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #fefefe, background color: #f5f9fb, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1",
+      "data": {
+       "fgColor": "#fefefe",
+       "bgColor": "#f5f9fb",
+       "contrastRatio": 1.05,
+       "fontSize": "10.1pt (13.5px)",
+       "fontWeight": "normal",
+       "messageKey": null,
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 5,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight.text-\\[14px\\].font-bold",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pb-\\[10px\\].pt-\\[3px\\].text-white\\/75",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".backdrop-blur-xl > .text-white\\/75.pt-\\[6px\\].leading-snug",
+      "html": "<p class=\"pt-[6px] text-[12.5px] leading-snug text-white/75\" data-tsd-source=\"/src/components/site/SiteClub.tsx:618:13\">profondeur max sur nos 9 sites</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.4pt (12.5px)",
+       "fontWeight": "normal",
+       "messageKey": "elmPartiallyObscuring",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Mon site internet",
+  "lang": "fr",
+  "h1": [
+   "Mon site internet"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/site",
+  "espace": "club",
+  "nom": "Site internet"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-tight.text-\\[14px\\]",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Mon offre",
+  "lang": "fr",
+  "h1": [
+   "Mon offre"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/offre",
+  "espace": "club",
+  "nom": "Offre"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".bg-gradient-to-br > .leading-tight",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".leading-snug",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Paramètres",
+  "lang": "fr",
+  "h1": [
+   "Paramètres"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/parametres",
+  "espace": "club",
+  "nom": "Paramètres"
+ },
+ {
+  "violations": [],
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "n": 4,
+    "nodes": [
+     {
+      "t": "span[aria-label=\"8 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"8 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": "span[aria-label=\"4 points à voir\"]",
+      "html": "<span class=\"min-w-[22px] rounded-[10px] px-[6px] py-[1px] text-center text-[11.5px] font-bold bg-[#FF8A75] text-white\" aria-label=\"4 points à voir\" data-tsd-source=\"/src/component",
+      "msg": "Fix any of the following:\n  Element content is too short to determine if it is actual text content",
+      "data": {
+       "fgColor": "#ffffff",
+       "bgColor": "#ff8a75",
+       "contrastRatio": 2.29,
+       "fontSize": "8.6pt (11.5px)",
+       "fontWeight": "bold",
+       "messageKey": "shortTextContent",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".text-\\[14px\\].leading-tight",
+      "html": "<p class=\"text-[14px] font-bold leading-tight\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:162:13\">Nouvelle sortie</p>",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "10.5pt (14px)",
+       "fontWeight": "bold",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     },
+     {
+      "t": ".pt-\\[3px\\]",
+      "html": "<p class=\"pb-[10px] pt-[3px] text-[12px] leading-snug text-white/75\" data-tsd-source=\"/src/components/club/NavigationDp.tsx:163:13\">Date, site, bateau : les plongeurs s'inscrivent ",
+      "msg": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+      "data": {
+       "fgColor": null,
+       "bgColor": null,
+       "contrastRatio": 0,
+       "fontSize": "9.0pt (12px)",
+       "fontWeight": "normal",
+       "messageKey": "bgGradient",
+       "expectedContrastRatio": "4.5:1",
+       "shadowColor": null
+      }
+     }
+    ]
+   }
+  ],
+  "titre": "Palanote — Notifications",
+  "lang": "fr",
+  "h1": [
+   "NotificationsNotifications"
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club/notifications",
+  "espace": "club",
+  "nom": "Notifications club"
+ },
+ {
+  "espace": "admin",
+  "nom": "Vue d'ensemble",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Vue d'ensemble",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "espace": "admin",
+  "nom": "Agent IA",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Agent IA",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "espace": "admin",
+  "nom": "Retours",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Retours",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "espace": "admin",
+  "nom": "Erreurs",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Erreurs",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "espace": "admin",
+  "nom": "Utilisateurs",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Utilisateurs",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "espace": "admin",
+  "nom": "Finances",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Finances",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "espace": "admin",
+  "nom": "Lettre annuelle",
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Admin · Lettre annuelle",
+  "lang": "fr",
+  "h1": [],
+  "skip": false,
+  "main": true,
+  "url": "/admin"
+ },
+ {
+  "violations": [],
+  "incomplete": [],
+  "titre": "Palanote — Espace club",
+  "lang": "fr",
+  "h1": [
+   "Le bateau part à 9 h. Ta fiche de sécurité est déjà prête."
+  ],
+  "skip": true,
+  "main": true,
+  "url": "/club",
+  "espace": "club",
+  "nom": "Vitrine (sans centre)"
+ }
+]

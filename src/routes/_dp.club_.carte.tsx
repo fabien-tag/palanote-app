@@ -71,7 +71,7 @@ function PageCarteClub() {
       <MessageErreur texte={erreurCentre ?? erreur} />
       {sorties && (
         <>
-          <p className="pt-[2px] text-[13.5px] text-[#5B7189]">
+          <p className="pt-[2px] text-[13.5px] text-[#566B82]">
             {spots.length} site{spots.length > 1 ? "s" : ""} · {sorties.length} sortie{sorties.length > 1 ? "s" : ""} · {total} plongée{total > 1 ? "s" : ""} encadrée{total > 1 ? "s" : ""}
           </p>
           <div className="grid grid-cols-1 gap-[16px] pt-[12px] lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -79,8 +79,8 @@ function PageCarteClub() {
               {spots.length > 0 ? (
                 <CarteSpots spots={spots} choisi={choisi} onChoisir={setChoisi} onPrete={setApi} className="h-full w-full" />
               ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-[8px] px-[30px] text-center text-[13.5px] text-[#5B7189]">
-                  <MapPin className="h-[26px] w-[26px] text-[#9DB0C0]" />
+                <div className="flex h-full flex-col items-center justify-center gap-[8px] px-[30px] text-center text-[13.5px] text-[#566B82]">
+                  <MapPin className="h-[26px] w-[26px] text-[#566B82]" />
                   Les sites apparaissent ici dès qu'une sortie est clôturée.
                 </div>
               )}
@@ -88,12 +88,12 @@ function PageCarteClub() {
             <div className="flex flex-col gap-[8px] lg:max-h-[calc(100svh-150px)] lg:overflow-y-auto">
               {spot ? (
                 <>
-                  <button type="button" onClick={() => setChoisi(null)} className="self-start text-[12.5px] font-bold text-[#1176A8]">
+                  <button type="button" onClick={() => setChoisi(null)} className="self-start text-[12.5px] font-bold text-[#106F9F]">
                     ← Tous les sites
                   </button>
                   <div className="rounded-[10px] border border-[#E4EBF1] bg-white px-[14px] py-[12px]">
                     <p className="text-[18px] font-bold first-letter:uppercase">{spot.nom}</p>
-                    <p className="text-[13px] text-[#5B7189]">
+                    <p className="text-[13px] text-[#566B82]">
                       {spot.lieu} · {spot.plongees.length} plongée{spot.plongees.length > 1 ? "s" : ""}
                       {spot.profMax ? ` · ${String(spot.profMax).replace(".", ",")} m max` : ""}
                     </p>
@@ -109,12 +109,12 @@ function PageCarteClub() {
                         <span className="block text-[13.5px] font-bold first-letter:uppercase">
                           {depuisIso(s.date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
                         </span>
-                        <span className="block text-[12px] text-[#5B7189]">
+                        <span className="block text-[12px] text-[#566B82]">
                           {s.nb} plongeur{s.nb > 1 ? "s" : ""} · DP {s.dp}
                           {s.duree ? ` · ${s.duree} min` : ""}
                         </span>
                       </span>
-                      <ChevronRight className="h-[16px] w-[16px] text-[#9DB0C0]" />
+                      <ChevronRight className="h-[16px] w-[16px] text-[#566B82]" />
                     </button>
                   ))}
                 </>
@@ -134,12 +134,12 @@ function PageCarteClub() {
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[14px] font-bold first-letter:uppercase">{s.nom}</span>
-                      <span className="block truncate text-[12px] text-[#5B7189]">
+                      <span className="block truncate text-[12px] text-[#566B82]">
                         {s.lieu}
                         {s.derniere ? ` · dernière ${s.derniere.toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}` : ""}
                       </span>
                     </span>
-                    <ChevronRight className="h-[16px] w-[16px] text-[#9DB0C0]" />
+                    <ChevronRight className="h-[16px] w-[16px] text-[#566B82]" />
                   </button>
                 ))
               )}

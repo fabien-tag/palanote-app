@@ -18,7 +18,7 @@ export const Route = createFileRoute("/plongee-express")({
     lieu: typeof search["lieu"] === "string" ? search["lieu"] : undefined,
     coords: typeof search["coords"] === "string" ? search["coords"] : undefined,
   }),
-  head: () => ({ meta: [{ title: "Palanote — Nouvelle plongée" }] }),
+  head: () => ({ meta: [{ title: "Palanote — Plongée express" }] }),
   component: SaisieExpress,
 });
 
@@ -61,7 +61,7 @@ function Puce({ actif, onClick, children }: { actif: boolean; onClick: () => voi
 function GrosChamp({ label, unite, valeur, onChange, decimal }: { label: string; unite: string; valeur: string; onChange: (v: string) => void; decimal?: boolean }) {
   return (
     <label className="block min-w-0 flex-1">
-      <span className="block pb-[8px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
+      <span className="block pb-[8px] text-[13px] font-semibold text-[#566B82]">{label}</span>
       <span
         className={`flex h-[74px] items-baseline justify-center gap-[6px] galet-moyen border-[1.5px] bg-white px-[12px] pt-[16px] ${valeur ? "border-[#C9D9E6]" : "border-[#E4EBF1]"} focus-within:border-[#57D4F5]`}
       >
@@ -74,7 +74,7 @@ function GrosChamp({ label, unite, valeur, onChange, decimal }: { label: string;
           size={4}
           className="w-[86px] bg-transparent text-right text-[32px] font-bold leading-none text-[#123A63] outline-none placeholder:text-[#C2CFDB]"
         />
-        <span className="w-[34px] text-[14px] text-[#9DB0C0]">{unite}</span>
+        <span className="w-[34px] text-[14px] text-[#566B82]">{unite}</span>
       </span>
     </label>
   );
@@ -257,7 +257,7 @@ function SaisieExpress() {
           <button type="button" aria-label="Retour" onClick={() => navigate({ to: "/carnet" })} className="flex h-10 w-10 items-center justify-center goutte bg-[#E3EDF6]">
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
-          <button type="button" onClick={() => navigate({ to: "/carnet" })} className="px-[4px] py-[8px] text-[15px] font-medium text-[#5B7189]">
+          <button type="button" onClick={() => navigate({ to: "/carnet" })} className="px-[4px] py-[8px] text-[15px] font-medium text-[#566B82]">
             Annuler
           </button>
         </div>
@@ -269,14 +269,14 @@ function SaisieExpress() {
         <div className="relative mt-[18px] galet border border-[#BFE6F5] bg-[#E3F4FC] px-[16px] py-[14px]">
           <Meduse className="-right-[4px] -top-[14px]" />
           <div className="flex items-center gap-[12px]">
-            <MapPin className="h-[19px] w-[19px] shrink-0 text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+            <MapPin className="h-[19px] w-[19px] shrink-0 text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
             <div className="min-w-0 flex-1">
               <div className="truncate text-[16px] font-bold">{siteNom.trim() || "Quel site ?"}</div>
-              <div className="text-[12.5px] text-[#5B7189]">
+              <div className="text-[12.5px] text-[#566B82]">
                 {libelleJour(date)} · {heure}
               </div>
             </div>
-            <button type="button" onClick={() => setModifSite((v) => !v)} className="shrink-0 px-[2px] py-[6px] text-[13.5px] font-bold text-[#1176A8]">
+            <button type="button" onClick={() => setModifSite((v) => !v)} className="shrink-0 px-[2px] py-[6px] text-[13.5px] font-bold text-[#106F9F]">
               {modifSite ? "OK" : "Changer"}
             </button>
           </div>
@@ -334,7 +334,7 @@ function SaisieExpress() {
 
         {/* Note */}
         <div className="flex items-center justify-between pt-[18px]">
-          <span className="text-[13px] font-semibold text-[#5B7189]">Ta note</span>
+          <span className="text-[13px] font-semibold text-[#566B82]">Ta note</span>
           <div className="flex gap-[4px]">
             {[1, 2, 3, 4, 5].map((n) => (
               <button key={n} type="button" aria-label={`${n} sur 5`} aria-pressed={note === n} onClick={() => setNote(note === n ? 0 : n)} className="p-[2px]">
@@ -343,10 +343,10 @@ function SaisieExpress() {
             ))}
           </div>
         </div>
-        {note === 0 && <p className="text-right text-[12px] text-[#9DB0C0]">Pas encore notée</p>}
+        {note === 0 && <p className="text-right text-[12px] text-[#566B82]">Pas encore notée</p>}
 
         {/* Avec qui ? */}
-        <span className="block pb-[10px] pt-[16px] text-[13px] font-semibold text-[#5B7189]">Avec qui ?</span>
+        <span className="block pb-[10px] pt-[16px] text-[13px] font-semibold text-[#566B82]">Avec qui ?</span>
         <div className="flex flex-wrap gap-[8px]">
           {binomesAffiches.map((b) => {
             const actif = identifies.includes(b.id);
@@ -384,7 +384,7 @@ function SaisieExpress() {
             <button
               type="button"
               onClick={() => setAjoutNom(true)}
-              className="flex h-[44px] items-center gap-[6px] rounded-full border-[1.5px] border-dashed border-[#BFD3E2] bg-white px-[16px] text-[14px] font-bold text-[#1176A8]"
+              className="flex h-[44px] items-center gap-[6px] rounded-full border-[1.5px] border-dashed border-[#BFD3E2] bg-white px-[16px] text-[14px] font-bold text-[#106F9F]"
             >
               <Plus className="h-[15px] w-[15px]" strokeWidth={2.6} aria-hidden="true" />
               Autre
@@ -394,8 +394,8 @@ function SaisieExpress() {
 
         {/* Photos */}
         <div className="flex items-baseline justify-between pb-[10px] pt-[18px]">
-          <span className="text-[13px] font-semibold text-[#5B7189]">Photos</span>
-          <span className={`text-[12.5px] ${photos.length ? "font-semibold text-[#FF8A75]" : "text-[#9DB0C0]"}`}>
+          <span className="text-[13px] font-semibold text-[#566B82]">Photos</span>
+          <span className={`text-[12.5px] ${photos.length ? "font-semibold text-[#C2412D]" : "text-[#566B82]"}`}>
             {photos.length ? `${photos.length} sélectionnée${photos.length > 1 ? "s" : ""}` : "aucune"}
           </span>
         </div>
@@ -403,12 +403,12 @@ function SaisieExpress() {
           <button
             type="button"
             onClick={() => fichiers.current?.click()}
-            className="flex h-[76px] w-[76px] shrink-0 flex-col items-center justify-center gap-[4px] galet-petit border-[1.5px] border-dashed border-[#FF8A75] bg-[#FFF3F0] text-[12px] font-bold text-[#E0654F]"
+            className="flex h-[76px] w-[76px] shrink-0 flex-col items-center justify-center gap-[4px] galet-petit border-[1.5px] border-dashed border-[#FF8A75] bg-[#FFF3F0] text-[12px] font-bold text-[#B8432F]"
           >
             <Camera className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
             Ajouter
           </button>
-          {photos.length === 0 && <span className="text-[13px] text-[#9DB0C0]">Ajoute les photos de la plongée, la première sera la couverture.</span>}
+          {photos.length === 0 && <span className="text-[13px] text-[#566B82]">Ajoute les photos de la plongée, la première sera la couverture.</span>}
           {photos.map((ph, i) => (
             <button
               key={ph.url}
@@ -447,9 +447,9 @@ function SaisieExpress() {
         >
           <span className="min-w-0 flex-1">
             <span className="block text-[15px] font-bold">Ajouter les détails</span>
-            <span className="block text-[12.5px] text-[#7D93A8]">Gaz, lestage, paliers, conditions…</span>
+            <span className="block text-[12.5px] text-[#566B82]">Gaz, lestage, paliers, conditions…</span>
           </span>
-          <ChevronRight className="h-[18px] w-[18px] text-[#9DB0C0]" aria-hidden="true" />
+          <ChevronRight className="h-[18px] w-[18px] text-[#566B82]" aria-hidden="true" />
         </button>
 
         {erreur && <p className="pt-[10px] text-center text-[13px] text-[#8A2A1A]">{erreur}</p>}
@@ -458,12 +458,12 @@ function SaisieExpress() {
           disabled={!pretAEnregistrer || enCours}
           onClick={() => void enregistrer()}
           className={`mt-[12px] flex h-[56px] w-full items-center justify-center galet-moyen text-[14px] font-bold tracking-wide transition-colors ${
-            pretAEnregistrer ? "bg-[#3DEFBE] text-[#0B3B63] shadow-[0_6px_16px_#3DEFBE40]" : "bg-[#E4EBF1] text-[#9DB0C0]"
+            pretAEnregistrer ? "bg-[#3DEFBE] text-[#0B3B63] shadow-[0_6px_16px_#3DEFBE40]" : "bg-[#E4EBF1] text-[#566B82]"
           }`}
         >
           {enCours ? (photos.length ? "ENVOI DES PHOTOS…" : "ENREGISTREMENT…") : "ENREGISTRER"}
         </button>
-        {!pretAEnregistrer && <p className="pt-[8px] text-center text-[12px] text-[#9DB0C0]">Un site et une profondeur ou une durée suffisent.</p>}
+        {!pretAEnregistrer && <p className="pt-[8px] text-center text-[12px] text-[#566B82]">Un site et une profondeur ou une durée suffisent.</p>}
       </div>
     </div>
   );

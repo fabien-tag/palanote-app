@@ -168,7 +168,7 @@ function PageAmis() {
         <div className="min-h-0 flex-1 overflow-y-auto px-[22px] pb-[20px]">
           {connecte === false ? (
             <div className="flex flex-col items-center gap-4 pt-[18svh] text-center">
-              <p className="text-[15px] text-[#5B7189]">Connecte-toi pour retrouver tes binômes.</p>
+              <p className="text-[15px] text-[#566B82]">Connecte-toi pour retrouver tes binômes.</p>
               <button
                 type="button"
                 onClick={() => navigate({ to: "/connexion" })}
@@ -183,7 +183,7 @@ function PageAmis() {
                 <Masques />
               </div>
               <h2 className="pt-[22px] text-[21px] font-bold">Personne ici pour l'instant</h2>
-              <p className="pt-[8px] text-[14px] leading-normal text-[#5B7189]">
+              <p className="pt-[8px] text-[14px] leading-normal text-[#566B82]">
                 Quand tu ajoutes tes binômes, ils apparaissent ici — et vos plongées communes pourront se remplir des deux côtés.
               </p>
               <div className="flex w-full flex-col gap-[11px] pt-[24px]">
@@ -197,7 +197,7 @@ function PageAmis() {
                 <button
                   type="button"
                   onClick={() => navigate({ to: "/amis/rechercher" })}
-                  className="flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+                  className="flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F]"
                 >
                   <Search className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
                   RECHERCHER QUELQU'UN
@@ -225,13 +225,13 @@ function PageAmis() {
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-[15px] font-bold">{d.prenom}</span>
-                          <span className="block truncate text-[12.5px] text-[#5B7189]">{[d.niveau, d.club].filter(Boolean).join(" · ") || "veut devenir ton binôme"}</span>
+                          <span className="block truncate text-[12.5px] text-[#566B82]">{[d.niveau, d.club].filter(Boolean).join(" · ") || "veut devenir ton binôme"}</span>
                         </span>
                         <button
                           type="button"
                           disabled={reponseEnCours === d.demande_id}
                           onClick={() => void repondreDemande(d, false)}
-                          className="px-[4px] text-[12.5px] font-semibold text-[#5B7189] underline underline-offset-4 disabled:opacity-60"
+                          className="px-[4px] text-[12.5px] font-semibold text-[#566B82] underline underline-offset-4 disabled:opacity-60"
                         >
                           Refuser
                         </button>
@@ -266,7 +266,7 @@ function PageAmis() {
                           >
                             {initiales(p.de.prenom)}
                           </span>
-                          <span className="min-w-0 text-[13.5px] leading-snug text-[#5B7189]">
+                          <span className="min-w-0 text-[13.5px] leading-snug text-[#566B82]">
                             <b className="text-[#123A63]">{p.de.prenom}</b> a noté votre plongée
                           </span>
                         </div>
@@ -275,7 +275,7 @@ function PageAmis() {
                             {p.site || "Site non renseigné"} · {dateCourte(p.date)}
                           </div>
                           {(p.lieu || chiffresPlongee(p)) && (
-                            <div className="truncate pt-[2px] text-[12.5px] text-[#5B7189]">{[p.lieu, chiffresPlongee(p)].filter(Boolean).join(" · ")}</div>
+                            <div className="truncate pt-[2px] text-[12.5px] text-[#566B82]">{[p.lieu, chiffresPlongee(p)].filter(Boolean).join(" · ")}</div>
                           )}
                         </div>
                         <div className="mt-[11px] flex items-center gap-[12px]">
@@ -291,7 +291,7 @@ function PageAmis() {
                             type="button"
                             disabled={reponseEnCours === p.id}
                             onClick={() => void repondre(p, false)}
-                            className="px-[4px] text-[12.5px] font-semibold text-[#5B7189] underline underline-offset-4 disabled:opacity-60"
+                            className="px-[4px] text-[12.5px] font-semibold text-[#566B82] underline underline-offset-4 disabled:opacity-60"
                           >
                             Pas moi
                           </button>
@@ -330,7 +330,7 @@ function PageAmis() {
               {binomes.length > 0 && (<>
               <div className="flex items-baseline justify-between pb-[10px] pt-[22px]">
                 <h2 className="text-[17px] font-bold">Mes binômes</h2>
-                <span className="text-[12.5px] text-[#9DB0C0]">
+                <span className="text-[12.5px] text-[#566B82]">
                   {binomes.length} personne{binomes.length > 1 ? "s" : ""}
                 </span>
               </div>
@@ -350,11 +350,11 @@ function PageAmis() {
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[15.5px] font-bold">{b.prenom}</span>
-                      <span className="block truncate text-[12.5px] text-[#5B7189]">
+                      <span className="block truncate text-[12.5px] text-[#566B82]">
                         {[plongeesEnsembleTexte(comptes[b.id] ?? 0), b.niveau].filter(Boolean).join(" · ")}
                       </span>
                     </span>
-                    <ChevronRight className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+                    <ChevronRight className="h-[18px] w-[18px] shrink-0 text-[#566B82]" aria-hidden="true" />
                   </button>
                 ))}
               </div>

@@ -100,19 +100,19 @@ function PageOffre() {
   return (
     <PageClub titre="Mon offre" large navigation={<NavigationDpMobile />}>
       <MessageErreur texte={erreurCentre ?? erreur} />
-      {message && <p className="mb-[12px] rounded-[10px] bg-[#E2F8EF] px-[14px] py-[10px] text-[13.5px] font-semibold text-[#14805F]">{message}</p>}
+      {message && <p className="mb-[12px] rounded-[10px] bg-[#E2F8EF] px-[14px] py-[10px] text-[13.5px] font-semibold text-[#137758]">{message}</p>}
       {o === undefined ? (
         <div className="h-[420px] animate-pulse rounded-[14px] bg-white/60" />
       ) : (
         <>
           {o && (
             <div className="flex flex-wrap items-center gap-[14px] rounded-[14px] border border-[#E4EBF1] bg-white px-[18px] py-[16px]">
-              <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#1176A8]">
+              <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[10px] bg-[#E3F2FB] text-[#106F9F]">
                 <Sparkles className="h-[20px] w-[20px]" aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[16px] font-bold">Offre {actuelle.nom}</span>
-                <span className="block text-[13px] text-[#7D93A8]">
+                <span className="block text-[13px] text-[#566B82]">
                   {o.offre === "starter"
                     ? "Compris avec Palanote, sans abonnement."
                     : o.abonnement_statut === "impaye"
@@ -142,9 +142,9 @@ function PageOffre() {
                   <div className="flex items-start justify-between gap-[10px]">
                     <div>
                       <h2 className="text-[20px] font-bold">{x.nom}</h2>
-                      <p className="text-[13px] text-[#7D93A8]">{x.accroche}</p>
+                      <p className="text-[13px] text-[#566B82]">{x.accroche}</p>
                     </div>
-                    {courante && <span className="rounded-[8px] bg-[#E2F8EF] px-[10px] py-[5px] text-[12px] font-bold text-[#14805F]">Ton offre</span>}
+                    {courante && <span className="rounded-[8px] bg-[#E2F8EF] px-[10px] py-[5px] text-[12px] font-bold text-[#137758]">Ton offre</span>}
                   </div>
                   <p className="pt-[16px]">
                     {x.prix === 0 ? (
@@ -152,19 +152,19 @@ function PageOffre() {
                     ) : (
                       <>
                         <span className="text-[34px] font-bold tracking-[-0.02em]">{x.prix} €</span>
-                        <span className="text-[14px] text-[#7D93A8]"> par mois, sans engagement</span>
+                        <span className="text-[14px] text-[#566B82]"> par mois, sans engagement</span>
                       </>
                     )}
                   </p>
                   <ul className="flex flex-col gap-[8px] pt-[16px]">
                     {x.inclus.map((t) => (
                       <li key={t} className="flex gap-[8px] text-[13.5px] leading-snug">
-                        <Check className="mt-[2px] h-[16px] w-[16px] shrink-0 text-[#14805F]" strokeWidth={2.6} aria-hidden="true" />
+                        <Check className="mt-[2px] h-[16px] w-[16px] shrink-0 text-[#137758]" strokeWidth={2.6} aria-hidden="true" />
                         {t}
                       </li>
                     ))}
                     {x.bientot.map((t) => (
-                      <li key={t} className="flex gap-[8px] text-[13.5px] leading-snug text-[#7D93A8]">
+                      <li key={t} className="flex gap-[8px] text-[13.5px] leading-snug text-[#566B82]">
                         <Clock className="mt-[2px] h-[16px] w-[16px] shrink-0" aria-hidden="true" />
                         <span>
                           {t} <span className="rounded-[6px] bg-[#FFF1D6] px-[6px] py-[1px] text-[11px] font-bold text-[#8A5A10]">bientôt</span>
@@ -174,7 +174,7 @@ function PageOffre() {
                   </ul>
                   <div className="mt-auto pt-[22px]">
                     {courante ? (
-                      <span className="block text-center text-[13px] font-semibold text-[#7D93A8]">C'est ton offre actuelle</span>
+                      <span className="block text-center text-[13px] font-semibold text-[#566B82]">C'est ton offre actuelle</span>
                     ) : x.cle === "starter" ? (
                       o?.avec_stripe ? (
                         <button type="button" disabled={enCours !== null} onClick={() => void choisir(x.cle)} className={`${BOUTON_SECONDAIRE} w-full`}>
@@ -198,11 +198,11 @@ function PageOffre() {
           </div>
 
           <div className="mt-[16px] flex flex-wrap items-start gap-[12px] rounded-[14px] border border-[#BFE3F4] bg-[#E3F2FB] px-[18px] py-[14px] text-[13px] leading-normal text-[#3F5B76]">
-            <CreditCard className="mt-[1px] h-[18px] w-[18px] shrink-0 text-[#1176A8]" aria-hidden="true" />
+            <CreditCard className="mt-[1px] h-[18px] w-[18px] shrink-0 text-[#106F9F]" aria-hidden="true" />
             <span className="min-w-0 flex-1">
               <b className="text-[#123A63]">Paiement sécurisé par Stripe, en mode test pour la démonstration.</b> Carte de test : 4242 4242 4242 4242, une date future, n'importe quel code. Aucune somme n'est débitée.
             </span>
-            <button type="button" onClick={() => navigate({ to: "/club/site" })} className="flex items-center gap-[6px] font-bold text-[#1176A8]">
+            <button type="button" onClick={() => navigate({ to: "/club/site" })} className="flex items-center gap-[6px] font-bold text-[#106F9F]">
               <Globe className="h-[15px] w-[15px]" aria-hidden="true" /> Mon site internet
             </button>
           </div>

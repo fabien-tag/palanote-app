@@ -175,7 +175,7 @@ export function FiltresPlongees({
             className={`flex h-9 shrink-0 items-center gap-[6px] rounded-[18px] px-[14px] text-[13px] ${
               on
                 ? "bg-[#0F3D70] font-semibold text-white"
-                : "border-[1.5px] border-[#D8E5EE] bg-white font-medium text-[#5B7189]"
+                : "border-[1.5px] border-[#D8E5EE] bg-white font-medium text-[#566B82]"
             }`}
           >
             {!on && pastille(f.id)}
@@ -217,9 +217,9 @@ export function BandeauProposition({ propositions }: { propositions: PlongeeACon
         </span>
         <span className="flex min-w-0 flex-grow flex-col gap-px">
           <span className="text-[14.5px] font-bold text-[#123A63]">{p.de.prenom} a noté votre plongée</span>
-          {details && <span className="truncate text-[12.5px] text-[#5B7189]">{details}</span>}
+          {details && <span className="truncate text-[12.5px] text-[#566B82]">{details}</span>}
           {autres > 0 && (
-            <span className="text-[12px] font-semibold text-[#1176A8]">
+            <span className="text-[12px] font-semibold text-[#106F9F]">
               + {autres} autre{autres > 1 ? "s" : ""} proposition{autres > 1 ? "s" : ""} dans Amis
             </span>
           )}
@@ -360,11 +360,11 @@ export function RaccourcisAccueil() {
           className={`relative flex h-[150px] ${ouvrir ? "" : "cursor-default"} flex-col items-start gap-[10px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
         >
           <span style={{ borderRadius: GOUTTE }} className="flex h-[35px] w-[35px] shrink-0 items-center justify-center bg-[#DCEEF8]">
-            <Icone className="h-[21px] w-[21px] text-[#5B7189]" strokeWidth={1.7} aria-hidden="true" />
+            <Icone className="h-[21px] w-[21px] text-[#566B82]" strokeWidth={1.7} aria-hidden="true" />
           </span>
           <span className="min-w-0">
             <span className="block text-[14px] font-semibold leading-[1.35] text-[#123A63]">{titre}</span>
-            <span className="mt-[6px] block text-[10px] leading-normal text-[#5B7189]">{texte}</span>
+            <span className="mt-[6px] block text-[10px] leading-normal text-[#566B82]">{texte}</span>
           </span>
           {ouvrir ? (
             <ChevronRight className="absolute right-[14px] top-[24px] h-[16px] w-[16px] text-[#6387A4]" strokeWidth={2.4} aria-hidden="true" />
@@ -383,7 +383,7 @@ export function RaccourcisAccueil() {
 
 export function IconeVueCartes({ actif }: { actif: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#9DB0C0"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#5B7189"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="3.5" y="4" width="17" height="9.5" rx="2.6" />
       <path d="M3.5 17.2h17M3.5 20.6h10" />
     </svg>
@@ -392,7 +392,7 @@ export function IconeVueCartes({ actif }: { actif: boolean }) {
 
 export function IconeVueListe({ actif }: { actif: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#9DB0C0"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#5B7189"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="3.2" y="4.6" width="4" height="4" rx="1.2" />
       <rect x="3.2" y="10" width="4" height="4" rx="1.2" />
       <rect x="3.2" y="15.4" width="4" height="4" rx="1.2" />

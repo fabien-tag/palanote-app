@@ -132,12 +132,12 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
           <div className="min-w-0 flex-1">
             {s && (
               <>
-                <p className="text-[12px] font-bold uppercase tracking-[.07em] text-[#1176A8]">
+                <p className="text-[12px] font-bold uppercase tracking-[.07em] text-[#106F9F]">
                   {s.date_texte}
                   {s.heure ? ` · ${heureCourte(s.heure)}` : ""}
                 </p>
                 <h2 className="truncate pt-[2px] text-[22px] font-bold leading-tight">{s.site}</h2>
-                <p className="truncate text-[13px] text-[#5B7189]">
+                <p className="truncate text-[13px] text-[#566B82]">
                   {[s.lieu, s.bateau, s.profondeur_prevue ? `${String(s.profondeur_prevue).replace(".0", "")} m prévus` : null, `DP ${s.dp.prenom}`]
                     .filter(Boolean)
                     .join(" · ")}
@@ -153,7 +153,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
 
         <div className="flex flex-col px-[24px] pb-[30px]">
           <MessageErreur texte={erreur} />
-          {!s && !erreur && <p className="py-[40px] text-center text-[14px] text-[#5B7189]">Chargement…</p>}
+          {!s && !erreur && <p className="py-[40px] text-center text-[14px] text-[#566B82]">Chargement…</p>}
           {s && (
             <>
               <div className="flex flex-wrap gap-[8px] pt-[14px]">
@@ -174,7 +174,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                   </BoutonPetit>
                 )}
               </div>
-              {info && <p className="pt-[10px] text-[13px] font-semibold text-[#14805F]">{info}</p>}
+              {info && <p className="pt-[10px] text-[13px] font-semibold text-[#137758]">{info}</p>}
 
               {/* Accès et mélange : sortie réservée aux membres privilégiés */}
               {options && !s.entre_amis && (
@@ -189,10 +189,10 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                     }}
                     className={`flex w-full items-center gap-[12px] border px-[14px] py-[11px] text-left ${options.reservee ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1] bg-white"} rounded-[10px]`}
                   >
-                    <Star className="h-[19px] w-[19px] shrink-0" fill={options.reservee ? "#E9A93A" : "none"} stroke={options.reservee ? "#E9A93A" : "#9DB0C0"} />
+                    <Star className="h-[19px] w-[19px] shrink-0" fill={options.reservee ? "#E9A93A" : "none"} stroke={options.reservee ? "#E9A93A" : "#5B7189"} />
                     <span className="min-w-0 flex-1">
                       <span className="block text-[14px] font-bold">Réservée aux membres privilégiés</span>
-                      <span className="block text-[12px] text-[#7D93A8]">
+                      <span className="block text-[12px] text-[#566B82]">
                         {options.reservee ? "Seuls les privilégiés peuvent s'inscrire avec le QR ou le lien" : "Ouverte à tous les plongeurs"}
                       </span>
                     </span>
@@ -211,7 +211,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                           setOptions(o);
                           void agir(() => definirSortiePrivilegies(id, o.reservee, o.melange));
                         }}
-                        className={`h-[32px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${options.melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+                        className={`h-[32px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${options.melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
                       >
                         {g}
                       </button>
@@ -259,10 +259,10 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                       >
                         <div className="flex items-center justify-between px-[4px] pb-[2px]">
                           <span className="text-[13px] font-bold">{c.titre}</span>
-                          <span className="text-[12px] font-semibold text-[#5B7189]">{membres.length}</span>
+                          <span className="text-[12px] font-semibold text-[#566B82]">{membres.length}</span>
                         </div>
                         {sansGuide && (
-                          <span className="flex items-center gap-[4px] px-[4px] text-[11px] font-bold text-[#D9573F]">
+                          <span className="flex items-center gap-[4px] px-[4px] text-[11px] font-bold text-[#B8432F]">
                             <AlertTriangle className="h-[12px] w-[12px]" /> Sans guide
                           </span>
                         )}
@@ -280,7 +280,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                             onGuide={() => c.id && void agir(() => definirGuide(c.id!, c.guide === p.id ? null : p.id))}
                           />
                         ))}
-                        {membres.length === 0 && <span className="px-[4px] py-[10px] text-center text-[12px] text-[#9DB0C0]">{modifiable ? "Dépose ici" : "—"}</span>}
+                        {membres.length === 0 && <span className="px-[4px] py-[10px] text-center text-[12px] text-[#566B82]">{modifiable ? "Dépose ici" : "—"}</span>}
                       </div>
                     );
                   })}
@@ -288,7 +288,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                     <button
                       type="button"
                       onClick={() => void agir(() => ajouterPalanquee(id))}
-                      className="flex w-[120px] shrink-0 flex-col items-center justify-center gap-[4px] galet-b border-2 border-dashed border-[#B5D9EC] text-[13px] font-bold text-[#1176A8]"
+                      className="flex w-[120px] shrink-0 flex-col items-center justify-center gap-[4px] galet-b border-2 border-dashed border-[#B5D9EC] text-[13px] font-bold text-[#106F9F]"
                     >
                       <Plus className="h-[18px] w-[18px]" /> Palanquée
                     </button>
@@ -303,10 +303,10 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                 )}
                 {s.statut === "prevue" && <ListeAttente key={`attente-${id}-${s.participants.length}`} sortie={id} modifiable onChange={() => void agir(async () => undefined)} />}
                 {s.participants.length === 0 && (
-                  <p className="pt-[6px] text-[13px] text-[#5B7189]">Personne n'est encore inscrit : montre le QR code ou ouvre la sortie pour ajouter des plongeurs.</p>
+                  <p className="pt-[6px] text-[13px] text-[#566B82]">Personne n'est encore inscrit : montre le QR code ou ouvre la sortie pour ajouter des plongeurs.</p>
                 )}
                 {s.statut === "prevue" && (
-                  <button type="button" onClick={() => setImporter(true)} className="mt-[8px] flex items-center gap-[6px] text-[12.5px] font-bold text-[#14805F]">
+                  <button type="button" onClick={() => setImporter(true)} className="mt-[8px] flex items-center gap-[6px] text-[12.5px] font-bold text-[#137758]">
                     <FileSpreadsheet className="h-[15px] w-[15px]" /> Importer une liste de plongeurs (Excel)
                   </button>
                 )}
@@ -334,7 +334,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                             <Ship className="h-[16px] w-[16px] shrink-0" />
                             <span>
                               <span className="block font-bold">{b.libelle}</span>
-                              <span className={`block text-[11.5px] ${choisi ? "text-white/80" : pris ? "font-bold text-[#D9573F]" : "text-[#5B7189]"}`}>
+                              <span className={`block text-[11.5px] ${choisi ? "text-white/80" : pris ? "font-bold text-[#B8432F]" : "text-[#566B82]"}`}>
                                 {pris ? `Déjà pris : ${pris.site} ${heureCourte(pris.heure)}` : `${b.places ?? "?"} places`}
                               </span>
                             </span>
@@ -373,9 +373,9 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                             <span className="min-w-0 flex-1">
                               <span className="block truncate text-[14px] font-bold">
                                 {e.nom}
-                                {e.niveau ? <span className="font-semibold text-[#5B7189]"> · {e.niveau}</span> : null}
+                                {e.niveau ? <span className="font-semibold text-[#566B82]"> · {e.niveau}</span> : null}
                               </span>
-                              <span className={`block truncate text-[11.5px] ${ailleurs && (affecte || estDpSortie) ? "font-bold text-[#D9573F]" : "text-[#7D93A8]"}`}>
+                              <span className={`block truncate text-[11.5px] ${ailleurs && (affecte || estDpSortie) ? "font-bold text-[#B8432F]" : "text-[#566B82]"}`}>
                                 {ailleurs ? `Aussi sur ${ailleurs.site} à ${heureCourte(ailleurs.heure) || "?"}` : roleCourt(e.role)}
                               </span>
                             </span>
@@ -388,7 +388,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                                 disabled={!modifiable}
                                 onChange={(ev) => void agir(() => affecterEquipier(id, e.id, (ev.target.value || null) as RoleEquipe | null))}
                                 className={`h-[34px] rounded-[10px] border px-[8px] text-[13px] font-semibold outline-none ${
-                                  affecte ? "border-[#3DEFBE] bg-[#E2F8EF] text-[#0B3B63]" : "border-[#D8E5EE] bg-white text-[#7D93A8]"
+                                  affecte ? "border-[#3DEFBE] bg-[#E2F8EF] text-[#0B3B63]" : "border-[#D8E5EE] bg-white text-[#566B82]"
                                 }`}
                               >
                                 <option value="">Pas sur cette sortie</option>
@@ -427,7 +427,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                             <div key={m.id} className={`flex items-center gap-[8px] galet-petit border bg-white px-[12px] py-[8px] ${trop ? "border-[#FF8A75]" : "border-transparent"}`}>
                               <span className="min-w-0 flex-1">
                                 <span className="block truncate text-[13.5px] font-bold">{m.libelle}</span>
-                                <span className={`block text-[11.5px] ${trop ? "font-bold text-[#D9573F]" : "text-[#7D93A8]"}`}>
+                                <span className={`block text-[11.5px] ${trop ? "font-bold text-[#B8432F]" : "text-[#566B82]"}`}>
                                   {trop ? `Il n'en reste que ${Math.max(0, libre)} ce jour-là` : `${Math.max(0, libre - ici)} libres sur ${m.quantite} ce jour-là`}
                                 </span>
                               </span>
@@ -456,7 +456,7 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                     </div>
                   )}
                   {modifiable && s.participants.length > 0 && jour.materiel.some((m) => m.type === "bloc") && (
-                    <p className="pt-[8px] text-[12px] text-[#7D93A8]">
+                    <p className="pt-[8px] text-[12px] text-[#566B82]">
                       Repère : {s.participants.length} plongeur{s.participants.length > 1 ? "s" : ""} inscrit{s.participants.length > 1 ? "s" : ""}, soit {s.participants.length} bloc
                       {s.participants.length > 1 ? "s" : ""} au minimum.
                     </p>
@@ -542,12 +542,12 @@ function CartePlongeur({
         {onPasseport ? (
           <button type="button" onClick={onPasseport} title="Voir son passeport" className="flex max-w-full items-center gap-[3px] text-left">
             <span className="truncate text-[13px] font-bold leading-tight underline decoration-[#B5D9EC] underline-offset-2">{p.prenom}</span>
-            {resume && resume.verifies > 0 && <BadgeCheck className="h-[12px] w-[12px] shrink-0 text-[#14805F]" aria-label="Carte vérifiée" />}
+            {resume && resume.verifies > 0 && <BadgeCheck className="h-[12px] w-[12px] shrink-0 text-[#137758]" aria-label="Carte vérifiée" />}
           </button>
         ) : (
           <span className="block truncate text-[13px] font-bold leading-tight">{p.prenom}</span>
         )}
-        <span className={`block truncate text-[11px] leading-tight ${tropProfond || alertes.length ? "font-bold text-[#D9573F]" : "text-[#7D93A8]"}`}>
+        <span className={`block truncate text-[11px] leading-tight ${tropProfond || alertes.length ? "font-bold text-[#B8432F]" : "text-[#566B82]"}`}>
           {alertes.length
             ? alertes[0]
             : tropProfond
@@ -565,7 +565,7 @@ function CartePlongeur({
           aria-label={guide ? `${p.prenom} n'est plus guide` : `${p.prenom} guide la palanquée`}
           title={guide ? "Guide de palanquée" : "Désigner comme guide"}
           className={`flex h-[24px] shrink-0 items-center justify-center rounded-[8px] px-[5px] text-[10.5px] font-bold ${
-            guide ? "bg-[#0F3D70] text-white" : "text-[#B5C4D1] hover:text-[#1176A8]"
+            guide ? "bg-[#0F3D70] text-white" : "text-[#B5C4D1] hover:text-[#106F9F]"
           }`}
         >
           {guide ? "GP" : <Star className="h-[14px] w-[14px]" />}
@@ -579,8 +579,8 @@ function Section({ titre, aide, children }: { titre: string; aide?: string | und
   return (
     <section className="pt-[20px]">
       <div className="flex items-baseline justify-between gap-2 pb-[9px]">
-        <h3 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5B7189]">{titre}</h3>
-        {aide && <span className="text-[12px] text-[#9DB0C0]">{aide}</span>}
+        <h3 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#566B82]">{titre}</h3>
+        {aide && <span className="text-[12px] text-[#566B82]">{aide}</span>}
       </div>
       {children}
     </section>
@@ -589,7 +589,7 @@ function Section({ titre, aide, children }: { titre: string; aide?: string | und
 
 function BoutonPetit({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
-    <button type="button" onClick={onClick} className="flex h-[34px] items-center gap-[6px] rounded-[17px] border border-[#D8E5EE] bg-white px-[12px] text-[12.5px] font-bold text-[#1176A8]">
+    <button type="button" onClick={onClick} className="flex h-[34px] items-center gap-[6px] rounded-[17px] border border-[#D8E5EE] bg-white px-[12px] text-[12.5px] font-bold text-[#106F9F]">
       {children}
     </button>
   );
@@ -603,7 +603,7 @@ export function Jauge({ valeur, total, libelle }: { valeur: number; total: numbe
       <div className="h-[6px] overflow-hidden rounded-[3px] bg-[#E3EDF6]">
         <div className={`h-full rounded-[3px] ${plein ? "bg-[#FF8A75]" : pct > 85 ? "bg-[#F5B544]" : "bg-[#3DEFBE]"}`} style={{ width: `${pct}%` }} />
       </div>
-      {libelle && <p className={`pt-[4px] text-[11.5px] ${plein ? "font-bold text-[#D9573F]" : "text-[#7D93A8]"}`}>{libelle}</p>}
+      {libelle && <p className={`pt-[4px] text-[11.5px] ${plein ? "font-bold text-[#B8432F]" : "text-[#566B82]"}`}>{libelle}</p>}
     </div>
   );
 }

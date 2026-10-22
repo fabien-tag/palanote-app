@@ -101,7 +101,7 @@ function FicheBinome() {
         </div>
 
         {ami === null && (
-          <p className="pt-[18svh] text-center text-[14.5px] text-[#5B7189]">{erreur ?? "Ce plongeur ne fait pas partie de tes binômes."}</p>
+          <p className="pt-[18svh] text-center text-[14.5px] text-[#566B82]">{erreur ?? "Ce plongeur ne fait pas partie de tes binômes."}</p>
         )}
 
         {ami && (
@@ -115,13 +115,13 @@ function FicheBinome() {
                 {initiales(ami.prenom)}
               </span>
               <h2 className="pt-[12px] text-[22px] font-bold">{ami.prenom}</h2>
-              {(ami.niveau || ami.club) && <p className="text-[13.5px] text-[#5B7189]">{[ami.niveau, ami.club].filter(Boolean).join(" · ")}</p>}
+              {(ami.niveau || ami.club) && <p className="text-[13.5px] text-[#566B82]">{[ami.niveau, ami.club].filter(Boolean).join(" · ")}</p>}
               <div className="mt-[12px] flex flex-wrap justify-center gap-[8px]">
                 <span className="rounded-full bg-[#3DEFBE]/25 px-[12px] py-[5px] text-[12.5px] font-semibold text-[#0B6B52]">
                   {plongeesEnsembleTexte(plongees?.length ?? 0)}
                 </span>
                 {depuis && (
-                  <span className="rounded-full bg-[#E3EDF6] px-[12px] py-[5px] text-[12.5px] font-semibold text-[#5B7189]">
+                  <span className="rounded-full bg-[#E3EDF6] px-[12px] py-[5px] text-[12.5px] font-semibold text-[#566B82]">
                     Binômes depuis {MOIS[depuis.getMonth()]} {depuis.getFullYear()}
                   </span>
                 )}
@@ -145,10 +145,10 @@ function FicheBinome() {
                 const contenu = (
                   <>
                     <div className="min-w-0 flex-1">
-                      <div className="text-[12px] font-semibold uppercase tracking-[.04em] text-[#9DB0C0]">{dateCourte(p.date)}</div>
+                      <div className="text-[12px] font-semibold uppercase tracking-[.04em] text-[#566B82]">{dateCourte(p.date)}</div>
                       <div className="truncate text-[15.5px] font-bold">{p.site || "Site non renseigné"}</div>
                       {(p.lieu || chiffresPlongee(p)) && (
-                        <div className="truncate pt-[1px] text-[12.5px] text-[#5B7189]">{[p.lieu, chiffresPlongee(p)].filter(Boolean).join(" · ")}</div>
+                        <div className="truncate pt-[1px] text-[12.5px] text-[#566B82]">{[p.lieu, chiffresPlongee(p)].filter(Boolean).join(" · ")}</div>
                       )}
                       {p.identifie_par_moi && p.statut === "a_confirmer" && (
                         <span className="mt-[7px] inline-flex items-center gap-[5px] rounded-full bg-[#FFE6CC] px-[9px] py-[3px] text-[11px] font-semibold text-[#C2570C]">
@@ -157,7 +157,7 @@ function FicheBinome() {
                         </span>
                       )}
                     </div>
-                    {ouvrable && <ChevronRight className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />}
+                    {ouvrable && <ChevronRight className="h-[18px] w-[18px] shrink-0 text-[#566B82]" aria-hidden="true" />}
                   </>
                 );
                 const classe = "flex w-full items-center gap-[12px] galet border border-[#DCE7F0] bg-white px-[15px] py-[13px] text-left shadow-[0_4px_14px_#123A6308]";
@@ -185,7 +185,7 @@ function FicheBinome() {
               })}
             </div>
             {erreur && <p className="pt-3 text-center text-[13px] text-[#8A2A1A]">{erreur}</p>}
-            <p className="pt-[18px] text-center text-[11.5px] leading-normal text-[#9DB0C0]">
+            <p className="pt-[18px] text-center text-[11.5px] leading-normal text-[#566B82]">
               Tu ne vois que les plongées faites ensemble. Le reste du carnet de {ami.prenom} reste privé.
             </p>
           </>

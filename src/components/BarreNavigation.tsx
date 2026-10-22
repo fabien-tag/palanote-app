@@ -47,7 +47,7 @@ export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?:
           onClick={() => to && !estActif && navigate({ to })}
           aria-current={estActif ? "page" : undefined}
           className={`flex flex-1 flex-col items-center justify-start gap-[3px] text-[11px] leading-[17px] ${
-            estActif ? "font-semibold text-[#123A63]" : "font-medium text-[#63809A]"
+            estActif ? "font-semibold text-[#123A63]" : "font-medium text-[#566B82]"
           }`}
         >
           <span

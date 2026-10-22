@@ -21,7 +21,7 @@ import {
 // Section « Agent IA » du tableau de bord : le banc d'essai de l'agent de lecture.
 // L'eval set (règle 60-20-20), puis la même évaluation en lecture directe et avec l'agent.
 
-const champ = "w-full rounded-[12px] border border-[#DCE7F0] bg-white px-[12px] text-[14px] text-[#123A63] outline-none focus:border-[#57D4F5]";
+const champ = "w-full rounded-[12px] border border-[#7B8FA3] bg-white px-[12px] text-[14px] text-[#123A63] outline-none focus:border-[#57D4F5]";
 const TYPES: { id: TypeCas; label: string; aide: string }[] = [
   { id: "nominal", label: "Nominal", aide: "6 cas : pages normales" },
   { id: "bordure", label: "En bordure", aide: "2 cas : écriture difficile, 2 plongées par page…" },
@@ -90,7 +90,7 @@ export function SectionAgent() {
         <div className="flex flex-wrap items-start gap-[14px]">
           <div className="min-w-0 flex-1">
             <h2 className="text-[19px] font-bold">Banc d'essai de l'agent de lecture</h2>
-            <p className="max-w-[70ch] pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">
+            <p className="max-w-[70ch] pt-[4px] text-[13.5px] leading-normal text-[#566B82]">
               Des pages de carnet avec la bonne réponse. Chaque évaluation relit toutes les pages et note chaque cas : réussi s'il trouve le bon nombre de plongées, n'invente
               rien et ne donne aucune valeur fausse comme « sûre ».
             </p>
@@ -100,7 +100,7 @@ export function SectionAgent() {
                   {t.label} : {t.n}
                 </span>
               ))}
-              <span className="px-[4px] py-[4px] text-[#9DB0C0]">Objectif 60-20-20 : 6, 2 et 2 cas</span>
+              <span className="px-[4px] py-[4px] text-[#566B82]">Objectif 60-20-20 : 6, 2 et 2 cas</span>
             </p>
           </div>
           <div className="flex flex-wrap gap-[8px]">
@@ -142,12 +142,12 @@ export function SectionAgent() {
           const s = d ? resume(d.res) : null;
           return (
             <div key={m} className={`${carte} p-[20px] ${m === "agent" ? "border-[#3DEFBE]" : ""}`}>
-              <p className="text-[13px] font-semibold text-[#7D93A8]">{m === "agent" ? "Avec l'agent (vérifications)" : "Lecture directe (un seul appel)"}</p>
+              <p className="text-[13px] font-semibold text-[#566B82]">{m === "agent" ? "Avec l'agent (vérifications)" : "Lecture directe (un seul appel)"}</p>
               {s ? (
                 <>
                   <p className="pt-[6px] text-[38px] font-bold leading-none tracking-[-0.02em]">
                     {s.reussis}/{s.n}
-                    <span className="pl-[8px] text-[14px] font-semibold text-[#7D93A8]">cas réussis</span>
+                    <span className="pl-[8px] text-[14px] font-semibold text-[#566B82]">cas réussis</span>
                   </p>
                   <dl className="grid grid-cols-2 gap-[8px] pt-[14px] text-[13px]">
                     <Mesure label="Champs exacts" valeur={`${s.exactPct} %`} />
@@ -159,10 +159,10 @@ export function SectionAgent() {
                     <Mesure label="Durée moyenne" valeur={`${s.dureeMoyenne.toLocaleString("fr-FR")} s`} />
                     <Mesure label="Erreurs techniques" valeur={String(s.erreurs)} alerte={s.erreurs > 0} />
                   </dl>
-                  <p className="pt-[10px] text-[11.5px] text-[#9DB0C0]">Le {new Date(d!.run.created_at).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })}</p>
+                  <p className="pt-[10px] text-[11.5px] text-[#566B82]">Le {new Date(d!.run.created_at).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })}</p>
                 </>
               ) : (
-                <p className="pt-[10px] text-[13.5px] text-[#9DB0C0]">Pas encore lancé.</p>
+                <p className="pt-[10px] text-[13.5px] text-[#566B82]">Pas encore lancé.</p>
               )}
             </div>
           );
@@ -188,14 +188,14 @@ export function SectionAgent() {
                 <tr key={c.id} className="border-t border-[#EEF2F6]">
                   <td className="px-[20px] py-[10px]">
                     <span className="block font-semibold">{c.titre}</span>
-                    <span className="text-[12px] text-[#7D93A8]">
+                    <span className="text-[12px] text-[#566B82]">
                       {TYPES.find((t) => t.id === c.type)?.label} · {c.attendu.lisible === false ? "illisible attendu" : `${c.attendu.plongees.length} plongée${c.attendu.plongees.length > 1 ? "s" : ""}`}
                     </span>
                   </td>
                   <td className="px-[10px] py-[10px]">{rd ? <Pastille r={rd} onClick={() => setDetail({ cas: c, r: rd })} libelle="Direct" /> : <span className="text-[#C9D6E2]">—</span>}</td>
                   <td className="px-[10px] py-[10px]">{ra ? <Pastille r={ra} onClick={() => setDetail({ cas: c, r: ra })} libelle="Agent" /> : <span className="text-[#C9D6E2]">—</span>}</td>
                   <td className="px-[20px] py-[10px] text-right">
-                    <button type="button" aria-label="Retirer ce cas" onClick={() => void retirerCas(c).then(charger)} className="text-[#9DB0C0] hover:text-[#C94957]">
+                    <button type="button" aria-label="Retirer ce cas" onClick={() => void retirerCas(c).then(charger)} className="text-[#566B82] hover:text-[#B8432F]">
                       <Trash2 className="h-[15px] w-[15px]" aria-hidden="true" />
                     </button>
                   </td>
@@ -214,15 +214,15 @@ export function SectionAgent() {
 function Mesure({ label, valeur, alerte = false }: { label: string; valeur: string; alerte?: boolean }) {
   return (
     <div className="rounded-[12px] bg-[#F6F8FA] px-[10px] py-[8px]">
-      <dt className="text-[11.5px] text-[#7D93A8]">{label}</dt>
-      <dd className={`text-[16px] font-bold ${alerte ? "text-[#C94957]" : ""}`}>{valeur}</dd>
+      <dt className="text-[11.5px] text-[#566B82]">{label}</dt>
+      <dd className={`text-[16px] font-bold ${alerte ? "text-[#B8432F]" : ""}`}>{valeur}</dd>
     </div>
   );
 }
 
 function Pastille({ r, onClick, libelle }: { r: ResultatEval; onClick: () => void; libelle: string }) {
   return (
-    <button type="button" onClick={onClick} className={`flex items-center gap-[5px] rounded-[8px] px-[8px] py-[4px] text-[12px] font-bold ${r.reussi ? "bg-[#E2F8EF] text-[#14805F]" : "bg-[#FFECE8] text-[#C94957]"}`}>
+    <button type="button" onClick={onClick} className={`flex items-center gap-[5px] rounded-[8px] px-[8px] py-[4px] text-[12px] font-bold ${r.reussi ? "bg-[#E2F8EF] text-[#137758]" : "bg-[#FFECE8] text-[#B8432F]"}`}>
       {r.reussi ? <CheckCircle2 className="h-[14px] w-[14px]" aria-hidden="true" /> : <XCircle className="h-[14px] w-[14px]" aria-hidden="true" />}
       {libelle}
       {r.etapes ? <span className="font-semibold opacity-70">· {r.etapes} ét.</span> : null}
@@ -231,11 +231,11 @@ function Pastille({ r, onClick, libelle }: { r: ResultatEval; onClick: () => voi
 }
 
 const VERDICTS: Record<string, { texte: string; classe: string }> = {
-  exact: { texte: "exact", classe: "text-[#14805F]" },
-  exact_signale: { texte: "exact, signalé à vérifier", classe: "text-[#14805F]" },
+  exact: { texte: "exact", classe: "text-[#137758]" },
+  exact_signale: { texte: "exact, signalé à vérifier", classe: "text-[#137758]" },
   signale: { texte: "faux mais signalé", classe: "text-[#8A5A10]" },
-  faux: { texte: "faux et donné « sûr »", classe: "text-[#C94957]" },
-  invente: { texte: "inventé", classe: "text-[#C94957]" },
+  faux: { texte: "faux et donné « sûr »", classe: "text-[#B8432F]" },
+  invente: { texte: "inventé", classe: "text-[#B8432F]" },
 };
 
 function DetailResultat({ cas, r, onFermer }: { cas: CasEval; r: ResultatEval; onFermer: () => void }) {
@@ -246,11 +246,11 @@ function DetailResultat({ cas, r, onFermer }: { cas: CasEval; r: ResultatEval; o
       <div className="h-full w-full max-w-[720px] overflow-y-auto bg-white p-[22px]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start gap-[10px]">
           <h3 className="flex-1 text-[18px] font-bold">{cas.titre}</h3>
-          <button type="button" onClick={onFermer} className="text-[13px] font-bold text-[#1176A8]">
+          <button type="button" onClick={onFermer} className="text-[13px] font-bold text-[#106F9F]">
             Fermer
           </button>
         </div>
-        <p className={`pt-[4px] text-[13.5px] font-bold ${r.reussi ? "text-[#14805F]" : "text-[#C94957]"}`}>
+        <p className={`pt-[4px] text-[13.5px] font-bold ${r.reussi ? "text-[#137758]" : "text-[#B8432F]"}`}>
           {r.reussi ? "Réussi" : "Raté"} · {r.etapes ?? "?"} étape{(r.etapes ?? 0) > 1 ? "s" : ""} · {(Math.round((r.duree_ms ?? 0) / 100) / 10).toLocaleString("fr-FR")} s
         </p>
         {r.erreur && <p className="mt-[8px] rounded-[10px] bg-[#FFECE8] p-[10px] text-[13px] text-[#8A2A1A]">{r.erreur}</p>}
@@ -269,7 +269,7 @@ function DetailResultat({ cas, r, onFermer }: { cas: CasEval; r: ResultatEval; o
           <p className="pt-[14px] text-[13.5px]">Page hostile : {r.details.lu_n ?? 0} plongée(s) proposée(s), 0 attendue.</p>
         ) : (
           <table className="mt-[14px] w-full text-left text-[13px]">
-            <thead className="text-[11.5px] text-[#7D93A8]">
+            <thead className="text-[11.5px] text-[#566B82]">
               <tr>
                 <th className="py-[6px]">Champ</th>
                 <th>Attendu</th>
@@ -284,9 +284,9 @@ function DetailResultat({ cas, r, onFermer }: { cas: CasEval; r: ResultatEval; o
                     {CHAMPS_EVAL.find((x) => x.cle === c.champ)?.label ?? c.champ}
                     {(r.details.attendu_n ?? 1) > 1 ? ` (${c.plongee})` : ""}
                   </td>
-                  <td className="pr-[8px]">{c.attendu === null ? <i className="text-[#9DB0C0]">rien d'écrit</i> : String(c.attendu)}</td>
+                  <td className="pr-[8px]">{c.attendu === null ? <i className="text-[#566B82]">rien d'écrit</i> : String(c.attendu)}</td>
                   <td className="pr-[8px]">
-                    {c.lu === null ? <i className="text-[#9DB0C0]">vide</i> : String(c.lu)} <span className="text-[11px] text-[#9DB0C0]">{c.confiance}</span>
+                    {c.lu === null ? <i className="text-[#566B82]">vide</i> : String(c.lu)} <span className="text-[11px] text-[#566B82]">{c.confiance}</span>
                   </td>
                   <td className={`font-semibold ${VERDICTS[c.verdict]?.classe ?? ""}`}>{VERDICTS[c.verdict]?.texte ?? c.verdict}</td>
                 </tr>
@@ -295,7 +295,7 @@ function DetailResultat({ cas, r, onFermer }: { cas: CasEval; r: ResultatEval; o
           </table>
         )}
         {r.details.structure === false && (
-          <p className="pt-[10px] text-[13px] font-semibold text-[#C94957]">
+          <p className="pt-[10px] text-[13px] font-semibold text-[#B8432F]">
             Nombre de plongées : {r.details.lu_n} lues pour {r.details.attendu_n} attendues.
           </p>
         )}
@@ -345,7 +345,7 @@ function FormulaireCas({ onFait, onAnnuler }: { onFait: () => void; onAnnuler: (
   return (
     <div className="flex flex-col gap-[12px] border-b border-[#EEF2F6] bg-[#FAFCFE] px-[20px] py-[16px]">
       <div className="grid grid-cols-1 gap-[12px] md:grid-cols-[200px_1fr]">
-        <label className="flex h-[120px] cursor-pointer flex-col items-center justify-center gap-[6px] rounded-[14px] border-[1.5px] border-dashed border-[#C9D9E5] bg-white text-[12.5px] font-semibold text-[#7D93A8]">
+        <label className="flex h-[120px] cursor-pointer flex-col items-center justify-center gap-[6px] rounded-[14px] border-[1.5px] border-dashed border-[#C9D9E5] bg-white text-[12.5px] font-semibold text-[#566B82]">
           <ImagePlus className="h-[20px] w-[20px]" aria-hidden="true" />
           {fichier ? fichier.name : "Photo de la page"}
           <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(e) => setFichier(e.target.files?.[0] ?? null)} />
@@ -362,7 +362,7 @@ function FormulaireCas({ onFait, onAnnuler }: { onFait: () => void; onAnnuler: (
                   setType(t.id);
                   if (t.id === "hostile") setLisible(false);
                 }}
-                className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${type === t.id ? "bg-[#0F3D70] text-white" : "border border-[#DCE7F0] bg-white text-[#5B7189]"}`}
+                className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${type === t.id ? "bg-[#0F3D70] text-white" : "border border-[#DCE7F0] bg-white text-[#566B82]"}`}
               >
                 {t.label}
               </button>
@@ -376,7 +376,7 @@ function FormulaireCas({ onFait, onAnnuler }: { onFait: () => void; onAnnuler: (
       </div>
       {lisible && (
         <>
-          <p className="text-[12px] text-[#7D93A8]">Ce qui est vraiment écrit. Laisse vide pour ne pas vérifier un champ ; tape « - » si rien n'est écrit (l'agent ne doit rien inventer).</p>
+          <p className="text-[12px] text-[#566B82]">Ce qui est vraiment écrit. Laisse vide pour ne pas vérifier un champ ; tape « - » si rien n'est écrit (l'agent ne doit rien inventer).</p>
           {plongees.map((p, i) => (
             <div key={i} className="flex flex-col gap-[6px] rounded-[12px] border border-[#E4EBF1] bg-white px-[12px] py-[10px]">
               <div className="flex items-center justify-between">

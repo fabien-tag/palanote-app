@@ -5,13 +5,13 @@ import type { ReactNode } from "react";
 // qui se replient en colonne sur téléphone.
 
 export const CHAMP =
-  "block h-[44px] w-full min-w-0 rounded-[10px] border-[1.5px] border-[#E4EBF1] bg-white px-[13px] text-[14px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5] disabled:bg-[#F5F8FB] disabled:text-[#7D93A8]";
+  "block h-[44px] w-full min-w-0 rounded-[10px] border-[1.5px] border-[#7B8FA3] bg-white px-[13px] text-[14px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5] disabled:bg-[#F5F8FB] disabled:text-[#566B82]";
 
 export const BOUTON_PRINCIPAL =
   "inline-flex h-[42px] items-center justify-center gap-[6px] rounded-[10px] bg-[#3DEFBE] px-[18px] text-[13px] font-bold text-[#0B3B63] hover:bg-[#34E0B1] disabled:opacity-40";
 
 export const BOUTON_SECONDAIRE =
-  "inline-flex h-[42px] items-center justify-center gap-[6px] rounded-[10px] border border-[#D8E5EE] bg-white px-[16px] text-[13px] font-bold text-[#5B7189] hover:border-[#57D4F5] hover:text-[#1176A8] disabled:opacity-40";
+  "inline-flex h-[42px] items-center justify-center gap-[6px] rounded-[10px] border border-[#D8E5EE] bg-white px-[16px] text-[13px] font-bold text-[#566B82] hover:border-[#57D4F5] hover:text-[#106F9F] disabled:opacity-40";
 
 export function Carte({
   titre,
@@ -32,8 +32,8 @@ export function Carte({
     <section className={`overflow-hidden rounded-[14px] border bg-white ${danger ? "border-[#F5C9BF]" : "border-[#E4EBF1]"}`}>
       <header className="flex flex-wrap items-start gap-[12px] border-b border-[#EDF2F7] px-[18px] py-[16px] lg:px-[24px]">
         <div className="min-w-0 flex-1">
-          <h2 className={`text-[16px] font-bold ${danger ? "text-[#C94957]" : ""}`}>{titre}</h2>
-          {texte && <p className="pt-[3px] text-[13px] leading-normal text-[#7D93A8]">{texte}</p>}
+          <h2 className={`text-[16px] font-bold ${danger ? "text-[#B8432F]" : ""}`}>{titre}</h2>
+          {texte && <p className="pt-[3px] text-[13px] leading-normal text-[#566B82]">{texte}</p>}
         </div>
         {droite}
       </header>
@@ -49,7 +49,7 @@ export function Rang({ titre, texte, children }: { titre: string; texte?: ReactN
     <div className="grid grid-cols-1 gap-[10px] border-t border-[#EDF2F7] py-[18px] first:border-t-0 lg:grid-cols-[minmax(200px,280px)_1fr] lg:gap-[32px]">
       <div>
         <div className="text-[14px] font-bold">{titre}</div>
-        {texte && <div className="pt-[3px] text-[12.5px] leading-normal text-[#7D93A8]">{texte}</div>}
+        {texte && <div className="pt-[3px] text-[12.5px] leading-normal text-[#566B82]">{texte}</div>}
       </div>
       <div className="min-w-0">{children}</div>
     </div>
@@ -59,7 +59,7 @@ export function Rang({ titre, texte, children }: { titre: string; texte?: ReactN
 export function Libelle({ texte, children }: { texte: string; children: ReactNode }) {
   return (
     <label className="block min-w-0">
-      <span className="block pb-[6px] text-[12.5px] font-semibold text-[#5B7189]">{texte}</span>
+      <span className="block pb-[6px] text-[12.5px] font-semibold text-[#566B82]">{texte}</span>
       {children}
     </label>
   );
@@ -85,7 +85,7 @@ export function Puces<T extends string>({
             aria-pressed={actif}
             onClick={() => onChange(o.valeur)}
             className={`h-[36px] rounded-[10px] border-[1.5px] px-[13px] text-[13px] font-semibold ${
-              actif ? "border-[#3DEFBE] bg-[#E2F8EF] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#5B7189] hover:border-[#B8D9EA]"
+              actif ? "border-[#3DEFBE] bg-[#E2F8EF] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#566B82] hover:border-[#B8D9EA]"
             }`}
           >
             {o.label}

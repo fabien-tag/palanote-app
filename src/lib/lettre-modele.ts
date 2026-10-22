@@ -28,7 +28,7 @@ export function lettreHtml(o: { sujet: string; contenu: string; annee: number; a
     `<td width="33%" style="padding:4px"><div style="background:${fond};border-radius:14px;padding:14px 6px;text-align:center"><div style="font-size:24px;font-weight:700;color:#123A63">${valeur}</div><div style="font-size:12px;color:#5B7189">${label}</div></div></td>`;
   const bilan =
     d.plongees > 0
-      ? `<p style="margin:0 0 4px 0;font-size:12px;letter-spacing:.08em;color:#7D93A8;font-weight:700">SALUT ${echapper((d.prenom || "").toUpperCase())}</p>
+      ? `<p style="margin:0 0 4px 0;font-size:12px;letter-spacing:.08em;color:#5B7189;font-weight:700">SALUT ${echapper((d.prenom || "").toUpperCase())}</p>
          <p style="margin:0 0 16px 0;font-size:20px;font-weight:700;color:#123A63">Tu as passé ${heures} heure${heures > 1 ? "s" : ""} sous l'eau en ${annee}.</p>
          <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px 0"><tr>
            ${tuile(String(d.plongees), d.plongees > 1 ? "plongées" : "plongée", "#E2F8EF")}
@@ -51,11 +51,11 @@ export function lettreHtml(o: { sujet: string; contenu: string; annee: number; a
   <table width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 6px 0"><tr><td align="center" style="background:#3DEFBE;border-radius:14px">
     <a href="${appUrl}/recif" style="display:block;padding:15px 10px;font-size:14px;font-weight:700;color:#0B3B63;text-decoration:none;letter-spacing:.04em">REJOINDRE LE RÉCIF</a>
   </td></tr></table>
-  <p style="margin:6px 0 0 0;font-size:12.5px;color:#9DB0C0;text-align:center">Et si tu préfères ne rien faire, l'app ne changera pas d'un pixel.</p>
+  <p style="margin:6px 0 0 0;font-size:12.5px;color:#5B7189;text-align:center">Et si tu préfères ne rien faire, l'app ne changera pas d'un pixel.</p>
 </td></tr>
-<tr><td style="padding:18px 10px;font-size:11.5px;line-height:1.5;color:#9DB0C0;text-align:center">
+<tr><td style="padding:18px 10px;font-size:11.5px;line-height:1.5;color:#5B7189;text-align:center">
   Tu reçois ce message parce que tu as accepté de recevoir le bilan de ton année. C'est le seul de l'année.<br>
-  <a href="${desabo}" style="color:#7D93A8">Ne plus recevoir ce bilan</a><br>Palanote · Fabien Tagliareni · France
+  <a href="${desabo}" style="color:#5B7189">Ne plus recevoir ce bilan</a><br>Palanote · Fabien Tagliareni · France
 </td></tr>
 </table></td></tr></table></body></html>`;
 }

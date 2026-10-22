@@ -36,7 +36,7 @@ export function PasseportDp({ userId, onFermer, onChange }: { userId: string; on
     if (typeof document === "undefined") return null;
     return createPortal(
       <div className="bureau fixed inset-0 z-[70] flex items-center justify-center bg-[#0B2540]/40 p-[20px]" role="dialog" aria-modal="true">
-        <div className="w-full max-w-[360px] rounded-[10px] bg-white p-[20px] text-center text-[14px] text-[#5B7189]">
+        <div className="w-full max-w-[360px] rounded-[10px] bg-white p-[20px] text-center text-[14px] text-[#566B82]">
           {erreur ?? "Chargement du passeport…"}
           {erreur && (
             <button type="button" onClick={onFermer} className="mt-[14px] block w-full rounded-[10px] bg-[#EEF3F8] py-[10px] font-bold text-[#123A63]">
@@ -71,7 +71,7 @@ export function PasseportDp({ userId, onFermer, onChange }: { userId: string; on
             setEnCours(null);
           }}
           className={`mt-[10px] flex h-[42px] w-full items-center justify-center gap-[6px] rounded-[10px] text-[14px] font-bold ${
-            b.verifie_le ? "border border-[#D8E5EE] bg-white text-[#5B7189]" : "bg-[#14805F] text-white"
+            b.verifie_le ? "border border-[#D8E5EE] bg-white text-[#566B82]" : "bg-[#14805F] text-white"
           }`}
         >
           <BadgeCheck className="h-[17px] w-[17px]" />

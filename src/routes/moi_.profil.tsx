@@ -26,12 +26,12 @@ function Champ({
 }: { label: string; aide?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="block">
-      <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
+      <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">{label}</span>
       <input
         {...props}
-        className="block h-[52px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+        className="block h-[52px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
       />
-      {aide && <span className="block pt-[6px] text-[12px] text-[#9DB0C0]">{aide}</span>}
+      {aide && <span className="block pt-[6px] text-[12px] text-[#566B82]">{aide}</span>}
     </label>
   );
 }
@@ -111,7 +111,7 @@ function ModifierProfil() {
           <div className="flex flex-col gap-[16px]">
             <Champ label="Prénom" value={prenom} onChange={(e) => setPrenom(e.target.value)} autoComplete="given-name" placeholder="Fabien" />
             <div>
-              <span className="block pb-[8px] text-[13px] font-semibold text-[#5B7189]">Niveau</span>
+              <span className="block pb-[8px] text-[13px] font-semibold text-[#566B82]">Niveau</span>
               <div className="flex flex-wrap gap-[8px]">
                 {NIVEAUX.map((n) => {
                   const actif = niveau === n;
@@ -121,7 +121,7 @@ function ModifierProfil() {
                       type="button"
                       onClick={() => setNiveau(actif ? "" : n)}
                       className={`h-[40px] rounded-full border-[1.5px] px-[14px] text-[13.5px] font-semibold ${
-                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#5B7189]"
+                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#566B82]"
                       }`}
                     >
                       {n}
@@ -129,10 +129,10 @@ function ModifierProfil() {
                   );
                 })}
               </div>
-              {niveau && !NIVEAUX.includes(niveau) && <p className="pt-[8px] text-[12.5px] text-[#5B7189]">Niveau actuel : {niveau}</p>}
+              {niveau && !NIVEAUX.includes(niveau) && <p className="pt-[8px] text-[12.5px] text-[#566B82]">Niveau actuel : {niveau}</p>}
             </div>
             <div>
-              <span className="block pb-[8px] text-[13px] font-semibold text-[#5B7189]">Ton rôle</span>
+              <span className="block pb-[8px] text-[13px] font-semibold text-[#566B82]">Ton rôle</span>
               <div className="flex flex-wrap gap-[8px]">
                 {ROLES.map((r) => {
                   const actif = role === r.valeur;
@@ -143,7 +143,7 @@ function ModifierProfil() {
                       aria-pressed={actif}
                       onClick={() => setRole(actif ? "" : r.valeur)}
                       className={`h-[40px] rounded-full border-[1.5px] px-[14px] text-[13.5px] font-semibold ${
-                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#5B7189]"
+                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#566B82]"
                       }`}
                     >
                       {r.label}
@@ -151,11 +151,11 @@ function ModifierProfil() {
                   );
                 })}
               </div>
-              <p className="pt-[6px] text-[12px] text-[#9DB0C0]">{AIDE_ROLE}</p>
+              <p className="pt-[6px] text-[12px] text-[#566B82]">{AIDE_ROLE}</p>
             </div>
             <Champ label="Club" value={club} onChange={(e) => setClub(e.target.value)} placeholder="CIP Lavandou" />
             <div>
-              <span className="block pb-[8px] text-[13px] font-semibold text-[#5B7189]">Certifications</span>
+              <span className="block pb-[8px] text-[13px] font-semibold text-[#566B82]">Certifications</span>
               <div className="flex flex-wrap gap-[8px]">
                 {CERTIFICATIONS.map((c) => {
                   const actif = certifications.includes(c.valeur);
@@ -166,7 +166,7 @@ function ModifierProfil() {
                       aria-pressed={actif}
                       onClick={() => setCertifications((l) => (actif ? l.filter((x) => x !== c.valeur) : [...l, c.valeur]))}
                       className={`h-[40px] rounded-full border-[1.5px] px-[14px] text-[13.5px] font-semibold ${
-                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#5B7189]"
+                        actif ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#E4EBF1] bg-white text-[#566B82]"
                       }`}
                     >
                       {c.label}
@@ -174,7 +174,7 @@ function ModifierProfil() {
                   );
                 })}
               </div>
-              <p className="pt-[6px] text-[12px] text-[#9DB0C0]">Affichées en haut de ton carnet, à côté de ton niveau.</p>
+              <p className="pt-[6px] text-[12px] text-[#566B82]">Affichées en haut de ton carnet, à côté de ton niveau.</p>
             </div>
           </div>
 

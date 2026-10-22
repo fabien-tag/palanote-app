@@ -65,7 +65,7 @@ export function BoutonSecondaire({ children, onClick }: { children: ReactNode; o
     <button
       type="button"
       onClick={onClick}
-      className="flex h-[52px] w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white px-4 text-[14px] font-bold uppercase text-[#1176A8]"
+      className="flex h-[52px] w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white px-4 text-[14px] font-bold uppercase text-[#106F9F]"
     >
       {children}
     </button>
@@ -77,7 +77,7 @@ export function LienDiscret({ children, onClick }: { children: ReactNode; onClic
     <button
       type="button"
       onClick={onClick}
-      className="mx-auto block text-[13.5px] font-semibold text-[#5B7189] underline underline-offset-4"
+      className="mx-auto block text-[13.5px] font-semibold text-[#566B82] underline underline-offset-4"
     >
       {children}
     </button>
@@ -125,7 +125,7 @@ export function useConnexionRequise() {
       <FondNumerisation>
         <div className="flex flex-grow flex-col items-center justify-center gap-4 px-8 text-center">
           <h1 className="text-[22px] font-bold">Connecte-toi pour numériser</h1>
-          <p className="text-[14px] leading-normal text-[#5B7189]">
+          <p className="text-[14px] leading-normal text-[#566B82]">
             Les pages et les plongées lues sont enregistrées dans ton compte, pour que rien ne se perde.
           </p>
           <div className="w-full pt-2">

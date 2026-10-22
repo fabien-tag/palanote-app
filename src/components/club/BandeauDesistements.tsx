@@ -38,9 +38,9 @@ export function BandeauDesistements({
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[13.5px] font-bold">
                 {d.prenom}
-                {d.palanquee ? <span className="font-normal text-[#7D93A8]"> · P{d.palanquee}</span> : null}
+                {d.palanquee ? <span className="font-normal text-[#566B82]"> · P{d.palanquee}</span> : null}
               </span>
-              <span className="block truncate text-[12px] text-[#7D93A8]">{[d.motif, ilYA(d.le)].filter(Boolean).join(" · ")}</span>
+              <span className="block truncate text-[12px] text-[#566B82]">{[d.motif, ilYA(d.le)].filter(Boolean).join(" · ")}</span>
             </span>
             <button
               type="button"

@@ -66,7 +66,7 @@ function DonnerMonAvis() {
           <div className="flex flex-grow flex-col items-center justify-center gap-[12px] pb-[10svh] text-center">
             <CheckCircle2 className="h-[54px] w-[54px] text-[#14B88A]" strokeWidth={1.8} />
             <h2 className="text-[22px] font-bold">Merci, c'est parti.</h2>
-            <p className="text-[14px] leading-normal text-[#5B7189]">
+            <p className="text-[14px] leading-normal text-[#566B82]">
               Ton message est arrivé chez l'auteur de l'app.
               {joindre && connecte ? " Il pourra te répondre par e-mail." : ""}
             </p>
@@ -82,9 +82,9 @@ function DonnerMonAvis() {
           <>
             <div className="mt-[20px] flex items-start gap-[13px]">
               <span className="flex h-[48px] w-[48px] shrink-0 items-center justify-center goutte bg-[#FFE4DE]">
-                <MessageCircle className="h-[22px] w-[22px] text-[#D9573F]" strokeWidth={2} aria-hidden="true" />
+                <MessageCircle className="h-[22px] w-[22px] text-[#B8432F]" strokeWidth={2} aria-hidden="true" />
               </span>
-              <p className="text-[13.5px] leading-normal text-[#5B7189]">
+              <p className="text-[13.5px] leading-normal text-[#566B82]">
                 Ce message part directement à l'auteur de l'app. Il n'apparaît nulle part, ni sur les stores, ni sur ton profil.
               </p>
             </div>
@@ -100,7 +100,7 @@ function DonnerMonAvis() {
                     aria-pressed={actif}
                     onClick={() => setRaison(actif ? null : r)}
                     className={`h-[38px] rounded-full border-[1.5px] px-[14px] text-[13px] font-semibold ${
-                      actif ? "border-[#0F3D70] bg-[#0F3D70] text-white" : "border-[#D8E5EE] bg-white text-[#5B7189]"
+                      actif ? "border-[#0F3D70] bg-[#0F3D70] text-white" : "border-[#D8E5EE] bg-white text-[#566B82]"
                     }`}
                   >
                     {r}
@@ -118,7 +118,7 @@ function DonnerMonAvis() {
                 placeholder="Je voudrais pouvoir exporter mon carnet en PDF pour le faire signer par mon club."
                 className="block w-full resize-none bg-transparent text-[15px] leading-normal text-[#123A63] outline-none placeholder:text-[#B5C4D1]"
               />
-              <div className="pt-[4px] text-right text-[11.5px] text-[#9DB0C0]">
+              <div className="pt-[4px] text-right text-[11.5px] text-[#566B82]">
                 {message.length} / {MAX}
               </div>
             </div>
@@ -133,12 +133,12 @@ function DonnerMonAvis() {
               <div className="text-[13px] font-bold">Ce qui part avec ton message</div>
               <div className="flex flex-wrap gap-[6px] pt-[10px]">
                 {[`Version ${VERSION_APP}`, appareil.appareil, appareil.systeme].filter(Boolean).map((t) => (
-                  <span key={t} className="rounded-[10px] bg-[#EEF4F9] px-[10px] py-[5px] text-[12px] text-[#5B7189]">
+                  <span key={t} className="rounded-[10px] bg-[#EEF4F9] px-[10px] py-[5px] text-[12px] text-[#566B82]">
                     {t}
                   </span>
                 ))}
               </div>
-              <p className="pt-[10px] text-[12px] leading-normal text-[#9DB0C0]">Rien d'autre. Pas ton carnet, pas tes photos, pas ta position.</p>
+              <p className="pt-[10px] text-[12px] leading-normal text-[#566B82]">Rien d'autre. Pas ton carnet, pas tes photos, pas ta position.</p>
             </div>
 
             <div className="min-h-[24px] flex-grow" />
@@ -154,7 +154,7 @@ function DonnerMonAvis() {
             <button
               type="button"
               onClick={() => navigate({ to: "/carnet" })}
-              className="mx-auto mt-[14px] text-[13px] font-semibold text-[#5B7189] underline underline-offset-4"
+              className="mx-auto mt-[14px] text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
             >
               Revenir à mon carnet
             </button>

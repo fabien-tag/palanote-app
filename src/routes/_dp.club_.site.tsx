@@ -146,23 +146,23 @@ function PageMonSite() {
         <>
           {/* Barre d'état : adresse, offre, publication */}
           <div className="flex flex-wrap items-center gap-[12px] rounded-[14px] border border-[#E4EBF1] bg-white px-[16px] py-[12px]">
-            <span className={`rounded-[8px] px-[10px] py-[5px] text-[12px] font-bold ${b.publie ? "bg-[#E2F8EF] text-[#14805F]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}>
+            <span className={`rounded-[8px] px-[10px] py-[5px] text-[12px] font-bold ${b.publie ? "bg-[#E2F8EF] text-[#137758]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}>
               {b.publie ? "En ligne" : "Brouillon"}
             </span>
-            <Link to="/club/offre" title="Voir les offres" className="rounded-[8px] bg-[#E3F2FB] px-[10px] py-[5px] text-[12px] font-bold text-[#1176A8] hover:bg-[#D5EBF8]">
+            <Link to="/club/offre" title="Voir les offres" className="rounded-[8px] bg-[#E3F2FB] px-[10px] py-[5px] text-[12px] font-bold text-[#106F9F] hover:bg-[#D5EBF8]">
               Offre {contenu.site.offre === "advanced" ? "Advanced" : contenu.site.offre === "premium" ? "Premium" : "Starter"}
             </Link>
-            <span className="min-w-0 truncate text-[13px] text-[#5B7189]">
+            <span className="min-w-0 truncate text-[13px] text-[#566B82]">
               {lienSite(contenu.site.slug)}
             </span>
-            <button type="button" title="Copier l'adresse" onClick={() => void navigator.clipboard?.writeText(lienSite(contenu.site.slug)).then(() => setMessage("Adresse copiée."))} className="text-[#7D93A8] hover:text-[#1176A8]">
+            <button type="button" title="Copier l'adresse" onClick={() => void navigator.clipboard?.writeText(lienSite(contenu.site.slug)).then(() => setMessage("Adresse copiée."))} className="text-[#566B82] hover:text-[#106F9F]">
               <Copy className="h-[16px] w-[16px]" aria-hidden="true" />
             </button>
-            <a href={`/clubs/${contenu.site.slug}`} target="_blank" rel="noreferrer" className="flex items-center gap-[5px] text-[13px] font-bold text-[#1176A8]">
+            <a href={`/clubs/${contenu.site.slug}`} target="_blank" rel="noreferrer" className="flex items-center gap-[5px] text-[13px] font-bold text-[#106F9F]">
               Ouvrir <ExternalLink className="h-[14px] w-[14px]" aria-hidden="true" />
             </a>
             <span className="ml-auto flex flex-wrap items-center gap-[10px]">
-              {message && <span className="text-[13px] font-semibold text-[#14805F]">{message}</span>}
+              {message && <span className="text-[13px] font-semibold text-[#137758]">{message}</span>}
               {modifie && (
                 <button type="button" disabled={enCours} onClick={() => setBrouillon(contenu.site)} className={BOUTON_SECONDAIRE}>
                   Annuler
@@ -181,7 +181,7 @@ function PageMonSite() {
             {/* ——— Réglages ——— */}
             <div className="flex flex-col gap-[10px]">
               <Volet titre="Apparence" texte="Modèle, couleurs, logo, photo" ouvert={ouverte === "apparence"} onClick={() => setOuverte("apparence")}>
-                <p className="pb-[8px] text-[12.5px] font-semibold text-[#5B7189]">Modèle de page</p>
+                <p className="pb-[8px] text-[12.5px] font-semibold text-[#566B82]">Modèle de page</p>
                 <div className="grid grid-cols-2 gap-[8px]">
                   {MODELES.map((m) => (
                     <button
@@ -198,13 +198,13 @@ function PageMonSite() {
                         <span className="block text-[13px] font-bold" style={{ fontFamily: m.titres }}>
                           {m.nom}
                         </span>
-                        <span className="block text-[11.5px] text-[#7D93A8]">{m.texte}</span>
+                        <span className="block text-[11.5px] text-[#566B82]">{m.texte}</span>
                       </span>
                     </button>
                   ))}
                 </div>
 
-                <p className="pb-[8px] pt-[16px] text-[12.5px] font-semibold text-[#5B7189]">Palettes</p>
+                <p className="pb-[8px] pt-[16px] text-[12.5px] font-semibold text-[#566B82]">Palettes</p>
                 <div className="flex flex-wrap gap-[8px]">
                   {PALETTES.map((p) => {
                     const actif = b.couleur_accent === p.accent && b.couleur_secondaire === p.secondaire && b.couleur_tertiaire === p.tertiaire;
@@ -274,9 +274,9 @@ function PageMonSite() {
                               aria-label="Prix en euros"
                               onChange={(e) => majTarif({ prix: e.target.value.replace(/[^\d,.]/g, "").slice(0, 7) })}
                             />
-                            <span className="pointer-events-none absolute right-[10px] top-[12px] text-[13px] text-[#9DB0C0]">€</span>
+                            <span className="pointer-events-none absolute right-[10px] top-[12px] text-[13px] text-[#566B82]">€</span>
                           </div>
-                          <button type="button" aria-label="Retirer ce tarif" onClick={() => maj("tarifs", b.tarifs.filter((_, j) => j !== i))} className="shrink-0 px-[4px] text-[#9DB0C0] hover:text-[#C94957]">
+                          <button type="button" aria-label="Retirer ce tarif" onClick={() => maj("tarifs", b.tarifs.filter((_, j) => j !== i))} className="shrink-0 px-[4px] text-[#566B82] hover:text-[#B8432F]">
                             <Trash2 className="h-[16px] w-[16px]" aria-hidden="true" />
                           </button>
                         </div>
@@ -293,7 +293,7 @@ function PageMonSite() {
                               type="button"
                               aria-pressed={t.groupe === g}
                               onClick={() => majTarif({ groupe: g })}
-                              className={`h-[30px] rounded-[8px] px-[10px] text-[12px] font-semibold ${t.groupe === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                              className={`h-[30px] rounded-[8px] px-[10px] text-[12px] font-semibold ${t.groupe === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
                             >
                               {label}
                             </button>
@@ -305,7 +305,7 @@ function PageMonSite() {
                   <button type="button" onClick={() => maj("tarifs", [...b.tarifs, { libelle: "", detail: "", prix: "", groupe: "plongee" }])} className={`${BOUTON_SECONDAIRE} h-[36px] w-fit`}>
                     <Plus className="h-[15px] w-[15px]" aria-hidden="true" /> Ajouter un tarif
                   </button>
-                  <p className="text-[12px] leading-normal text-[#7D93A8]">
+                  <p className="text-[12px] leading-normal text-[#566B82]">
                     Les prix des niveaux ({contenu.formations.filter((f) => f.categorie === "niveau").map((f) => f.code).join(", ") || "aucun pour l'instant"}) viennent du catalogue Formations : modifie-les là-bas.
                   </p>
                 </div>
@@ -331,11 +331,11 @@ function PageMonSite() {
                     </Libelle>
                   </div>
                 </div>
-                <p className="pt-[8px] text-[12px] leading-normal text-[#7D93A8]">
+                <p className="pt-[8px] text-[12px] leading-normal text-[#566B82]">
                   La note s'affiche en haut du site et mène à ta fiche Google : recopie-la de temps en temps. Le pourcentage de satisfaits est déclaré par le club.
                 </p>
-                <p className="pt-[16px] text-[12.5px] font-semibold text-[#5B7189]">Les chiffres affichés (4 au plus, dans l'ordre choisi)</p>
-                <p className="pb-[6px] text-[11.5px] text-[#9DB0C0]">Touche un chiffre pour l'ajouter ou le retirer ; quand il y en a déjà 4, il remplace le dernier.</p>
+                <p className="pt-[16px] text-[12.5px] font-semibold text-[#566B82]">Les chiffres affichés (4 au plus, dans l'ordre choisi)</p>
+                <p className="pb-[6px] text-[11.5px] text-[#566B82]">Touche un chiffre pour l'ajouter ou le retirer ; quand il y en a déjà 4, il remplace le dernier.</p>
                 {(() => {
                   const choisis = b.chiffres && b.chiffres.length > 0 ? b.chiffres : CHIFFRES_DEFAUT;
                   const profondeurs = b.zones.map((z) => nombre(z.profondeur) ?? 0);
@@ -365,7 +365,7 @@ function PageMonSite() {
                       >
                         <span className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[6px] text-[11.5px] font-bold ${coche ? "bg-[#0F3D70] text-white" : "border border-[#C9D9E5]"}`}>{coche ? rang + 1 : ""}</span>
                         <span className="min-w-0 flex-1 text-[13.5px] font-bold">{c.nom}</span>
-                        <span className={`text-[12.5px] ${valeur[c.cle] ? "font-semibold text-[#1176A8]" : "text-[#C9A15A]"}`}>{valeur[c.cle] ?? "à renseigner"}</span>
+                        <span className={`text-[12.5px] ${valeur[c.cle] ? "font-semibold text-[#106F9F]" : "text-[#C9A15A]"}`}>{valeur[c.cle] ?? "à renseigner"}</span>
                       </button>
                     );
                   });
@@ -383,12 +383,12 @@ function PageMonSite() {
                   <Libelle texte="Présentation du club">
                     <textarea className={`${CHAMP} h-[110px] resize-y py-[10px]`} value={b.presentation ?? ""} maxLength={900} onChange={(e) => maj("presentation", e.target.value)} />
                   </Libelle>
-                  <p className="pt-[4px] text-[12.5px] font-semibold text-[#5B7189]">Points forts du club</p>
+                  <p className="pt-[4px] text-[12.5px] font-semibold text-[#566B82]">Points forts du club</p>
                   {b.atouts.map((a, i) => (
                     <div key={i} className="rounded-[10px] border border-[#EDF2F7] p-[10px]">
                       <div className="flex gap-[8px]">
                         <input className={CHAMP} value={a.titre} placeholder="Titre" onChange={(e) => maj("atouts", b.atouts.map((x, j) => (j === i ? { ...x, titre: e.target.value } : x)))} />
-                        <button type="button" aria-label="Retirer" onClick={() => maj("atouts", b.atouts.filter((_, j) => j !== i))} className="shrink-0 px-[6px] text-[#9DB0C0] hover:text-[#C94957]">
+                        <button type="button" aria-label="Retirer" onClick={() => maj("atouts", b.atouts.filter((_, j) => j !== i))} className="shrink-0 px-[6px] text-[#566B82] hover:text-[#B8432F]">
                           <Trash2 className="h-[16px] w-[16px]" aria-hidden="true" />
                         </button>
                       </div>
@@ -411,7 +411,7 @@ function PageMonSite() {
                       <div key={i} className="rounded-[10px] border border-[#EDF2F7] p-[10px]">
                         <div className="flex gap-[8px]">
                           <input className={CHAMP} value={z.nom} placeholder="Nom du site" onChange={(e) => majZone({ nom: e.target.value })} />
-                          <button type="button" aria-label="Retirer le site" onClick={() => maj("zones", b.zones.filter((_, j) => j !== i))} className="shrink-0 px-[6px] text-[#9DB0C0] hover:text-[#C94957]">
+                          <button type="button" aria-label="Retirer le site" onClick={() => maj("zones", b.zones.filter((_, j) => j !== i))} className="shrink-0 px-[6px] text-[#566B82] hover:text-[#B8432F]">
                             <Trash2 className="h-[16px] w-[16px]" aria-hidden="true" />
                           </button>
                         </div>
@@ -507,18 +507,18 @@ function PageMonSite() {
                   <div key={cle} className="flex items-center gap-[12px] border-t border-[#EDF2F7] py-[11px] first:border-t-0">
                     <span className="min-w-0 flex-1">
                       <span className="block text-[13.5px] font-bold">{titre}</span>
-                      {texte && <span className="block text-[12px] text-[#7D93A8]">{texte}</span>}
+                      {texte && <span className="block text-[12px] text-[#566B82]">{texte}</span>}
                     </span>
                     <Bascule actif={b.sections[cle] !== false} label={titre} onChange={(v) => maj("sections", { ...b.sections, [cle]: v })} />
                   </div>
                 ))}
-                <p className="pt-[6px] text-[12px] leading-normal text-[#7D93A8]">
+                <p className="pt-[6px] text-[12px] leading-normal text-[#566B82]">
                   Les formations, le bateau, le matériel et l'équipe viennent directement de Formations, Matériel et Équipe : une mise à jour là-bas change le site.
                 </p>
                 <div className="pt-[14px]">
                   <Libelle texte="Adresse du site">
-                    <div className="flex items-center overflow-hidden rounded-[10px] border-[1.5px] border-[#E4EBF1] bg-white focus-within:border-[#57D4F5]">
-                      <span className="pl-[12px] text-[13px] text-[#9DB0C0]">/clubs/</span>
+                    <div className="flex items-center overflow-hidden rounded-[10px] border-[1.5px] border-[#7B8FA3] bg-white focus-within:border-[#57D4F5]">
+                      <span className="pl-[12px] text-[13px] text-[#566B82]">/clubs/</span>
                       <input
                         className="h-[42px] min-w-0 flex-1 bg-transparent pr-[12px] text-[14px] outline-none"
                         value={b.slug}
@@ -533,7 +533,7 @@ function PageMonSite() {
             {/* ——— Aperçu en direct ——— */}
             <div className="min-w-0 xl:sticky xl:top-[92px] xl:self-start">
               <div className="flex items-center gap-[10px] pb-[10px]">
-                <span className="text-[13px] font-bold text-[#5B7189]">Aperçu en direct</span>
+                <span className="text-[13px] font-bold text-[#566B82]">Aperçu en direct</span>
                 <span className="ml-auto flex rounded-[10px] border border-[#D8E5EE] bg-white p-[3px]">
                   {(
                     [
@@ -546,7 +546,7 @@ function PageMonSite() {
                       type="button"
                       aria-pressed={vue === v}
                       onClick={() => setVue(v)}
-                      className={`flex h-[30px] items-center gap-[6px] rounded-[8px] px-[10px] text-[12.5px] font-bold ${vue === v ? "bg-[#0F3D70] text-white" : "text-[#5B7189]"}`}
+                      className={`flex h-[30px] items-center gap-[6px] rounded-[8px] px-[10px] text-[12.5px] font-bold ${vue === v ? "bg-[#0F3D70] text-white" : "text-[#566B82]"}`}
                     >
                       <Icone className="h-[14px] w-[14px]" aria-hidden="true" /> {label}
                     </button>
@@ -554,7 +554,7 @@ function PageMonSite() {
                 </span>
               </div>
               <Apercu largeur={vue === "ordinateur" ? 1280 : 390}>
-                <SiteClub contenu={{ ...contenu, site: { ...b, zones: b.zones.filter((z) => z.nom.trim()) } }} apercu />
+                <SiteClub contenu={{ ...contenu, site: { ...b, zones: b.zones.filter((z) => z.nom.trim()) } }} apercu integre />
               </Apercu>
             </div>
           </div>
@@ -592,9 +592,9 @@ function Volet({ titre, texte, ouvert, onClick, children }: { titre: string; tex
       <button type="button" aria-expanded={ouvert} onClick={onClick} className="flex w-full items-center gap-[10px] px-[16px] py-[14px] text-left">
         <span className="min-w-0 flex-1">
           <span className="block text-[15px] font-bold">{titre}</span>
-          <span className="block truncate text-[12.5px] text-[#7D93A8]">{texte}</span>
+          <span className="block truncate text-[12.5px] text-[#566B82]">{texte}</span>
         </span>
-        <ChevronDown className={`h-[18px] w-[18px] shrink-0 text-[#9DB0C0] transition-transform ${ouvert ? "rotate-180" : ""}`} aria-hidden="true" />
+        <ChevronDown className={`h-[18px] w-[18px] shrink-0 text-[#566B82] transition-transform ${ouvert ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
       {ouvert && <div className="border-t border-[#EDF2F7] px-[16px] pb-[16px] pt-[14px]">{children}</div>}
     </section>
@@ -611,7 +611,7 @@ function Couleur({ label, aide, valeur, onChange }: { label: string; aide?: stri
       </label>
       <span className="min-w-0 flex-1">
         <span className="block text-[13px] font-bold">{label}</span>
-        {aide && <span className="block text-[11.5px] text-[#9DB0C0]">{aide}</span>}
+        {aide && <span className="block text-[11.5px] text-[#566B82]">{aide}</span>}
       </span>
       <input
         value={saisie}
@@ -646,22 +646,22 @@ function Image({
 }) {
   return (
     <div>
-      <p className="pb-[6px] text-[12.5px] font-semibold text-[#5B7189]">{label}</p>
+      <p className="pb-[6px] text-[12.5px] font-semibold text-[#566B82]">{label}</p>
       <label className="relative flex h-[96px] cursor-pointer items-center justify-center overflow-hidden rounded-[12px] border-[1.5px] border-dashed border-[#C9D9E5] bg-[#F7FAFC] hover:border-[#57D4F5]">
         {url ? (
           <img src={url} alt="" className={rond ? "h-[70px] w-[70px] rounded-full bg-white object-contain p-[4px]" : "h-full w-full object-cover"} />
         ) : (
-          <span className="flex flex-col items-center gap-[4px] text-[12px] font-semibold text-[#7D93A8]">
+          <span className="flex flex-col items-center gap-[4px] text-[12px] font-semibold text-[#566B82]">
             {enCours ? <Upload className="h-[20px] w-[20px] animate-pulse" aria-hidden="true" /> : <ImagePlus className="h-[20px] w-[20px]" aria-hidden="true" />}
             {enCours ? "Envoi…" : "Choisir une image"}
           </span>
         )}
         <input type="file" accept="image/png,image/jpeg,image/webp" className="sr-only" onChange={(e) => onFichier(e.target.files?.[0])} />
       </label>
-      <p className="flex items-center gap-[6px] pt-[5px] text-[11.5px] text-[#9DB0C0]">
+      <p className="flex items-center gap-[6px] pt-[5px] text-[11.5px] text-[#566B82]">
         <span className="min-w-0 flex-1 truncate">{aide}</span>
         {url && (
-          <button type="button" onClick={onRetirer} className="font-semibold text-[#C94957]">
+          <button type="button" onClick={onRetirer} className="font-semibold text-[#B8432F]">
             Retirer
           </button>
         )}

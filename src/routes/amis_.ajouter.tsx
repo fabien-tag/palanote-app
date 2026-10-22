@@ -94,7 +94,7 @@ function AjouterBinome() {
           <h1 className="text-[17px] font-bold">Ajouter un binôme</h1>
         </div>
 
-        <p className="pt-[clamp(18px,5svh,44px)] text-center text-[14.5px] leading-normal text-[#5B7189]">
+        <p className="pt-[clamp(18px,5svh,44px)] text-center text-[14.5px] leading-normal text-[#566B82]">
           Montre cet écran à ton binôme.
           <br />
           Il vise avec l'appareil photo de son téléphone.
@@ -110,7 +110,7 @@ function AjouterBinome() {
               </div>
             </div>
           ) : (
-            <span className="text-[13px] text-[#9DB0C0]">{erreur ? "—" : "Création du code…"}</span>
+            <span className="text-[13px] text-[#566B82]">{erreur ? "—" : "Création du code…"}</span>
           )}
         </div>
 
@@ -123,14 +123,14 @@ function AjouterBinome() {
             <span>
               <span className="block text-[17px] font-bold leading-tight">{profil.prenom}</span>
               {(profil.niveau || profil.club) && (
-                <span className="block text-[12.5px] text-[#5B7189]">{[profil.niveau, profil.club].filter(Boolean).join(" · ")}</span>
+                <span className="block text-[12.5px] text-[#566B82]">{[profil.niveau, profil.club].filter(Boolean).join(" · ")}</span>
               )}
             </span>
           </div>
         )}
 
         {invitation && reste > 0 && (
-          <div className="mx-auto mt-[12px] flex h-[30px] items-center gap-[6px] rounded-[15px] bg-[#E3EDF6] px-[12px] text-[12.5px] font-semibold text-[#5B7189]">
+          <div className="mx-auto mt-[12px] flex h-[30px] items-center gap-[6px] rounded-[15px] bg-[#E3EDF6] px-[12px] text-[12.5px] font-semibold text-[#566B82]">
             <Clock className="h-[13px] w-[13px]" strokeWidth={2.4} aria-hidden="true" />
             Ce code expire dans {minutes} min
           </div>
@@ -138,7 +138,7 @@ function AjouterBinome() {
         {erreur && (
           <div className="mt-[14px] text-center">
             <p className="text-[13px] text-[#8A2A1A]">{erreur}</p>
-            <button type="button" onClick={() => void nouvelle()} className="pt-2 text-[13.5px] font-bold text-[#1176A8] underline">
+            <button type="button" onClick={() => void nouvelle()} className="pt-2 text-[13.5px] font-bold text-[#106F9F] underline">
               Réessayer
             </button>
           </div>
@@ -152,12 +152,12 @@ function AjouterBinome() {
 
         <div className="min-h-4 flex-grow" />
 
-        {partage && <p className="pb-2 text-center text-[12.5px] text-[#14805F]">{partage}</p>}
+        {partage && <p className="pb-2 text-center text-[12.5px] text-[#137758]">{partage}</p>}
         <button
           type="button"
           disabled={!invitation}
           onClick={() => void envoyerLien()}
-          className="flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8] disabled:opacity-50"
+          className="flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F] disabled:opacity-50"
         >
           <Share2 className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
           ENVOYER LE LIEN À LA PLACE

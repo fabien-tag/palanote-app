@@ -36,9 +36,9 @@ export function ReglageDomaine({ centre }: { centre: string }) {
     return (
       <div className="flex flex-col items-start gap-[10px] rounded-[10px] bg-[#F7FAFC] p-[14px]">
         <span className="flex items-center gap-[8px] text-[13.5px] font-bold">
-          <Lock className="h-[16px] w-[16px] text-[#1176A8]" aria-hidden="true" /> Compris dans l'offre Premium
+          <Lock className="h-[16px] w-[16px] text-[#106F9F]" aria-hidden="true" /> Compris dans l'offre Premium
         </span>
-        <p className="text-[12.5px] leading-normal text-[#5B7189]">
+        <p className="text-[12.5px] leading-normal text-[#566B82]">
           Avec le Premium, ton site s'ouvre à ton adresse, par exemple club-le-lion.fr, au lieu de palanote/clubs/{o.slug}.
         </p>
         <Link to="/club/offre" className={`${BOUTON_PRINCIPAL} h-[38px]`}>
@@ -86,10 +86,10 @@ export function ReglageDomaine({ centre }: { centre: string }) {
     return (
       <div className="flex flex-col gap-[10px]">
         <label className="block">
-          <span className="block pb-[6px] text-[12.5px] font-semibold text-[#5B7189]">Ton nom de domaine</span>
+          <span className="block pb-[6px] text-[12.5px] font-semibold text-[#566B82]">Ton nom de domaine</span>
           <input className={CHAMP} placeholder="club-le-lion.fr" value={domaine} onChange={(e) => setDomaine(e.target.value.toLowerCase().replace(/\s/g, ""))} />
         </label>
-        <span className="text-[12.5px] font-semibold text-[#5B7189]">Acheté chez</span>
+        <span className="text-[12.5px] font-semibold text-[#566B82]">Acheté chez</span>
         <div className="flex flex-wrap gap-[6px]">
           {HEBERGEURS.map((h) => (
             <button
@@ -97,7 +97,7 @@ export function ReglageDomaine({ centre }: { centre: string }) {
               type="button"
               aria-pressed={hebergeur === h.cle}
               onClick={() => setHebergeur(h.cle)}
-              className={`h-[34px] rounded-[8px] px-[12px] text-[12.5px] font-semibold ${hebergeur === h.cle ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+              className={`h-[34px] rounded-[8px] px-[12px] text-[12.5px] font-semibold ${hebergeur === h.cle ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
             >
               {h.nom}
             </button>
@@ -107,11 +107,11 @@ export function ReglageDomaine({ centre }: { centre: string }) {
         <button type="button" disabled={enCours || domaine.length < 4} onClick={() => void agir(() => definirDomaine(centre, domaine, hebergeur))} className={`${BOUTON_PRINCIPAL} w-fit`}>
           BRANCHER CE DOMAINE
         </button>
-        <div className="rounded-[10px] bg-[#F7FAFC] p-[12px] text-[12.5px] leading-normal text-[#5B7189]">
+        <div className="rounded-[10px] bg-[#F7FAFC] p-[12px] text-[12.5px] leading-normal text-[#566B82]">
           <b className="text-[#123A63]">Pas encore de domaine ?</b> Achète-le au nom du club, environ 10 € par an :
           <span className="mt-[6px] flex flex-wrap gap-x-[14px] gap-y-[4px]">
             {HEBERGEURS.filter((h) => h.acheter).map((h) => (
-              <a key={h.cle} href={h.acheter!} target="_blank" rel="noreferrer" className="flex items-center gap-[4px] font-bold text-[#1176A8]">
+              <a key={h.cle} href={h.acheter!} target="_blank" rel="noreferrer" className="flex items-center gap-[4px] font-bold text-[#106F9F]">
                 {h.nom} <ExternalLink className="h-[12px] w-[12px]" aria-hidden="true" />
               </a>
             ))}
@@ -129,10 +129,10 @@ export function ReglageDomaine({ centre }: { centre: string }) {
     <div className="flex flex-col gap-[12px]">
       <div className="flex flex-wrap items-center gap-[8px]">
         <span className="text-[15px] font-bold">{o.domaine}</span>
-        <span className={`rounded-[8px] px-[8px] py-[3px] text-[11.5px] font-bold ${o.domaine_statut === "branche" ? "bg-[#E2F8EF] text-[#14805F]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}>
+        <span className={`rounded-[8px] px-[8px] py-[3px] text-[11.5px] font-bold ${o.domaine_statut === "branche" ? "bg-[#E2F8EF] text-[#137758]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}>
           {o.domaine_statut === "branche" ? "Réglages DNS en place" : "En attente des réglages DNS"}
         </span>
-        <span className="text-[12px] text-[#9DB0C0]">chez {heb.nom}</span>
+        <span className="text-[12px] text-[#566B82]">chez {heb.nom}</span>
       </div>
 
       <div className="overflow-hidden rounded-[10px] border border-[#E4EBF1]">
@@ -140,15 +140,15 @@ export function ReglageDomaine({ centre }: { centre: string }) {
           <div key={r.type} className="flex items-center gap-[10px] border-t border-[#EDF2F7] px-[12px] py-[10px] first:border-t-0">
             <span className="w-[54px] shrink-0 rounded-[6px] bg-[#EEF4F9] py-[3px] text-center text-[11.5px] font-bold">{r.type}</span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[12px] text-[#7D93A8]">
+              <span className="block text-[12px] text-[#566B82]">
                 Nom <b className="font-mono text-[#123A63]">{r.nom}</b> · {r.role}
               </span>
               <span className="block truncate font-mono text-[12.5px] font-semibold">{r.valeur}</span>
             </span>
-            {r.ok === true && <CheckCircle2 className="h-[18px] w-[18px] shrink-0 text-[#14805F]" aria-label="Trouvé" />}
-            {r.ok === false && <XCircle className="h-[18px] w-[18px] shrink-0 text-[#D9573F]" aria-label="Pas encore trouvé" />}
-            <button type="button" title="Copier" onClick={() => copier(r.valeur)} className="shrink-0 text-[#7D93A8] hover:text-[#1176A8]">
-              {copie === r.valeur ? <CheckCircle2 className="h-[16px] w-[16px] text-[#14805F]" aria-hidden="true" /> : <Copy className="h-[16px] w-[16px]" aria-hidden="true" />}
+            {r.ok === true && <CheckCircle2 className="h-[18px] w-[18px] shrink-0 text-[#137758]" aria-label="Trouvé" />}
+            {r.ok === false && <XCircle className="h-[18px] w-[18px] shrink-0 text-[#B8432F]" aria-label="Pas encore trouvé" />}
+            <button type="button" title="Copier" onClick={() => copier(r.valeur)} className="shrink-0 text-[#566B82] hover:text-[#106F9F]">
+              {copie === r.valeur ? <CheckCircle2 className="h-[16px] w-[16px] text-[#137758]" aria-hidden="true" /> : <Copy className="h-[16px] w-[16px]" aria-hidden="true" />}
             </button>
           </div>
         ))}
@@ -161,14 +161,14 @@ export function ReglageDomaine({ centre }: { centre: string }) {
             {e}
           </li>
         ))}
-        <li className="pl-[26px] text-[#7D93A8]">Les changements DNS mettent de quelques minutes à quelques heures à se propager.</li>
+        <li className="pl-[26px] text-[#566B82]">Les changements DNS mettent de quelques minutes à quelques heures à se propager.</li>
       </ol>
 
       {resultat && !(resultat.txt && resultat.cname) && (
         <p className="text-[12.5px] font-semibold text-[#8A5A10]">Pas encore tout à fait : les réglages marqués d'une croix ne sont pas encore visibles. Réessaie dans un moment.</p>
       )}
       {o.domaine_statut === "branche" && (
-        <p className="text-[12.5px] leading-normal text-[#14805F]">
+        <p className="text-[12.5px] leading-normal text-[#137758]">
           Tout est en place côté {heb.nom}. Palanote active ensuite ton domaine et son certificat HTTPS.
         </p>
       )}

@@ -117,12 +117,12 @@ export function BandeAnalyse({ diveId, nbPhotos }: { diveId: string; nbPhotos: n
       <button type="button" onClick={() => (accord ? void demarrer() : setFeuille(true))} className={`${base} border-[#BFE6F5] bg-[#E3F4FC] text-[#123A63]`}>
         <PoissonOrange className="right-[18px] -top-[13px]" />
         <span className={`${pastille} bg-white/70`}>
-          <Fish className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
+          <Fish className="h-[18px] w-[18px] text-[#106F9F]" strokeWidth={2} aria-hidden="true" />
         </span>
         <span className="flex-1 text-[14px] font-semibold leading-snug">
           Identifier les espèces sur {nbPhotos > 1 ? `ces ${nbPhotos} photos` : "cette photo"}
         </span>
-        <ChevronRight className="h-[17px] w-[17px] text-[#1176A8]" strokeWidth={2.4} aria-hidden="true" />
+        <ChevronRight className="h-[17px] w-[17px] text-[#106F9F]" strokeWidth={2.4} aria-hidden="true" />
       </button>
     );
   } else if (etat === "en_cours") {
@@ -143,17 +143,17 @@ export function BandeAnalyse({ diveId, nbPhotos }: { diveId: string; nbPhotos: n
           </b>{" "}
           sur tes photos — à valider.
         </span>
-        <ChevronRight className="h-[17px] w-[17px] text-[#1176A8]" aria-hidden="true" />
+        <ChevronRight className="h-[17px] w-[17px] text-[#106F9F]" aria-hidden="true" />
       </button>
     );
   } else if (etat === "aucune") {
     contenu = (
       <div className={`${base} border-[#DCE7F0] bg-white`}>
         <span className={`${pastille} bg-[#EEF4F9]`}>
-          <Eye className="h-[17px] w-[17px] text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
+          <Eye className="h-[17px] w-[17px] text-[#566B82]" strokeWidth={2.2} aria-hidden="true" />
         </span>
         <span className="flex-1 text-[14px] leading-snug">Aucune espèce reconnue sur ces photos</span>
-        <button type="button" onClick={() => navigate({ to: "/plongee/especes", search: { id: diveId } })} className="shrink-0 py-[6px] text-[14px] font-bold text-[#1176A8]">
+        <button type="button" onClick={() => navigate({ to: "/plongee/especes", search: { id: diveId } })} className="shrink-0 py-[6px] text-[14px] font-bold text-[#106F9F]">
           Nommer
         </button>
       </div>
@@ -162,10 +162,10 @@ export function BandeAnalyse({ diveId, nbPhotos }: { diveId: string; nbPhotos: n
     contenu = (
       <div className={`${base} border-[#DCE7F0] bg-white`}>
         <span className={`${pastille} bg-[#EEF4F9]`}>
-          <RefreshCw className="h-[16px] w-[16px] text-[#5B7189]" strokeWidth={2.2} aria-hidden="true" />
+          <RefreshCw className="h-[16px] w-[16px] text-[#566B82]" strokeWidth={2.2} aria-hidden="true" />
         </span>
         <span className="flex-1 text-[14px] leading-snug">Analyse impossible pour le moment</span>
-        <button type="button" onClick={() => void demarrer()} className="shrink-0 py-[6px] text-[14px] font-bold text-[#1176A8]">
+        <button type="button" onClick={() => void demarrer()} className="shrink-0 py-[6px] text-[14px] font-bold text-[#106F9F]">
           Réessayer
         </button>
       </div>
@@ -185,11 +185,11 @@ export function FeuilleAccord({ nbPhotos, onAccepter, onFermer }: { nbPhotos: nu
   const point = (Icone: typeof Eye, titre: string, texte: string) => (
     <div className="flex gap-[12px] py-[8px]">
       <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center goutte bg-[#E3F4FC]">
-        <Icone className="h-[16px] w-[16px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+        <Icone className="h-[16px] w-[16px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
       </span>
       <div>
         <div className="text-[14.5px] font-bold">{titre}</div>
-        <div className="text-[12.5px] leading-snug text-[#5B7189]">{texte}</div>
+        <div className="text-[12.5px] leading-snug text-[#566B82]">{texte}</div>
       </div>
     </div>
   );
@@ -200,12 +200,12 @@ export function FeuilleAccord({ nbPhotos, onAccepter, onFermer }: { nbPhotos: nu
         <Meduse className="left-[28px] -top-[22px]" />
         <div className="mx-auto mb-[16px] h-[5px] w-[44px] rounded-full bg-[#DCE7F0]" aria-hidden="true" />
         <button type="button" onClick={onFermer} aria-label="Pas maintenant" className="absolute right-[18px] top-[18px] flex h-9 w-9 items-center justify-center goutte bg-[#EEF4F9]">
-          <X className="h-[16px] w-[16px] text-[#5B7189]" strokeWidth={2.4} />
+          <X className="h-[16px] w-[16px] text-[#566B82]" strokeWidth={2.4} />
         </button>
         <h2 id="titre-accord" className="pr-[40px] text-[21px] font-bold leading-tight">
           Qui as-tu croisé sous l'eau ?
         </h2>
-        <p className="pb-[8px] pt-[6px] text-[14px] leading-normal text-[#5B7189]">
+        <p className="pb-[8px] pt-[6px] text-[14px] leading-normal text-[#566B82]">
           L'IA regarde {nbPhotos > 1 ? `tes ${nbPhotos} photos` : "ta photo"} et te propose les espèces qu'elle reconnaît.
         </p>
         {point(Images, "Seulement tes photos", "Celles que tu as ajoutées à cette plongée, envoyées à l'IA (Claude) le temps de l'analyse. Pas celles de tes binômes.")}
@@ -214,7 +214,7 @@ export function FeuilleAccord({ nbPhotos, onAccepter, onFermer }: { nbPhotos: nu
         <button type="button" onClick={onAccepter} className="mt-[16px] flex h-[56px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold tracking-wide text-[#0B3B63]">
           ACCEPTER ET ANALYSER
         </button>
-        <button type="button" onClick={onFermer} className="mx-auto mt-[10px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#5B7189]">
+        <button type="button" onClick={onFermer} className="mx-auto mt-[10px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#566B82]">
           Pas maintenant
         </button>
       </div>

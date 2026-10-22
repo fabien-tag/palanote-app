@@ -205,16 +205,16 @@ function AnalyserPhotos() {
           </button>
         </div>
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">Analyser mes photos</h1>
-        <p className="pt-[4px] text-[13.5px] leading-snug text-[#5B7189]">
+        <p className="pt-[4px] text-[13.5px] leading-snug text-[#566B82]">
           L'IA regarde les photos de chaque plongée et te propose les espèces qu'elle reconnaît.
           Rien n'entre dans ton carnet sans ta validation.
         </p>
 
         {lignes === null && (
-          <p className="pt-[24px] text-[14px] text-[#9DB0C0]">Chargement de tes photos…</p>
+          <p className="pt-[24px] text-[14px] text-[#566B82]">Chargement de tes photos…</p>
         )}
         {lignes && lignes.length === 0 && (
-          <p className="mt-[18px] galet border border-[#DCE7F0] bg-white p-[16px] text-[14px] leading-snug text-[#5B7189]">
+          <p className="mt-[18px] galet border border-[#DCE7F0] bg-white p-[16px] text-[14px] leading-snug text-[#566B82]">
             Aucune photo dans tes plongées pour l'instant. Ajoute des photos à une plongée, puis
             reviens ici.
           </p>
@@ -244,7 +244,7 @@ function AnalyserPhotos() {
                 className="flex w-full items-baseline gap-[8px] text-left"
               >
                 <span className="min-w-0 flex-1 truncate text-[16px] font-bold">{l.site}</span>
-                <span className="shrink-0 text-[12.5px] text-[#5B7189]">{dateCourte(l.date)}</span>
+                <span className="shrink-0 text-[12.5px] text-[#566B82]">{dateCourte(l.date)}</span>
               </button>
               {/* Les photos de la plongée */}
               <div className="-mx-[2px] mt-[10px] flex gap-[6px] overflow-x-auto pb-[2px]">
@@ -259,7 +259,7 @@ function AnalyserPhotos() {
                     />
                   ))
                 ) : (
-                  <span className="text-[12.5px] text-[#9DB0C0]">
+                  <span className="text-[12.5px] text-[#566B82]">
                     {l.nbPhotos} photo{l.nbPhotos > 1 ? "s" : ""}
                   </span>
                 )}
@@ -308,7 +308,7 @@ function ActionLigne({
     );
   if (l.etat === "en_cours")
     return (
-      <div className={`${bouton} bg-[#E3F4FC] text-[#1176A8]`}>
+      <div className={`${bouton} bg-[#E3F4FC] text-[#106F9F]`}>
         <span className="flex gap-[3px]" aria-hidden="true">
           {[0, 1, 2].map((i) => (
             <span
@@ -331,13 +331,13 @@ function ActionLigne({
     );
   if (l.etat === "aucune")
     return (
-      <div className="flex items-center gap-[8px] text-[13px] text-[#5B7189]">
-        <Check className="h-[15px] w-[15px] text-[#14805F]" strokeWidth={2.6} aria-hidden="true" />
+      <div className="flex items-center gap-[8px] text-[13px] text-[#566B82]">
+        <Check className="h-[15px] w-[15px] text-[#137758]" strokeWidth={2.6} aria-hidden="true" />
         <span className="flex-1">{l.validees > 0 ? `${l.validees} espèce${l.validees > 1 ? "s" : ""} validée${l.validees > 1 ? "s" : ""}` : "Analysée, aucune espèce gardée"}</span>
         <button
           type="button"
           onClick={onValider}
-          className="flex items-center gap-[4px] py-[4px] font-bold text-[#1176A8]"
+          className="flex items-center gap-[4px] py-[4px] font-bold text-[#106F9F]"
         >
           <Eye className="h-[15px] w-[15px]" aria-hidden="true" />
           Voir les espèces

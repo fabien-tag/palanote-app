@@ -88,7 +88,7 @@ function PageParametres() {
                 data-onglet={e.id}
                 onClick={() => aller(e.id)}
                 className={`flex h-[38px] shrink-0 items-center gap-[7px] rounded-[10px] px-[13px] text-[13px] font-bold ${
-                  e.id === onglet ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"
+                  e.id === onglet ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"
                 }`}
               >
                 <e.Icone className="h-[15px] w-[15px]" aria-hidden="true" />
@@ -99,7 +99,7 @@ function PageParametres() {
           <div className="hidden rounded-[14px] border border-[#E4EBF1] bg-white p-[10px] lg:block">
             {MENU.map((g) => (
               <div key={g.groupe} className="border-t border-[#EDF2F7] pt-[8px] first:border-t-0 first:pt-0 [&+&]:mt-[8px]">
-                <p className="px-[10px] pb-[4px] pt-[6px] text-[11px] font-bold uppercase tracking-[.08em] text-[#9DB0C0]">{g.groupe}</p>
+                <p className="px-[10px] pb-[4px] pt-[6px] text-[11px] font-bold uppercase tracking-[.08em] text-[#566B82]">{g.groupe}</p>
                 {g.entrees.map((e) => {
                   const actif = e.id === onglet;
                   return (
@@ -110,10 +110,10 @@ function PageParametres() {
                       onClick={() => aller(e.id)}
                       className={`flex w-full items-center gap-[11px] rounded-[10px] px-[10px] py-[9px] text-left ${actif ? "bg-[#E3F2FB]" : "hover:bg-[#F1F6FC]"}`}
                     >
-                      <e.Icone className={`h-[18px] w-[18px] shrink-0 ${actif ? "text-[#1176A8]" : "text-[#7D93A8]"}`} strokeWidth={2.1} aria-hidden="true" />
+                      <e.Icone className={`h-[18px] w-[18px] shrink-0 ${actif ? "text-[#106F9F]" : "text-[#566B82]"}`} strokeWidth={2.1} aria-hidden="true" />
                       <span className="min-w-0">
                         <span className={`block text-[13.5px] font-bold ${actif ? "text-[#0F3D70]" : "text-[#3F5B76]"}`}>{e.label}</span>
-                        <span className="block truncate text-[11.5px] text-[#9DB0C0]">{e.texte}</span>
+                        <span className="block truncate text-[11.5px] text-[#566B82]">{e.texte}</span>
                       </span>
                     </button>
                   );
@@ -176,7 +176,7 @@ function OngletClub({ vue, pret }: { vue: "centre" | "exports"; pret: boolean })
       <div className="flex flex-col gap-[20px]">
         <Carte titre="Exporter la saison" texte="Un fichier Excel pour le bilan annuel, l'assurance ou la fédération.">
           <div className="grid grid-cols-1 gap-[20px] py-[20px] md:grid-cols-[1fr_auto] md:items-center">
-            <ul className="grid grid-cols-1 gap-[8px] text-[13px] text-[#5B7189] sm:grid-cols-2">
+            <ul className="grid grid-cols-1 gap-[8px] text-[13px] text-[#566B82] sm:grid-cols-2">
               {["Un résumé : sorties, plongées, plongeurs", "Chaque sortie, annulations et reports compris", "Chaque plongée, tamponnée ou non", "Le bilan de chaque plongeur sur la saison"].map((t) => (
                 <li key={t} className="flex gap-[8px]">
                   <span className="mt-[6px] h-[6px] w-[6px] shrink-0 rounded-full bg-[#3DEFBE]" aria-hidden="true" />
@@ -213,7 +213,7 @@ function OngletClub({ vue, pret }: { vue: "centre" | "exports"; pret: boolean })
         texte={`${p.nb_sorties} sortie${p.nb_sorties > 1 ? "s" : ""} organisée${p.nb_sorties > 1 ? "s" : ""} · sur Palanote depuis ${depuis(p.cree_le)}`}
         droite={
           p.verifie ? (
-            <span className="flex items-center gap-[6px] rounded-[8px] bg-[#E2F8EF] px-[10px] py-[5px] text-[12px] font-bold text-[#14805F]">
+            <span className="flex items-center gap-[6px] rounded-[8px] bg-[#E2F8EF] px-[10px] py-[5px] text-[12px] font-bold text-[#137758]">
               <BadgeCheck className="h-[15px] w-[15px]" aria-hidden="true" /> Centre vérifié
             </span>
           ) : undefined
@@ -237,12 +237,12 @@ function OngletClub({ vue, pret }: { vue: "centre" | "exports"; pret: boolean })
                 Annuler
               </button>
             )}
-            {message && !modifie && <span className="text-[13px] font-semibold text-[#14805F]">{message}</span>}
+            {message && !modifie && <span className="text-[13px] font-semibold text-[#137758]">{message}</span>}
           </div>
         </Rang>
       </Carte>
 
-      <Carte titre="Directeurs de plongée" texte={`Un autre DP rejoint le centre depuis son app : Choisir mon centre, puis il cherche « ${p.nom} ».`} droite={<span className="text-[13px] font-bold text-[#7D93A8]">{p.dp.length}</span>}>
+      <Carte titre="Directeurs de plongée" texte={`Un autre DP rejoint le centre depuis son app : Choisir mon centre, puis il cherche « ${p.nom} ».`} droite={<span className="text-[13px] font-bold text-[#566B82]">{p.dp.length}</span>}>
         <div className="grid grid-cols-1 gap-[10px] py-[16px] md:grid-cols-2 xl:grid-cols-3">
           {p.dp.map((d) => (
             <div key={d.id} className="flex items-center gap-[10px] rounded-[10px] border border-[#EDF2F7] px-[12px] py-[10px]">
@@ -250,9 +250,9 @@ function OngletClub({ vue, pret }: { vue: "centre" | "exports"; pret: boolean })
               <span className="min-w-0">
                 <span className="block truncate text-[14px] font-bold">
                   {d.prenom}
-                  {d.moi && <span className="font-semibold text-[#7D93A8]"> (toi)</span>}
+                  {d.moi && <span className="font-semibold text-[#566B82]"> (toi)</span>}
                 </span>
-                <span className="block truncate text-[12px] text-[#7D93A8]">{[d.niveau, `depuis ${depuis(d.depuis)}`].filter(Boolean).join(" · ")}</span>
+                <span className="block truncate text-[12px] text-[#566B82]">{[d.niveau, `depuis ${depuis(d.depuis)}`].filter(Boolean).join(" · ")}</span>
               </span>
             </div>
           ))}
@@ -278,7 +278,7 @@ function OngletClub({ vue, pret }: { vue: "centre" | "exports"; pret: boolean })
                 choisirCentre(c.id);
                 window.location.assign("/club");
               }}
-              className={`flex h-[38px] items-center gap-[7px] rounded-[10px] px-[14px] text-[13px] font-bold ${c.id === p.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189] hover:border-[#57D4F5]"}`}
+              className={`flex h-[38px] items-center gap-[7px] rounded-[10px] px-[14px] text-[13px] font-bold ${c.id === p.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82] hover:border-[#57D4F5]"}`}
             >
               <Anchor className="h-[14px] w-[14px]" aria-hidden="true" />
               {c.nom}
@@ -311,7 +311,7 @@ function OngletClub({ vue, pret }: { vue: "centre" | "exports"; pret: boolean })
               </button>
             </>
           ) : (
-            <button type="button" onClick={() => setQuitter(true)} className="inline-flex h-[42px] items-center rounded-[10px] border border-[#F0B3A6] bg-white px-[16px] text-[13px] font-bold text-[#C94957] hover:bg-[#FFF4F1]">
+            <button type="button" onClick={() => setQuitter(true)} className="inline-flex h-[42px] items-center rounded-[10px] border border-[#F0B3A6] bg-white px-[16px] text-[13px] font-bold text-[#B8432F] hover:bg-[#FFF4F1]">
               Quitter {p.nom}…
             </button>
           )}
@@ -334,9 +334,9 @@ function OngletAide() {
               <div key={x.q} className="border-t border-[#EDF2F7] first:border-t-0">
                 <button type="button" aria-expanded={ouvert} onClick={() => setOuverte(ouvert ? null : i)} className="flex w-full items-center gap-[10px] py-[14px] text-left">
                   <span className="flex-1 text-[14px] font-bold leading-snug">{x.q}</span>
-                  <ChevronDown className={`h-[17px] w-[17px] shrink-0 text-[#9DB0C0] transition-transform ${ouvert ? "rotate-180" : ""}`} aria-hidden="true" />
+                  <ChevronDown className={`h-[17px] w-[17px] shrink-0 text-[#566B82] transition-transform ${ouvert ? "rotate-180" : ""}`} aria-hidden="true" />
                 </button>
-                {ouvert && <p className="max-w-[720px] pb-[16px] text-[13.5px] leading-normal text-[#5B7189]">{x.r}</p>}
+                {ouvert && <p className="max-w-[720px] pb-[16px] text-[13.5px] leading-normal text-[#566B82]">{x.r}</p>}
               </div>
             );
           })}
@@ -351,11 +351,11 @@ function OngletAide() {
             </span>
             <span>
               <b className="block text-[15px]">Palanote</b>
-              <span className="text-[12px] text-[#9DB0C0]">V2 · octobre 2026</span>
+              <span className="text-[12px] text-[#566B82]">V2 · octobre 2026</span>
             </span>
           </div>
-          <p className="pt-[10px] text-[12.5px] leading-normal text-[#5B7189]">Conçu par {EDITEUR.nom}, designer UX/UI et plongeur. Gratuit, sans publicité.</p>
-          <div className="flex flex-wrap gap-x-[14px] gap-y-[6px] pt-[12px] text-[12.5px] font-semibold text-[#1176A8]">
+          <p className="pt-[10px] text-[12.5px] leading-normal text-[#566B82]">Conçu par {EDITEUR.nom}, designer UX/UI et plongeur. Gratuit, sans publicité.</p>
+          <div className="flex flex-wrap gap-x-[14px] gap-y-[6px] pt-[12px] text-[12.5px] font-semibold text-[#106F9F]">
             <button type="button" onClick={() => navigate({ to: "/conditions-utilisation" })} className="underline underline-offset-4">
               Conditions
             </button>
@@ -404,7 +404,7 @@ function NousEcrire() {
         </div>
       ) : (
         <>
-          <MessageCircle className="h-[22px] w-[22px] text-[#14805F]" strokeWidth={2.2} aria-hidden="true" />
+          <MessageCircle className="h-[22px] w-[22px] text-[#137758]" strokeWidth={2.2} aria-hidden="true" />
           <p className="pt-[8px] text-[14px] font-bold">Pas trouvé ta réponse ?</p>
           <p className="pb-[12px] pt-[3px] text-[13px] leading-normal text-[#3F5B76]">Écris-moi : je lis chaque message.</p>
           <div className="flex flex-wrap gap-[6px] pb-[10px]">
@@ -414,7 +414,7 @@ function NousEcrire() {
                 type="button"
                 aria-pressed={raison === r}
                 onClick={() => setRaison(raison === r ? null : r)}
-                className={`h-[30px] rounded-[8px] px-[10px] text-[12px] font-semibold ${raison === r ? "bg-[#0F3D70] text-white" : "bg-white text-[#5B7189]"}`}
+                className={`h-[30px] rounded-[8px] px-[10px] text-[12px] font-semibold ${raison === r ? "bg-[#0F3D70] text-white" : "bg-white text-[#566B82]"}`}
               >
                 {r}
               </button>
@@ -431,7 +431,7 @@ function NousEcrire() {
           <button type="button" disabled={enCours} onClick={() => void envoyer()} className={`${BOUTON_PRINCIPAL} mt-[10px] w-full`}>
             {enCours ? "ENVOI…" : "ENVOYER"}
           </button>
-          <p className="pt-[8px] text-[11.5px] leading-normal text-[#5B7189]">Ton adresse e-mail part avec le message, pour que je puisse te répondre.</p>
+          <p className="pt-[8px] text-[11.5px] leading-normal text-[#566B82]">Ton adresse e-mail part avec le message, pour que je puisse te répondre.</p>
         </>
       )}
     </div>

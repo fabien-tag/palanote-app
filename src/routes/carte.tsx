@@ -23,7 +23,7 @@ const sansAccents = (t: string) =>
 
 function IconeCarte({ actif }: { actif: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#9DB0C0"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#5B7189"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M3 6.5 9 4l6 2.5 6-2.5v13.5L15 20l-6-2.5L3 20V6.5Z" />
       <path d="M9 4v13.5M15 6.5V20" />
     </svg>
@@ -31,7 +31,7 @@ function IconeCarte({ actif }: { actif: boolean }) {
 }
 function IconeListe({ actif }: { actif: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#9DB0C0"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={actif ? "#0F3D70" : "#5B7189"} strokeWidth={actif ? 2.2 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="3.2" y="4.6" width="4" height="4" rx="1.2" />
       <rect x="3.2" y="10" width="4" height="4" rx="1.2" />
       <rect x="3.2" y="15.4" width="4" height="4" rx="1.2" />
@@ -147,7 +147,7 @@ function PageCarte() {
         {/* Recherche */}
         <div className="relative z-[1100] shrink-0 px-[22px] pt-[12px]">
           <div className="flex h-[48px] items-center gap-2 galet-moyen border border-[#DCE7F0] bg-white px-[14px] shadow-[0_2px_8px_#123A6306]">
-            <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
+            <Search className="h-[18px] w-[18px] shrink-0 text-[#566B82]" strokeWidth={2.2} aria-hidden="true" />
             <input
               value={recherche}
               onChange={(e) => {
@@ -161,7 +161,7 @@ function PageCarte() {
               className="w-full min-w-0 bg-transparent text-[15px] text-[#123A63] outline-none placeholder:text-[#9AAAB9]"
             />
             {recherche && (
-              <button type="button" aria-label="Effacer" onClick={() => setRecherche("")} className="text-[#9DB0C0]">
+              <button type="button" aria-label="Effacer" onClick={() => setRecherche("")} className="text-[#566B82]">
                 <X className="h-[17px] w-[17px]" />
               </button>
             )}
@@ -176,7 +176,7 @@ function PageCarte() {
                     </span>
                     <span className="min-w-0">
                       <span className="block truncate text-[14.5px] font-semibold text-[#123A63]">{s.nom}</span>
-                      <span className="block truncate text-[12.5px] text-[#5B7189]">Ton spot · {s.lieu || "lieu inconnu"}</span>
+                      <span className="block truncate text-[12.5px] text-[#566B82]">Ton spot · {s.lieu || "lieu inconnu"}</span>
                     </span>
                   </button>
                 </li>
@@ -193,10 +193,10 @@ function PageCarte() {
                     }}
                     className="flex w-full items-center gap-3 px-[14px] py-[10px] text-left"
                   >
-                    <MapPin className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" strokeWidth={2} aria-hidden="true" />
+                    <MapPin className="h-[18px] w-[18px] shrink-0 text-[#566B82]" strokeWidth={2} aria-hidden="true" />
                     <span className="min-w-0">
                       <span className="block truncate text-[14.5px] font-semibold text-[#123A63]">{l.nom}</span>
-                      <span className="block truncate text-[12.5px] text-[#5B7189]">{l.lieu}</span>
+                      <span className="block truncate text-[12.5px] text-[#566B82]">{l.lieu}</span>
                     </span>
                   </button>
                 </li>
@@ -235,7 +235,7 @@ function PageCarte() {
               {vide || aucunLieu ? (
                 <div className="px-[6px]">
                   <h2 className="text-[18px] font-bold text-[#123A63]">{vide ? "Ta carte est vide, pour l'instant" : "Tes plongées n'ont pas encore de lieu"}</h2>
-                  <p className="pt-1 text-[13.5px] leading-snug text-[#5B7189]">
+                  <p className="pt-1 text-[13.5px] leading-snug text-[#566B82]">
                     {vide
                       ? "Chaque plongée à laquelle tu donnes un lieu viendra se poser ici."
                       : `Ouvre une plongée, touche « Modifier » puis « Choisir sur la carte » : elle apparaîtra ici.`}
@@ -252,7 +252,7 @@ function PageCarte() {
                       <button
                         type="button"
                         onClick={() => navigate({ to: "/nouvelle-plongee" })}
-                        className="flex h-[50px] items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+                        className="flex h-[50px] items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F]"
                       >
                         AJOUTER MA PREMIÈRE PLONGÉE
                       </button>
@@ -264,7 +264,7 @@ function PageCarte() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="truncate text-[17px] font-bold text-[#123A63]">{spotChoisi.nom}</div>
-                      <div className="truncate text-[12.5px] text-[#5B7189]">
+                      <div className="truncate text-[12.5px] text-[#566B82]">
                         {[spotChoisi.ville, spotChoisi.pays].filter(Boolean).join(" · ") || "Lieu inconnu"}
                       </div>
                     </div>
@@ -272,11 +272,11 @@ function PageCarte() {
                       <span className="flex h-[26px] shrink-0 items-center gap-[4px] rounded-[13px] bg-[#FFF1D9] px-[9px] text-[12.5px] font-bold text-[#123A63]">
                         <Star className="h-[12px] w-[12px] fill-[#FFC65C] text-[#FFC65C]" aria-hidden="true" />
                         {spotChoisi.noteMoyenne.toFixed(1).replace(".0", "").replace(".", ",")}
-                        <span className="font-semibold text-[#9DB0C0]">/5</span>
+                        <span className="font-semibold text-[#566B82]">/5</span>
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 pt-[8px] text-[12.5px] text-[#5B7189]">
+                  <div className="flex items-center gap-2 pt-[8px] text-[12.5px] text-[#566B82]">
                     <PastilleProfondeur m={spotChoisi.profMax} />
                     <span className="truncate">
                       {pluriel(spotChoisi.plongees.length, "plongée")} ici{spotChoisi.derniere ? ` · la dernière ${ilYA(spotChoisi.derniere)}` : ""}
@@ -299,7 +299,7 @@ function PageCarte() {
                         ? "Aucun spot pour ce filtre"
                         : `${pluriel(resume.nbPlongees, "plongée")} · ${pluriel(resume.nbSites, "site")}`}
                     </div>
-                    <div className="truncate text-[12.5px] text-[#5B7189]">
+                    <div className="truncate text-[12.5px] text-[#566B82]">
                       {spots.length === 0
                         ? "Choisis « Toutes » pour tout revoir."
                         : [resume.nbPays > 0 ? `${resume.nbPays} pays` : "", resume.periode].filter(Boolean).join(", ")}
@@ -328,7 +328,7 @@ function PageCarte() {
                 <section key={g.pays} className="pt-[18px]">
                   <div className="flex items-baseline justify-between pb-[10px]">
                     <h2 className="text-[17px] font-bold text-[#123A63]">{g.pays}</h2>
-                    <span className="text-[12.5px] text-[#9DB0C0]">{pluriel(g.spots.length, "site")}</span>
+                    <span className="text-[12.5px] text-[#566B82]">{pluriel(g.spots.length, "site")}</span>
                   </div>
                   <div className="overflow-hidden galet border border-[#DCE7F0] bg-white shadow-[0_4px_14px_#123A6308]">
                     {visibles.map((s) => (
@@ -343,7 +343,7 @@ function PageCarte() {
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-[15px] font-bold text-[#123A63]">{s.nom}</span>
-                          <span className="block truncate text-[12px] text-[#5B7189]">
+                          <span className="block truncate text-[12px] text-[#566B82]">
                             {[s.ville, s.derniere ? (Date.now() - s.derniere.getTime() < 31 * 86_400_000 ? ilYA(s.derniere) : moisAnnee(s.derniere)) : ""]
                               .filter(Boolean)
                               .join(" · ")}
@@ -364,7 +364,7 @@ function PageCarte() {
                             return n;
                           })
                         }
-                        className="w-full border-t border-[#EDF2F7] px-[14px] py-[12px] text-left text-[13.5px] font-bold text-[#1176A8]"
+                        className="w-full border-t border-[#EDF2F7] px-[14px] py-[12px] text-left text-[13.5px] font-bold text-[#106F9F]"
                       >
                         {ouvert ? "Réduire" : `Voir les ${g.spots.length - 4} autres sites${g.pays === "Autres lieux" ? "" : ` en ${g.pays}`}`}
                       </button>
@@ -373,7 +373,7 @@ function PageCarte() {
                 </section>
               );
             })}
-            {spots.length === 0 && <p className="pt-10 text-center text-[13.5px] text-[#5B7189]">Aucun spot pour ce filtre.</p>}
+            {spots.length === 0 && <p className="pt-10 text-center text-[13.5px] text-[#566B82]">Aucun spot pour ce filtre.</p>}
           </div>
         )}
       </div>

@@ -64,7 +64,7 @@ function NotificationsDp() {
               key={f.id}
               type="button"
               onClick={() => setFiltre(f.id)}
-              className={`h-[34px] rounded-[10px] px-[13px] text-[13px] font-bold ${filtre === f.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+              className={`h-[34px] rounded-[10px] px-[13px] text-[13px] font-bold ${filtre === f.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
             >
               {f.libelle}
             </button>
@@ -73,10 +73,10 @@ function NotificationsDp() {
         {liste && visibles.length === 0 && (
           <div className="flex flex-col items-center gap-[10px] pt-[12svh] text-center">
             <span className="flex h-[56px] w-[56px] items-center justify-center rounded-[10px] bg-[#E3EDF6]">
-              <Bell className="h-[24px] w-[24px] text-[#9DB0C0]" aria-hidden="true" />
+              <Bell className="h-[24px] w-[24px] text-[#566B82]" aria-hidden="true" />
             </span>
             <p className="text-[16px] font-bold">Rien à signaler</p>
-            <p className="max-w-[320px] text-[13.5px] leading-normal text-[#5B7189]">
+            <p className="max-w-[320px] text-[13.5px] leading-normal text-[#566B82]">
               Les contrôles du matériel, les certificats à renouveler et les sorties à préparer arriveront ici.
             </p>
           </div>

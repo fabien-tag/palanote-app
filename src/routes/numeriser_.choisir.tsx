@@ -104,12 +104,12 @@ function Choisir() {
         <button
           type="button"
           onClick={() => navigate(lot ? { to: "/numeriser/lecture", search: { lot } } : { to: "/numeriser" })}
-          className="text-[14.5px] font-semibold text-[#5B7189]"
+          className="text-[14.5px] font-semibold text-[#566B82]"
         >
           Annuler
         </button>
         <h1 className="text-[16px] font-bold">Choisir des pages</h1>
-        <button type="button" onClick={toutPrendre} disabled={!photos.length} className="text-[14.5px] font-bold text-[#1176A8] disabled:opacity-40">
+        <button type="button" onClick={toutPrendre} disabled={!photos.length} className="text-[14.5px] font-bold text-[#106F9F] disabled:opacity-40">
           Tout
         </button>
       </div>
@@ -128,7 +128,7 @@ function Choisir() {
               type="button"
               aria-selected={onglet === v}
               onClick={() => setOnglet(v)}
-              className={`h-[34px] flex-1 galet-petit text-[13.5px] font-semibold ${onglet === v ? "bg-white text-[#123A63] shadow-[0_2px_6px_rgba(15,61,112,.10)]" : "text-[#7D93A8]"}`}
+              className={`h-[34px] flex-1 galet-petit text-[13.5px] font-semibold ${onglet === v ? "bg-white text-[#123A63] shadow-[0_2px_6px_rgba(15,61,112,.10)]" : "text-[#566B82]"}`}
             >
               {l}
             </button>
@@ -137,7 +137,7 @@ function Choisir() {
       </div>
 
       {onglet === "fichiers" ? (
-        <div className="mx-[22px] mt-[16px] galet-b border border-[#D9E6F0] bg-white p-[18px] text-[13.5px] leading-normal text-[#5B7189]">
+        <div className="mx-[22px] mt-[16px] galet-b border border-[#D9E6F0] bg-white p-[18px] text-[13.5px] leading-normal text-[#566B82]">
           <b className="text-[#123A63]">Les PDF arrivent bientôt.</b> En attendant, choisis tes pages dans tes photos.
         </div>
       ) : (
@@ -153,8 +153,8 @@ function Choisir() {
             {groupes.map((g, gi) => (
               <section key={g.jour} className="pt-[18px]">
                 <div className="flex items-baseline justify-between pb-[10px]">
-                  <h2 className="text-[12px] font-bold tracking-[.04em] text-[#5B7189]">{g.jour}</h2>
-                  {gi === 0 && <span className="text-[11.5px] text-[#9DB0C0]">appui long pour agrandir</span>}
+                  <h2 className="text-[12px] font-bold tracking-[.04em] text-[#566B82]">{g.jour}</h2>
+                  {gi === 0 && <span className="text-[11.5px] text-[#566B82]">appui long pour agrandir</span>}
                 </div>
                 <div className="grid grid-cols-3 gap-[9px]">
                   {g.photos.map((p, i) => {
@@ -197,7 +197,7 @@ function Choisir() {
             <button
               type="button"
               onClick={() => champ.current?.click()}
-              className="mt-[18px] flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border-2 border-dashed border-[#1176A8]/35 text-[13.5px] font-bold text-[#1176A8]"
+              className="mt-[18px] flex h-[52px] w-full items-center justify-center gap-2 galet-moyen border-2 border-dashed border-[#1176A8]/35 text-[13.5px] font-bold text-[#106F9F]"
             >
               <Plus className="h-[17px] w-[17px]" strokeWidth={2.6} aria-hidden="true" />
               {photos.length ? "Ajouter d'autres photos" : "Ouvrir mes photos"}

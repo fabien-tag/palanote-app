@@ -50,7 +50,7 @@ export function Bloc({
             type="button"
             onClick={onOuvrir}
             aria-label={`Ouvrir : ${titre}`}
-            className={`-mr-[6px] -mt-[6px] flex h-[30px] w-[30px] items-center justify-center rounded-full transition ${sombre ? "text-white/80 hover:bg-white/15" : "text-[#123A63]/60 hover:bg-white/60"}`}
+            className={`-mr-[6px] -mt-[6px] flex h-[30px] w-[30px] items-center justify-center rounded-full transition ${sombre ? "text-white/80 hover:bg-white/15" : "text-[#566B82] hover:bg-white/60"}`}
           >
             <ArrowUpRight className="h-[16px] w-[16px]" />
           </button>
@@ -65,7 +65,7 @@ export function GrandNombre({ valeur, unite, sombre }: { valeur: string; unite?:
   return (
     <div className={`mt-auto flex items-baseline gap-[8px] ${sombre ? "text-white" : "text-[#0F2A4A]"}`}>
       <span className="text-[44px] font-light leading-none tracking-[-0.02em]">{valeur}</span>
-      {unite && <span className={`text-[13px] ${sombre ? "text-white/75" : "text-[#123A63]/60"}`}>{unite}</span>}
+      {unite && <span className={`text-[13px] ${sombre ? "text-white/75" : "text-[#566B82]"}`}>{unite}</span>}
     </div>
   );
 }

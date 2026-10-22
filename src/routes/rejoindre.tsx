@@ -57,7 +57,7 @@ function PageRejoindre() {
       {inv === null && (
         <div className="mt-[16px] galet-c border border-[#FFD3C8] bg-[#FFF3EF] p-[16px]">
           <p className="text-[15px] font-bold">Invitation introuvable</p>
-          <p className="pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">Le lien est peut-être incomplet. Demande au club de te le renvoyer.</p>
+          <p className="pt-[4px] text-[13.5px] leading-normal text-[#566B82]">Le lien est peut-être incomplet. Demande au club de te le renvoyer.</p>
         </div>
       )}
       {inv && (
@@ -66,9 +66,9 @@ function PageRejoindre() {
             <span className="flex h-[52px] w-[52px] items-center justify-center goutte bg-[#0F3D70] text-white">
               <Anchor className="h-[24px] w-[24px]" />
             </span>
-            <p className="pt-[12px] text-[13px] font-bold uppercase tracking-[.08em] text-[#1176A8]">Bienvenue {inv.prenom}</p>
+            <p className="pt-[12px] text-[13px] font-bold uppercase tracking-[.08em] text-[#106F9F]">Bienvenue {inv.prenom}</p>
             <h1 className="pt-[2px] text-[24px] font-bold leading-tight">{inv.club} t'invite sur Palanote</h1>
-            {inv.ville && <p className="text-[13.5px] text-[#5B7189]">{inv.ville}</p>}
+            {inv.ville && <p className="text-[13.5px] text-[#566B82]">{inv.ville}</p>}
             <Meduse className="-right-[6px] -top-[14px]" />
           </div>
           <div className="flex flex-col gap-[14px] pt-[20px]">
@@ -78,12 +78,12 @@ function PageRejoindre() {
               { I: Stamp, t: "Le tampon numérique", x: "Ta plongée validée par le DP, sans chercher le tampon à la sortie de l'eau." },
             ].map(({ I, t, x }) => (
               <div key={t} className="flex items-start gap-[12px]">
-                <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte bg-[#E3F2FB] text-[#1176A8]">
+                <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte bg-[#E3F2FB] text-[#106F9F]">
                   <I className="h-[19px] w-[19px]" />
                 </span>
                 <span>
                   <span className="block text-[14px] font-bold leading-snug">{t}</span>
-                  <span className="block text-[12.5px] leading-normal text-[#5B7189]">{x}</span>
+                  <span className="block text-[12.5px] leading-normal text-[#566B82]">{x}</span>
                 </span>
               </div>
             ))}
@@ -110,11 +110,11 @@ function PageRejoindre() {
               <button
                 type="button"
                 onClick={() => sansCompte("/connexion")}
-                className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#1176A8] underline underline-offset-4"
+                className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#106F9F] underline underline-offset-4"
               >
                 J'ai déjà un compte
               </button>
-              <p className="pt-[12px] text-center text-[11.5px] leading-normal text-[#9DB0C0]">
+              <p className="pt-[12px] text-center text-[11.5px] leading-normal text-[#566B82]">
                 {inv.email ? `Utilise de préférence ${inv.email}. ` : ""}Carnet gratuit, sans publicité.
               </p>
             </>

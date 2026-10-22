@@ -76,7 +76,7 @@ export function FeuilleConditions() {
         <h2 id="titre-conditions" className="text-[22px] font-bold leading-tight">
           Avant de continuer
         </h2>
-        <p className="pt-[8px] text-[14px] leading-normal text-[#5B7189]">
+        <p className="pt-[8px] text-[14px] leading-normal text-[#566B82]">
           Palanote a maintenant ses conditions d'utilisation et sa politique de confidentialité. Prends une minute pour les lire : elles
           disent ce qu'on fait de ton carnet, et surtout ce qu'on n'en fait pas.
         </p>
@@ -93,11 +93,11 @@ export function FeuilleConditions() {
           </span>
           <span>
             J'accepte les{" "}
-            <Link to="/conditions-utilisation" className="font-semibold text-[#1176A8] underline underline-offset-2">
+            <Link to="/conditions-utilisation" className="font-semibold text-[#106F9F] underline underline-offset-2">
               conditions d'utilisation
             </Link>{" "}
             et j'ai lu la{" "}
-            <Link to="/politique-de-confidentialite" className="font-semibold text-[#1176A8] underline underline-offset-2">
+            <Link to="/politique-de-confidentialite" className="font-semibold text-[#106F9F] underline underline-offset-2">
               politique de confidentialité
             </Link>
             .
@@ -121,7 +121,7 @@ export function FeuilleConditions() {
         <button
           type="button"
           onClick={() => void signOut().then(() => navigate({ to: "/" }))}
-          className="mx-auto mt-[10px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#5B7189]"
+          className="mx-auto mt-[10px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#566B82]"
         >
           Me déconnecter
         </button>

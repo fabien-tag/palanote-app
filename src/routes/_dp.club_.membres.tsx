@@ -92,7 +92,7 @@ function PageMembres() {
             role="tab"
             aria-selected={onglet === id}
             onClick={() => setOnglet(id)}
-            className={`h-[36px] rounded-[10px] px-[14px] text-[13px] font-bold ${onglet === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+            className={`h-[36px] rounded-[10px] px-[14px] text-[13px] font-bold ${onglet === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
           >
             {l}
           </button>
@@ -111,18 +111,18 @@ function PageMembres() {
               <div key={t.l} className="rounded-[10px] border border-[#E4EBF1] bg-white px-[14px] py-[12px]">
                 <span className="block text-[26px] font-bold leading-none">{t.v}</span>
                 <span className="block pt-[4px] text-[13px] font-semibold">{t.l}</span>
-                <span className="block text-[11.5px] text-[#7D93A8]">{t.d}</span>
+                <span className="block text-[11.5px] text-[#566B82]">{t.d}</span>
               </div>
             ))}
           </div>
 
           <div className="flex flex-wrap items-center gap-[10px] pt-[18px]">
             <label className="flex h-[42px] min-w-[240px] flex-1 items-center gap-[8px] rounded-[10px] border border-[#E4EBF1] bg-white px-[12px] focus-within:border-[#57D4F5] lg:max-w-[360px]">
-              <Search className="h-[16px] w-[16px] text-[#9DB0C0]" />
+              <Search className="h-[16px] w-[16px] text-[#566B82]" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Prénom, niveau, club…" aria-label="Chercher un membre" className="min-w-0 flex-1 bg-transparent text-[14px] outline-none" />
               {q && (
                 <button type="button" aria-label="Effacer" onClick={() => setQ("")}>
-                  <X className="h-[14px] w-[14px] text-[#9DB0C0]" />
+                  <X className="h-[14px] w-[14px] text-[#566B82]" />
                 </button>
               )}
             </label>
@@ -138,7 +138,7 @@ function PageMembres() {
                   key={id}
                   type="button"
                   onClick={() => setTri(id)}
-                  className={`h-[36px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${tri === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+                  className={`h-[36px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${tri === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
                 >
                   {l}
                 </button>
@@ -148,14 +148,14 @@ function PageMembres() {
           </div>
 
           {tous.length === 0 ? (
-            <p className="mt-[12px] rounded-[10px] border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#5B7189]">
+            <p className="mt-[12px] rounded-[10px] border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#566B82]">
               Les plongeurs apparaissent ici après leur première sortie avec le centre.
             </p>
           ) : (
             <div className="mt-[12px] overflow-x-auto rounded-[10px] border border-[#E4EBF1] bg-white">
               <table className="w-full min-w-[760px] border-collapse text-[13px]">
                 <thead>
-                  <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#7D93A8]">
+                  <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#566B82]">
                     <th className="w-[40px] pl-[10px]" aria-label="Privilégié" />
                     <th className="px-[10px] py-[10px] font-bold">Membre</th>
                     <th className="px-[8px] font-bold">Sorties</th>
@@ -200,22 +200,22 @@ function PageMembres() {
                               {habitue(m) && <span className="rounded-[6px] bg-[#0F3D70] px-[5px] py-[1px] text-[10px] font-bold text-white">Habitué</span>}
                               {nouveau(m) && <span className="rounded-[6px] bg-[#FFF1D6] px-[5px] py-[1px] text-[10px] font-bold text-[#8A5A10]">Nouveau</span>}
                             </span>
-                            <span className="block text-[11.5px] text-[#7D93A8]">{[m.niveau, m.club].filter(Boolean).join(" · ") || "—"}</span>
+                            <span className="block text-[11.5px] text-[#566B82]">{[m.niveau, m.club].filter(Boolean).join(" · ") || "—"}</span>
                           </span>
                         </span>
                       </td>
                       <td className="px-[8px] font-bold">{m.sorties}</td>
-                      <td className="px-[8px] text-[#5B7189]">{dateCourte(m.premiere)}</td>
-                      <td className="px-[8px] text-[#5B7189]">{dateCourte(m.derniere)}</td>
+                      <td className="px-[8px] text-[#566B82]">{dateCourte(m.premiere)}</td>
+                      <td className="px-[8px] text-[#566B82]">{dateCourte(m.derniere)}</td>
                       <td className="px-[8px]">
-                        <span className={m.fiches < m.sorties ? "font-bold text-[#8A5A10]" : "text-[#14805F]"}>
+                        <span className={m.fiches < m.sorties ? "font-bold text-[#8A5A10]" : "text-[#137758]"}>
                           {m.fiches}/{m.sorties}
                         </span>
                       </td>
                       <td className="px-[8px]">{m.tampons}</td>
                       <td className="px-[8px]">
                         {m.prochaine ? (
-                          <span className="rounded-[6px] bg-[#E3F2FB] px-[6px] py-[2px] text-[12px] font-bold text-[#1176A8]">{dateCourte(m.prochaine)}</span>
+                          <span className="rounded-[6px] bg-[#E3F2FB] px-[6px] py-[2px] text-[12px] font-bold text-[#106F9F]">{dateCourte(m.prochaine)}</span>
                         ) : (
                           <span className="text-[#C9D5E0]">—</span>
                         )}
@@ -224,7 +224,7 @@ function PageMembres() {
                   ))}
                 </tbody>
               </table>
-              {liste.length === 0 && <p className="px-[14px] py-[14px] text-[13px] text-[#7D93A8]">Aucun membre ne correspond.</p>}
+              {liste.length === 0 && <p className="px-[14px] py-[14px] text-[13px] text-[#566B82]">Aucun membre ne correspond.</p>}
             </div>
           )}
         </>

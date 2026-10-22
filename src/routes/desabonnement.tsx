@@ -44,8 +44,8 @@ function Desabonnement() {
           <img src={logoCorail} alt="Palanote" className="h-full w-auto" />
         </span>
         <h1 className="pt-[18px] text-[24px] font-bold">{textes[0]}</h1>
-        {textes[1] && <p className="pt-[8px] text-[14.5px] leading-normal text-[#5B7189]">{textes[1]}</p>}
-        <button type="button" onClick={() => navigate({ to: "/" })} className="mt-[24px] text-[14px] font-bold text-[#1176A8] underline underline-offset-4">
+        {textes[1] && <p className="pt-[8px] text-[14.5px] leading-normal text-[#566B82]">{textes[1]}</p>}
+        <button type="button" onClick={() => navigate({ to: "/" })} className="mt-[24px] text-[14px] font-bold text-[#106F9F] underline underline-offset-4">
           Ouvrir Palanote
         </button>
       </div>

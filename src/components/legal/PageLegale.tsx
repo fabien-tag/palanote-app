@@ -17,10 +17,10 @@ export function PageLegale({ titre, intro, children }: { titre: string; intro?: 
           </button>
         </div>
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">{titre}</h1>
-        <p className="pt-[4px] text-[12.5px] text-[#9DB0C0]">Mise à jour le {DATE_CONDITIONS}</p>
+        <p className="pt-[4px] text-[12.5px] text-[#566B82]">Mise à jour le {DATE_CONDITIONS}</p>
         {intro && <p className="pt-[12px] text-[14.5px] leading-relaxed text-[#3F5B76]">{intro}</p>}
         <div className="mt-[16px] flex flex-col gap-[12px]">{children}</div>
-        <nav className="mt-[22px] flex flex-wrap justify-center gap-x-[14px] gap-y-[6px] text-[12.5px] font-semibold text-[#1176A8]">
+        <nav className="mt-[22px] flex flex-wrap justify-center gap-x-[14px] gap-y-[6px] text-[12.5px] font-semibold text-[#106F9F]">
           <Link to="/mentions-legales">Mentions légales</Link>
           <Link to="/politique-de-confidentialite">Confidentialité</Link>
           <Link to="/conditions-utilisation">Conditions d'utilisation</Link>
@@ -55,7 +55,7 @@ export function Puces({ items }: { items: ReactNode[] }) {
 // L'adresse de contact, ou ce qu'on affiche tant qu'elle n'existe pas
 export function Contact() {
   return EDITEUR.email ? (
-    <a href={`mailto:${EDITEUR.email}`} className="font-semibold text-[#1176A8] underline underline-offset-2">
+    <a href={`mailto:${EDITEUR.email}`} className="font-semibold text-[#106F9F] underline underline-offset-2">
       {EDITEUR.email}
     </a>
   ) : (

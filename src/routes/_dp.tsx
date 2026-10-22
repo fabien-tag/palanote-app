@@ -35,9 +35,14 @@ function LayoutDp() {
       {dp && <PanneauNouvelleSortie />}
       <div className={dp ? "lg:pl-[232px]" : ""}>
         {dp && <BarreHautDp />}
-        <div key={chemin} className={dp ? "fondu" : ""}>
+        <main
+          key={chemin}
+          data-contenu
+          tabIndex={-1}
+          className={`outline-none ${dp ? "fondu" : ""}`}
+        >
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );

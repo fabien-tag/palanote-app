@@ -120,7 +120,7 @@ function Importer() {
 
       {!nouvelles && (
         <>
-          <p className="pt-[6px] text-[14px] leading-normal text-[#5B7189]">
+          <p className="pt-[6px] text-[14px] leading-normal text-[#566B82]">
             Tes plongées sont dans une autre app ou dans ton ordinateur de plongée ? Exporte-les dans un fichier, et Palanote les range dans ton carnet.
           </p>
           <button
@@ -130,10 +130,10 @@ function Importer() {
             className="mt-[18px] flex w-full flex-col items-center gap-[10px] galet border-2 border-dashed border-[#9ACDEB] bg-white px-[20px] py-[26px] text-center disabled:opacity-60"
           >
             <span className="flex h-[52px] w-[52px] items-center justify-center goutte bg-[#E3F2FB]">
-              <FileUp className="h-[24px] w-[24px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
+              <FileUp className="h-[24px] w-[24px] text-[#106F9F]" strokeWidth={2} aria-hidden="true" />
             </span>
             <span className="text-[16px] font-bold">{enCours ? "Lecture du fichier…" : "Choisir mon fichier"}</span>
-            <span className="text-[12.5px] text-[#7D93A8]">{nomFichier ?? "UDDF (.uddf, .xml) ou Subsurface (.ssrf)"}</span>
+            <span className="text-[12.5px] text-[#566B82]">{nomFichier ?? "UDDF (.uddf, .xml) ou Subsurface (.ssrf)"}</span>
           </button>
           <MessageErreur texte={erreur} />
 
@@ -142,11 +142,11 @@ function Importer() {
             {APPS.map((a) => (
               <div key={a.nom} className="galet-petit bg-white px-[14px] py-[11px]">
                 <p className="text-[14px] font-bold">{a.nom}</p>
-                <p className="text-[12.5px] leading-snug text-[#5B7189]">{a.ou}</p>
+                <p className="text-[12.5px] leading-snug text-[#566B82]">{a.ou}</p>
               </div>
             ))}
           </div>
-          <p className="flex items-start gap-[8px] pt-[16px] text-[12px] leading-snug text-[#9DB0C0]">
+          <p className="flex items-start gap-[8px] pt-[16px] text-[12px] leading-snug text-[#566B82]">
             <ShieldCheck className="mt-[1px] h-[15px] w-[15px] shrink-0" aria-hidden="true" />
             Le fichier est lu sur ton téléphone, il n'est envoyé nulle part. Seules les plongées que tu importes rejoignent ton carnet, privées comme les autres.
           </p>
@@ -156,7 +156,7 @@ function Importer() {
       {nouvelles && (
         <>
           <div className="mt-[8px] galet border border-[#B8E4D8] bg-[#E2F8EF] p-[16px]">
-            <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#14805F]">
+            <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#137758]">
               Fichier {format} lu
             </p>
             <p className="pt-[4px] text-[24px] font-bold leading-tight">
@@ -180,7 +180,7 @@ function Importer() {
               </span>
               <span className="text-[13px] leading-snug text-[#3F5B76]">
                 Tu avais indiqué <b className="text-[#123A63]">{avant} plongées avant Palanote</b>. Les retirer de ce nombre, pour ne pas les compter deux fois ?
-                {ajuster && <span className="block pt-[2px] text-[#14805F]">Il deviendra {Math.max(0, avant - n)}.</span>}
+                {ajuster && <span className="block pt-[2px] text-[#137758]">Il deviendra {Math.max(0, avant - n)}.</span>}
               </span>
             </button>
           )}
@@ -191,11 +191,11 @@ function Importer() {
               <div className="flex flex-col gap-[6px]">
                 {(nouvelles ?? []).slice(0, 8).map((p, i) => (
                   <div key={i} className="flex items-center gap-[12px] galet-petit bg-white px-[13px] py-[10px]">
-                    <span className="w-[78px] shrink-0 text-[12.5px] font-semibold text-[#7D93A8]">
+                    <span className="w-[78px] shrink-0 text-[12.5px] font-semibold text-[#566B82]">
                       {p.dive_date ? new Date(`${p.dive_date}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" }) : "sans date"}
                     </span>
                     <span className="min-w-0 flex-1 truncate text-[14px] font-bold">{p.site_name ?? "Site inconnu"}</span>
-                    <span className="shrink-0 text-[12.5px] text-[#5B7189]">
+                    <span className="shrink-0 text-[12.5px] text-[#566B82]">
                       {[p.max_depth_m !== null ? `${String(p.max_depth_m).replace(".", ",")} m` : null, p.duration_min ? `${p.duration_min} min` : null].filter(Boolean).join(" · ")}
                     </span>
                   </div>
@@ -204,7 +204,7 @@ function Importer() {
             </>
           )}
           <MessageErreur texte={erreur} />
-          <button type="button" onClick={() => champ.current?.click()} className="mx-auto mt-[18px] block text-[13.5px] font-semibold text-[#1176A8] underline underline-offset-4">
+          <button type="button" onClick={() => champ.current?.click()} className="mx-auto mt-[18px] block text-[13.5px] font-semibold text-[#106F9F] underline underline-offset-4">
             Choisir un autre fichier
           </button>
         </>

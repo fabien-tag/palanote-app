@@ -57,10 +57,10 @@ export type Seance = {
 
 export type StatutFormation = "prevue" | "en_cours" | "validee" | "abandon";
 export const STATUTS_FORMATION: { id: StatutFormation; libelle: string; classe: string }[] = [
-  { id: "prevue", libelle: "Programmée", classe: "bg-[#E3F2FB] text-[#1176A8]" },
+  { id: "prevue", libelle: "Programmée", classe: "bg-[#E3F2FB] text-[#106F9F]" },
   { id: "en_cours", libelle: "En cours", classe: "bg-[#FFF1D6] text-[#8A5A10]" },
-  { id: "validee", libelle: "Validée", classe: "bg-[#E2F8EF] text-[#14805F]" },
-  { id: "abandon", libelle: "Abandon", classe: "bg-[#EEF2F6] text-[#7D93A8]" },
+  { id: "validee", libelle: "Validée", classe: "bg-[#E2F8EF] text-[#137758]" },
+  { id: "abandon", libelle: "Abandon", classe: "bg-[#EEF2F6] text-[#566B82]" },
 ];
 
 export type FormationEleve = {

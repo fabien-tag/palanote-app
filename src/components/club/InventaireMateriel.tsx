@@ -28,7 +28,7 @@ function Echeance({ a, date }: { a: Article; date: string | null }) {
   return (
     <span
       className={`inline-flex items-center gap-[4px] rounded-[8px] px-[7px] py-[2px] text-[12px] font-bold ${
-        e.etat === "depasse" ? "bg-[#FFE9E2] text-[#D9573F]" : e.etat === "bientot" ? "bg-[#FFF1D6] text-[#8A5A10]" : "text-[#3F5B76]"
+        e.etat === "depasse" ? "bg-[#FFE9E2] text-[#B8432F]" : e.etat === "bientot" ? "bg-[#FFF1D6] text-[#8A5A10]" : "text-[#3F5B76]"
       }`}
     >
       {e.etat !== "ok" && <AlertTriangle className="h-[12px] w-[12px]" />}
@@ -158,7 +158,7 @@ export function InventaireMateriel({ centre }: { centre: string }) {
     <>
       <MessageErreur texte={erreur} />
       {articles && articles.length === 0 && !erreur && (
-        <p className="mt-[12px] rounded-[10px] border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#5B7189]">
+        <p className="mt-[12px] rounded-[10px] border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#566B82]">
           Aucune pièce dans l'inventaire pour l'instant.
         </p>
       )}
@@ -177,11 +177,11 @@ export function InventaireMateriel({ centre }: { centre: string }) {
                   aria-selected={cat === x.id}
                   onClick={() => setCat(x.id)}
                   className={`-mb-px flex shrink-0 items-center gap-[7px] border-b-[2.5px] px-[12px] pb-[10px] pt-[6px] text-[14px] font-bold ${
-                    cat === x.id ? "border-[#0F3D70] text-[#123A63]" : "border-transparent text-[#7D93A8] hover:text-[#123A63]"
+                    cat === x.id ? "border-[#0F3D70] text-[#123A63]" : "border-transparent text-[#566B82] hover:text-[#123A63]"
                   }`}
                 >
                   {x.libelle}
-                  <span className={`rounded-[8px] px-[6px] text-[11.5px] ${cat === x.id ? "bg-[#0F3D70] text-white" : "bg-[#EEF3F8] text-[#5B7189]"}`}>{l.length}</span>
+                  <span className={`rounded-[8px] px-[6px] text-[11.5px] ${cat === x.id ? "bg-[#0F3D70] text-white" : "bg-[#EEF3F8] text-[#566B82]"}`}>{l.length}</span>
                   {alerte > 0 && <span className="h-[7px] w-[7px] rounded-full bg-[#FF8A75]" aria-label={`${alerte} à contrôler`} />}
                 </button>
               );
@@ -190,11 +190,11 @@ export function InventaireMateriel({ centre }: { centre: string }) {
 
           <div className="flex flex-wrap items-center gap-[10px] pt-[14px]">
             <label className="flex h-[40px] min-w-[220px] flex-1 items-center gap-[8px] rounded-[10px] border border-[#E4EBF1] bg-white px-[12px] focus-within:border-[#57D4F5] lg:max-w-[340px]">
-              <Search className="h-[16px] w-[16px] text-[#9DB0C0]" />
+              <Search className="h-[16px] w-[16px] text-[#566B82]" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Référence, marque, n° de série, taille…" aria-label="Chercher dans l'inventaire" className="min-w-0 flex-1 bg-transparent text-[14px] outline-none" />
               {q && (
                 <button type="button" aria-label="Effacer" onClick={() => setQ("")}>
-                  <X className="h-[14px] w-[14px] text-[#9DB0C0]" />
+                  <X className="h-[14px] w-[14px] text-[#566B82]" />
                 </button>
               )}
             </label>
@@ -210,13 +210,13 @@ export function InventaireMateriel({ centre }: { centre: string }) {
                   key={id}
                   type="button"
                   onClick={() => setFiltre(id)}
-                  className={`h-[34px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${filtre === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+                  className={`h-[34px] rounded-[8px] px-[12px] text-[12.5px] font-bold ${filtre === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
                 >
                   {l}
                 </button>
               ))}
             </div>
-            <span className="ml-auto text-[12.5px] text-[#7D93A8]">
+            <span className="ml-auto text-[12.5px] text-[#566B82]">
               {liste.length} pièce{liste.length > 1 ? "s" : ""} · clique sur une ligne pour la fiche
             </span>
           </div>
@@ -224,7 +224,7 @@ export function InventaireMateriel({ centre }: { centre: string }) {
           <div className="mt-[10px] overflow-x-auto rounded-[10px] border border-[#E4EBF1] bg-white">
             <table className="w-full min-w-[820px] border-collapse text-[13px]">
               <thead>
-                <tr className="border-b border-[#E4EBF1] text-left text-[11px] font-bold uppercase tracking-[.06em] text-[#7D93A8]">
+                <tr className="border-b border-[#E4EBF1] text-left text-[11px] font-bold uppercase tracking-[.06em] text-[#566B82]">
                   <th className="px-[12px] py-[10px]">Réf.</th>
                   {colonnes.map((col) => (
                     <th key={col.titre} className="px-[8px] py-[10px]">
@@ -243,7 +243,7 @@ export function InventaireMateriel({ centre }: { centre: string }) {
                     onKeyDown={(e) => e.key === "Enter" && setOuvert(a)}
                     className={`cursor-pointer border-b border-[#F0F4F8] last:border-0 hover:bg-[#F5F9FD] ${ouvert?.id === a.id ? "bg-[#EEF6FC]" : ""}`}
                   >
-                    <td className="whitespace-nowrap px-[12px] py-[10px] font-mono text-[12px] font-bold text-[#1176A8]">{a.reference}</td>
+                    <td className="whitespace-nowrap px-[12px] py-[10px] font-mono text-[12px] font-bold text-[#106F9F]">{a.reference}</td>
                     {colonnes.map((col) => (
                       <td key={col.titre} className={`px-[8px] py-[10px] ${col.classe ?? ""}`}>
                         {col.valeur(a)}
@@ -256,7 +256,7 @@ export function InventaireMateriel({ centre }: { centre: string }) {
                 ))}
                 {liste.length === 0 && (
                   <tr>
-                    <td colSpan={colonnes.length + 2} className="px-[12px] py-[20px] text-center text-[13px] text-[#9DB0C0]">
+                    <td colSpan={colonnes.length + 2} className="px-[12px] py-[20px] text-center text-[13px] text-[#566B82]">
                       Rien ne correspond.
                     </td>
                   </tr>
@@ -308,7 +308,7 @@ function FicheArticle({ a, onFermer, onChange }: { a: Article; onFermer: () => v
   })();
   const ligne = (l: string, v: ReactNode) => (
     <div key={l} className="flex items-start justify-between gap-[16px] border-b border-[#F0F4F8] py-[9px] text-[13.5px] last:border-0">
-      <span className="shrink-0 text-[#7D93A8]">{l}</span>
+      <span className="shrink-0 text-[#566B82]">{l}</span>
       <span className="text-right font-semibold">{v}</span>
     </div>
   );
@@ -325,11 +325,11 @@ function FicheArticle({ a, onFermer, onChange }: { a: Article; onFermer: () => v
       >
         <header className="flex items-start gap-[12px] border-b border-[#DFEAF2] px-[32px] py-[18px]">
           <span className="min-w-0 flex-1">
-            <span className="block font-mono text-[12.5px] font-bold text-[#1176A8]">
+            <span className="block font-mono text-[12.5px] font-bold text-[#106F9F]">
               {a.reference} · {cat.libelle.replace(/s$/, "")}
             </span>
             <span className="block pt-[2px] text-[21px] font-bold leading-tight">{a.libelle ?? nomComplet(a)}</span>
-            <span className="block pt-[2px] text-[13px] text-[#5B7189]">{nomComplet(a)}</span>
+            <span className="block pt-[2px] text-[13px] text-[#566B82]">{nomComplet(a)}</span>
           </span>
           <PastilleEtat etat={a.etat} />
           <button type="button" aria-label="Fermer" onClick={fermer} className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-[10px] bg-[#EEF3F8]">
@@ -338,7 +338,7 @@ function FicheArticle({ a, onFermer, onChange }: { a: Article; onFermer: () => v
         </header>
         <div className="flex-1 overflow-y-auto px-[32px] pb-[24px]">
           <MessageErreur texte={erreur} />
-          <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Contrôles</p>
+          <p className="pb-[6px] pt-[18px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Contrôles</p>
           <div className="rounded-[10px] border border-[#E4EBF1] px-[14px]">
             {ligne(`${cat.controle} : dernier`, dateFr(a.dernier_controle))}
             {ligne(`${cat.controle} : prochain`, <Echeance a={a} date={a.prochain_controle} />)}
@@ -356,7 +356,7 @@ function FicheArticle({ a, onFermer, onChange }: { a: Article; onFermer: () => v
             </button>
           </div>
 
-          <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">État</p>
+          <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">État</p>
           <div className="flex flex-wrap gap-[6px]">
             {ETATS.map((e) => (
               <button
@@ -364,14 +364,14 @@ function FicheArticle({ a, onFermer, onChange }: { a: Article; onFermer: () => v
                 type="button"
                 disabled={enCours}
                 onClick={() => a.etat !== e.id && void agir({ etat: e.id })}
-                className={`h-[34px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${a.etat === e.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+                className={`h-[34px] rounded-[10px] px-[11px] text-[12.5px] font-bold ${a.etat === e.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
               >
                 {e.libelle}
               </button>
             ))}
           </div>
 
-          <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Identité</p>
+          <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Identité</p>
           <div className="rounded-[10px] border border-[#E4EBF1] px-[14px]">
             {ligne("Marque", a.marque ?? "—")}
             {ligne("Modèle", a.modele ?? "—")}
@@ -382,13 +382,13 @@ function FicheArticle({ a, onFermer, onChange }: { a: Article; onFermer: () => v
 
           {caracs.length > 0 && (
             <>
-              <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Caractéristiques</p>
+              <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Caractéristiques</p>
               <div className="rounded-[10px] border border-[#E4EBF1] px-[14px]">{caracs.map(([k, v]) => ligne(LIBELLES_CARAC[k] ?? k, v))}</div>
             </>
           )}
           {a.note && (
             <>
-              <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#9DB0C0]">Note</p>
+              <p className="pb-[6px] pt-[20px] text-[11.5px] font-bold uppercase tracking-[.1em] text-[#566B82]">Note</p>
               <p className="rounded-[10px] bg-[#F7FAFD] px-[14px] py-[10px] text-[13.5px] leading-snug">{a.note}</p>
             </>
           )}

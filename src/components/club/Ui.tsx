@@ -45,7 +45,7 @@ export function PageClub({
                 <span className="lg:hidden">{titre}</span>
                 <span className="hidden lg:inline">{titreBureau}</span>
               </h1>
-              {sousTitreBureau && <p className="truncate pt-[2px] text-[13.5px] text-[#5B7189] first-letter:uppercase">{sousTitreBureau}</p>}
+              {sousTitreBureau && <p className="truncate pt-[2px] text-[13.5px] text-[#566B82] first-letter:uppercase">{sousTitreBureau}</p>}
             </div>
           ) : (
             <h1 className={`min-w-0 flex-1 truncate font-bold ${onRetour ? "text-[17px]" : "text-[clamp(24px,3.6svh,28px)]"} ${large ? "lg:text-[26px]" : ""}`}>{titre}</h1>
@@ -71,8 +71,8 @@ export function PageClub({
 export function Titre({ children, aide }: { children: ReactNode; aide?: ReactNode }) {
   return (
     <div className="flex items-baseline justify-between gap-2 pb-[9px] pt-[22px]">
-      <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5B7189]">{children}</h2>
-      {aide && <span className="text-[12px] text-[#9DB0C0]">{aide}</span>}
+      <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#566B82]">{children}</h2>
+      {aide && <span className="text-[12px] text-[#566B82]">{aide}</span>}
     </div>
   );
 }
@@ -81,7 +81,7 @@ export function Titre({ children, aide }: { children: ReactNode; aide?: ReactNod
 export function Avatar({ id, prenom, taille = 38, prevu = false }: { id: string | null; prenom: string; taille?: number; prevu?: boolean | undefined }) {
   return (
     <span
-      className={`flex shrink-0 items-center justify-center rounded-full font-bold ${prevu ? "border-[1.5px] border-dashed border-[#9DB0C0] text-[#7D93A8]" : "text-[#0F3D70]"}`}
+      className={`flex shrink-0 items-center justify-center rounded-full font-bold ${prevu ? "border-[1.5px] border-dashed border-[#9DB0C0] text-[#566B82]" : "text-[#0F3D70]"}`}
       style={{ background: prevu ? "#F4F8FB" : couleurAvatar(id ?? prenom), width: taille, height: taille, fontSize: Math.round(taille * 0.36) }}
       aria-hidden="true"
     >
@@ -91,10 +91,10 @@ export function Avatar({ id, prenom, taille = 38, prevu = false }: { id: string 
 }
 
 const COULEURS_STATUT: Record<StatutSortie, string> = {
-  prevue: "bg-[#E3F2FB] text-[#1176A8]",
+  prevue: "bg-[#E3F2FB] text-[#106F9F]",
   terminee: "bg-[#FFE8C7] text-[#8A5A10]",
   validee: "bg-[#3DEFBE] text-[#0B3B63]",
-  annulee: "bg-[#EEF2F6] text-[#7D93A8]",
+  annulee: "bg-[#EEF2F6] text-[#566B82]",
 };
 
 export function PastilleStatut({ statut }: { statut: StatutSortie }) {
@@ -127,13 +127,13 @@ export function LigneSortie({ s, onClick, pourDp = true }: { s: SortieResume; on
       <BlocDate date={s.date} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[15px] font-bold">{s.site}</span>
-        <span className="block truncate text-[12.5px] text-[#5B7189]">
+        <span className="block truncate text-[12.5px] text-[#566B82]">
           {[heureCourte(s.heure), s.lieu].filter(Boolean).join(" · ")}
         </span>
-        <span className="block truncate pt-[1px] text-[12px] text-[#7D93A8]">{details}</span>
+        <span className="block truncate pt-[1px] text-[12px] text-[#566B82]">{details}</span>
       </span>
       <PastilleStatut statut={s.statut} />
-      <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+      <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#566B82]" aria-hidden="true" />
     </button>
   );
 }
@@ -151,7 +151,7 @@ export function Etapes({ statut, entreAmis = false }: { statut: StatutSortie; en
         return (
           <li key={n} className="flex flex-1 flex-col gap-[5px]">
             <span className={`h-[5px] rounded-full ${fait ? "bg-[#3DEFBE]" : courant ? "bg-[#57D4F5]" : "bg-[#DCE7F0]"}`} />
-            <span className={`text-[11px] font-semibold ${fait || courant ? "text-[#123A63]" : "text-[#9DB0C0]"}`}>
+            <span className={`text-[11px] font-semibold ${fait || courant ? "text-[#123A63]" : "text-[#566B82]"}`}>
               {i + 1}. {n}
             </span>
           </li>
@@ -261,12 +261,12 @@ export function ChampTexte({
 }: { label: string; aide?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="block">
-      <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
+      <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">{label}</span>
       <input
         {...props}
-        className="block h-[52px] w-full min-w-0 galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+        className="block h-[52px] w-full min-w-0 galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] text-[15px] text-[#123A63] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
       />
-      {aide && <span className="block pt-[6px] text-[12px] text-[#9DB0C0]">{aide}</span>}
+      {aide && <span className="block pt-[6px] text-[12px] text-[#566B82]">{aide}</span>}
     </label>
   );
 }

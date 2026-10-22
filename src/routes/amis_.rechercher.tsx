@@ -52,12 +52,12 @@ function Rechercher() {
 
   const etat = (r: Relation) =>
     r === "binome" ? (
-      <span className="flex items-center gap-1 text-[12.5px] font-bold text-[#14805F]">
+      <span className="flex items-center gap-1 text-[12.5px] font-bold text-[#137758]">
         <Check className="h-[14px] w-[14px]" strokeWidth={3} aria-hidden="true" />
         Binôme
       </span>
     ) : r === "demande_envoyee" ? (
-      <span className="flex items-center gap-1 text-[12.5px] font-semibold text-[#7D93A8]">
+      <span className="flex items-center gap-1 text-[12.5px] font-semibold text-[#566B82]">
         <Clock className="h-[13px] w-[13px]" strokeWidth={2.4} aria-hidden="true" />
         Demande envoyée
       </span>
@@ -67,8 +67,8 @@ function Rechercher() {
 
   return (
     <PageClub titre="Rechercher un plongeur" onRetour={() => navigate({ to: "/amis" })}>
-      <label className="mt-[6px] flex h-[52px] items-center gap-[10px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] focus-within:border-[#57D4F5]">
-        <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+      <label className="mt-[6px] flex h-[52px] items-center gap-[10px] galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] focus-within:border-[#57D4F5]">
+        <Search className="h-[18px] w-[18px] shrink-0 text-[#566B82]" aria-hidden="true" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -79,21 +79,21 @@ function Rechercher() {
         />
         {q && (
           <button type="button" aria-label="Effacer" onClick={() => setQ("")}>
-            <X className="h-[16px] w-[16px] text-[#9DB0C0]" />
+            <X className="h-[16px] w-[16px] text-[#566B82]" />
           </button>
         )}
       </label>
       <MessageErreur texte={erreur} />
 
       {trouves === null && (
-        <div className="pt-[18px] text-[13.5px] leading-normal text-[#5B7189]">
+        <div className="pt-[18px] text-[13.5px] leading-normal text-[#566B82]">
           <p>
             <b className="text-[#123A63]">Par e-mail</b> : tape son adresse exacte, tu le trouveras même si vous n'avez rien en commun.
           </p>
           <p className="pt-[10px]">
             <b className="text-[#123A63]">Par prénom</b> : parmi les binômes de tes binômes et les plongeurs croisés en sortie club.
           </p>
-          <p className="pt-[10px] text-[12.5px] text-[#9DB0C0]">Palanote n'a pas d'annuaire : personne ne peut parcourir la liste des plongeurs.</p>
+          <p className="pt-[10px] text-[12.5px] text-[#566B82]">Palanote n'a pas d'annuaire : personne ne peut parcourir la liste des plongeurs.</p>
         </div>
       )}
 
@@ -104,7 +104,7 @@ function Rechercher() {
               <Avatar id={p.id} prenom={p.prenom} taille={40} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[15px] font-bold">{p.prenom}</span>
-                <span className="block truncate text-[12.5px] text-[#5B7189]">{[p.niveau, p.club].filter(Boolean).join(" · ") || "Plongeur Palanote"}</span>
+                <span className="block truncate text-[12.5px] text-[#566B82]">{[p.niveau, p.club].filter(Boolean).join(" · ") || "Plongeur Palanote"}</span>
               </span>
               {p.relation === "binome" || p.relation === "demande_envoyee" ? (
                 etat(p.relation)
@@ -125,7 +125,7 @@ function Rechercher() {
       )}
 
       {trouves && trouves.length === 0 && !erreur && (
-        <p className="pt-[18px] text-[13.5px] leading-normal text-[#5B7189]">
+        <p className="pt-[18px] text-[13.5px] leading-normal text-[#566B82]">
           {email
             ? "Aucun plongeur Palanote avec cette adresse. Invite-le plutôt : il créera son compte en scannant ton QR code."
             : "Personne de ce prénom parmi les binômes de tes binômes et tes sorties club. Essaie son e-mail exact, ou montre-lui ton QR code."}
@@ -136,7 +136,7 @@ function Rechercher() {
       <button
         type="button"
         onClick={() => navigate({ to: "/amis/ajouter" })}
-        className="mt-[24px] flex h-[52px] w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+        className="mt-[24px] flex h-[52px] w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F]"
       >
         PLUTÔT MONTRER MON QR CODE
       </button>

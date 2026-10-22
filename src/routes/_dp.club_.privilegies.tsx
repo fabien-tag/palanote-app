@@ -80,7 +80,7 @@ function PagePrivilegies() {
             <button
               type="button"
               onClick={() => setSerie(true)}
-              className="flex h-[42px] items-center gap-2 rounded-[10px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#1176A8]"
+              className="flex h-[42px] items-center gap-2 rounded-[10px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#106F9F]"
             >
               <CalendarPlus className="h-[17px] w-[17px]" />
               <span className="hidden sm:inline">PROGRAMMER UNE SÉRIE</span>
@@ -101,7 +101,7 @@ function PagePrivilegies() {
       <MessageErreur texte={erreurCentre ?? erreur} />
       {c && centre && (
         <>
-          <p className="max-w-[720px] pt-[2px] text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="max-w-[720px] pt-[2px] text-[13.5px] leading-normal text-[#566B82]">
             La communauté des plus actifs du club : ils ont accès aux plongées réservées (épaves, plongées profondes, nitrox) et reçoivent les invitations en
             premier.
           </p>
@@ -119,7 +119,7 @@ function PagePrivilegies() {
                   {t.Icone && <t.Icone className="h-[18px] w-[18px]" fill={OR} stroke={OR} />}
                 </span>
                 <span className="block pt-[4px] text-[13px] font-semibold">{t.l}</span>
-                <span className="block text-[11.5px] text-[#7D93A8]">{t.d}</span>
+                <span className="block text-[11.5px] text-[#566B82]">{t.d}</span>
               </div>
             ))}
           </div>
@@ -128,7 +128,7 @@ function PagePrivilegies() {
             <div>
               <Titre aide={c.membres.length > 0 ? `${c.membres.length}` : undefined}>La communauté</Titre>
               {c.membres.length === 0 ? (
-                <p className="rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[16px] py-[14px] text-[13.5px] leading-normal text-[#5B7189]">
+                <p className="rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[16px] py-[14px] text-[13.5px] leading-normal text-[#566B82]">
                   Personne n'a encore l'étoile. Choisis parmi les suggestions, ou mets l'étoile depuis Membres du club.
                 </p>
               ) : (
@@ -141,9 +141,9 @@ function PagePrivilegies() {
 
               <Titre aide="3 plongées ou plus avec le club">Les plus actifs</Titre>
               {c.suggestions.length === 0 ? (
-                <p className="text-[13px] text-[#7D93A8]">
+                <p className="text-[13px] text-[#566B82]">
                   Pas d'autre suggestion pour l'instant.{" "}
-                  <button type="button" onClick={() => navigate({ to: "/club/membres" })} className="font-bold text-[#1176A8]">
+                  <button type="button" onClick={() => navigate({ to: "/club/membres" })} className="font-bold text-[#106F9F]">
                     Voir tous les membres
                   </button>
                 </p>
@@ -156,7 +156,7 @@ function PagePrivilegies() {
                         <span className="block truncate text-[14px] font-bold">
                           {s.prenom} {s.nom?.toUpperCase() ?? ""}
                         </span>
-                        <span className="block text-[12px] text-[#7D93A8]">
+                        <span className="block text-[12px] text-[#566B82]">
                           {[s.niveau, `${s.activite} plongées avec le club`].filter(Boolean).join(" · ")}
                         </span>
                       </span>
@@ -176,9 +176,9 @@ function PagePrivilegies() {
             <div>
               <Titre aide={c.sorties.length > 0 ? `${c.sorties.length} à venir` : undefined}>Plongées réservées</Titre>
               {c.sorties.length === 0 ? (
-                <div className="rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[16px] py-[14px] text-[13.5px] leading-normal text-[#5B7189]">
+                <div className="rounded-[10px] border border-dashed border-[#C9DCEA] bg-white/60 px-[16px] py-[14px] text-[13.5px] leading-normal text-[#566B82]">
                   <p>Aucune plongée réservée à venir.</p>
-                  <button type="button" onClick={() => setSerie(true)} className="mt-[8px] flex items-center gap-[6px] font-bold text-[#1176A8]">
+                  <button type="button" onClick={() => setSerie(true)} className="mt-[8px] flex items-center gap-[6px] font-bold text-[#106F9F]">
                     <CalendarPlus className="h-[15px] w-[15px]" /> Programmer une série (ex. chaque dimanche)
                   </button>
                 </div>
@@ -191,25 +191,25 @@ function PagePrivilegies() {
                       onClick={() => navigate({ to: "/club/planning", search: { semaine: s.date, sortie: s.id } })}
                       className="flex items-center gap-[12px] rounded-[10px] border border-[#E4EBF1] bg-white px-[12px] py-[10px] text-left hover:border-[#57D4F5]"
                     >
-                      <span className="w-[62px] shrink-0 text-[12px] font-bold leading-tight text-[#1176A8] first-letter:uppercase">
+                      <span className="w-[62px] shrink-0 text-[12px] font-bold leading-tight text-[#106F9F] first-letter:uppercase">
                         {dateCourte(s.date)}
                         <span className="block text-[#123A63]">{heureCourte(s.heure)}</span>
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[14px] font-bold">{s.site}</span>
-                        <span className="block truncate text-[12px] text-[#7D93A8]">
+                        <span className="block truncate text-[12px] text-[#566B82]">
                           {[s.lieu, s.profondeur_prevue ? `${String(s.profondeur_prevue).replace(".0", "")} m` : null, s.bateau].filter(Boolean).join(" · ")}
                         </span>
                       </span>
-                      {s.melange && <span className="shrink-0 rounded-[8px] bg-[#E3F2FB] px-[7px] py-[2px] text-[11.5px] font-bold text-[#1176A8]">{s.melange}</span>}
-                      <span className="w-[54px] shrink-0 text-right text-[12px] font-semibold text-[#5B7189]">
+                      {s.melange && <span className="shrink-0 rounded-[8px] bg-[#E3F2FB] px-[7px] py-[2px] text-[11.5px] font-bold text-[#106F9F]">{s.melange}</span>}
+                      <span className="w-[54px] shrink-0 text-right text-[12px] font-semibold text-[#566B82]">
                         {s.nb_inscrits} inscrit{s.nb_inscrits > 1 ? "s" : ""}
                       </span>
                     </button>
                   ))}
                 </div>
               )}
-              <p className="pt-[8px] text-[12px] leading-normal text-[#9DB0C0]">
+              <p className="pt-[8px] text-[12px] leading-normal text-[#566B82]">
                 Sur une plongée réservée, seuls les privilégiés peuvent s'inscrire avec le QR code ou le lien. Toi, tu peux toujours ajouter qui tu veux.
               </p>
             </div>
@@ -242,14 +242,14 @@ function LignePrivilegie({ m, onRetirer }: { m: Privilegie; onRetirer: () => voi
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[14px] font-bold">
           {m.prenom} {m.nom?.toUpperCase() ?? ""}
-          {m.niveau && <span className="font-semibold text-[#5B7189]"> · {m.niveau}</span>}
+          {m.niveau && <span className="font-semibold text-[#566B82]"> · {m.niveau}</span>}
         </span>
-        <span className="flex flex-wrap items-center gap-x-[8px] text-[12px] text-[#7D93A8]">
+        <span className="flex flex-wrap items-center gap-x-[8px] text-[12px] text-[#566B82]">
           <span>{m.activite} plongée{m.activite > 1 ? "s" : ""} avec le club</span>
-          {m.inscrit_reservees > 0 && <span className="font-bold text-[#14805F]">inscrit à {m.inscrit_reservees} réservée{m.inscrit_reservees > 1 ? "s" : ""}</span>}
+          {m.inscrit_reservees > 0 && <span className="font-bold text-[#137758]">inscrit à {m.inscrit_reservees} réservée{m.inscrit_reservees > 1 ? "s" : ""}</span>}
           {!m.sur_palanote && <span>{m.email ? "pas encore sur Palanote" : "sans e-mail"}</span>}
           {cert && (
-            <span className={`flex items-center gap-[3px] font-bold ${cert === "depasse" ? "text-[#D9573F]" : "text-[#8A5A10]"}`}>
+            <span className={`flex items-center gap-[3px] font-bold ${cert === "depasse" ? "text-[#B8432F]" : "text-[#8A5A10]"}`}>
               <AlertTriangle className="h-[11px] w-[11px]" /> certificat {cert === "depasse" ? "expiré" : "à renouveler"}
             </span>
           )}
@@ -260,7 +260,7 @@ function LignePrivilegie({ m, onRetirer }: { m: Privilegie; onRetirer: () => voi
         onClick={onRetirer}
         aria-label={`Retirer l'étoile de ${m.prenom}`}
         title="Retirer l'étoile"
-        className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] text-[#9DB0C0] hover:bg-[#FFF1EE] hover:text-[#D9573F]"
+        className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] text-[#566B82] hover:bg-[#FFF1EE] hover:text-[#B8432F]"
       >
         <Trash2 className="h-[14px] w-[14px]" />
       </button>
@@ -322,15 +322,15 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
 
   return (
     <Fenetre titre="Programmer une série de plongées réservées" onFermer={() => onFermer(false)}>
-      <p className="text-[13px] leading-normal text-[#5B7189]">Par exemple chaque dimanche de la saison, avec une ou plusieurs plongées dans la journée.</p>
+      <p className="text-[13px] leading-normal text-[#566B82]">Par exemple chaque dimanche de la saison, avec une ou plusieurs plongées dans la journée.</p>
       <div className="grid grid-cols-2 gap-[10px] pt-[12px]">
         <ChampTexte label="Premier jour" type="date" value={debut} onChange={(e) => setDebut(e.target.value)} />
         <label className="block">
-          <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">Répéter</span>
+          <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">Répéter</span>
           <select
             value={semaines}
             onChange={(e) => setSemaines(Number(e.target.value))}
-            className="block h-[52px] w-full rounded-[10px] border-[1.5px] border-[#E4EBF1] bg-white px-[12px] text-[15px] outline-none focus:border-[#57D4F5]"
+            className="block h-[52px] w-full rounded-[10px] border-[1.5px] border-[#7B8FA3] bg-white px-[12px] text-[15px] outline-none focus:border-[#57D4F5]"
           >
             <option value={1}>Une seule fois</option>
             {[2, 3, 4, 5, 6, 8, 10, 12].map((n) => (
@@ -342,7 +342,7 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
         </label>
       </div>
 
-      <p className="pb-[6px] pt-[16px] text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Plongées de la journée</p>
+      <p className="pb-[6px] pt-[16px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">Plongées de la journée</p>
       <div className="flex flex-col gap-[10px]">
         {plongees.map((p, i) => (
           <div key={i} className="rounded-[10px] border border-[#E4EBF1] p-[10px]">
@@ -365,13 +365,13 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
                   key={g}
                   type="button"
                   onClick={() => maj(i, { melange: g })}
-                  className={`h-[30px] rounded-[10px] px-[10px] text-[12px] font-bold ${p.melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                  className={`h-[30px] rounded-[10px] px-[10px] text-[12px] font-bold ${p.melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
                 >
                   {g}
                 </button>
               ))}
               {plongees.length > 1 && (
-                <button type="button" onClick={() => setPlongees(plongees.filter((_, j) => j !== i))} className="ml-auto text-[12px] font-semibold text-[#9DB0C0]">
+                <button type="button" onClick={() => setPlongees(plongees.filter((_, j) => j !== i))} className="ml-auto text-[12px] font-semibold text-[#566B82]">
                   Retirer
                 </button>
               )}
@@ -382,7 +382,7 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
           <button
             type="button"
             onClick={() => setPlongees([...plongees, { heure: "16:30", site: "", lieu: "", profondeur: "", melange: "Air" }])}
-            className="flex items-center gap-[6px] self-start text-[13px] font-bold text-[#1176A8]"
+            className="flex items-center gap-[6px] self-start text-[13px] font-bold text-[#106F9F]"
           >
             <Plus className="h-[15px] w-[15px]" /> Une plongée de plus dans la journée
           </button>
@@ -391,13 +391,13 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
 
       {bateaux.length > 0 && (
         <div className="flex flex-wrap items-center gap-[6px] pt-[14px]">
-          <span className="text-[13px] font-semibold text-[#5B7189]">Bateau :</span>
+          <span className="text-[13px] font-semibold text-[#566B82]">Bateau :</span>
           {bateaux.map((b) => (
             <button
               key={b.id}
               type="button"
               onClick={() => setBateau(bateau === b.id ? null : b.id)}
-              className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${bateau === b.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+              className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${bateau === b.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
             >
               {b.libelle} · {b.places} pl.
             </button>
@@ -410,13 +410,13 @@ function FeuilleSerie({ centre, onFermer }: { centre: string; onFermer: (fait: b
 
       <p className="pt-[14px] text-[13px] font-semibold">
         {liste.length} plongée{liste.length > 1 ? "s" : ""} réservée{liste.length > 1 ? "s" : ""} :{" "}
-        <span className="font-normal text-[#5B7189]">
+        <span className="font-normal text-[#566B82]">
           {dates.map((d) => dateCourte(d)).join(", ")}
         </span>
       </p>
       <MessageErreur texte={erreur} />
       <div className="flex justify-end gap-[10px] pt-[16px]">
-        <button type="button" onClick={() => onFermer(false)} className="h-[44px] rounded-[10px] px-[14px] text-[13.5px] font-bold text-[#5B7189]">
+        <button type="button" onClick={() => onFermer(false)} className="h-[44px] rounded-[10px] px-[14px] text-[13.5px] font-bold text-[#566B82]">
           Annuler
         </button>
         <button
@@ -493,7 +493,7 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
     <Fenetre titre="Inviter les membres privilégiés" onFermer={onFermer} large>
       <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
         <div>
-          <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">
+          <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">
             Destinataires · {dest.size}/{c.membres.length}
           </p>
           <div className="max-h-[200px] overflow-y-auto rounded-[10px] border border-[#E4EBF1]">
@@ -503,41 +503,41 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
                 <span className="min-w-0 flex-1 truncate text-[13.5px] font-semibold">
                   {m.prenom} {m.nom?.toUpperCase() ?? ""}
                 </span>
-                <span className="shrink-0 text-[11.5px] text-[#7D93A8]">{m.sur_palanote ? "app" : ""}{m.sur_palanote && m.email ? " + " : ""}{m.email ? "e-mail" : m.sur_palanote ? "" : "—"}</span>
+                <span className="shrink-0 text-[11.5px] text-[#566B82]">{m.sur_palanote ? "app" : ""}{m.sur_palanote && m.email ? " + " : ""}{m.email ? "e-mail" : m.sur_palanote ? "" : "—"}</span>
               </label>
             ))}
           </div>
-          <p className="pb-[6px] pt-[14px] text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">
+          <p className="pb-[6px] pt-[14px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">
             Plongées proposées · {choix.size}/{c.sorties.length}
           </p>
           {c.sorties.length === 0 ? (
-            <p className="text-[13px] text-[#7D93A8]">Programme d'abord une série de plongées réservées.</p>
+            <p className="text-[13px] text-[#566B82]">Programme d'abord une série de plongées réservées.</p>
           ) : (
             <div className="max-h-[200px] overflow-y-auto rounded-[10px] border border-[#E4EBF1]">
               {c.sorties.map((s, i) => (
                 <label key={s.id} className={`flex cursor-pointer items-center gap-[10px] px-[12px] py-[8px] ${i > 0 ? "border-t border-[#EEF3F8]" : ""}`}>
                   <input type="checkbox" checked={choix.has(s.id)} onChange={() => basculer(choix, s.id, setChoix)} className="h-[16px] w-[16px] accent-[#0F3D70]" />
-                  <span className="w-[86px] shrink-0 text-[12px] font-bold text-[#1176A8] first-letter:uppercase">
+                  <span className="w-[86px] shrink-0 text-[12px] font-bold text-[#106F9F] first-letter:uppercase">
                     {dateCourte(s.date)} {heureCourte(s.heure)}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[13.5px] font-semibold">{s.site}</span>
-                  {s.melange && <span className="shrink-0 text-[11.5px] font-bold text-[#1176A8]">{s.melange}</span>}
+                  {s.melange && <span className="shrink-0 text-[11.5px] font-bold text-[#106F9F]">{s.melange}</span>}
                 </label>
               ))}
             </div>
           )}
         </div>
         <div className="flex flex-col">
-          <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Message</p>
+          <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">Message</p>
           <textarea
             value={texte}
             onChange={(e) => setMessage(e.target.value)}
             rows={14}
             aria-label="Message de l'invitation"
-            className="w-full flex-1 rounded-[10px] border-[1.5px] border-[#E4EBF1] bg-white px-[12px] py-[10px] text-[13px] leading-relaxed outline-none focus:border-[#57D4F5]"
+            className="w-full flex-1 rounded-[10px] border-[1.5px] border-[#7B8FA3] bg-white px-[12px] py-[10px] text-[13px] leading-relaxed outline-none focus:border-[#57D4F5]"
           />
           {message !== null && (
-            <button type="button" onClick={() => setMessage(null)} className="self-start pt-[4px] text-[12px] font-semibold text-[#1176A8]">
+            <button type="button" onClick={() => setMessage(null)} className="self-start pt-[4px] text-[12px] font-semibold text-[#106F9F]">
               Revenir au message proposé
             </button>
           )}
@@ -545,22 +545,22 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
       </div>
 
       {resultat && (
-        <p className="mt-[12px] flex items-start gap-[8px] rounded-[10px] bg-[#E2F8EF] px-[12px] py-[10px] text-[13px] font-semibold text-[#14805F]">
+        <p className="mt-[12px] flex items-start gap-[8px] rounded-[10px] bg-[#E2F8EF] px-[12px] py-[10px] text-[13px] font-semibold text-[#137758]">
           <Check className="mt-[2px] h-[15px] w-[15px] shrink-0" /> {resultat}
         </p>
       )}
       <MessageErreur texte={erreur} />
       <div className="flex flex-wrap items-center justify-end gap-[8px] pt-[16px]">
-        <button type="button" onClick={() => copier("adresses", emails.join(", "))} disabled={emails.length === 0} className="flex h-[42px] items-center gap-[6px] rounded-[10px] px-[12px] text-[13px] font-bold text-[#5B7189] disabled:opacity-40">
+        <button type="button" onClick={() => copier("adresses", emails.join(", "))} disabled={emails.length === 0} className="flex h-[42px] items-center gap-[6px] rounded-[10px] px-[12px] text-[13px] font-bold text-[#566B82] disabled:opacity-40">
           <Copy className="h-[14px] w-[14px]" /> {copie === "adresses" ? "Copié" : emails.length === 1 ? "Copier l'adresse" : `Copier les ${emails.length} adresses`}
         </button>
-        <button type="button" onClick={() => copier("message", texte)} className="flex h-[42px] items-center gap-[6px] rounded-[10px] px-[12px] text-[13px] font-bold text-[#5B7189]">
+        <button type="button" onClick={() => copier("message", texte)} className="flex h-[42px] items-center gap-[6px] rounded-[10px] px-[12px] text-[13px] font-bold text-[#566B82]">
           <Copy className="h-[14px] w-[14px]" /> {copie === "message" ? "Message copié" : "Copier le message"}
         </button>
         <a
           href={emails.length > 0 ? mailto : undefined}
           aria-disabled={emails.length === 0}
-          className={`flex h-[42px] items-center gap-[6px] rounded-[10px] border border-[#57D4F5] bg-white px-[14px] text-[13px] font-bold text-[#1176A8] ${emails.length === 0 ? "pointer-events-none opacity-40" : ""}`}
+          className={`flex h-[42px] items-center gap-[6px] rounded-[10px] border border-[#57D4F5] bg-white px-[14px] text-[13px] font-bold text-[#106F9F] ${emails.length === 0 ? "pointer-events-none opacity-40" : ""}`}
         >
           <Mail className="h-[15px] w-[15px]" /> Préparer l'e-mail ({emails.length})
         </a>
@@ -573,7 +573,7 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
           <Send className="h-[15px] w-[15px]" /> {enCours ? "ENVOI…" : `PRÉVENIR DANS L'APP (${destinataires.filter((m) => m.sur_palanote).length})`}
         </button>
       </div>
-      <p className="pt-[8px] text-right text-[11.5px] text-[#9DB0C0]">L'e-mail s'ouvre dans ta messagerie, adresses en copie cachée.</p>
+      <p className="pt-[8px] text-right text-[11.5px] text-[#566B82]">L'e-mail s'ouvre dans ta messagerie, adresses en copie cachée.</p>
     </Fenetre>
   );
 }

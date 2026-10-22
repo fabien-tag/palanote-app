@@ -36,7 +36,7 @@ function NouvelleSortie() {
           }
         />
       ) : (
-        <p className="pt-[20px] text-[14px] text-[#5B7189]">Choisis d'abord ton centre dans Paramètres.</p>
+        <p className="pt-[20px] text-[14px] text-[#566B82]">Choisis d'abord ton centre dans Paramètres.</p>
       )}
     </PageClub>
   );

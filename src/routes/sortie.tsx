@@ -159,7 +159,7 @@ function PageSortie() {
             <p className="text-[15px] font-bold">
               {a.etat === "annulee" ? "Cette sortie est annulée" : a.etat === "validee" ? "Cette sortie est terminée" : "Sortie introuvable"}
             </p>
-            <p className="pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">
+            <p className="pt-[4px] text-[13.5px] leading-normal text-[#566B82]">
               {a.etat === "introuvable" ? "Le lien est peut-être incomplet. Demande au directeur de plongée de te montrer à nouveau son QR code." : "Les inscriptions sont fermées."}
             </p>
           </div>
@@ -174,17 +174,17 @@ function PageSortie() {
                 <span className="min-w-0">
                   <span className="flex items-center gap-[5px] text-[15px] font-bold">
                     <span className="truncate">{a.centre ?? `Sortie entre amis`}</span>
-                    {a.centre_verifie && <BadgeCheck className="h-[15px] w-[15px] shrink-0 text-[#1176A8]" aria-label="Centre vérifié" />}
+                    {a.centre_verifie && <BadgeCheck className="h-[15px] w-[15px] shrink-0 text-[#106F9F]" aria-label="Centre vérifié" />}
                   </span>
-                  <span className="block text-[12.5px] text-[#5B7189]">{[a.ville, a.dp ? (a.centre ? `DP ${a.dp}` : `organisée par ${a.dp}`) : null].filter(Boolean).join(" · ")}</span>
+                  <span className="block text-[12.5px] text-[#566B82]">{[a.ville, a.dp ? (a.centre ? `DP ${a.dp}` : `organisée par ${a.dp}`) : null].filter(Boolean).join(" · ")}</span>
                 </span>
               </div>
-              <p className="pt-[16px] text-[12.5px] font-bold uppercase tracking-[.07em] text-[#1176A8]">
+              <p className="pt-[16px] text-[12.5px] font-bold uppercase tracking-[.07em] text-[#106F9F]">
                 {a.date_texte}
                 {a.heure ? ` · ${heureCourte(a.heure)}` : ""}
               </p>
               <h1 className="pt-[2px] text-[25px] font-bold leading-tight">{a.site}</h1>
-              {a.lieu && <p className="text-[13.5px] text-[#5B7189]">{a.lieu}</p>}
+              {a.lieu && <p className="text-[13.5px] text-[#566B82]">{a.lieu}</p>}
               <div className="flex flex-wrap gap-[6px] pt-[12px]">
                 {a.bateau && <Info Icone={Ship} texte={a.bateau} />}
                 {a.profondeur_prevue ? <Info Icone={Waves} texte={`${String(a.profondeur_prevue).replace(".", ",")} m prévus`} /> : null}
@@ -225,7 +225,7 @@ function PageSortie() {
             {connecte && libres.length > 0 && (
               <div className="pt-[20px]">
                 <p className="text-[16px] font-bold">Qui es-tu ?</p>
-                <p className="pb-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+                <p className="pb-[10px] text-[12.5px] leading-snug text-[#566B82]">
                   {a.dp ?? "L'organisateur"} a déjà préparé les palanquées. Choisis ton prénom : tu rejoins directement la tienne.
                 </p>
                 <div className="flex flex-wrap gap-[8px]" role="radiogroup" aria-label="Ton prénom dans les palanquées">
@@ -241,7 +241,7 @@ function PageSortie() {
                       }`}
                     >
                       {n.nom}
-                      {n.palanquee && <span className={`text-[11.5px] font-semibold ${place === n.id ? "text-white/70" : "text-[#9DB0C0]"}`}>P{n.palanquee}</span>}
+                      {n.palanquee && <span className={`text-[11.5px] font-semibold ${place === n.id ? "text-white/70" : "text-[#566B82]"}`}>P{n.palanquee}</span>}
                     </button>
                   ))}
                   <button
@@ -250,7 +250,7 @@ function PageSortie() {
                     aria-checked={place === null}
                     onClick={() => setPlace(null)}
                     className={`flex h-[40px] items-center rounded-[20px] px-[14px] text-[13px] font-semibold ${
-                      place === null ? "bg-[#0F3D70] text-white" : "border border-dashed border-[#BFD7E8] text-[#5B7189]"
+                      place === null ? "bg-[#0F3D70] text-white" : "border border-dashed border-[#BFD7E8] text-[#566B82]"
                     }`}
                   >
                     Je ne suis pas dans la liste
@@ -269,11 +269,11 @@ function PageSortie() {
               ].map(({ Icone, t, x }) => (
                 <div key={t} className="flex items-start gap-[12px]">
                   <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center goutte bg-[#E3F2FB]">
-                    <Icone className="h-[18px] w-[18px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+                    <Icone className="h-[18px] w-[18px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
                   </span>
                   <span>
                     <span className="block text-[14px] font-bold leading-snug">{t}</span>
-                    <span className="block text-[12.5px] leading-normal text-[#5B7189]">{x}</span>
+                    <span className="block text-[12.5px] leading-normal text-[#566B82]">{x}</span>
                   </span>
                 </div>
               ))}
@@ -292,7 +292,7 @@ function PageSortie() {
                   type="button"
                   disabled={enCours}
                   onClick={() => void quitter()}
-                  className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+                  className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#566B82] underline underline-offset-4"
                 >
                   Quitter la liste d'attente
                 </button>
@@ -301,7 +301,7 @@ function PageSortie() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/carnet" })}
-                className="flex h-14 w-full items-center justify-center galet-moyen border border-[#D8E5EE] bg-white text-[14px] font-bold text-[#5B7189]"
+                className="flex h-14 w-full items-center justify-center galet-moyen border border-[#D8E5EE] bg-white text-[14px] font-bold text-[#566B82]"
               >
                 REVENIR À MON CARNET
               </button>
@@ -334,11 +334,11 @@ function PageSortie() {
                 <button
                   type="button"
                   onClick={() => sansCompte("/connexion")}
-                  className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#1176A8] underline underline-offset-4"
+                  className="mx-auto mt-[12px] block text-[13.5px] font-semibold text-[#106F9F] underline underline-offset-4"
                 >
                   J'ai déjà un compte
                 </button>
-                <p className="pt-[12px] text-center text-[11.5px] leading-normal text-[#9DB0C0]">
+                <p className="pt-[12px] text-center text-[11.5px] leading-normal text-[#566B82]">
                   Ton inscription est gardée le temps de créer ton compte. Carnet gratuit, sans publicité.
                 </p>
               </>
@@ -368,7 +368,7 @@ function PageSortie() {
     <button
       type="button"
       onClick={() => navigate({ to: "/nouvelle-plongee", search: { id: d.moi!.dive_id! } })}
-      className="flex h-14 w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+      className="flex h-14 w-full items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F]"
     >
       VOIR MA PLONGÉE
     </button>
@@ -381,12 +381,12 @@ function PageSortie() {
         <div className="flex items-start gap-[12px]">
           <BlocDate date={d.date} />
           <span className="min-w-0">
-            <span className="block text-[12.5px] font-bold uppercase tracking-[.07em] text-[#1176A8]">
+            <span className="block text-[12.5px] font-bold uppercase tracking-[.07em] text-[#106F9F]">
               {d.date_texte}
               {d.heure ? ` · ${heureCourte(d.heure)}` : ""}
             </span>
             <span className="block text-[22px] font-bold leading-tight">{d.site}</span>
-            <span className="block text-[13px] text-[#5B7189]">{[d.lieu, d.centre.nom].filter(Boolean).join(" · ")}</span>
+            <span className="block text-[13px] text-[#566B82]">{[d.lieu, d.centre.nom].filter(Boolean).join(" · ")}</span>
           </span>
         </div>
         <div className="flex flex-wrap gap-[6px] pt-[12px]">
@@ -395,7 +395,7 @@ function PageSortie() {
           {d.duree_min ? <Info Icone={Clock} texte={`${d.duree_min} min`} /> : null}
           {d.temp_fond_c !== null ? <Info Icone={Thermometer} texte={`${String(d.temp_fond_c).replace(".", ",")} °C`} /> : null}
         </div>
-        <p className="pt-[10px] text-[12.5px] text-[#5B7189]">
+        <p className="pt-[10px] text-[12.5px] text-[#566B82]">
           {d.entre_amis ? "Organisée par " : "Directeur de plongée : "}
           <b className="text-[#123A63]">{d.dp.prenom}</b>
           {d.dp.niveau ? ` (${d.dp.niveau})` : ""}
@@ -418,14 +418,14 @@ function PageSortie() {
               <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[14.5px] font-bold">{p.prenom}</span>
-                <span className="block truncate text-[12px] text-[#5B7189]">{p.prevu ? "pas encore sur Palanote" : (p.niveau ?? "Plongeur")}</span>
+                <span className="block truncate text-[12px] text-[#566B82]">{p.prevu ? "pas encore sur Palanote" : (p.niveau ?? "Plongeur")}</span>
               </span>
-              {p.id && maPalanquee.guide_id === p.id && <span className="text-[12px] font-bold text-[#1176A8]">Guide</span>}
+              {p.id && maPalanquee.guide_id === p.id && <span className="text-[12px] font-bold text-[#106F9F]">Guide</span>}
             </div>
           ))}
         </div>
       ) : (
-        <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] text-[#5B7189]">
+        <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] text-[#566B82]">
           {d.entre_amis ? "L'organisateur compose les palanquées" : "Le DP compose les palanquées"} : elle apparaîtra ici.
         </p>
       )}
@@ -440,7 +440,7 @@ function PageSortie() {
           </p>
         </div>
       ) : (
-        <p className="galet-b border border-[#E4EBF1] bg-white px-[15px] py-[13px] text-[13.5px] leading-normal text-[#5B7189]">
+        <p className="galet-b border border-[#E4EBF1] bg-white px-[15px] py-[13px] text-[13.5px] leading-normal text-[#566B82]">
           {d.statut === "prevue"
             ? "Après la plongée, ta fiche arrivera préremplie : site, date, durée, bateau et palanquée. Tu ajouteras ta profondeur et ton air."
             : d.statut === "annulee"
@@ -491,14 +491,14 @@ function PageSortie() {
             setPrecision("");
             setFeuilleDesistement(true);
           }}
-          className="mx-auto mt-[24px] flex items-center gap-[6px] text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+          className="mx-auto mt-[24px] flex items-center gap-[6px] text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
         >
           <UserMinus className="h-[14px] w-[14px]" /> Je ne peux plus venir
         </button>
       )}
       {feuilleDesistement && (
         <Feuille titre="Prévenir que tu ne viens pas" onFermer={() => setFeuilleDesistement(false)}>
-          <p className="pb-[12px] text-[13.5px] leading-snug text-[#5B7189]">
+          <p className="pb-[12px] text-[13.5px] leading-snug text-[#566B82]">
             {d.dp.prenom} reçoit une notification et te retire de ta palanquée. Même au dernier moment, ça l'aide à réorganiser la sortie.
           </p>
           <div className="flex flex-wrap gap-[6px]">
@@ -507,7 +507,7 @@ function PageSortie() {
                 key={m}
                 type="button"
                 onClick={() => setMotif(m)}
-                className={`h-[36px] rounded-[14px] px-[13px] text-[13px] font-bold ${motif === m ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+                className={`h-[36px] rounded-[14px] px-[13px] text-[13px] font-bold ${motif === m ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
               >
                 {m}
               </button>
@@ -518,7 +518,7 @@ function PageSortie() {
             onChange={(e) => setPrecision(e.target.value)}
             maxLength={120}
             placeholder="Un mot pour le DP (facultatif)"
-            className="mt-[12px] block h-[46px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] px-[12px] text-[14px] outline-none focus:border-[#57D4F5]"
+            className="mt-[12px] block h-[46px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] px-[12px] text-[14px] outline-none focus:border-[#57D4F5]"
           />
           <button
             type="button"
@@ -559,7 +559,7 @@ function PageSortie() {
               setEnCours(false);
             }
           }}
-          className="mx-auto mt-[24px] block text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+          className="mx-auto mt-[24px] block text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
         >
           Je ne participe plus
         </button>

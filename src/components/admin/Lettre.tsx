@@ -6,7 +6,7 @@ import { lettreHtml } from "@/lib/lettre-modele";
 
 // Section « Lettre annuelle » : bilan de l'année + appel au Récif, envoyé à ceux qui l'ont accepté.
 
-const champ = "w-full rounded-[12px] border border-[#DCE7F0] bg-white px-[12px] text-[14px] font-normal text-[#123A63] outline-none focus:border-[#57D4F5]";
+const champ = "w-full rounded-[12px] border border-[#7B8FA3] bg-white px-[12px] text-[14px] font-normal text-[#123A63] outline-none focus:border-[#57D4F5]";
 
 export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
   const anneeCourante = new Date().getFullYear();
@@ -74,19 +74,19 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
         <Bloc titre="Destinataires" voyant={n ? "vert" : "gris"} fond="bg-[linear-gradient(160deg,#F2FBF7_0%,#D3F4E7_100%)]">
           <div className="mt-auto flex items-baseline gap-[8px] text-[#0F2A4A]">
             <span className="text-[44px] font-light leading-none tracking-[-0.02em]">{infos ? n : "…"}</span>
-            <span className="text-[13px] text-[#123A63]/60">plongeur{n > 1 ? "s" : ""}</span>
+            <span className="text-[13px] text-[#566B82]">plongeur{n > 1 ? "s" : ""}</span>
           </div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">ont accepté la lettre dans Moi › Confidentialité</p>
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">ont accepté la lettre dans Moi › Confidentialité</p>
         </Bloc>
         <Bloc titre="Dernier envoi" voyant={dejaCetteAnnee ? "vert" : "orange"} fond="bg-white border border-[#E9EEF3]">
           <div className="mt-auto text-[30px] font-light leading-tight tracking-[-0.02em] text-[#0F2A4A]">
             {derniere ? new Date(derniere.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "Jamais"}
           </div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">{dejaCetteAnnee ? `La lettre ${annee} est déjà partie.` : `La lettre ${annee} n'est pas encore partie.`}</p>
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">{dejaCetteAnnee ? `La lettre ${annee} est déjà partie.` : `La lettre ${annee} n'est pas encore partie.`}</p>
         </Bloc>
         <Bloc titre="Quand l'envoyer" fond="bg-[linear-gradient(160deg,#FBF9F4_0%,#F1E7D3_100%)]">
           <div className="mt-auto text-[30px] font-light leading-tight tracking-[-0.02em] text-[#0F2A4A]">Début décembre</div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">Une seule fois par an, comme promis aux plongeurs.</p>
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">Une seule fois par an, comme promis aux plongeurs.</p>
         </Bloc>
       </div>
 
@@ -94,7 +94,7 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
         {/* Rédaction */}
         <div className={`${carte} flex flex-col gap-[14px] p-[20px]`}>
           <h2 className="text-[15px] font-semibold">Rédiger la lettre</h2>
-          <label className="text-[12.5px] font-semibold text-[#7D93A8]">
+          <label className="text-[12.5px] font-semibold text-[#566B82]">
             Année du bilan
             <select className={`${champ} mt-[6px] h-[40px]`} value={annee} onChange={(e) => setAnnee(Number(e.target.value))}>
               {[anneeCourante, anneeCourante - 1].map((a) => (
@@ -104,15 +104,15 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
               ))}
             </select>
           </label>
-          <label className="text-[12.5px] font-semibold text-[#7D93A8]">
+          <label className="text-[12.5px] font-semibold text-[#566B82]">
             Objet du mail
             <input className={`${champ} mt-[6px] h-[40px]`} value={sujet} onChange={(e) => setSujet(e.target.value)} />
           </label>
-          <label className="text-[12.5px] font-semibold text-[#7D93A8]">
+          <label className="text-[12.5px] font-semibold text-[#566B82]">
             Message (après le bilan de l'année)
             <textarea className={`${champ} mt-[6px] min-h-[220px] py-[10px] leading-normal`} value={contenu} onChange={(e) => setContenu(e.target.value)} />
           </label>
-          <p className="text-[12px] leading-snug text-[#9DB0C0]">
+          <p className="text-[12px] leading-snug text-[#566B82]">
             {"{prenom}"} est remplacé par le prénom de chacun, {"{annee}"} par l'année dans l'objet. Chaque plongeur reçoit en haut son propre bilan (plongées, sites, heures, plus
             profonde), puis le bouton « Rejoindre le Récif » et le lien pour ne plus recevoir la lettre.
           </p>
@@ -151,7 +151,7 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
                 <button type="button" onClick={() => void envoyer(false)} className="h-[38px] rounded-[10px] bg-[#C94957] px-[14px] text-[13px] font-semibold text-white">
                   Oui, envoyer
                 </button>
-                <button type="button" onClick={() => setConfirmer(false)} className="h-[38px] rounded-[10px] px-[14px] text-[13px] font-semibold text-[#5B7189]">
+                <button type="button" onClick={() => setConfirmer(false)} className="h-[38px] rounded-[10px] px-[14px] text-[13px] font-semibold text-[#566B82]">
                   Annuler
                 </button>
               </div>
@@ -163,7 +163,7 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
         <div className={`${carte} overflow-hidden`}>
           <div className="flex items-center justify-between border-b border-[#EDF1F5] px-[20px] py-[14px]">
             <h2 className="text-[15px] font-semibold">Aperçu</h2>
-            <span className="text-[12px] text-[#9DB0C0]">avec un bilan d'exemple</span>
+            <span className="text-[12px] text-[#566B82]">avec un bilan d'exemple</span>
           </div>
           <iframe title="Aperçu de la lettre" srcDoc={apercu} sandbox="" className="h-[760px] w-full bg-[#EEF3F8]" />
         </div>
@@ -172,7 +172,7 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
       {/* Historique */}
       <div className={`${carte} p-[20px]`}>
         <h2 className="text-[15px] font-semibold">Envois</h2>
-        {infos && infos.lettres.length === 0 && <p className="py-[14px] text-[13.5px] text-[#9DB0C0]">Aucun envoi pour l'instant.</p>}
+        {infos && infos.lettres.length === 0 && <p className="py-[14px] text-[13.5px] text-[#566B82]">Aucun envoi pour l'instant.</p>}
         <table className="mt-[8px] w-full text-left text-[13.5px]">
           <tbody>
             {infos?.lettres.map((l) => (
@@ -184,7 +184,7 @@ export function SectionLettre({ prenomAdmin }: { prenomAdmin: string }) {
                   </span>
                 </td>
                 <td className="py-[10px]">{l.sujet}</td>
-                <td className="py-[10px] text-[#7D93A8]">{l.test ? "test" : "envoi réel"}</td>
+                <td className="py-[10px] text-[#566B82]">{l.test ? "test" : "envoi réel"}</td>
                 <td className="py-[10px] text-right">
                   {l.nb_envoyes} / {l.nb_destinataires}
                 </td>

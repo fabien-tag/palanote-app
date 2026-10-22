@@ -183,7 +183,7 @@ function PagePlanning() {
             type="button"
             onClick={() => setExporter(true)}
             aria-label="Exporter la saison en Excel"
-            className="flex h-[42px] items-center gap-2 rounded-[10px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#14805F] lg:px-[14px]"
+            className="flex h-[42px] items-center gap-2 rounded-[10px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#137758] lg:px-[14px]"
           >
             <FileSpreadsheet className="h-[17px] w-[17px]" aria-hidden="true" />
             <span className="hidden sm:inline">EXPORTER</span>
@@ -202,9 +202,9 @@ function PagePlanning() {
     >
       <MessageErreur texte={erreurCentre ?? erreur} />
       {centres && centres.length === 0 && !erreurCentre && (
-        <p className="pt-[16px] text-[14px] text-[#5B7189]">
+        <p className="pt-[16px] text-[14px] text-[#566B82]">
           Choisis d'abord ton centre dans l'onglet Sorties.{" "}
-          <button type="button" className="font-bold text-[#1176A8]" onClick={() => navigate({ to: "/club/centre" })}>
+          <button type="button" className="font-bold text-[#106F9F]" onClick={() => navigate({ to: "/club/centre" })}>
             Choisir mon centre
           </button>
         </p>
@@ -228,7 +228,7 @@ function PagePlanning() {
                   role="tab"
                   aria-selected={vue === id}
                   onClick={() => aller({ vue: id })}
-                  className={`h-[34px] rounded-[11px] px-[14px] text-[13px] font-bold ${vue === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+                  className={`h-[34px] rounded-[11px] px-[14px] text-[13px] font-bold ${vue === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
                 >
                   {l}
                 </button>
@@ -242,13 +242,13 @@ function PagePlanning() {
                 <button type="button" aria-label="Période suivante" onClick={() => decaler(1)} className="flex h-[36px] w-[36px] items-center justify-center goutte bg-white">
                   <ChevronRight className="h-[18px] w-[18px]" />
                 </button>
-                <button type="button" onClick={() => aller({ semaine: auj })} className="h-[36px] rounded-[18px] border border-[#D8E5EE] bg-white px-[12px] text-[12.5px] font-bold text-[#1176A8]">
+                <button type="button" onClick={() => aller({ semaine: auj })} className="h-[36px] rounded-[18px] border border-[#D8E5EE] bg-white px-[12px] text-[12.5px] font-bold text-[#106F9F]">
                   Aujourd'hui
                 </button>
               </div>
             )}
             <h2 className="text-[17px] font-bold first-letter:uppercase">{titrePeriode}</h2>
-            <span className="ml-auto text-[12.5px] text-[#7D93A8]">{centre.nom}</span>
+            <span className="ml-auto text-[12.5px] text-[#566B82]">{centre.nom}</span>
           </div>
 
           {vue !== "suivi" && plan && <ResumePeriode plan={plan} />}
@@ -269,13 +269,13 @@ function PagePlanning() {
                     }`}
                   >
                     <div className={`flex items-center justify-between px-[4px] lg:pb-[8px] ${liste.length > 0 ? "pb-[8px]" : ""}`}>
-                      <span className={`text-[13px] font-bold ${passe ? "text-[#9DB0C0]" : ""}`}>
+                      <span className={`text-[13px] font-bold ${passe ? "text-[#566B82]" : ""}`}>
                         {JOURS[i]} <span className="text-[18px]">{depuisIso(d).getDate()}</span>
                       </span>
                       <span className="flex items-center gap-[8px]">
-                        {liste.length > 0 && <span className="text-[11.5px] font-semibold text-[#5B7189]">{pal} pal.</span>}
+                        {liste.length > 0 && <span className="text-[11.5px] font-semibold text-[#566B82]">{pal} pal.</span>}
                         {!passe && (
-                          <button type="button" onClick={() => nouvelle(d)} aria-label={`Nouvelle sortie le ${d}`} className="flex h-[28px] w-[28px] items-center justify-center goutte bg-[#E3F2FB] text-[#1176A8] lg:hidden">
+                          <button type="button" onClick={() => nouvelle(d)} aria-label={`Nouvelle sortie le ${d}`} className="flex h-[28px] w-[28px] items-center justify-center goutte bg-[#E3F2FB] text-[#106F9F] lg:hidden">
                             <Plus className="h-[15px] w-[15px]" />
                           </button>
                         )}
@@ -291,7 +291,7 @@ function PagePlanning() {
                         type="button"
                         onClick={() => nouvelle(d)}
                         aria-label={`Nouvelle sortie le ${d}`}
-                        className="mt-[8px] hidden h-[34px] items-center justify-center gap-[4px] rounded-[12px] text-[12.5px] font-bold text-[#9DB0C0] hover:bg-[#E3F2FB] hover:text-[#1176A8] lg:flex"
+                        className="mt-[8px] hidden h-[34px] items-center justify-center gap-[4px] rounded-[12px] text-[12.5px] font-bold text-[#566B82] hover:bg-[#E3F2FB] hover:text-[#106F9F] lg:flex"
                       >
                         <Plus className="h-[15px] w-[15px]" /> Sortie
                       </button>
@@ -307,7 +307,7 @@ function PagePlanning() {
             <div className="pt-[12px]">
               <div className="hidden grid-cols-7 gap-[6px] pb-[6px] lg:grid">
                 {JOURS.map((j) => (
-                  <span key={j} className="px-[6px] text-[12px] font-bold uppercase tracking-[.06em] text-[#7D93A8]">
+                  <span key={j} className="px-[6px] text-[12px] font-bold uppercase tracking-[.06em] text-[#566B82]">
                     {j}
                   </span>
                 ))}
@@ -328,7 +328,7 @@ function PagePlanning() {
                       } ${horsMois ? "opacity-50" : ""} ${liste.length === 0 ? "hidden lg:flex" : ""}`}
                     >
                       <div className="flex items-baseline justify-between">
-                        <span className={`text-[13px] font-bold ${d < auj ? "text-[#9DB0C0]" : ""}`}>
+                        <span className={`text-[13px] font-bold ${d < auj ? "text-[#566B82]" : ""}`}>
                           <span className="lg:hidden">{JOURS[(depuisIso(d).getDay() + 6) % 7]} </span>
                           {depuisIso(d).getDate()}
                         </span>
@@ -350,7 +350,7 @@ function PagePlanning() {
                           className={`truncate rounded-[8px] border-l-[3px] bg-[#F1F6FC] px-[6px] py-[3px] text-left text-[11.5px] font-semibold ${COULEUR_STATUT[s.statut]}`}
                         >
                           {heureCourte(s.heure)} {s.site}
-                          {alertesSortie(s, plan!.sorties, plan!.materiel).length > 0 && <AlertTriangle className="ml-[3px] inline h-[11px] w-[11px] text-[#D9573F]" />}
+                          {alertesSortie(s, plan!.sorties, plan!.materiel).length > 0 && <AlertTriangle className="ml-[3px] inline h-[11px] w-[11px] text-[#B8432F]" />}
                         </button>
                       ))}
                     </div>
@@ -386,7 +386,7 @@ function PagePlanning() {
       )}
       {aTamponner && (
         <Feuille titre={`Tamponner ${aTamponner.site} ?`} onFermer={() => setATamponner(null)}>
-          <p className="text-[14px] leading-normal text-[#5B7189]">
+          <p className="text-[14px] leading-normal text-[#566B82]">
             {aTamponner.nb_completees ?? 0} fiche{(aTamponner.nb_completees ?? 0) > 1 ? "s" : ""} remplie{(aTamponner.nb_completees ?? 0) > 1 ? "s" : ""} sur {aTamponner.nb_inscrits ?? 0}.
             Tout le monde est tamponné ; ceux qui rempliront leur fiche plus tard le seront automatiquement. Pour retirer quelqu'un du tampon, ouvre la sortie.
           </p>
@@ -428,7 +428,7 @@ function ResumePeriode({ plan }: { plan: Planning }) {
         </span>
       ))}
       {alertes > 0 && (
-        <span className="flex items-center gap-[5px] rounded-[12px] bg-[#FFE9E2] px-[12px] py-[6px] text-[13px] font-bold text-[#D9573F]">
+        <span className="flex items-center gap-[5px] rounded-[12px] bg-[#FFE9E2] px-[12px] py-[6px] text-[13px] font-bold text-[#B8432F]">
           <AlertTriangle className="h-[14px] w-[14px]" /> {alertes} point{alertes > 1 ? "s" : ""} à régler
         </span>
       )}
@@ -453,19 +453,19 @@ function CarteSortie({ s, plan, reservee, onClick }: { s: SortiePlanning; plan: 
         deplacable ? "cursor-grab active:cursor-grabbing" : ""
       }`}
     >
-      <span className="flex items-center gap-[4px] text-[11.5px] font-bold text-[#1176A8]">
+      <span className="flex items-center gap-[4px] text-[11.5px] font-bold text-[#106F9F]">
         {heureCourte(s.heure) || "—"}
-        {!s.mienne && <span className="font-semibold text-[#7D93A8]"> · DP {s.dp}</span>}
+        {!s.mienne && <span className="font-semibold text-[#566B82]"> · DP {s.dp}</span>}
         {reservee && <Star className="ml-auto h-[13px] w-[13px] shrink-0" fill="#E9A93A" stroke="#E9A93A" aria-label="Réservée aux membres privilégiés" />}
       </span>
       <span className="block truncate text-[14px] font-bold leading-snug">{s.site}</span>
-      <span className="block truncate text-[11.5px] text-[#5B7189]">
+      <span className="block truncate text-[11.5px] text-[#566B82]">
         {monde} plong. · {s.nb_palanquees} pal.
         {s.statut !== "prevue" && ` · ${s.nb_completees}/${s.nb_inscrits} fiches`}
       </span>
-      {reservee?.melange && <span className="mt-[3px] inline-block rounded-[6px] bg-[#E3F2FB] px-[5px] py-[1px] text-[10.5px] font-bold text-[#1176A8]">{reservee.melange}</span>}
+      {reservee?.melange && <span className="mt-[3px] inline-block rounded-[6px] bg-[#E3F2FB] px-[5px] py-[1px] text-[10.5px] font-bold text-[#106F9F]">{reservee.melange}</span>}
       {s.bateau && (
-        <span className="flex items-center gap-[4px] pt-[3px] text-[11px] text-[#7D93A8]">
+        <span className="flex items-center gap-[4px] pt-[3px] text-[11px] text-[#566B82]">
           <Ship className="h-[11px] w-[11px]" /> <span className="truncate">{s.bateau}</span>
         </span>
       )}
@@ -480,7 +480,7 @@ function CarteSortie({ s, plan, reservee, onClick }: { s: SortiePlanning; plan: 
         </span>
       )}
       {alertes.length > 0 && (
-        <span className="flex items-start gap-[4px] pt-[6px] text-[11px] font-bold leading-tight text-[#D9573F]">
+        <span className="flex items-start gap-[4px] pt-[6px] text-[11px] font-bold leading-tight text-[#B8432F]">
           <AlertTriangle className="mt-[1px] h-[11px] w-[11px] shrink-0" />
           {alertes[0]}
           {alertes.length > 1 ? ` (+${alertes.length - 1})` : ""}
@@ -555,9 +555,9 @@ function KanbanSorties({
           >
             <div className="flex items-baseline justify-between px-[4px]">
               <span className="text-[14px] font-bold">
-                {c.titre} <span className="text-[#5B7189]">{liste.length}</span>
+                {c.titre} <span className="text-[#566B82]">{liste.length}</span>
               </span>
-              <span className="text-[11.5px] text-[#7D93A8]">{c.aide}</span>
+              <span className="text-[11.5px] text-[#566B82]">{c.aide}</span>
             </div>
             {liste.map((s) => (
               <button
@@ -568,18 +568,18 @@ function KanbanSorties({
                 onClick={() => onOuvrir(s.id)}
                 className={`block w-full cursor-grab rounded-[14px] border-l-[4px] bg-white px-[11px] py-[9px] text-left shadow-[0_3px_10px_#123A630D] active:cursor-grabbing ${COULEUR_STATUT[s.statut]}`}
               >
-                <span className="block text-[11.5px] font-bold text-[#1176A8] first-letter:uppercase">
+                <span className="block text-[11.5px] font-bold text-[#106F9F] first-letter:uppercase">
                   {depuisIso(s.date).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })}
                   {s.heure ? ` · ${heureCourte(s.heure)}` : ""}
                 </span>
                 <span className="block truncate text-[14px] font-bold">{s.site}</span>
-                <span className="block truncate text-[11.5px] text-[#5B7189]">
+                <span className="block truncate text-[11.5px] text-[#566B82]">
                   {s.nb_inscrits ?? 0} plongeur{(s.nb_inscrits ?? 0) > 1 ? "s" : ""}
                   {c.id !== "prevue" ? ` · ${s.nb_completees ?? 0}/${s.nb_inscrits ?? 0} fiches` : s.nb_prevus ? ` · ${s.nb_prevus} en attente` : ""}
                 </span>
               </button>
             ))}
-            {liste.length === 0 && <span className="px-[4px] py-[14px] text-center text-[12px] text-[#9DB0C0]">{cible ? "Glisse une sortie ici" : "Rien ici"}</span>}
+            {liste.length === 0 && <span className="px-[4px] py-[14px] text-center text-[12px] text-[#566B82]">{cible ? "Glisse une sortie ici" : "Rien ici"}</span>}
           </div>
         );
       })}
@@ -597,7 +597,7 @@ function FeuilleCloturer({ s, onFermer, onFait }: { s: SortieResume; onFermer: (
   const nombre = (v: string) => (v.trim() === "" ? null : Number(v.replace(",", ".")));
   return (
     <Feuille titre={`${s.site} : la plongée est finie`} onFermer={onFermer}>
-      <p className="pb-[14px] text-[13.5px] text-[#5B7189]">Chaque plongeur reçoit sa fiche préremplie avec ces infos.</p>
+      <p className="pb-[14px] text-[13.5px] text-[#566B82]">Chaque plongeur reçoit sa fiche préremplie avec ces infos.</p>
       <div className="grid grid-cols-3 gap-[10px]">
         <ChampTexte label="Durée (min)" inputMode="numeric" value={duree} onChange={(e) => setDuree(e.target.value.replace(/\D/g, "").slice(0, 3))} />
         <ChampTexte label="Eau (°C)" inputMode="decimal" value={temp} onChange={(e) => setTemp(e.target.value.replace(/[^\d,.]/g, "").slice(0, 4))} />

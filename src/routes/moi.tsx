@@ -129,7 +129,7 @@ function Moi() {
         <div className="px-[22px] pb-[24px]">
           {connecte === false && (
             <div className="flex flex-col items-center gap-4 pt-[10svh] text-center">
-              <p className="text-[15px] text-[#5B7189]">Connecte-toi pour retrouver ton profil et tes réglages.</p>
+              <p className="text-[15px] text-[#566B82]">Connecte-toi pour retrouver ton profil et tes réglages.</p>
               <button
                 type="button"
                 onClick={() => navigate({ to: "/connexion" })}
@@ -153,7 +153,7 @@ function Moi() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[20px] font-bold leading-tight">{profil?.prenom ?? " "}</span>
-                  <span className="block truncate text-[13.5px] text-[#5B7189]">
+                  <span className="block truncate text-[13.5px] text-[#566B82]">
                     {profil && (profil.niveau || profil.club || profil.role) ? [profil.niveau, libelleRole(profil.role), profil.club].filter(Boolean).join(" · ") : "Ajoute ton niveau et ton club"}
                   </span>
                 </span>
@@ -164,7 +164,7 @@ function Moi() {
                 {tuiles.map(([label, cle]) => (
                   <div key={cle}>
                     <b className="block text-[19px] leading-tight">{stats ? stats[cle] : "…"}</b>
-                    <small className="text-[12px] text-[#9DB0C0]">{label}</small>
+                    <small className="text-[12px] text-[#566B82]">{label}</small>
                   </div>
                 ))}
               </div>
@@ -281,13 +281,13 @@ function GraphiqueMois({ plongees }: { plongees: CartePlongee[] }) {
             ))}
           </select>
         ) : (
-          <span className="text-[12.5px] font-semibold text-[#9DB0C0]">{annee}</span>
+          <span className="text-[12.5px] font-semibold text-[#566B82]">{annee}</span>
         )}
       </div>
       <div className="mt-[14px] flex h-[96px] items-end gap-[5px]" role="img" aria-label={`Plongées par mois en ${annee}`}>
         {parMois.map((n, i) => (
           <div key={i} className="flex h-full flex-1 flex-col items-center justify-end gap-[3px]">
-            {n > 0 && <span className={`text-[11px] font-bold ${seulMeilleur && i === meilleur ? "text-[#123A63]" : "text-[#7D93A8]"}`}>{n}</span>}
+            {n > 0 && <span className={`text-[11px] font-bold ${seulMeilleur && i === meilleur ? "text-[#123A63]" : "text-[#566B82]"}`}>{n}</span>}
             <div
               className={`w-full rounded-t-[5px] ${n === 0 ? "bg-[#E7EFF6]" : seulMeilleur && i === meilleur ? "bg-[#0F3D70]" : "bg-[#9ACDEB]"}`}
               style={{ height: n === 0 ? 3 : `${Math.max(10, (n / max) * 70)}px` }}
@@ -297,12 +297,12 @@ function GraphiqueMois({ plongees }: { plongees: CartePlongee[] }) {
       </div>
       <div className="mt-[6px] flex gap-[5px]">
         {INITIALES_MOIS.map((m, i) => (
-          <span key={i} className="flex-1 text-center text-[10.5px] text-[#9DB0C0]">
+          <span key={i} className="flex-1 text-center text-[10.5px] text-[#566B82]">
             {m}
           </span>
         ))}
       </div>
-      <p className="pt-[10px] text-[12.5px] leading-normal text-[#5B7189]">
+      <p className="pt-[10px] text-[12.5px] leading-normal text-[#566B82]">
         {total} plongée{total > 1 ? "s" : ""} en {annee}.
         {seulMeilleur ? ` ${NOMS_MOIS[meilleur]} t'en a pris ${max}.` : ""}
         {vides > 0 ? ` ${vides} mois sans plongée.` : ""}

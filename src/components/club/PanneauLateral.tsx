@@ -46,9 +46,9 @@ export function PanneauLateral({
       >
         <header className="flex items-start gap-[12px] border-b border-[#DFEAF2] px-[32px] py-[18px]">
           <span className="min-w-0 flex-1">
-            {surTitre && <span className="block text-[12px] font-bold uppercase tracking-[.08em] text-[#1176A8]">{surTitre}</span>}
+            {surTitre && <span className="block text-[12px] font-bold uppercase tracking-[.08em] text-[#106F9F]">{surTitre}</span>}
             <span className="block pt-[2px] text-[21px] font-bold leading-tight">{titre}</span>
-            {sousTitre && <span className="block pt-[2px] text-[13px] text-[#5B7189]">{sousTitre}</span>}
+            {sousTitre && <span className="block pt-[2px] text-[13px] text-[#566B82]">{sousTitre}</span>}
           </span>
           {droite}
           <button type="button" aria-label="Fermer" onClick={fermer} className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-[10px] bg-[#EEF3F8]">

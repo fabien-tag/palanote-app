@@ -54,7 +54,7 @@ export function CarteDePlongee({ p }: { p: CartePlongee }) {
               <div className="flex h-[26px] items-center gap-[5px] rounded-[13px] bg-white px-[10px] shadow-[0_2px_7px_rgba(9,38,74,.20)]">
                 <Star className="h-[13px] w-[13px] fill-[#FFC65C] text-[#FFC65C]" />
                 <span className="text-[12.5px] font-bold leading-none text-[#123A63]">
-                  {p.note}<span className="font-semibold text-[#9DB0C0]">/5</span>
+                  {p.note}<span className="font-semibold text-[#566B82]">/5</span>
                 </span>
               </div>
             </div>
@@ -69,7 +69,7 @@ export function CarteDePlongee({ p }: { p: CartePlongee }) {
         </div>
       </div>
       <div className="flex items-center justify-between gap-[10px] px-[9px] pb-[5px] pt-[13px]">
-        <div className="text-[12.5px] text-[#5B7189]">{infos.join(" · ") || "\u00a0"}</div>
+        <div className="text-[12.5px] text-[#566B82]">{infos.join(" · ") || "\u00a0"}</div>
         <div className="flex">
           {visibles.map((b, i) => (
             <div

@@ -27,7 +27,7 @@ export function PageMoi({ titre, children }: { titre: string; children: ReactNod
 }
 
 export function TitreSection({ children }: { children: ReactNode }) {
-  return <h2 className="pb-[10px] pt-[26px] text-[11px] font-bold uppercase tracking-[.08em] text-[#7D93A8]">{children}</h2>;
+  return <h2 className="pb-[10px] pt-[26px] text-[11px] font-bold uppercase tracking-[.08em] text-[#566B82]">{children}</h2>;
 }
 
 export function Bloc({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -39,7 +39,7 @@ export function Bloc({ children, className = "" }: { children: ReactNode; classN
 }
 
 export function Note({ children }: { children: ReactNode }) {
-  return <p className="pt-[10px] text-[12.5px] leading-normal text-[#5B7189]">{children}</p>;
+  return <p className="pt-[10px] text-[12.5px] leading-normal text-[#566B82]">{children}</p>;
 }
 
 export function TagBientot() {
@@ -67,13 +67,13 @@ export function Ligne({
     <>
       {Icone && (
         <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center goutte bg-[#EEF4F9]">
-          <Icone className={`h-[17px] w-[17px] ${danger ? "text-[#C94957]" : "text-[#123A63]"}`} strokeWidth={2} aria-hidden="true" />
+          <Icone className={`h-[17px] w-[17px] ${danger ? "text-[#B8432F]" : "text-[#123A63]"}`} strokeWidth={2} aria-hidden="true" />
         </span>
       )}
-      <span className={`min-w-0 flex-1 text-[14.5px] font-bold ${danger ? "text-[#C94957]" : ""}`}>{label}</span>
-      {valeur !== undefined && <span className="max-w-[45%] truncate text-[12.5px] text-[#9DB0C0]">{valeur}</span>}
+      <span className={`min-w-0 flex-1 text-[14.5px] font-bold ${danger ? "text-[#B8432F]" : ""}`}>{label}</span>
+      {valeur !== undefined && <span className="max-w-[45%] truncate text-[12.5px] text-[#566B82]">{valeur}</span>}
       {bientot && <TagBientot />}
-      {onClick && chevron && !bientot && <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />}
+      {onClick && chevron && !bientot && <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#566B82]" aria-hidden="true" />}
     </>
   );
   const classe = "flex min-h-[64px] w-full items-center gap-[12px] border-t border-[#EDF2F7] py-[12px] text-left first:border-t-0";
@@ -102,7 +102,7 @@ export function Interrupteur({
     <div className="flex items-center gap-[14px] border-t border-[#EDF2F7] py-[15px] first:border-t-0">
       <div className="min-w-0 flex-1">
         <div className="text-[14.5px] font-bold leading-snug">{titre}</div>
-        {texte && <div className="pt-[3px] text-[12.5px] leading-normal text-[#5B7189]">{texte}</div>}
+        {texte && <div className="pt-[3px] text-[12.5px] leading-normal text-[#566B82]">{texte}</div>}
       </div>
       <button
         type="button"
@@ -139,16 +139,16 @@ export function ModaleSuppressionCompte({
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0A2A50]/55 px-4 pb-[max(16px,env(safe-area-inset-bottom))] sm:items-center">
       <div role="dialog" aria-modal="true" className="w-full max-w-[398px] galet-c bg-white p-[20px] text-[#123A63] shadow-[0_18px_40px_rgba(10,42,80,.35)]">
         <h2 className="text-[19px] font-bold">Supprimer ton compte ?</h2>
-        <p className="pt-[8px] text-[13.5px] leading-normal text-[#5B7189]">
+        <p className="pt-[8px] text-[13.5px] leading-normal text-[#566B82]">
           Tes plongées, tes photos, tes positions, tes binômes et ton compte seront effacés. Rien n'est gardé, rien n'est récupérable.
         </p>
-        <label className="block pt-[14px] text-[12.5px] font-semibold text-[#5B7189]">
-          Pour confirmer, tape <b className="text-[#C94957]">SUPPRIMER</b>
+        <label className="block pt-[14px] text-[12.5px] font-semibold text-[#566B82]">
+          Pour confirmer, tape <b className="text-[#B8432F]">SUPPRIMER</b>
           <input
             value={saisie}
             onChange={(e) => setSaisie(e.target.value)}
             autoCapitalize="characters"
-            className="mt-[6px] block h-[48px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] px-[14px] text-[15px] font-semibold outline-none focus:border-[#C94957]"
+            className="mt-[6px] block h-[48px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] px-[14px] text-[15px] font-semibold outline-none focus:border-[#C94957]"
           />
         </label>
         {erreur && <p className="pt-[10px] text-[13px] text-[#8A2A1A]">{erreur}</p>}
@@ -161,7 +161,7 @@ export function ModaleSuppressionCompte({
           >
             {enCours ? "SUPPRESSION…" : "SUPPRIMER DÉFINITIVEMENT"}
           </button>
-          <button type="button" onClick={onAnnuler} disabled={enCours} className="h-[44px] text-[14px] font-bold text-[#1176A8]">
+          <button type="button" onClick={onAnnuler} disabled={enCours} className="h-[44px] text-[14px] font-bold text-[#106F9F]">
             Annuler
           </button>
         </div>

@@ -6,7 +6,7 @@ import { chargerForfaitsAdmin, donnerForfait, OFFRES, retirerForfait, type Forfa
 // Tableau de bord › Finances : les forfaits (pack et Palanote+), saisis à la main
 // tant que le paiement en ligne n'est pas branché. Un forfait à 0 € est un forfait offert.
 
-const champ = "h-[38px] rounded-[10px] border border-[#DCE7F0] bg-white px-[10px] text-[13.5px] outline-none focus:border-[#57D4F5]";
+const champ = "h-[38px] rounded-[10px] border border-[#7B8FA3] bg-white px-[10px] text-[13.5px] outline-none focus:border-[#57D4F5]";
 const PRIX = { pack: "4.99", plus: "19" };
 
 export function SectionForfaits() {
@@ -50,7 +50,7 @@ export function SectionForfaits() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h2 className="text-[15px] font-semibold">Forfaits</h2>
-          <p className="text-[12.5px] text-[#7D93A8]">
+          <p className="text-[12.5px] text-[#566B82]">
             {actifsPlus} Palanote+ actif{actifsPlus > 1 ? "s" : ""} · {packs} pack{packs > 1 ? "s" : ""} « {OFFRES.pack.nom} »
           </p>
         </div>
@@ -79,16 +79,16 @@ export function SectionForfaits() {
           <button type="button" onClick={() => void valider()} className="h-[38px] rounded-[10px] bg-[#0F2A4A] px-[14px] text-[13px] font-semibold text-white">
             Ajouter
           </button>
-          <button type="button" onClick={() => setAjout(false)} aria-label="Annuler" className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] text-[#7D93A8] hover:bg-white">
+          <button type="button" onClick={() => setAjout(false)} aria-label="Annuler" className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] text-[#566B82] hover:bg-white">
             <X className="h-[16px] w-[16px]" />
           </button>
-          <p className="w-full text-[12px] text-[#7D93A8]">Montant à 0 : forfait offert (testeur, ami, geste commercial).</p>
+          <p className="w-full text-[12px] text-[#566B82]">Montant à 0 : forfait offert (testeur, ami, geste commercial).</p>
           {erreur && <p className="w-full text-[12.5px] text-[#8A2A1A]">{erreur}</p>}
         </div>
       )}
 
       {liste.length === 0 ? (
-        <p className="py-[20px] text-[13.5px] text-[#9DB0C0]">
+        <p className="py-[20px] text-[13.5px] text-[#566B82]">
           Aucun forfait pour l'instant. Les plongeurs intéressés apparaissent dans les retours (sujet « Forfait »).
         </p>
       ) : (
@@ -97,12 +97,12 @@ export function SectionForfaits() {
             {liste.map((f) => (
               <tr key={f.id} className={`border-t border-[#EDF2F7] first:border-t-0 ${f.actif ? "" : "opacity-50"}`}>
                 <td className="py-[10px] font-semibold">{f.email}</td>
-                <td className="py-[10px] text-[#7D93A8]">{f.type === "plus" ? "Palanote+" : `Pack ${f.pages ?? 200} pages`}</td>
-                <td className="py-[10px] text-[#7D93A8]">
+                <td className="py-[10px] text-[#566B82]">{f.type === "plus" ? "Palanote+" : `Pack ${f.pages ?? 200} pages`}</td>
+                <td className="py-[10px] text-[#566B82]">
                   {f.type === "plus" && f.fin ? `jusqu'au ${new Date(f.fin).toLocaleDateString("fr-FR")}` : new Date(f.debut).toLocaleDateString("fr-FR")}
                 </td>
-                <td className="py-[10px] text-[12px] text-[#9DB0C0]">{f.source === "offert" ? "offert" : f.source === "stripe" ? "Stripe" : "saisi à la main"}</td>
-                <td className="py-[10px] text-right font-semibold text-[#14805F]">{f.montant ? `+${String(f.montant).replace(".", ",")} €` : "—"}</td>
+                <td className="py-[10px] text-[12px] text-[#566B82]">{f.source === "offert" ? "offert" : f.source === "stripe" ? "Stripe" : "saisi à la main"}</td>
+                <td className="py-[10px] text-right font-semibold text-[#137758]">{f.montant ? `+${String(f.montant).replace(".", ",")} €` : "—"}</td>
                 <td className="w-[44px] py-[10px] text-right">
                   <button
                     type="button"
@@ -110,7 +110,7 @@ export function SectionForfaits() {
                     onClick={() => {
                       if (window.confirm("Retirer ce forfait ?")) void retirerForfait(f.id).then(charger).catch((e) => console.error("Forfait non retiré", e));
                     }}
-                    className="rounded-[8px] p-[6px] text-[#C94957] hover:bg-[#FFF1EE]"
+                    className="rounded-[8px] p-[6px] text-[#B8432F] hover:bg-[#FFF1EE]"
                   >
                     <Trash2 className="h-[14px] w-[14px]" />
                   </button>

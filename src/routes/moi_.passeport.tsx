@@ -98,7 +98,7 @@ function PageMonPasseport() {
           <TitreSection>Certificat médical</TitreSection>
           <Bloc className="py-[14px]">
             <label className="flex items-center gap-[12px]">
-              <ShieldCheck className="h-[20px] w-[20px] shrink-0 text-[#1176A8]" />
+              <ShieldCheck className="h-[20px] w-[20px] shrink-0 text-[#106F9F]" />
               <span className="min-w-0 flex-1 text-[14.5px] font-bold">Valable jusqu'au</span>
               <input
                 type="date"
@@ -134,18 +134,18 @@ function PageMonPasseport() {
                   {b.photo_recto && photos[b.photo_recto] ? (
                     <img src={photos[b.photo_recto]} alt={`Carte ${b.intitule}`} className="h-full w-full object-cover" />
                   ) : (
-                    <CreditCard className="h-[22px] w-[22px] text-[#9DB0C0]" />
+                    <CreditCard className="h-[22px] w-[22px] text-[#566B82]" />
                   )}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-[6px]">
                     <span className="truncate text-[15px] font-bold">{b.intitule}</span>
-                    <span className="shrink-0 rounded-[8px] bg-[#E3F2FB] px-[6px] py-[1px] text-[10.5px] font-bold text-[#1176A8]">{libelleType(b.type)}</span>
+                    <span className="shrink-0 rounded-[8px] bg-[#E3F2FB] px-[6px] py-[1px] text-[10.5px] font-bold text-[#106F9F]">{libelleType(b.type)}</span>
                   </span>
-                  <span className="block truncate text-[12.5px] text-[#5B7189]">
+                  <span className="block truncate text-[12.5px] text-[#566B82]">
                     {[b.organisme, b.numero ? `n° ${b.numero}` : null, b.obtenu_le ? new Date(`${b.obtenu_le}T12:00:00`).getFullYear() : null].filter(Boolean).join(" · ") || "Ajoute les détails"}
                   </span>
-                  <span className={`flex items-center gap-[4px] text-[12px] font-semibold ${b.verifie_le ? "text-[#14805F]" : "text-[#9DB0C0]"}`}>
+                  <span className={`flex items-center gap-[4px] text-[12px] font-semibold ${b.verifie_le ? "text-[#137758]" : "text-[#566B82]"}`}>
                     {b.verifie_le ? (
                       <>
                         <BadgeCheck className="h-[13px] w-[13px]" /> Vérifiée par {b.verifie_par}
@@ -161,14 +161,14 @@ function PageMonPasseport() {
               </button>
             ))}
             {p.brevets.length === 0 && (
-              <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] leading-normal text-[#5B7189]">
+              <p className="galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[14px] text-[13.5px] leading-normal text-[#566B82]">
                 Ajoute ton niveau, et tes qualifications Nitrox ou Trimix avec la photo de tes cartes : le DP les verra sans que tu sortes ton portefeuille.
               </p>
             )}
             <button
               type="button"
               onClick={() => setEdition({ brouillon: { type: p.brevets.length === 0 ? "niveau" : "nitrox", intitule: "", organisme: "FFESSM", numero: "", obtenu_le: "" } })}
-              className="flex h-[52px] items-center justify-center gap-[8px] galet-moyen border-[1.5px] border-dashed border-[#9DCBE6] text-[14px] font-bold text-[#1176A8]"
+              className="flex h-[52px] items-center justify-center gap-[8px] galet-moyen border-[1.5px] border-dashed border-[#9DCBE6] text-[14px] font-bold text-[#106F9F]"
             >
               <Plus className="h-[18px] w-[18px]" /> Ajouter un brevet
             </button>
@@ -205,7 +205,7 @@ function ChoixPhoto({ titre, actuelle, nouvelle, onChoisir, onRetirer }: { titre
   const image = apercu ?? actuelle;
   return (
     <div>
-      <span className="block pb-[6px] text-[13px] font-semibold text-[#5B7189]">{titre}</span>
+      <span className="block pb-[6px] text-[13px] font-semibold text-[#566B82]">{titre}</span>
       <button
         type="button"
         onClick={() => entree.current?.click()}
@@ -214,13 +214,13 @@ function ChoixPhoto({ titre, actuelle, nouvelle, onChoisir, onRetirer }: { titre
         {image ? (
           <img src={image} alt={titre} className="h-full w-full object-cover" />
         ) : (
-          <span className="flex flex-col items-center gap-[4px] text-[12.5px] font-bold text-[#1176A8]">
+          <span className="flex flex-col items-center gap-[4px] text-[12.5px] font-bold text-[#106F9F]">
             <Camera className="h-[22px] w-[22px]" /> Prendre en photo
           </span>
         )}
       </button>
       {image && (
-        <button type="button" onClick={onRetirer} className="pt-[4px] text-[12px] font-semibold text-[#9DB0C0]">
+        <button type="button" onClick={onRetirer} className="pt-[4px] text-[12px] font-semibold text-[#566B82]">
           Retirer la photo
         </button>
       )}
@@ -270,19 +270,19 @@ function EditionBrevet({ brouillon, avant, photos, onFermer }: { brouillon: Brou
               key={t.id}
               type="button"
               onClick={() => setB({ ...b, type: t.id })}
-              className={`h-[34px] rounded-[17px] px-[13px] text-[13px] font-bold ${b.type === t.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+              className={`h-[34px] rounded-[17px] px-[13px] text-[13px] font-bold ${b.type === t.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
             >
               {t.libelle}
             </button>
           ))}
         </div>
         <label className="block">
-          <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">Intitulé</span>
+          <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">Intitulé</span>
           <input
             value={b.intitule}
             onChange={(e) => setB({ ...b, intitule: e.target.value })}
             placeholder={suggestions[0]}
-            className="block h-[50px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] text-[15px] outline-none focus:border-[#57D4F5]"
+            className="block h-[50px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] text-[15px] outline-none focus:border-[#57D4F5]"
           />
           <span className="flex flex-wrap gap-[5px] pt-[7px]">
             {suggestions.slice(0, 6).map((s) => (
@@ -293,14 +293,14 @@ function EditionBrevet({ brouillon, avant, photos, onFermer }: { brouillon: Brou
           </span>
         </label>
         <div>
-          <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">Organisme</span>
+          <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">Organisme</span>
           <div className="flex flex-wrap gap-[5px]">
             {ORGANISMES.map((o) => (
               <button
                 key={o}
                 type="button"
                 onClick={() => setB({ ...b, organisme: o })}
-                className={`h-[30px] rounded-[15px] px-[11px] text-[12.5px] font-bold ${b.organisme === o ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                className={`h-[30px] rounded-[15px] px-[11px] text-[12.5px] font-bold ${b.organisme === o ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
               >
                 {o}
               </button>
@@ -309,12 +309,12 @@ function EditionBrevet({ brouillon, avant, photos, onFermer }: { brouillon: Brou
         </div>
         <div className="grid grid-cols-2 gap-[10px]">
           <label className="block">
-            <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">N° de carte</span>
-            <input value={b.numero} onChange={(e) => setB({ ...b, numero: e.target.value })} className="block h-[46px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] px-[12px] text-[15px] outline-none focus:border-[#57D4F5]" />
+            <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">N° de carte</span>
+            <input value={b.numero} onChange={(e) => setB({ ...b, numero: e.target.value })} className="block h-[46px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] px-[12px] text-[15px] outline-none focus:border-[#57D4F5]" />
           </label>
           <label className="block">
-            <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">Obtenu le</span>
-            <input type="date" value={b.obtenu_le} onChange={(e) => setB({ ...b, obtenu_le: e.target.value })} className="block h-[46px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] px-[10px] text-[14px] outline-none focus:border-[#57D4F5]" />
+            <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">Obtenu le</span>
+            <input type="date" value={b.obtenu_le} onChange={(e) => setB({ ...b, obtenu_le: e.target.value })} className="block h-[46px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] px-[10px] text-[14px] outline-none focus:border-[#57D4F5]" />
           </label>
         </div>
         <div className="grid grid-cols-2 gap-[10px]">
@@ -340,7 +340,7 @@ function EditionBrevet({ brouillon, avant, photos, onFermer }: { brouillon: Brou
               .then(() => onFermer(true))
               .catch(() => setErreur("Le brevet n'a pas pu être retiré."))
           }
-          className="mx-auto mt-[12px] flex items-center gap-[5px] text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+          className="mx-auto mt-[12px] flex items-center gap-[5px] text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
         >
           <Trash2 className="h-[13px] w-[13px]" /> Retirer ce brevet
         </button>

@@ -54,7 +54,7 @@ function PageForfait() {
           </button>
         </div>
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">Ton forfait</h1>
-        <p className="pt-[4px] text-[14px] leading-snug text-[#5B7189]">
+        <p className="pt-[4px] text-[14px] leading-snug text-[#566B82]">
           Le carnet est gratuit, pour tout le monde. Seule la lecture de tes carnets papier par l'IA a un coût : on t'offre les {f?.offertes ?? 50} premières pages.
         </p>
 
@@ -65,7 +65,7 @@ function PageForfait() {
             {f.plus ? (
               <>
                 <p className="text-[15px] font-bold">Tu as Palanote+</p>
-                <p className="pt-[2px] text-[13px] text-[#5B7189]">
+                <p className="pt-[2px] text-[13px] text-[#566B82]">
                   Numérisation sans limite
                   {f.plusJusquAu ? ` jusqu'au ${new Date(f.plusJusquAu).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}` : ""}.
                 </p>
@@ -74,14 +74,14 @@ function PageForfait() {
               <>
                 <div className="flex items-baseline justify-between gap-2">
                   <p className="text-[15px] font-bold">Pages lues par l'IA</p>
-                  <p className="text-[13px] font-bold text-[#5B7189]">
+                  <p className="text-[13px] font-bold text-[#566B82]">
                     {f.lues} / {total}
                   </p>
                 </div>
                 <div className="mt-[8px] h-[8px] overflow-hidden rounded-full bg-[#E4EBF1]" aria-hidden="true">
                   <div className={`h-full rounded-full ${f.restantes === 0 ? "bg-[#F5A524]" : "bg-[#3DEFBE]"}`} style={{ width: `${Math.max(part * 100, f.lues ? 3 : 0)}%` }} />
                 </div>
-                <p className="pt-[8px] text-[13px] text-[#5B7189]">
+                <p className="pt-[8px] text-[13px] text-[#566B82]">
                   {f.restantes === 0
                     ? "Tu as utilisé toutes tes pages. Tes plongées restent dans ton carnet, rien n'est perdu."
                     : `Il te reste ${f.restantes} page${(f.restantes ?? 0) > 1 ? "s" : ""}${f.achetees ? ` (dont ${f.achetees} achetées)` : " offertes"}.`}
@@ -95,12 +95,12 @@ function PageForfait() {
         <section className="mt-[14px] galet-b border border-[#DCE7F0] bg-white px-[16px] py-[15px] shadow-[0_4px_14px_#123A6308]">
           <div className="flex items-center justify-between">
             <h2 className="text-[16px] font-bold">Gratuit</h2>
-            {f && !f.plus && <span className="rounded-full bg-[#E2F8EF] px-[10px] py-[3px] text-[11.5px] font-bold text-[#14805F]">Ton forfait</span>}
+            {f && !f.plus && <span className="rounded-full bg-[#E2F8EF] px-[10px] py-[3px] text-[11.5px] font-bold text-[#137758]">Ton forfait</span>}
           </div>
           <ul className="flex flex-col gap-[6px] pt-[8px]">
             {[...GRATUIT, `${f?.offertes ?? 50} pages de carnet papier lues par l'IA`].map((t) => (
               <li key={t} className="flex gap-[8px] text-[13.5px] leading-snug text-[#3F5B76]">
-                <Check className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[#14805F]" strokeWidth={2.6} aria-hidden="true" />
+                <Check className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[#137758]" strokeWidth={2.6} aria-hidden="true" />
                 {t}
               </li>
             ))}
@@ -134,7 +134,7 @@ function PageForfait() {
 
         {erreur && <p className="pt-[10px] text-[13px] text-[#8A2A1A]">{erreur}</p>}
 
-        <p className="pt-[14px] text-center text-[12.5px] leading-snug text-[#9DB0C0]">
+        <p className="pt-[14px] text-center text-[12.5px] leading-snug text-[#566B82]">
           Le paiement en ligne ouvre très bientôt. En attendant, dis-nous ce qui t'intéresse : ça nous aide à choisir.
         </p>
 
@@ -143,7 +143,7 @@ function PageForfait() {
           onClick={() => navigate({ to: "/recif" })}
           className="mt-[16px] flex items-center gap-[12px] galet-moyen border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[13px] text-left"
         >
-          <Sparkles className="h-[18px] w-[18px] shrink-0 text-[#14805F]" strokeWidth={2} aria-hidden="true" />
+          <Sparkles className="h-[18px] w-[18px] shrink-0 text-[#137758]" strokeWidth={2} aria-hidden="true" />
           <span className="min-w-0 flex-1 text-[13.5px] leading-snug">
             <b>Tu veux juste soutenir l'app ?</b> Le Récif, c'est un don libre, sans rien en échange.
           </span>
@@ -183,11 +183,11 @@ function Offre({
     >
       <div className="flex items-start gap-[12px]">
         <span className={`flex h-[40px] w-[40px] shrink-0 items-center justify-center goutte ${vedette ? "bg-white/15" : "bg-[#E3F4FC]"}`}>
-          <Icone className={`h-[19px] w-[19px] ${vedette ? "text-[#3DEFBE]" : "text-[#1176A8]"}`} strokeWidth={2} aria-hidden="true" />
+          <Icone className={`h-[19px] w-[19px] ${vedette ? "text-[#3DEFBE]" : "text-[#106F9F]"}`} strokeWidth={2} aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
           <h2 className="text-[16px] font-bold">{nom}</h2>
-          <p className={`text-[13px] ${vedette ? "text-white/75" : "text-[#5B7189]"}`}>
+          <p className={`text-[13px] ${vedette ? "text-white/75" : "text-[#566B82]"}`}>
             <b className={`text-[18px] ${vedette ? "text-white" : "text-[#123A63]"}`}>{prix}</b> {periode}
           </p>
         </div>

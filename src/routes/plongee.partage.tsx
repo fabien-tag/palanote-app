@@ -82,11 +82,11 @@ function PartagePhotos() {
   const point = (Icone: typeof Images, titre: string, texte: string) => (
     <div className="flex gap-[12px] py-[9px]">
       <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center goutte bg-[#E3F4FC]">
-        <Icone className="h-[16px] w-[16px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+        <Icone className="h-[16px] w-[16px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
       </span>
       <div>
         <div className="text-[14.5px] font-bold">{titre}</div>
-        <div className="text-[12.5px] leading-snug text-[#5B7189]">{texte}</div>
+        <div className="text-[12.5px] leading-snug text-[#566B82]">{texte}</div>
       </div>
     </div>
   );
@@ -104,7 +104,7 @@ function PartagePhotos() {
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
           {liste.length > 0 && (
-            <button type="button" onClick={() => setChoisies(toutes ? [] : liste.map((p) => p.id))} className="px-[2px] py-[8px] text-[14px] font-bold text-[#1176A8]">
+            <button type="button" onClick={() => setChoisies(toutes ? [] : liste.map((p) => p.id))} className="px-[2px] py-[8px] text-[14px] font-bold text-[#106F9F]">
               {toutes ? "Tout décocher" : "Tout cocher"}
             </button>
           )}
@@ -112,7 +112,7 @@ function PartagePhotos() {
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">
           {liste.length ? `Tes ${liste.length} photo${liste.length > 1 ? "s" : ""}` : "Tes photos"}
         </h1>
-        <p className="pt-[2px] text-[13.5px] text-[#5B7189]">{[site.nom, site.date ? dateCourte(site.date) : null].filter(Boolean).join(" · ")}</p>
+        <p className="pt-[2px] text-[13.5px] text-[#566B82]">{[site.nom, site.date ? dateCourte(site.date) : null].filter(Boolean).join(" · ")}</p>
 
         {mes === null && <div className="mt-[18px] h-[120px] animate-pulse galet bg-white" />}
 
@@ -141,7 +141,7 @@ function PartagePhotos() {
           </div>
         )}
 
-        {mes && liste.length === 0 && !erreur && <p className="pt-[14svh] text-center text-[14.5px] text-[#5B7189]">Tu n'as pas encore ajouté de photos à cette plongée.</p>}
+        {mes && liste.length === 0 && !erreur && <p className="pt-[14svh] text-center text-[14.5px] text-[#566B82]">Tu n'as pas encore ajouté de photos à cette plongée.</p>}
 
         {liste.length > 0 && (
           <>
@@ -150,7 +150,7 @@ function PartagePhotos() {
               <div className="flex items-center gap-[12px]">
                 <div className="min-w-0 flex-1">
                   <div className="text-[15px] font-bold">Visibles par la palanquée</div>
-                  <div className="text-[12.5px] text-[#5B7189]">
+                  <div className="text-[12.5px] text-[#566B82]">
                     {palanquee.length
                       ? `Les ${palanquee.length + 1} personnes qui ont cette plongée dans leur carnet.`
                       : "Dès qu'un binôme ajoute cette plongée à son carnet."}
@@ -180,7 +180,7 @@ function PartagePhotos() {
                       </span>
                     ))}
                   </span>
-                  <span className="truncate text-[13px] text-[#5B7189]">{palanquee.map((g) => g.prenom).join(", ")}</span>
+                  <span className="truncate text-[13px] text-[#566B82]">{palanquee.map((g) => g.prenom).join(", ")}</span>
                 </div>
               )}
             </div>

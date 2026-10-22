@@ -26,7 +26,7 @@ function Pastille({ e }: { e: EspecePlongee }) {
   return pct >= 85 ? (
     <span className="rounded-full bg-[#3DEFBE] px-[8px] py-[2px] text-[11px] font-bold text-[#0B3B63]">Sûr · {pct} %</span>
   ) : (
-    <span className="rounded-full bg-[#DCEEF8] px-[8px] py-[2px] text-[11px] font-bold text-[#1176A8]">À confirmer · {pct} %</span>
+    <span className="rounded-full bg-[#DCEEF8] px-[8px] py-[2px] text-[11px] font-bold text-[#106F9F]">À confirmer · {pct} %</span>
   );
 }
 
@@ -48,12 +48,12 @@ function Reference({ nom, latin }: { nom: string; latin: string | null }) {
         ) : ref ? (
           <img src={ref.url} alt={`Image de référence : ${nom}`} className="h-full w-full object-cover" />
         ) : (
-          <span className="px-[10px] text-center text-[12px] leading-snug text-[#9DB0C0]">Pas d'image de référence pour cette espèce</span>
+          <span className="px-[10px] text-center text-[12px] leading-snug text-[#566B82]">Pas d'image de référence pour cette espèce</span>
         )}
       </div>
-      <figcaption className="px-[2px] pt-[5px] text-[11.5px] font-semibold text-[#5B7189]">
+      <figcaption className="px-[2px] pt-[5px] text-[11.5px] font-semibold text-[#566B82]">
         {ref ? (
-          <a href={ref.page} target="_blank" rel="noreferrer" className="text-[#1176A8] underline-offset-2 hover:underline">
+          <a href={ref.page} target="_blank" rel="noreferrer" className="text-[#106F9F] underline-offset-2 hover:underline">
             Référence (Wikipédia)
           </a>
         ) : (
@@ -149,7 +149,7 @@ function EspecesDetectees() {
         aria-pressed={actif}
         onClick={() => setChoix((c) => ({ ...c, [e.id]: actif ? null : valeur }))}
         className={`flex h-[38px] w-[38px] items-center justify-center galet-petit border-[1.5px] ${
-          actif ? (valeur === "garder" ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#FF8A75] bg-[#FFE4DE] text-[#C2412F]") : "border-[#E4EBF1] bg-white text-[#9DB0C0]"
+          actif ? (valeur === "garder" ? "border-[#3DEFBE] bg-[#3DEFBE] text-[#0B3B63]" : "border-[#FF8A75] bg-[#FFE4DE] text-[#C2412F]") : "border-[#E4EBF1] bg-white text-[#566B82]"
         }`}
       >
         <Icone className="h-[17px] w-[17px]" strokeWidth={2.6} />
@@ -169,7 +169,7 @@ function EspecesDetectees() {
           >
             <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
-          <button type="button" onClick={revenir} className="px-[2px] py-[8px] text-[14.5px] font-medium text-[#5B7189]">
+          <button type="button" onClick={revenir} className="px-[2px] py-[8px] text-[14.5px] font-medium text-[#566B82]">
             Passer
           </button>
         </div>
@@ -185,13 +185,13 @@ function EspecesDetectees() {
                 </span>
               )}
             </div>
-            <p className="px-[8px] pb-[4px] pt-[8px] text-[12.5px] text-[#5B7189]">
+            <p className="px-[8px] pb-[4px] pt-[8px] text-[12.5px] text-[#566B82]">
               {[site.nom, site.date ? dateCourte(site.date) : null, photos.length ? `photo ${indexCouverture} sur ${photos.length}` : null].filter(Boolean).join(" · ")}
             </p>
           </div>
         )}
 
-        <p className="pt-[14px] text-[13.5px] leading-snug text-[#5B7189]">L'app propose, tu valides. Rien n'est ajouté à la plongée sans ton accord.</p>
+        <p className="pt-[14px] text-[13.5px] leading-snug text-[#566B82]">L'app propose, tu valides. Rien n'est ajouté à la plongée sans ton accord.</p>
 
         {especes === null && <div className="mt-[12px] h-[180px] animate-pulse galet bg-white" />}
 
@@ -207,17 +207,17 @@ function EspecesDetectees() {
                     <div className="flex h-[132px] items-center justify-center overflow-hidden rounded-[14px] bg-[#E3F4FC]">
                       {ph ? <img src={ph.url} alt={`Ta photo, où l'IA voit : ${e.nom}`} className="h-full w-full object-cover" /> : <Eye className="h-[22px] w-[22px] text-[#8FBAD4]" strokeWidth={1.8} />}
                     </div>
-                    <figcaption className="px-[2px] pt-[5px] text-[11.5px] font-semibold text-[#5B7189]">Ta photo</figcaption>
+                    <figcaption className="px-[2px] pt-[5px] text-[11.5px] font-semibold text-[#566B82]">Ta photo</figcaption>
                   </figure>
                   <Reference nom={e.nom} latin={e.nom_latin} />
                 </div>
                 <div className="flex items-center gap-[12px] px-[4px] pt-[10px]">
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[16px] font-bold">{e.nom}</span>
-                    {e.nom_latin && <span className="block truncate text-[12.5px] italic text-[#5B7189]">{e.nom_latin}</span>}
+                    {e.nom_latin && <span className="block truncate text-[12.5px] italic text-[#566B82]">{e.nom_latin}</span>}
                     <span className="flex flex-wrap items-center gap-[6px] pt-[5px]">
                       <Pastille e={e} />
-                      {e.alternative && <span className="truncate text-[11.5px] text-[#9DB0C0]">ou {e.alternative}</span>}
+                      {e.alternative && <span className="truncate text-[11.5px] text-[#566B82]">ou {e.alternative}</span>}
                     </span>
                   </span>
                   <span className="flex gap-[6px]">
@@ -236,9 +236,9 @@ function EspecesDetectees() {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[16px] font-bold">{n}</span>
-                <span className="mt-[5px] inline-block rounded-full bg-[#E6ECF2] px-[8px] py-[2px] text-[11px] font-bold text-[#5B7189]">Ajoutée par toi</span>
+                <span className="mt-[5px] inline-block rounded-full bg-[#E6ECF2] px-[8px] py-[2px] text-[11px] font-bold text-[#566B82]">Ajoutée par toi</span>
               </span>
-              <button type="button" aria-label={`Retirer ${n}`} onClick={() => setAjouts((l) => l.filter((x) => x !== n))} className="flex h-[38px] w-[38px] items-center justify-center galet-petit border-[1.5px] border-[#E4EBF1] text-[#9DB0C0]">
+              <button type="button" aria-label={`Retirer ${n}`} onClick={() => setAjouts((l) => l.filter((x) => x !== n))} className="flex h-[38px] w-[38px] items-center justify-center galet-petit border-[1.5px] border-[#7B8FA3] text-[#566B82]">
                 <X className="h-[17px] w-[17px]" strokeWidth={2.6} />
               </button>
             </div>
@@ -251,8 +251,8 @@ function EspecesDetectees() {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[16px] font-bold">Espèce non reconnue</span>
-                <span className="block text-[12.5px] italic text-[#5B7189]">Nomme-la toi-même</span>
-                <span className="mt-[5px] inline-block rounded-full bg-[#E6ECF2] px-[8px] py-[2px] text-[11px] font-bold text-[#5B7189]">Non identifiée</span>
+                <span className="block text-[12.5px] italic text-[#566B82]">Nomme-la toi-même</span>
+                <span className="mt-[5px] inline-block rounded-full bg-[#E6ECF2] px-[8px] py-[2px] text-[11px] font-bold text-[#566B82]">Non identifiée</span>
               </span>
             </div>
           )}
@@ -283,7 +283,7 @@ function EspecesDetectees() {
           <button
             type="button"
             onClick={() => setSaisie("")}
-            className="mt-[14px] flex h-[52px] w-full items-center justify-center gap-[8px] galet-moyen border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+            className="mt-[14px] flex h-[52px] w-full items-center justify-center gap-[8px] galet-moyen border-[1.5px] border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F]"
           >
             <Plus className="h-[16px] w-[16px]" strokeWidth={2.6} aria-hidden="true" />
             AJOUTER UNE ESPÈCE

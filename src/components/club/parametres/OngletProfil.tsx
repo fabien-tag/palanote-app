@@ -90,7 +90,7 @@ export function OngletProfil({ compte }: { compte: Compte | null }) {
         <Avatar id={compte?.id ?? null} prenom={f.prenom || "?"} taille={60} />
         <div className="min-w-0 flex-1">
           <div className="truncate text-[19px] font-bold">{[f.prenom, f.nom].filter(Boolean).join(" ") || "Ton nom"}</div>
-          <div className="truncate text-[13px] text-[#7D93A8]">{[libelleRole(f.role) || "Directeur de plongée", f.niveau, compte?.email].filter(Boolean).join(" · ")}</div>
+          <div className="truncate text-[13px] text-[#566B82]">{[libelleRole(f.role) || "Directeur de plongée", f.niveau, compte?.email].filter(Boolean).join(" · ")}</div>
         </div>
       </div>
 
@@ -122,18 +122,18 @@ export function OngletProfil({ compte }: { compte: Compte | null }) {
           />
         </Rang>
         <Rang titre="Club d'origine" texte="Le club où tu as passé tes niveaux, s'il est différent du centre.">
-          <input className={`${CHAMP} lg:max-w-[420px]`} value={f.club} onChange={(e) => maj("club", e.target.value)} placeholder="Centre de plongée le Lion" />
+          <input className={`${CHAMP} lg:max-w-[420px]`} value={f.club} aria-label="Club d'origine" onChange={(e) => maj("club", e.target.value)} placeholder="Centre de plongée le Lion" />
         </Rang>
         <Rang
           titre="Certificat médical"
           texte="Seule la date de fin est gardée, jamais le document. Un rappel arrive un mois avant."
         >
           <div className="flex flex-wrap items-center gap-[12px]">
-            <input type="date" className={`${CHAMP} w-[200px]`} value={f.certificatFin} onChange={(e) => maj("certificatFin", e.target.value)} />
+            <input type="date" className={`${CHAMP} w-[200px]`} aria-label="Date de fin du certificat médical" value={f.certificatFin} onChange={(e) => maj("certificatFin", e.target.value)} />
             {certificat !== null && (
               <span
                 className={`rounded-[8px] px-[10px] py-[5px] text-[12px] font-bold ${
-                  certificat < 0 ? "bg-[#FFE9E2] text-[#D9573F]" : certificat <= 30 ? "bg-[#FFF1D6] text-[#8A5A10]" : "bg-[#E2F8EF] text-[#14805F]"
+                  certificat < 0 ? "bg-[#FFE9E2] text-[#B8432F]" : certificat <= 30 ? "bg-[#FFF1D6] text-[#8A5A10]" : "bg-[#E2F8EF] text-[#137758]"
                 }`}
               >
                 {certificat < 0 ? "Expiré" : certificat <= 30 ? `Expire dans ${certificat} j` : "Valide"}
@@ -172,9 +172,9 @@ export function OngletProfil({ compte }: { compte: Compte | null }) {
           {erreur ? (
             <span className="text-[13px] font-semibold text-[#8A2A1A]">{erreur}</span>
           ) : modifie ? (
-            <span className="text-[13px] font-semibold text-[#5B7189]">Modifications non enregistrées</span>
+            <span className="text-[13px] font-semibold text-[#566B82]">Modifications non enregistrées</span>
           ) : (
-            <span className="text-[13px] font-semibold text-[#14805F]">{message}</span>
+            <span className="text-[13px] font-semibold text-[#137758]">{message}</span>
           )}
           <span className="ml-auto flex gap-[10px]">
             <button type="button" disabled={!modifie || enCours} onClick={() => { setF(origine); setErreur(null); }} className={BOUTON_SECONDAIRE}>

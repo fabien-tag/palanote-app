@@ -73,10 +73,10 @@ function LigneCommune({ label, valeur, aDroite }: { label: string; valeur: React
     <div className="flex items-center gap-[12px] border-t border-[#EDF2F7] py-[11px] first:border-t-0">
       <Coche />
       <div className="min-w-0 flex-1">
-        <div className="text-[12px] font-semibold text-[#7D93A8]">{label}</div>
+        <div className="text-[12px] font-semibold text-[#566B82]">{label}</div>
         <div className="text-[15px] font-bold text-[#123A63]">{valeur}</div>
       </div>
-      {aDroite && <span className="max-w-[40%] truncate text-[12px] text-[#9DB0C0]">{aDroite}</span>}
+      {aDroite && <span className="max-w-[40%] truncate text-[12px] text-[#566B82]">{aDroite}</span>}
     </div>
   );
 }
@@ -94,16 +94,16 @@ function ChampMesure({
 }) {
   return (
     <label className="block min-w-0 flex-1">
-      <span className="block pb-[7px] text-[13px] font-semibold text-[#5B7189]">{label}</span>
+      <span className="block pb-[7px] text-[13px] font-semibold text-[#566B82]">{label}</span>
       <span className="relative block">
         <input
           value={valeur}
           onChange={(e) => onChange(e.target.value.replace(/[^\d.,]/g, "").slice(0, 5))}
           inputMode="decimal"
           placeholder="—"
-          className="block h-[50px] w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white pl-[16px] pr-[44px] text-[15px] text-[#123A63] outline-none placeholder:text-[#C2CFDB] focus:border-[#57D4F5]"
+          className="block h-[50px] w-full galet-moyen border-[1.5px] border-[#7B8FA3] bg-white pl-[16px] pr-[44px] text-[15px] text-[#123A63] outline-none placeholder:text-[#C2CFDB] focus:border-[#57D4F5]"
         />
-        <span className="pointer-events-none absolute right-[14px] top-1/2 -translate-y-1/2 text-[13px] text-[#9DB0C0]">{unite}</span>
+        <span className="pointer-events-none absolute right-[14px] top-1/2 -translate-y-1/2 text-[13px] text-[#566B82]">{unite}</span>
       </span>
     </label>
   );
@@ -111,7 +111,7 @@ function ChampMesure({
 
 function Etoiles({ valeur, onChange }: { valeur: number; onChange: (n: number) => void }) {
   return (
-    <div className="flex h-[50px] items-center gap-[6px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px]">
+    <div className="flex h-[50px] items-center gap-[6px] galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[14px]">
       {[1, 2, 3, 4, 5].map((n) => (
         <button key={n} type="button" aria-label={`${n} sur 5`} aria-pressed={valeur === n} onClick={() => onChange(valeur === n ? 0 : n)}>
           <Star className={`h-[24px] w-[24px] ${n <= valeur ? "fill-[#FFC65C] text-[#FFC65C]" : "text-[#C9D6E2]"}`} strokeWidth={1.8} />
@@ -141,7 +141,7 @@ function lignesCommunes(p: Proposition) {
       valeur: (
         <span className="flex items-center gap-[8px] pt-[3px]">
           {palanquee.length > 0 && <Pile gens={palanquee} />}
-          <span className="truncate text-[13.5px] font-medium text-[#5B7189]">{noms.join(", ")}</span>
+          <span className="truncate text-[13.5px] font-medium text-[#566B82]">{noms.join(", ")}</span>
         </span>
       ),
     });
@@ -276,9 +276,9 @@ function PageProposition() {
       {droite}
     </div>
   );
-  const disparait = jours !== null && <span className="text-[12.5px] text-[#9DB0C0]">disparaît dans {jours} jour{jours > 1 ? "s" : ""}</span>;
+  const disparait = jours !== null && <span className="text-[12.5px] text-[#566B82]">disparaît dans {jours} jour{jours > 1 ? "s" : ""}</span>;
   const boutonPrincipal = "flex h-[56px] w-full items-center justify-center galet-moyen bg-[#3DEFBE] text-[14px] font-bold tracking-wide text-[#0B3B63] shadow-[0_6px_16px_#3DEFBE40] disabled:opacity-60";
-  const lienSecondaire = "mx-auto mt-[14px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#5B7189]";
+  const lienSecondaire = "mx-auto mt-[14px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#566B82]";
 
   return (
     <div className="min-h-screen bg-[#F1F6FC] text-[#123A63]">
@@ -294,14 +294,14 @@ function PageProposition() {
         {p === null && (
           <>
             {barreHaut(null)}
-            <p className="pt-[18svh] text-center text-[14.5px] text-[#5B7189]">{erreur}</p>
+            <p className="pt-[18svh] text-center text-[14.5px] text-[#566B82]">{erreur}</p>
           </>
         )}
 
         {p && p.statut !== "a_confirmer" && ecran !== "fiche" && (
           <>
             {barreHaut(null)}
-            <p className="pt-[18svh] text-center text-[14.5px] text-[#5B7189]">
+            <p className="pt-[18svh] text-center text-[14.5px] text-[#566B82]">
               {p.statut === "ajoutee" ? "Cette plongée est déjà dans ton carnet." : "Tu as indiqué que ce n'était pas toi."}
             </p>
           </>
@@ -315,7 +315,7 @@ function PageProposition() {
               <Avatar p={p.de} taille={54} />
               <div className="min-w-0">
                 <h1 className="text-[21px] font-bold leading-tight">{p.de.prenom} a plongé avec toi</h1>
-                <p className="pt-[3px] text-[13.5px] text-[#5B7189]">
+                <p className="pt-[3px] text-[13.5px] text-[#566B82]">
                   {[p.commun.date ? dateCourte(p.commun.date) : null, heure(p.commun.heure) && `à ${heure(p.commun.heure)}`].filter(Boolean).join(" ")}
                   {p.validee_le && ` · fiche validée à ${heureCourte(p.validee_le)}`}
                 </p>
@@ -337,7 +337,7 @@ function PageProposition() {
 
             <div className="mt-[16px] galet-b border border-[#DCE7F0] bg-white px-[16px] py-[16px] shadow-[0_4px_14px_#123A6308]">
               <h2 className="text-[15.5px] font-bold">Ce qui reste à toi</h2>
-              <p className="pb-[12px] pt-[3px] text-[12.5px] leading-snug text-[#7D93A8]">Tes mesures ne viennent jamais de ton binôme. Tu peux aussi les remplir plus tard.</p>
+              <p className="pb-[12px] pt-[3px] text-[12.5px] leading-snug text-[#566B82]">Tes mesures ne viennent jamais de ton binôme. Tu peux aussi les remplir plus tard.</p>
               <div className="flex gap-[12px]">
                 <ChampMesure label="Profondeur max" unite="m" valeur={perso.prof_max ?? ""} onChange={(v) => set("prof_max", v)} />
                 <ChampMesure label="Lestage" unite="kg" valeur={perso.lestage ?? ""} onChange={(v) => set("lestage", v)} />
@@ -363,24 +363,24 @@ function PageProposition() {
         {p && ecran === "fiche" && (
           <>
             <div className="flex items-center justify-end">
-              <button type="button" onClick={plusTard} className="px-[4px] py-[8px] text-[14px] font-bold text-[#1176A8]">
+              <button type="button" onClick={plusTard} className="px-[4px] py-[8px] text-[14px] font-bold text-[#106F9F]">
                 Plus tard
               </button>
             </div>
             <h1 className="pt-[8px] text-[24px] font-bold leading-tight">{p.commun.site || "Ta plongée"}</h1>
-            <p className="pt-[3px] text-[13.5px] text-[#5B7189]">
+            <p className="pt-[3px] text-[13.5px] text-[#566B82]">
               ajoutée à ton carnet{p.commun.date ? ` · ${dateCourte(p.commun.date)}` : ""}
             </p>
 
             <div className="mt-[16px] flex items-center gap-[12px] galet-moyen border border-[#BFE6F5] bg-[#E3F4FC] px-[14px] py-[12px]">
               <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center goutte bg-white/70">
-                <Info className="h-[17px] w-[17px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+                <Info className="h-[17px] w-[17px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
               </span>
               <div>
                 <div className="text-[14.5px] font-bold">
                   Il te reste {champsVides} champ{champsVides > 1 ? "s" : ""}
                 </div>
-                <div className="text-[12.5px] text-[#5B7189]">Le reste est arrivé de {p.de.prenom}.</div>
+                <div className="text-[12.5px] text-[#566B82]">Le reste est arrivé de {p.de.prenom}.</div>
               </div>
             </div>
 
@@ -393,14 +393,14 @@ function PageProposition() {
               <ChampMesure label="Bloc au départ" unite="bar" valeur={perso.pression_debut ?? ""} onChange={(v) => set("pression_debut", v)} />
               <ChampMesure label="Bloc à l'arrivée" unite="bar" valeur={perso.pression_fin ?? ""} onChange={(v) => set("pression_fin", v)} />
             </div>
-            <span className="block pb-[7px] pt-[12px] text-[13px] font-semibold text-[#5B7189]">Ta note</span>
+            <span className="block pb-[7px] pt-[12px] text-[13px] font-semibold text-[#566B82]">Ta note</span>
             <Etoiles valeur={perso.note ?? 0} onChange={(n) => set("note", n)} />
 
             <div className="relative mt-[18px] galet-c border border-[#DCE7F0] bg-white px-[16px] pb-[6px] pt-[16px] shadow-[0_4px_14px_#123A6308]">
               <Meduse className="-right-[6px] -top-[14px]" />
               <div className="flex items-baseline justify-between pb-[4px]">
                 <h2 className="text-[15.5px] font-bold">Commun à la palanquée</h2>
-                <span className="text-[12px] text-[#9DB0C0]">de {p.de.prenom}</span>
+                <span className="text-[12px] text-[#566B82]">de {p.de.prenom}</span>
               </div>
               {lignesCommunes(p)
                 .filter((l) => l.cle !== "site")
@@ -470,7 +470,7 @@ function EcranDeja({
 
   const ligne = (label: string, valeur: string | null) => (
     <div className="flex items-baseline justify-between gap-2 py-[3px] text-[12.5px]">
-      <span className="text-[#9DB0C0]">{label}</span>
+      <span className="text-[#566B82]">{label}</span>
       <b className="text-[13px] text-[#123A63]">{valeur ?? "—"}</b>
     </div>
   );
@@ -482,14 +482,14 @@ function EcranDeja({
         <Avatar p={p.de} taille={54} />
         <div className="min-w-0">
           <h1 className="text-[21px] font-bold leading-tight">Tu as déjà noté cette plongée</h1>
-          <p className="pt-[3px] text-[13.5px] text-[#5B7189]">{p.de.prenom} parle de la même.</p>
+          <p className="pt-[3px] text-[13.5px] text-[#566B82]">{p.de.prenom} parle de la même.</p>
         </div>
       </div>
 
       <div className="mt-[20px] flex gap-[10px]">
         <div className="min-w-0 flex-1 galet-moyen border-[1.5px] border-[#3DEFBE] bg-white px-[12px] py-[12px]">
           <div className="text-[14px] font-bold">La tienne</div>
-          <div className="pb-[6px] text-[11.5px] text-[#9DB0C0]">saisie à {heureCourte(m.saisie_le)}</div>
+          <div className="pb-[6px] text-[11.5px] text-[#566B82]">saisie à {heureCourte(m.saisie_le)}</div>
           {ligne("Profondeur", m.prof_max !== null ? `${nombre(m.prof_max)} m` : null)}
           {ligne("Durée", m.duree ? `${m.duree} min` : null)}
           {ligne("Eau", m.temp_fond !== null ? `${nombre(m.temp_fond)} °C` : null)}
@@ -497,7 +497,7 @@ function EcranDeja({
         </div>
         <div className="min-w-0 flex-1 galet-moyen border border-[#DCE7F0] bg-white px-[12px] py-[12px]">
           <div className="truncate text-[14px] font-bold">Celle de {p.de.prenom}</div>
-          <div className="pb-[6px] text-[11.5px] text-[#9DB0C0]">validée à {heureCourte(p.validee_le)}</div>
+          <div className="pb-[6px] text-[11.5px] text-[#566B82]">validée à {heureCourte(p.validee_le)}</div>
           {ligne("Mise à l'eau", heure(c.heure))}
           {ligne("Durée", c.duree ? `${c.duree} min` : null)}
           {ligne("Eau", c.temp_fond !== null ? `${nombre(c.temp_fond)} °C` : null)}
@@ -518,11 +518,11 @@ function EcranDeja({
         {comblable.map((l) => (
           <div key={l.label} className="flex items-center gap-[12px] border-t border-[#EDF2F7] py-[11px] first:border-t-0">
             <Coche />
-            <span className="flex-1 text-[14px] text-[#5B7189]">{l.label}</span>
+            <span className="flex-1 text-[14px] text-[#566B82]">{l.label}</span>
             <b className="text-[14px]">{l.valeur}</b>
           </div>
         ))}
-        <p className="pb-[10px] text-[12px] leading-snug text-[#9DB0C0]">Tes valeurs ne bougent pas : seules tes cases vides sont remplies.</p>
+        <p className="pb-[10px] text-[12px] leading-snug text-[#566B82]">Tes valeurs ne bougent pas : seules tes cases vides sont remplies.</p>
       </div>
 
       <div className="min-h-[22px] flex-grow" />

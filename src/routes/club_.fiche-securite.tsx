@@ -116,13 +116,13 @@ function PageFiche() {
             {/* En-tête */}
             <div className="flex flex-wrap items-start justify-between gap-[14px] border-b-2 border-[#123A63] pb-[12px]">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[.12em] text-[#1176A8]">Fiche de sécurité</p>
+                <p className="text-[11px] font-bold uppercase tracking-[.12em] text-[#106F9F]">Fiche de sécurité</p>
                 <h2 className="pt-[2px] text-[22px] font-bold leading-tight print:text-[18px]">{f.site}</h2>
-                <p className="text-[#5B7189]">{[f.lieu, f.centre ? `${f.centre.nom}${f.centre.ville ? `, ${f.centre.ville}` : ""}` : null].filter(Boolean).join(" · ")}</p>
+                <p className="text-[#566B82]">{[f.lieu, f.centre ? `${f.centre.nom}${f.centre.ville ? `, ${f.centre.ville}` : ""}` : null].filter(Boolean).join(" · ")}</p>
               </div>
               <div className="text-right">
                 <p className="text-[16px] font-bold print:text-[14px]">{f.date_texte.charAt(0).toUpperCase() + f.date_texte.slice(1)}</p>
-                <p className="text-[#5B7189]">{f.heure ? `Départ ${heureCourte(f.heure)}` : "Heure de départ : ______"}</p>
+                <p className="text-[#566B82]">{f.heure ? `Départ ${heureCourte(f.heure)}` : "Heure de départ : ______"}</p>
               </div>
             </div>
 
@@ -141,7 +141,7 @@ function PageFiche() {
             <div className="overflow-x-auto print:overflow-visible">
               <table className="w-full min-w-[860px] border-collapse print:min-w-0">
                 <thead>
-                  <tr className="text-left text-[11px] uppercase tracking-[.05em] text-[#5B7189]">
+                  <tr className="text-left text-[11px] uppercase tracking-[.05em] text-[#566B82]">
                     {["Plongeur", "Niveau", "Rôle", "Prof. prévue", "Prof. réalisée", "Durée", "Immersion", "Sortie", "Paliers", "Émargement"].map((t) => (
                       <th key={t} className="border-b border-[#123A63] px-[6px] py-[6px] font-bold">
                         {t}
@@ -163,7 +163,7 @@ function PageFiche() {
                       <tr key={i} className="border-b border-[#DCE6EE]">
                         <td className="px-[6px] py-[7px] font-semibold">
                           {[p.nom?.toUpperCase(), p.prenom].filter(Boolean).join(" ")}
-                          {p.prevu && <span className="pl-[5px] text-[10.5px] font-normal text-[#9DB0C0]">(hors Palanote)</span>}
+                          {p.prevu && <span className="pl-[5px] text-[10.5px] font-normal text-[#566B82]">(hors Palanote)</span>}
                         </td>
                         <td className="px-[6px]">
                           {[p.niveau, p.user_id && passeports[p.user_id]?.trimix ? "Trimix" : p.user_id && passeports[p.user_id]?.nitrox ? "Nitrox" : null]
@@ -192,7 +192,7 @@ function PageFiche() {
                 ))}
               </table>
             </div>
-            {nbPlongeurs === 0 && <p className="py-[16px] text-center text-[#5B7189]">Aucun plongeur inscrit pour l'instant.</p>}
+            {nbPlongeurs === 0 && <p className="py-[16px] text-center text-[#566B82]">Aucun plongeur inscrit pour l'instant.</p>}
 
             {f.consignes && (
               <p className="pt-[12px]">
@@ -202,18 +202,18 @@ function PageFiche() {
             )}
 
             <div className="mt-[18px] flex flex-wrap items-end justify-between gap-[16px]">
-              <p className="text-[11px] text-[#7D93A8]">
+              <p className="text-[11px] text-[#566B82]">
                 GP : guide de palanquée · P : plongeur. Données réalisées issues des fiches des plongeurs sur Palanote.
                 <br />
                 Générée le {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })} à{" "}
                 {new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}. À conserver par le centre.
               </p>
-              <div className={`w-[260px] border border-[#123A63] px-[10px] pt-[6px] text-[11px] font-bold uppercase tracking-[.05em] text-[#5B7189] ${signature ? "pb-[6px]" : "pb-[42px]"}`}>
+              <div className={`w-[260px] border border-[#123A63] px-[10px] pt-[6px] text-[11px] font-bold uppercase tracking-[.05em] text-[#566B82] ${signature ? "pb-[6px]" : "pb-[42px]"}`}>
                 Signature du directeur de plongée
                 {signature && (
                   <>
                     <img src={signature.signature} alt={`Signature de ${signature.par ?? "du DP"}`} className="mx-auto mt-[4px] h-[64px] w-auto" />
-                    <span className="block text-[10px] font-semibold normal-case tracking-normal text-[#5B7189]">
+                    <span className="block text-[10px] font-semibold normal-case tracking-normal text-[#566B82]">
                       {[signature.nom?.toUpperCase(), signature.par].filter(Boolean).join(" ")} · signée le{" "}
                       {new Date(signature.signe_le).toLocaleDateString("fr-FR")} à{" "}
                       {new Date(signature.signe_le).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
@@ -227,7 +227,7 @@ function PageFiche() {
       </div>
       {signer && id && (
         <Feuille titre="Signer la fiche de sécurité" onFermer={() => setSigner(false)}>
-          <p className="pb-[12px] text-[13px] leading-snug text-[#5B7189]">
+          <p className="pb-[12px] text-[13px] leading-snug text-[#566B82]">
             Ta signature s'ajoute à la fiche et au PDF, avec la date et l'heure. Tu peux signer à nouveau tant que la sortie n'est pas tamponnée.
           </p>
           <PadSignature onChange={setTrace} />
@@ -259,7 +259,7 @@ function PageFiche() {
 function Champ({ label, valeur }: { label: string; valeur: string }) {
   return (
     <div className="min-w-0">
-      <p className="text-[10.5px] font-bold uppercase tracking-[.06em] text-[#7D93A8]">{label}</p>
+      <p className="text-[10.5px] font-bold uppercase tracking-[.06em] text-[#566B82]">{label}</p>
       <p className="min-h-[18px] truncate border-b border-dotted border-[#B5C4D1] font-semibold">{valeur}</p>
     </div>
   );

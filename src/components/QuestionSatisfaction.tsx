@@ -85,7 +85,7 @@ export function QuestionSatisfaction({ nbPlongees }: { nbPlongees: number }) {
         <Meduse className="left-[28px] -top-[22px]" />
         <div className="mx-auto mb-[16px] h-[5px] w-[44px] rounded-full bg-[#DCE7F0]" aria-hidden="true" />
         <button type="button" onClick={fermer} aria-label="Plus tard" className="absolute right-[18px] top-[18px] flex h-9 w-9 items-center justify-center goutte bg-[#EEF4F9]">
-          <X className="h-[16px] w-[16px] text-[#5B7189]" strokeWidth={2.4} />
+          <X className="h-[16px] w-[16px] text-[#566B82]" strokeWidth={2.4} />
         </button>
 
         {etape === "question" ? (
@@ -93,7 +93,7 @@ export function QuestionSatisfaction({ nbPlongees }: { nbPlongees: number }) {
             <h2 id="titre-satisfaction" className="pr-[40px] text-[22px] font-bold leading-tight">
               Palanote te rend service ?
             </h2>
-            <p className="pt-[8px] text-[14px] leading-normal text-[#5B7189]">Une seule question, et on ne te la repose pas. Les deux réponses nous aident autant.</p>
+            <p className="pt-[8px] text-[14px] leading-normal text-[#566B82]">Une seule question, et on ne te la repose pas. Les deux réponses nous aident autant.</p>
             <div className="flex gap-[12px] pt-[22px]">
               <button type="button" onClick={oui} className="flex h-[56px] flex-1 items-center justify-center galet-moyen bg-[#3DEFBE] text-[15px] font-bold text-[#0B3B63]">
                 Oui
@@ -106,14 +106,14 @@ export function QuestionSatisfaction({ nbPlongees }: { nbPlongees: number }) {
                 Pas vraiment
               </button>
             </div>
-            <p className="pt-[14px] text-center text-[12px] leading-snug text-[#9DB0C0]">« Pas vraiment » t'emmène vers un message privé pour l'auteur, jamais public.</p>
+            <p className="pt-[14px] text-center text-[12px] leading-snug text-[#566B82]">« Pas vraiment » t'emmène vers un message privé pour l'auteur, jamais public.</p>
           </>
         ) : (
           <>
             <h2 id="titre-satisfaction" className="pr-[40px] text-[22px] font-bold leading-tight">
               Merci, ça compte vraiment.
             </h2>
-            <p className="pt-[8px] text-[14px] leading-normal text-[#5B7189]">
+            <p className="pt-[8px] text-[14px] leading-normal text-[#566B82]">
               Le meilleur coup de pouce pour Palanote : en parler à tes binômes. La note publique sur l'App Store arrivera avec l'app installable.
             </p>
             <button
@@ -124,7 +124,7 @@ export function QuestionSatisfaction({ nbPlongees }: { nbPlongees: number }) {
               <Share2 className="h-[18px] w-[18px]" strokeWidth={2.2} aria-hidden="true" />
               {copie ? "LIEN COPIÉ" : "PARTAGER PALANOTE"}
             </button>
-            <button type="button" onClick={() => setOuvert(false)} className="mx-auto mt-[12px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#5B7189]">
+            <button type="button" onClick={() => setOuvert(false)} className="mx-auto mt-[12px] block px-[8px] py-[8px] text-[14px] font-semibold text-[#566B82]">
               Revenir à mon carnet
             </button>
           </>

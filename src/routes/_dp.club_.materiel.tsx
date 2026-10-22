@@ -115,7 +115,7 @@ function PageMateriel() {
       const l = sorties.filter((s) => s.date === d && s.bateau_id === m.id);
       const conflit = l.some((x, i) => l.some((y, j) => i < j && enConflit(x, y)));
       return l.length === 0 ? null : (
-        <span className={`block truncate rounded-[7px] px-[5px] py-[2px] text-[10.5px] font-bold ${conflit ? "bg-[#FFE9E2] text-[#D9573F]" : "bg-[#D5FAF0] text-[#0B3B63]"}`}>
+        <span className={`block truncate rounded-[7px] px-[5px] py-[2px] text-[10.5px] font-bold ${conflit ? "bg-[#FFE9E2] text-[#B8432F]" : "bg-[#D5FAF0] text-[#0B3B63]"}`}>
           {l.map((s) => heureCourte(s.heure) || "?").join(" · ")}
         </span>
       );
@@ -127,7 +127,7 @@ function PageMateriel() {
     return (
       <span
         className={`block rounded-[7px] px-[5px] py-[2px] text-center text-[11px] font-bold ${
-          trop ? "bg-[#FFE9E2] text-[#D9573F]" : juste ? "bg-[#FFF1D6] text-[#8A5A10]" : "bg-[#D5FAF0] text-[#0B3B63]"
+          trop ? "bg-[#FFE9E2] text-[#B8432F]" : juste ? "bg-[#FFF1D6] text-[#8A5A10]" : "bg-[#D5FAF0] text-[#0B3B63]"
         }`}
       >
         {r}/{m.quantite}
@@ -147,7 +147,7 @@ function PageMateriel() {
           <button
             type="button"
             onClick={() => setImporter(true)}
-            className="flex h-[42px] items-center gap-2 rounded-[12px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#14805F] lg:px-[16px]"
+            className="flex h-[42px] items-center gap-2 rounded-[12px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] font-bold text-[#137758] lg:px-[16px]"
           >
             <FileSpreadsheet className="h-[17px] w-[17px]" aria-hidden="true" />
             <span className="hidden sm:inline">IMPORTER (EXCEL)</span>
@@ -179,7 +179,7 @@ function PageMateriel() {
               role="tab"
               aria-selected={vue === id}
               onClick={() => setVue(id)}
-              className={`h-[36px] rounded-[8px] px-[14px] text-[13px] font-bold ${vue === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#5B7189]"}`}
+              className={`h-[36px] rounded-[8px] px-[14px] text-[13px] font-bold ${vue === id ? "bg-white text-[#123A63] shadow-[0_2px_6px_#123A6314]" : "text-[#566B82]"}`}
             >
               {l}
             </button>
@@ -196,7 +196,7 @@ function PageMateriel() {
                 return (
                   <span
                     key={m.id}
-                    className={`flex items-center gap-[6px] rounded-[12px] px-[11px] py-[6px] text-[12.5px] font-bold ${etat === "depasse" ? "bg-[#FFE9E2] text-[#D9573F]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}
+                    className={`flex items-center gap-[6px] rounded-[12px] px-[11px] py-[6px] text-[12.5px] font-bold ${etat === "depasse" ? "bg-[#FFE9E2] text-[#B8432F]" : "bg-[#FFF1D6] text-[#8A5A10]"}`}
                   >
                     <AlertTriangle className="h-[14px] w-[14px]" />
                     {m.libelle} : contrôle {etat === "depasse" ? "dépassé" : "à prévoir"} ({depuisIso(m.prochain_controle!).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })})
@@ -207,7 +207,7 @@ function PageMateriel() {
           )}
 
           <div className="flex flex-wrap items-center gap-[8px] pt-[16px]">
-            <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5B7189]">Réservé par les sorties</h2>
+            <h2 className="text-[13px] font-bold uppercase tracking-[.08em] text-[#566B82]">Réservé par les sorties</h2>
             <span className="text-[13px] font-semibold">
               {a.getDate()} {a.toLocaleDateString("fr-FR", { month: "short" })} – {b.getDate()} {b.toLocaleDateString("fr-FR", { month: "short" })}
             </span>
@@ -220,19 +220,19 @@ function PageMateriel() {
           </div>
 
           {materiel.length === 0 ? (
-            <p className="mt-[10px] galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#5B7189]">
+            <p className="mt-[10px] galet-b border border-dashed border-[#D5E1EC] bg-white/60 px-[15px] py-[16px] text-[13.5px] text-[#566B82]">
               Ajoute ton bateau (avec son nombre de places) et ton stock de blocs, gilets et combinaisons : tu les réserveras pour chaque sortie depuis le planning.
             </p>
           ) : (
             <div className="mt-[10px] overflow-x-auto galet-b border border-[#E4EBF1] bg-white">
               <table className="w-full min-w-[760px] border-collapse text-[13px]">
                 <thead>
-                  <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#7D93A8]">
+                  <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#566B82]">
                     <th className="px-[14px] py-[10px] font-bold">Matériel</th>
                     <th className="px-[6px] font-bold">Stock</th>
                     <th className="px-[6px] font-bold">Contrôle</th>
                     {jours.map((d, i) => (
-                      <th key={d} className={`w-[64px] px-[3px] text-center font-bold ${d === aujourdhui() ? "text-[#1176A8]" : ""}`}>
+                      <th key={d} className={`w-[64px] px-[3px] text-center font-bold ${d === aujourdhui() ? "text-[#106F9F]" : ""}`}>
                         {JOURS[i]} {depuisIso(d).getDate()}
                       </th>
                     ))}
@@ -245,7 +245,7 @@ function PageMateriel() {
                   return (
                     <tbody key={t.id}>
                       <tr>
-                        <td colSpan={11} className="bg-[#F1F6FC] px-[14px] py-[5px] text-[11.5px] font-bold uppercase tracking-[.06em] text-[#5B7189]">
+                        <td colSpan={11} className="bg-[#F1F6FC] px-[14px] py-[5px] text-[11.5px] font-bold uppercase tracking-[.06em] text-[#566B82]">
                           {t.pluriel}
                         </td>
                       </tr>
@@ -255,12 +255,12 @@ function PageMateriel() {
                           <tr key={m.id} className="border-t border-[#EEF3F8]">
                             <td className="px-[14px] py-[9px]">
                               <span className="block font-bold">{m.libelle}</span>
-                              {m.note && <span className="block truncate text-[11.5px] text-[#7D93A8]">{m.note}</span>}
+                              {m.note && <span className="block truncate text-[11.5px] text-[#566B82]">{m.note}</span>}
                             </td>
                             <td className="px-[6px] font-semibold">{m.type === "bateau" ? `${m.places ?? "?"} places` : m.quantite}</td>
                             <td className="px-[6px]">
                               {m.prochain_controle ? (
-                                <span className={`text-[12px] font-semibold ${etat === "depasse" ? "text-[#D9573F]" : etat === "proche" ? "text-[#8A5A10]" : "text-[#5B7189]"}`}>
+                                <span className={`text-[12px] font-semibold ${etat === "depasse" ? "text-[#B8432F]" : etat === "proche" ? "text-[#8A5A10]" : "text-[#566B82]"}`}>
                                   {depuisIso(m.prochain_controle).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "2-digit" })}
                                 </span>
                               ) : (
@@ -287,7 +287,7 @@ function PageMateriel() {
                                     note: m.note ?? "",
                                   })
                                 }
-                                className="flex h-[30px] w-[30px] items-center justify-center goutte text-[#7D93A8] hover:bg-[#F1F6FC]"
+                                className="flex h-[30px] w-[30px] items-center justify-center goutte text-[#566B82] hover:bg-[#F1F6FC]"
                               >
                                 <Pencil className="h-[14px] w-[14px]" />
                               </button>
@@ -301,7 +301,7 @@ function PageMateriel() {
               </table>
             </div>
           )}
-          <p className="pt-[8px] text-[12px] text-[#9DB0C0]">
+          <p className="pt-[8px] text-[12px] text-[#566B82]">
             Chaque case : quantité réservée ce jour-là sur le stock. En jaune, presque tout est pris ; en corail, il en manque. Les réservations se font dans le panneau de la sortie, depuis le planning.
           </p>
         </>
@@ -331,7 +331,7 @@ function PageMateriel() {
                   key={t.id}
                   type="button"
                   onClick={() => setFiche({ ...fiche, type: t.id })}
-                  className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${fiche.type === t.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#5B7189]"}`}
+                  className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${fiche.type === t.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] text-[#566B82]"}`}
                 >
                   {t.libelle}
                 </button>
@@ -371,7 +371,7 @@ function PageMateriel() {
                   .catch((e) => setErreur(messagePlanning(e, "Le matériel n'a pas pu être retiré.")))
                   .finally(() => void charger());
               }}
-              className="mx-auto mt-[14px] block text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+              className="mx-auto mt-[14px] block text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
             >
               Retirer ce matériel
             </button>

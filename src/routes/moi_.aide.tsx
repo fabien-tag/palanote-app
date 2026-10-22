@@ -31,9 +31,9 @@ function Aide() {
                 className="flex w-full items-center gap-[10px] px-[15px] py-[13px] text-left"
               >
                 <span className="flex-1 text-[14.5px] font-bold leading-snug">{x.q}</span>
-                <ChevronDown className={`h-[17px] w-[17px] shrink-0 text-[#9DB0C0] transition-transform ${ouvert ? "rotate-180" : ""}`} aria-hidden="true" />
+                <ChevronDown className={`h-[17px] w-[17px] shrink-0 text-[#566B82] transition-transform ${ouvert ? "rotate-180" : ""}`} aria-hidden="true" />
               </button>
-              {ouvert && <p className="px-[15px] pb-[14px] text-[13.5px] leading-normal text-[#5B7189]">{x.r}</p>}
+              {ouvert && <p className="px-[15px] pb-[14px] text-[13.5px] leading-normal text-[#566B82]">{x.r}</p>}
             </div>
           );
         })}
@@ -44,7 +44,7 @@ function Aide() {
         onClick={() => navigate({ to: "/moi/avis" })}
         className="mt-[18px] flex w-full items-center gap-[12px] galet-c border border-[#B8E4D8] bg-[#E2F8EF] px-[15px] py-[14px] text-left"
       >
-        <MessageCircle className="h-[20px] w-[20px] shrink-0 text-[#14805F]" strokeWidth={2.2} aria-hidden="true" />
+        <MessageCircle className="h-[20px] w-[20px] shrink-0 text-[#137758]" strokeWidth={2.2} aria-hidden="true" />
         <span className="text-[13.5px] leading-snug text-[#3F5B76]">
           <b className="text-[#123A63]">Pas trouvé ta réponse ?</b> Écris-moi dans « Dis-moi ce qui manque » : je lis chaque message.
         </span>
@@ -55,12 +55,12 @@ function Aide() {
         <span className="flex h-[52px] w-[52px] shrink-0 items-center justify-center goutte bg-[#0F3D70] p-[10px]">
           <img src={logoCorail} alt="" className="h-full w-auto" />
         </span>
-        <span className="text-[13px] leading-normal text-[#5B7189]">
+        <span className="text-[13px] leading-normal text-[#566B82]">
           <b className="block text-[15px] text-[#123A63]">Palanote</b>
           Le carnet de plongée dans la poche. Conçu par {EDITEUR.nom}, designer UX/UI et plongeur. Gratuit, sans publicité.
         </span>
       </div>
-      <div className="flex flex-wrap gap-x-[16px] gap-y-[6px] px-[4px] pt-[14px] text-[13px] font-semibold text-[#1176A8]">
+      <div className="flex flex-wrap gap-x-[16px] gap-y-[6px] px-[4px] pt-[14px] text-[13px] font-semibold text-[#106F9F]">
         <button type="button" onClick={() => navigate({ to: "/conditions-utilisation" })} className="underline underline-offset-4">
           Conditions d'utilisation
         </button>
@@ -71,7 +71,7 @@ function Aide() {
           Mentions légales
         </button>
       </div>
-      <p className="px-[4px] pt-[14px] text-[11.5px] text-[#9DB0C0]">Palanote V2 · octobre 2026</p>
+      <p className="px-[4px] pt-[14px] text-[11.5px] text-[#566B82]">Palanote V2 · octobre 2026</p>
     </PageClub>
   );
 }

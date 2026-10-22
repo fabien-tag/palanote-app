@@ -53,7 +53,7 @@ export function FeuilleMeteo({
     }
   };
 
-  const puce = (actif: boolean) => `h-[34px] rounded-[10px] px-[12px] text-[13px] font-bold ${actif ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`;
+  const puce = (actif: boolean) => `h-[34px] rounded-[10px] px-[12px] text-[13px] font-bold ${actif ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`;
 
   return (
     <Feuille titre="Annuler ou reporter" onFermer={onFermer}>
@@ -68,7 +68,7 @@ export function FeuilleMeteo({
             key={id}
             type="button"
             onClick={() => setAction(id)}
-            className={`flex h-[46px] items-center justify-center gap-[6px] rounded-[10px] text-[14px] font-bold ${action === id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+            className={`flex h-[46px] items-center justify-center gap-[6px] rounded-[10px] text-[14px] font-bold ${action === id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
           >
             <Icone className="h-[16px] w-[16px]" /> {libelle}
           </button>
@@ -77,7 +77,7 @@ export function FeuilleMeteo({
 
       {liste && (
         <>
-          <p className="pb-[6px] pt-[16px] text-[12px] font-bold uppercase tracking-[.06em] text-[#7D93A8]">Sorties de la journée</p>
+          <p className="pb-[6px] pt-[16px] text-[12px] font-bold uppercase tracking-[.06em] text-[#566B82]">Sorties de la journée</p>
           <div className="flex flex-col gap-[6px]">
             {liste.map((s) => {
               const coche = choisies.includes(s.id);
@@ -91,7 +91,7 @@ export function FeuilleMeteo({
                   />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[14px] font-bold">{s.site}</span>
-                    <span className="block text-[12px] text-[#7D93A8]">
+                    <span className="block text-[12px] text-[#566B82]">
                       {[s.heure ? heureCourte(s.heure) : null, `${s.nb_inscrits} inscrit${s.nb_inscrits > 1 ? "s" : ""}`, s.mienne ? null : `DP ${s.dp}`].filter(Boolean).join(" · ")}
                     </span>
                   </span>
@@ -102,7 +102,7 @@ export function FeuilleMeteo({
         </>
       )}
 
-      <p className="pb-[6px] pt-[16px] text-[12px] font-bold uppercase tracking-[.06em] text-[#7D93A8]">Motif</p>
+      <p className="pb-[6px] pt-[16px] text-[12px] font-bold uppercase tracking-[.06em] text-[#566B82]">Motif</p>
       <div className="flex flex-wrap gap-[6px]">
         {MOTIFS_CHANGEMENT.map((m) => (
           <button key={m} type="button" onClick={() => setMotif(m)} className={puce(motif === m)}>
@@ -113,18 +113,18 @@ export function FeuilleMeteo({
 
       {action === "reporter" && (
         <div className="grid grid-cols-2 gap-[10px] pt-[14px]">
-          <label className="text-[12px] font-bold text-[#5B7189]">
+          <label className="text-[12px] font-bold text-[#566B82]">
             Nouvelle date
             <input type="date" value={date} min={new Date().toISOString().slice(0, 10)} onChange={(e) => setDate(e.target.value)} className="mt-[4px] block h-[42px] w-full rounded-[10px] border border-[#E4EBF1] px-[10px] text-[14px] text-[#123A63]" />
           </label>
-          <label className="text-[12px] font-bold text-[#5B7189]">
+          <label className="text-[12px] font-bold text-[#566B82]">
             Heure
             <input type="time" value={heure} onChange={(e) => setHeure(e.target.value)} className="mt-[4px] block h-[42px] w-full rounded-[10px] border border-[#E4EBF1] px-[10px] text-[14px] text-[#123A63]" />
           </label>
         </div>
       )}
 
-      <label className="block pt-[14px] text-[12px] font-bold text-[#5B7189]">
+      <label className="block pt-[14px] text-[12px] font-bold text-[#566B82]">
         Message aux plongeurs (facultatif)
         <textarea
           value={message}
@@ -148,7 +148,7 @@ export function FeuilleMeteo({
           ? "ENVOI…"
           : `${action === "annuler" ? "ANNULER" : "REPORTER"} ET PRÉVENIR ${prevenus} PLONGEUR${prevenus > 1 ? "S" : ""}`}
       </button>
-      <p className="pt-[8px] text-center text-[11.5px] text-[#9DB0C0]">Les plongeurs en liste d'attente sont prévenus aussi.</p>
+      <p className="pt-[8px] text-center text-[11.5px] text-[#566B82]">Les plongeurs en liste d'attente sont prévenus aussi.</p>
     </Feuille>
   );
 }

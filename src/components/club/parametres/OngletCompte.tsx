@@ -90,7 +90,7 @@ export function OngletCompte({ compte }: { compte: Compte | null }) {
         <Rang titre="Adresse e-mail" texte={google ? "Tu te connectes avec Google : c'est l'adresse de ton compte Google." : "Un lien de confirmation part vers la nouvelle adresse."}>
           <div className="flex flex-wrap items-center gap-[12px]">
             <span className="flex min-w-0 items-center gap-[8px] text-[14px] font-semibold">
-              <Mail className="h-[16px] w-[16px] shrink-0 text-[#1176A8]" aria-hidden="true" />
+              <Mail className="h-[16px] w-[16px] shrink-0 text-[#106F9F]" aria-hidden="true" />
               <span className="truncate">{compte?.email ?? "…"}</span>
             </span>
             {!google && (
@@ -111,7 +111,7 @@ export function OngletCompte({ compte }: { compte: Compte | null }) {
         <Rang titre="Mot de passe" texte={google ? "Facultatif : pour te connecter aussi avec ton adresse e-mail." : "8 caractères au minimum."}>
           <div className="flex flex-wrap items-center gap-[12px]">
             <span className="flex items-center gap-[8px] text-[14px] font-semibold">
-              <KeyRound className="h-[16px] w-[16px] text-[#1176A8]" aria-hidden="true" />
+              <KeyRound className="h-[16px] w-[16px] text-[#106F9F]" aria-hidden="true" />
               {compte?.avecMotDePasse ? "••••••••••" : "Aucun mot de passe"}
             </span>
             <button type="button" onClick={() => ouvrir("mdp")} className={`${BOUTON_SECONDAIRE} ml-auto h-[36px]`}>
@@ -129,7 +129,7 @@ export function OngletCompte({ compte }: { compte: Compte | null }) {
           )}
         </Rang>
         {(erreur || message) && (
-          <p className={`pb-[16px] text-[13px] font-semibold ${erreur ? "text-[#8A2A1A]" : "text-[#14805F]"}`}>{erreur ?? message}</p>
+          <p className={`pb-[16px] text-[13px] font-semibold ${erreur ? "text-[#8A2A1A]" : "text-[#137758]"}`}>{erreur ?? message}</p>
         )}
       </Carte>
 
@@ -143,7 +143,7 @@ export function OngletCompte({ compte }: { compte: Compte | null }) {
 
       <Carte titre="Supprimer mon compte" texte="Ton carnet, tes photos et ton compte sont effacés. Les sorties du club restent au club." danger>
         <div className="py-[18px]">
-          <button type="button" onClick={() => setSuppression(true)} className="inline-flex h-[42px] items-center rounded-[10px] border border-[#F0B3A6] bg-white px-[16px] text-[13px] font-bold text-[#C94957] hover:bg-[#FFF4F1]">
+          <button type="button" onClick={() => setSuppression(true)} className="inline-flex h-[42px] items-center rounded-[10px] border border-[#F0B3A6] bg-white px-[16px] text-[13px] font-bold text-[#B8432F] hover:bg-[#FFF4F1]">
             Supprimer mon compte…
           </button>
         </div>
@@ -212,7 +212,7 @@ export function OngletNotifications({ onVoir }: { onVoir: () => void }) {
               <span className="mt-[6px] h-[8px] w-[8px] shrink-0 rounded-full bg-[#3DEFBE]" aria-hidden="true" />
               <span>
                 <span className="block text-[14px] font-bold">{t}</span>
-                <span className="block text-[12.5px] leading-normal text-[#7D93A8]">{x}</span>
+                <span className="block text-[12.5px] leading-normal text-[#566B82]">{x}</span>
               </span>
             </div>
           ))}

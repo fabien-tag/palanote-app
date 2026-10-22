@@ -24,7 +24,7 @@ export function LigneDePlongee({ p, numero }: { p: CartePlongee; numero: number 
 
       <div className="flex min-w-0 flex-grow flex-col gap-[2px]">
         <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-[11px] text-[#9DB0C0]">
+          <span className="truncate text-[11px] text-[#566B82]">
             Nº {numero} · {date}
           </span>
           {p.profMax && (
@@ -44,11 +44,11 @@ export function LigneDePlongee({ p, numero }: { p: CartePlongee; numero: number 
               <Star className="h-[11px] w-[11px] fill-[#FFC65C] text-[#FFC65C]" aria-hidden="true" />
               <span className="text-[11px] font-bold leading-none text-[#123A63]">
                 {p.note}
-                <span className="font-semibold text-[#9DB0C0]">/5</span>
+                <span className="font-semibold text-[#566B82]">/5</span>
               </span>
             </span>
           )}
-          <span className="truncate text-[11.5px] text-[#5B7189]">{infos.join(" · ")}</span>
+          <span className="truncate text-[11.5px] text-[#566B82]">{infos.join(" · ")}</span>
         </div>
       </div>
     </div>

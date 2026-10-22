@@ -1,3 +1,4 @@
+import { LienEvitement } from "@/components/LienEvitement";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -150,6 +151,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <LienEvitement />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       {/* Accord aux conditions d'utilisation, demandé une fois par version */}

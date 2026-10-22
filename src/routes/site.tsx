@@ -38,8 +38,8 @@ function PageSite() {
   if (!spot)
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#F1F6FC] px-8 text-center">
-        <p className="text-[15px] text-[#5B7189]">Ce site n'est plus dans ton carnet.</p>
-        <button type="button" onClick={() => navigate({ to: "/carte" })} className="font-bold text-[#1176A8] underline">
+        <p className="text-[15px] text-[#566B82]">Ce site n'est plus dans ton carnet.</p>
+        <button type="button" onClick={() => navigate({ to: "/carte" })} className="font-bold text-[#106F9F] underline">
           Revenir à la carte
         </button>
       </div>
@@ -92,7 +92,7 @@ function PageSite() {
             {
               Icone: ArrowDown,
               fond: "bg-[#DFF3FB]",
-              couleur: "text-[#1176A8]",
+              couleur: "text-[#106F9F]",
               valeur: spot.profMax === null ? "—" : `${String(spot.profMax).replace(".", ",")} m`,
               label: "ta plus profonde",
             },
@@ -109,7 +109,7 @@ function PageSite() {
                 <Icone className={`h-[16px] w-[16px] ${couleur}`} strokeWidth={2.2} aria-hidden="true" />
               </span>
               <span className="text-[19px] font-bold">{valeur}</span>
-              <span className="text-[11px] text-[#7D93A8]">{label}</span>
+              <span className="text-[11px] text-[#566B82]">{label}</span>
             </div>
           ))}
         </div>
@@ -129,8 +129,8 @@ function PageSite() {
               >
                 <span className="w-[54px] shrink-0 text-center leading-none">
                   <span className="block text-[20px] font-bold">{ok ? d.getDate() : "—"}</span>
-                  <span className="block pt-[3px] text-[9.5px] font-semibold tracking-[.06em] text-[#7D93A8]">{ok ? MOIS[d.getMonth()] : "SANS DATE"}</span>
-                  {ok && <span className="block pt-[1px] text-[9.5px] text-[#9DB0C0]">{d.getFullYear()}</span>}
+                  <span className="block pt-[3px] text-[9.5px] font-semibold tracking-[.06em] text-[#566B82]">{ok ? MOIS[d.getMonth()] : "SANS DATE"}</span>
+                  {ok && <span className="block pt-[1px] text-[9.5px] text-[#566B82]">{d.getFullYear()}</span>}
                 </span>
                 <span className="flex flex-1 items-center gap-[10px]">
                   {p.profMax && (
@@ -140,7 +140,7 @@ function PageSite() {
                   )}
                   {p.note > 0 && <Etoiles note={p.note} />}
                 </span>
-                <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#9DB0C0]" strokeWidth={2.2} aria-hidden="true" />
+                <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#566B82]" strokeWidth={2.2} aria-hidden="true" />
               </button>
             );
           })}
@@ -153,9 +153,9 @@ function PageSite() {
             <div className="flex flex-wrap gap-[8px] px-[22px]">
               {especes.map(([e, n]) => (
                 <span key={e} className="flex h-[32px] items-center gap-[6px] rounded-[16px] border border-[#D8E5EE] bg-white px-[12px] text-[13px] text-[#123A63]">
-                  <Eye className="h-[14px] w-[14px] text-[#1176A8]" strokeWidth={2} aria-hidden="true" />
+                  <Eye className="h-[14px] w-[14px] text-[#106F9F]" strokeWidth={2} aria-hidden="true" />
                   {e}
-                  <span className="text-[#9DB0C0]">{n}</span>
+                  <span className="text-[#566B82]">{n}</span>
                 </span>
               ))}
             </div>
@@ -175,12 +175,12 @@ function PageSite() {
                       className={`w-full rounded-[5px] ${n === 0 ? "" : fort ? "bg-[#0F3D70]" : "bg-[#9FD6EE]"}`}
                       style={{ height: n === 0 ? 0 : `${Math.max(14, (n / maxMois) * 60)}px` }}
                     />
-                    <span className="text-[10px] text-[#9DB0C0]">{INITIALES_MOIS[i]}</span>
+                    <span className="text-[10px] text-[#566B82]">{INITIALES_MOIS[i]}</span>
                   </div>
                 );
               })}
             </div>
-            <p className="pt-[12px] text-[12.5px] leading-snug text-[#5B7189]">
+            <p className="pt-[12px] text-[12.5px] leading-snug text-[#566B82]">
               {avecDate === 1 ? "Ta visite" : `Tes ${avecDate <= 10 ? CHIFFRES[avecDate] : avecDate} visites`}, mois par mois. C'est ton historique, pas une
               recommandation — l'app ne te dira jamais quand plonger.
             </p>
@@ -198,7 +198,7 @@ function PageSite() {
             </span>
             <span className="min-w-0">
               <span className="block truncate text-[15px] font-bold">{club[0]}</span>
-              <span className="block text-[12.5px] text-[#5B7189]">
+              <span className="block text-[12.5px] text-[#566B82]">
                 {club[1] === nb ? (nb > 1 ? `Tes ${nb} plongées ici étaient avec eux` : "Ta plongée ici était avec eux") : `${club[1]} de tes ${nb} plongées ici étaient avec eux`}
               </span>
             </span>
@@ -218,7 +218,7 @@ function PageSite() {
           >
             AJOUTER UNE PLONGÉE ICI
           </button>
-          <p className="pt-[12px] text-center text-[12px] text-[#9DB0C0]">{pluriel(nb, "plongée")} · position décalée de 100 à 150 m</p>
+          <p className="pt-[12px] text-center text-[12px] text-[#566B82]">{pluriel(nb, "plongée")} · position décalée de 100 à 150 m</p>
         </div>
       </div>
     </div>

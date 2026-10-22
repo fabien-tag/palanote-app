@@ -40,7 +40,7 @@ export function ListeAttente({ sortie, onChange, modifiable }: { sortie: string;
             <Avatar id={p.id} prenom={p.prenom} taille={28} />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[13.5px] font-bold">{p.prenom}</span>
-              <span className="block truncate text-[11.5px] text-[#7D93A8]">
+              <span className="block truncate text-[11.5px] text-[#566B82]">
                 {[p.niveau, `depuis le ${new Date(p.depuis).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}`].filter(Boolean).join(" · ")}
               </span>
             </span>
@@ -58,7 +58,7 @@ export function ListeAttente({ sortie, onChange, modifiable }: { sortie: string;
                   type="button"
                   disabled={enCours === p.id}
                   onClick={() => void agir(p.id, () => quitterAttente(sortie, p.id))}
-                  className="h-[30px] px-[6px] text-[12px] font-semibold text-[#9DB0C0]"
+                  className="h-[30px] px-[6px] text-[12px] font-semibold text-[#566B82]"
                 >
                   Retirer
                 </button>

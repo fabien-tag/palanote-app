@@ -131,9 +131,9 @@ function PolitiqueConfidentialite() {
         </p>
       </Bloc>
 
-      <p className="px-[4px] text-[12.5px] leading-relaxed text-[#5B7189]">
+      <p className="px-[4px] text-[12.5px] leading-relaxed text-[#566B82]">
         Voir aussi les{" "}
-        <Link to="/conditions-utilisation" className="font-semibold text-[#1176A8]">
+        <Link to="/conditions-utilisation" className="font-semibold text-[#106F9F]">
           conditions d'utilisation
         </Link>
         .

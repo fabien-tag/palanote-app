@@ -113,6 +113,8 @@ function Connexion() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="prenom@exemple.fr"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "erreur-connexion" : undefined}
               className="mt-[clamp(4px,0.9svh,8px)] min-h-[clamp(46px,6.6svh,52px)] w-full galet-moyen border-0 bg-blanc px-4 text-base text-foreground outline-none focus:border-lagon"
             />
           </div>
@@ -128,6 +130,7 @@ function Connexion() {
               value={password}
               onChange={setPassword}
               placeholder="Mot de passe"
+              erreurId={error ? "erreur-connexion" : undefined}
             />
             <div className="flex justify-end">
               <Link
@@ -140,7 +143,7 @@ function Connexion() {
           </div>
 
           {error && (
-            <p role="alert" className="text-sm font-medium text-corail">
+            <p id="erreur-connexion" role="alert" className="text-sm font-medium text-corail">
               {error}
             </p>
           )}

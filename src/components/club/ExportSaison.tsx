@@ -35,7 +35,7 @@ export function ExportSaison({ centre, onFermer }: { centre: string; onFermer: (
 
   return (
     <Feuille titre="Exporter la saison" onFermer={onFermer}>
-      <p className="pb-[12px] text-[13.5px] leading-snug text-[#5B7189]">
+      <p className="pb-[12px] text-[13.5px] leading-snug text-[#566B82]">
         Un fichier Excel avec 4 onglets : le résumé, les sorties, toutes les plongées (y compris l'historique importé) et le bilan de chaque plongeur.
       </p>
       <div className="flex flex-wrap gap-[6px]">
@@ -47,7 +47,7 @@ export function ExportSaison({ centre, onFermer }: { centre: string; onFermer: (
               setP(x);
               setLibre(false);
             }}
-            className={`h-[36px] rounded-[10px] px-[12px] text-[13px] font-bold ${!libre && p.id === x.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+            className={`h-[36px] rounded-[10px] px-[12px] text-[13px] font-bold ${!libre && p.id === x.id ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
           >
             {x.libelle}
           </button>
@@ -55,25 +55,25 @@ export function ExportSaison({ centre, onFermer }: { centre: string; onFermer: (
         <button
           type="button"
           onClick={() => setLibre(true)}
-          className={`h-[36px] rounded-[10px] px-[12px] text-[13px] font-bold ${libre ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+          className={`h-[36px] rounded-[10px] px-[12px] text-[13px] font-bold ${libre ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
         >
           Autre période
         </button>
       </div>
       {libre && (
         <div className="grid grid-cols-2 gap-[10px] pt-[12px]">
-          <label className="text-[12px] font-bold text-[#5B7189]">
+          <label className="text-[12px] font-bold text-[#566B82]">
             Du
             <input type="date" value={debut} onChange={(e) => setDebut(e.target.value)} className="mt-[4px] block h-[42px] w-full rounded-[10px] border border-[#E4EBF1] px-[10px] text-[14px] text-[#123A63]" />
           </label>
-          <label className="text-[12px] font-bold text-[#5B7189]">
+          <label className="text-[12px] font-bold text-[#566B82]">
             Au
             <input type="date" value={fin} onChange={(e) => setFin(e.target.value)} className="mt-[4px] block h-[42px] w-full rounded-[10px] border border-[#E4EBF1] px-[10px] text-[14px] text-[#123A63]" />
           </label>
         </div>
       )}
       <MessageErreur texte={erreur} />
-      {fait && <p className="pt-[12px] text-[13px] font-semibold text-[#14805F]">{fait}</p>}
+      {fait && <p className="pt-[12px] text-[13px] font-semibold text-[#137758]">{fait}</p>}
       <button
         type="button"
         disabled={enCours || (libre && (!debut || !fin || fin < debut))}

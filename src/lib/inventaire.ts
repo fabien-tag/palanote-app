@@ -38,10 +38,10 @@ export const CATEGORIES: { id: CategorieArticle; libelle: string; controle: stri
 ];
 
 export const ETATS: { id: EtatArticle; libelle: string; classe: string }[] = [
-  { id: "ok", libelle: "En service", classe: "bg-[#E2F8EF] text-[#14805F]" },
+  { id: "ok", libelle: "En service", classe: "bg-[#E2F8EF] text-[#137758]" },
   { id: "a_controler", libelle: "À contrôler", classe: "bg-[#FFF1D6] text-[#8A5A10]" },
-  { id: "en_reparation", libelle: "En réparation", classe: "bg-[#E3F2FB] text-[#1176A8]" },
-  { id: "hors_service", libelle: "Hors service", classe: "bg-[#FFE9E2] text-[#D9573F]" },
+  { id: "en_reparation", libelle: "En réparation", classe: "bg-[#E3F2FB] text-[#106F9F]" },
+  { id: "hors_service", libelle: "Hors service", classe: "bg-[#FFE9E2] text-[#B8432F]" },
 ];
 
 // Libellés lisibles des caractéristiques

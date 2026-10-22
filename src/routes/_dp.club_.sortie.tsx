@@ -210,19 +210,19 @@ function SortieDp() {
         <>
           {/* Résumé de la sortie */}
           <div className="relative mt-[8px] galet border border-[#E4EBF1] bg-white p-[16px] shadow-[0_4px_14px_#123A6306]">
-            <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#1176A8]">
+            <p className="text-[12.5px] font-bold uppercase tracking-[.07em] text-[#106F9F]">
               {s.date_texte}
               {s.heure ? ` · ${heureCourte(s.heure)}` : ""}
             </p>
             <h2 className="pt-[3px] text-[23px] font-bold leading-tight">{s.site}</h2>
-            <p className="text-[13.5px] text-[#5B7189]">{[s.lieu, s.entre_amis ? `entre amis · organisée par ${s.est_dp ? "toi" : s.dp.prenom}` : s.centre.nom].filter(Boolean).join(" · ")}</p>
+            <p className="text-[13.5px] text-[#566B82]">{[s.lieu, s.entre_amis ? `entre amis · organisée par ${s.est_dp ? "toi" : s.dp.prenom}` : s.centre.nom].filter(Boolean).join(" · ")}</p>
             <div className="flex flex-wrap gap-[6px] pt-[10px]">
               {s.bateau && <Info Icone={Ship} texte={s.bateau} />}
               {s.profondeur_prevue && <Info Icone={Waves} texte={`${String(s.profondeur_prevue).replace(".", ",")} m prévus`} />}
               {s.duree_min && <Info Icone={Clock} texte={`${s.duree_min} min`} />}
               {s.temp_fond_c !== null && <Info Icone={Thermometer} texte={`${String(s.temp_fond_c).replace(".", ",")} °C`} />}
             </div>
-            {s.consignes && <p className="pt-[10px] text-[13px] italic leading-snug text-[#5B7189]">« {s.consignes} »</p>}
+            {s.consignes && <p className="pt-[10px] text-[13px] italic leading-snug text-[#566B82]">« {s.consignes} »</p>}
             <Etapes statut={s.statut} entreAmis={s.entre_amis} />
             <Meduse className="-right-[6px] -top-[14px]" />
           </div>
@@ -232,12 +232,12 @@ function SortieDp() {
               onClick={() => navigate({ to: "/club/fiche-securite", search: { id: s.id } })}
               className="mt-[10px] flex w-full items-center gap-[11px] galet-b border border-[#E4EBF1] bg-white px-[14px] py-[11px] text-left"
             >
-              <FileText className="h-[19px] w-[19px] shrink-0 text-[#1176A8]" strokeWidth={2.1} aria-hidden="true" />
+              <FileText className="h-[19px] w-[19px] shrink-0 text-[#106F9F]" strokeWidth={2.1} aria-hidden="true" />
               <span className="min-w-0 flex-1">
                 <span className="block text-[14px] font-bold">Fiche de sécurité</span>
-                <span className="block text-[12px] text-[#5B7189]">Palanquées, niveaux et paramètres, à imprimer</span>
+                <span className="block text-[12px] text-[#566B82]">Palanquées, niveaux et paramètres, à imprimer</span>
               </span>
-              <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+              <ChevronRight className="h-[16px] w-[16px] shrink-0 text-[#566B82]" aria-hidden="true" />
             </button>
           )}
 
@@ -266,20 +266,20 @@ function SortieDp() {
                 <button
                   type="button"
                   onClick={() => void envoyerLien()}
-                  className="flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[13.5px] font-bold text-[#1176A8]"
+                  className="flex h-[52px] items-center justify-center gap-2 galet-moyen border border-[#57D4F5] bg-white text-[13.5px] font-bold text-[#106F9F]"
                 >
                   <Share2 className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
                   LIEN
                 </button>
               </div>
-              {partage && <p className="pt-[8px] text-[12.5px] text-[#14805F]">{partage}</p>}
+              {partage && <p className="pt-[8px] text-[12.5px] text-[#137758]">{partage}</p>}
               {!s.entre_amis && (
-                <button type="button" onClick={() => setImporter(true)} className="mt-[10px] flex items-center gap-[6px] text-[13px] font-bold text-[#14805F]">
+                <button type="button" onClick={() => setImporter(true)} className="mt-[10px] flex items-center gap-[6px] text-[13px] font-bold text-[#137758]">
                   <FileSpreadsheet className="h-[15px] w-[15px]" /> Importer une liste de plongeurs (Excel)
                 </button>
               )}
-              <label className="mt-[10px] flex h-[50px] items-center gap-[10px] galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] focus-within:border-[#57D4F5]">
-                <Search className="h-[18px] w-[18px] shrink-0 text-[#9DB0C0]" aria-hidden="true" />
+              <label className="mt-[10px] flex h-[50px] items-center gap-[10px] galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] focus-within:border-[#57D4F5]">
+                <Search className="h-[18px] w-[18px] shrink-0 text-[#566B82]" aria-hidden="true" />
                 <input
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
@@ -289,7 +289,7 @@ function SortieDp() {
                 />
                 {q && (
                   <button type="button" aria-label="Effacer" onClick={() => setQ("")}>
-                    <X className="h-[16px] w-[16px] text-[#9DB0C0]" />
+                    <X className="h-[16px] w-[16px] text-[#566B82]" />
                   </button>
                 )}
               </label>
@@ -300,10 +300,10 @@ function SortieDp() {
                       <Avatar id={t.id} prenom={t.prenom} taille={34} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[14.5px] font-bold">{t.prenom}</span>
-                        <span className="block truncate text-[12px] text-[#5B7189]">{[t.niveau, t.club].filter(Boolean).join(" · ") || "Plongeur Palanote"}</span>
+                        <span className="block truncate text-[12px] text-[#566B82]">{[t.niveau, t.club].filter(Boolean).join(" · ") || "Plongeur Palanote"}</span>
                       </span>
                       {t.deja_inscrit ? (
-                        <span className="text-[12.5px] font-semibold text-[#14805F]">Inscrit</span>
+                        <span className="text-[12.5px] font-semibold text-[#137758]">Inscrit</span>
                       ) : (
                         <button
                           type="button"
@@ -325,7 +325,7 @@ function SortieDp() {
                 </div>
               )}
               {q.trim().length >= 2 && trouves.length === 0 && (
-                <p className="pt-[8px] text-[12.5px] leading-snug text-[#9DB0C0]">
+                <p className="pt-[8px] text-[12.5px] leading-snug text-[#566B82]">
                   {s.entre_amis
                     ? "Personne de ce nom parmi tes binômes. Montre-lui le QR code, ou ajoute-le d'abord comme binôme dans Amis."
                     : "Personne de ce nom parmi tes binômes et les habitués du centre. Essaie son e-mail exact, ou montre-lui le QR code."}
@@ -349,7 +349,7 @@ function SortieDp() {
                   ))}
                 </div>
               )}
-              <p className="-mt-[4px] pb-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+              <p className="-mt-[4px] pb-[10px] text-[12.5px] leading-snug text-[#566B82]">
                 Note les prénoms dès maintenant : quand un plongeur scanne le QR, il retrouve sa place et rejoint sa palanquée.
               </p>
               <div className="flex flex-col gap-[10px]">
@@ -359,7 +359,7 @@ function SortieDp() {
                     <div key={pal.id} className="galet-b border border-[#E4EBF1] bg-white p-[12px]">
                       <p className="pb-[8px] text-[13.5px] font-bold">
                         Palanquée {pal.numero}
-                        <span className="font-normal text-[#9DB0C0]"> · {membres.length} plongeur{membres.length > 1 ? "s" : ""}</span>
+                        <span className="font-normal text-[#566B82]"> · {membres.length} plongeur{membres.length > 1 ? "s" : ""}</span>
                       </p>
                       <div className="flex flex-col gap-[6px]">
                         {membres.map((p) => (
@@ -382,12 +382,12 @@ function SortieDp() {
                             placeholder="Prénom"
                             aria-label={`Prénom à ajouter à la palanquée ${pal.numero}`}
                             maxLength={60}
-                            className="h-[38px] min-w-0 flex-1 rounded-[12px] border-[1.5px] border-[#E4EBF1] bg-[#F7FBFE] px-[12px] text-[14px] outline-none focus:border-[#57D4F5]"
+                            className="h-[38px] min-w-0 flex-1 rounded-[12px] border-[1.5px] border-[#7B8FA3] bg-[#F7FBFE] px-[12px] text-[14px] outline-none focus:border-[#57D4F5]"
                           />
                           <button type="submit" disabled={enCours} className="h-[38px] rounded-[19px] bg-[#3DEFBE] px-[14px] text-[12.5px] font-bold text-[#0B3B63] disabled:opacity-60">
                             Ajouter
                           </button>
-                          <button type="button" aria-label="Fermer" onClick={() => setNouveauNom(null)} className="text-[#9DB0C0]">
+                          <button type="button" aria-label="Fermer" onClick={() => setNouveauNom(null)} className="text-[#566B82]">
                             <X className="h-[16px] w-[16px]" />
                           </button>
                         </form>
@@ -395,7 +395,7 @@ function SortieDp() {
                         <button
                           type="button"
                           onClick={() => setNouveauNom({ palanquee: pal.id, nom: "" })}
-                          className="mt-[6px] flex items-center gap-[5px] py-[4px] text-[12.5px] font-bold text-[#1176A8]"
+                          className="mt-[6px] flex items-center gap-[5px] py-[4px] text-[12.5px] font-bold text-[#106F9F]"
                         >
                           <Plus className="h-[13px] w-[13px]" strokeWidth={2.8} aria-hidden="true" />
                           Ajouter un prénom
@@ -406,7 +406,7 @@ function SortieDp() {
                 })}
                 {sansPalanquee.length > 0 && (
                   <div className="galet-b border border-dashed border-[#BFD7E8] bg-[#F7FBFE] p-[12px]">
-                    <p className="pb-[8px] text-[13.5px] font-bold text-[#5B7189]">Sans palanquée</p>
+                    <p className="pb-[8px] text-[13.5px] font-bold text-[#566B82]">Sans palanquée</p>
                     <div className="flex flex-col gap-[6px]">
                       {sansPalanquee.map((p) => (
                         <LigneParticipant key={p.participant_id} p={p} s={s} onAgir={agir} desactive={enCours} {...propsPasseport(p)} />
@@ -421,7 +421,7 @@ function SortieDp() {
                   type="button"
                   disabled={enCours}
                   onClick={() => void agir(() => ajouterPalanquee(s.id), "La palanquée n'a pas pu être ajoutée.")}
-                  className="flex h-[44px] items-center justify-center gap-[6px] text-[13.5px] font-bold text-[#1176A8]"
+                  className="flex h-[44px] items-center justify-center gap-[6px] text-[13.5px] font-bold text-[#106F9F]"
                 >
                   <Plus className="h-[15px] w-[15px]" strokeWidth={2.6} aria-hidden="true" />
                   Ajouter une palanquée
@@ -439,13 +439,13 @@ function SortieDp() {
                   <div key={p.participant_id} className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px]">
                     <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
                     <span className="min-w-0 flex-1 truncate text-[14.5px] font-bold">{p.moi ? `${p.prenom} (toi)` : p.prenom}</span>
-                    <span className={`text-[12px] font-semibold ${p.complete ? "text-[#14805F]" : "text-[#9DB0C0]"}`}>
+                    <span className={`text-[12px] font-semibold ${p.complete ? "text-[#137758]" : "text-[#566B82]"}`}>
                       {p.complete ? "Complétée" : p.prevu ? "Pas encore sur Palanote" : "Pas encore complétée"}
                     </span>
                   </div>
                 ))}
               </div>
-              <p className="pt-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+              <p className="pt-[10px] text-[12.5px] leading-snug text-[#566B82]">
                 Chacun a reçu sa fiche préremplie. Une sortie entre amis n'a pas de tampon : seul un directeur de plongée d'un centre peut en poser un.
               </p>
               {participants.find((p) => p.moi && !p.complete) && (
@@ -479,7 +479,7 @@ function SortieDp() {
                       <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[14.5px] font-bold">{p.prenom}</span>
-                        <span className={`block truncate text-[12px] ${p.complete ? "text-[#14805F]" : "text-[#9DB0C0]"}`}>
+                        <span className={`block truncate text-[12px] ${p.complete ? "text-[#137758]" : "text-[#566B82]"}`}>
                           {p.complete ? "Fiche complétée" : p.prevu ? "Pas encore sur Palanote : le tampon l'attendra" : "Fiche pas encore complétée"}
                         </span>
                       </span>
@@ -490,7 +490,7 @@ function SortieDp() {
                   );
                 })}
               </div>
-              <p className="pt-[10px] text-[12.5px] leading-snug text-[#5B7189]">
+              <p className="pt-[10px] text-[12.5px] leading-snug text-[#566B82]">
                 Ceux qui n'ont pas encore complété leur fiche recevront le tampon automatiquement dès qu'ils l'auront fait.
               </p>
             </>
@@ -511,7 +511,7 @@ function SortieDp() {
                   anime={vientDeTamponner}
                 />
                 <p className="pt-[12px] text-[17px] font-bold">{vientDeTamponner ? "Tampon posé !" : "Sortie tamponnée"}</p>
-                <p className="text-[13px] text-[#5B7189]">Chaque plongeur a été prévenu dans son app.</p>
+                <p className="text-[13px] text-[#566B82]">Chaque plongeur a été prévenu dans son app.</p>
               </div>
               <Titre aide={`${completes}/${participants.length} fiches`}>Plongeurs</Titre>
               <div className="flex flex-col gap-[6px]">
@@ -519,7 +519,7 @@ function SortieDp() {
                   <div key={p.participant_id} className="flex items-center gap-[11px] galet-petit bg-white px-[12px] py-[9px]">
                     <Avatar id={p.id} prenom={p.prenom} taille={34} prevu={p.prevu} />
                     <span className="min-w-0 flex-1 truncate text-[14.5px] font-bold">{p.prenom}</span>
-                    <span className={`text-[12px] font-semibold ${p.exclu_tampon ? "text-[#9DB0C0]" : p.complete ? "text-[#D9573F]" : "text-[#8A5A10]"}`}>
+                    <span className={`text-[12px] font-semibold ${p.exclu_tampon ? "text-[#566B82]" : p.complete ? "text-[#B8432F]" : "text-[#8A5A10]"}`}>
                       {p.exclu_tampon ? "Sans tampon" : p.complete ? "Tamponnée" : p.prevu ? "Pas encore sur Palanote" : "En attente de sa fiche"}
                     </span>
                   </div>
@@ -528,13 +528,13 @@ function SortieDp() {
             </>
           )}
 
-          {s.statut === "annulee" && <p className="pt-[22px] text-center text-[14px] text-[#5B7189]">Cette sortie est annulée. Les plongeurs ont été prévenus.</p>}
+          {s.statut === "annulee" && <p className="pt-[22px] text-center text-[14px] text-[#566B82]">Cette sortie est annulée. Les plongeurs ont été prévenus.</p>}
 
           {(s.statut === "prevue" || (s.statut === "terminee" && !s.entre_amis)) && (
             <button
               type="button"
               onClick={() => setAnnuler(true)}
-              className="mx-auto mt-[26px] block text-[13px] font-semibold text-[#9DB0C0] underline underline-offset-4"
+              className="mx-auto mt-[26px] block text-[13px] font-semibold text-[#566B82] underline underline-offset-4"
             >
               {s.statut === "prevue" && !s.entre_amis ? "Annuler ou reporter (météo…)" : "Annuler la sortie"}
             </button>
@@ -567,7 +567,7 @@ function SortieDp() {
               <X className="h-[18px] w-[18px]" />
             </button>
           </div>
-          <p className="pt-[clamp(12px,3svh,26px)] text-center text-[14px] text-[#5B7189]">
+          <p className="pt-[clamp(12px,3svh,26px)] text-center text-[14px] text-[#566B82]">
             {s.site} · {s.date_texte}
           </p>
           <div className="mt-[16px] flex aspect-square w-[min(78vw,300px)] items-center justify-center galet bg-white p-[20px] shadow-[0_8px_26px_rgba(15,61,112,.12)]">
@@ -584,20 +584,20 @@ function SortieDp() {
             {participants.map((p) => (
               <span
                 key={p.participant_id}
-                className={`flex h-[32px] items-center gap-[6px] rounded-[16px] pl-[4px] pr-[11px] text-[13px] font-semibold ${p.prevu ? "border border-dashed border-[#BFD7E8] text-[#9DB0C0]" : "bg-white shadow-sm"}`}
+                className={`flex h-[32px] items-center gap-[6px] rounded-[16px] pl-[4px] pr-[11px] text-[13px] font-semibold ${p.prevu ? "border border-dashed border-[#BFD7E8] text-[#566B82]" : "bg-white shadow-sm"}`}
               >
                 <Avatar id={p.id} prenom={p.prenom} taille={24} prevu={p.prevu} />
                 {p.prenom}
-                {!p.prevu && p.nom_prevu && <Check className="h-[13px] w-[13px] text-[#14805F]" strokeWidth={3} aria-label="a pris sa place" />}
+                {!p.prevu && p.nom_prevu && <Check className="h-[13px] w-[13px] text-[#137758]" strokeWidth={3} aria-label="a pris sa place" />}
               </span>
             ))}
           </div>
-          <p className="pt-[12px] text-[13px] font-bold text-[#14805F]">
+          <p className="pt-[12px] text-[13px] font-bold text-[#137758]">
             {inscrits} inscrit{inscrits > 1 ? "s" : ""}
-            {prevus > 0 && <span className="font-semibold text-[#9DB0C0]"> · {prevus} en attente</span>}
+            {prevus > 0 && <span className="font-semibold text-[#566B82]"> · {prevus} en attente</span>}
           </p>
           <div className="flex-grow" />
-          <p className="max-w-[340px] text-center text-[12px] leading-snug text-[#9DB0C0]">
+          <p className="max-w-[340px] text-center text-[12px] leading-snug text-[#566B82]">
             Pas encore Palanote ? Le plongeur crée son compte en scannant : son inscription l'attend.
           </p>
         </div>
@@ -606,7 +606,7 @@ function SortieDp() {
       {/* 2. Après la plongée */}
       {finie && s && (
         <Feuille titre="Comment s'est passée la plongée ?" onFermer={() => setFinie(false)}>
-          <p className="pb-[14px] text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="pb-[14px] text-[13.5px] leading-normal text-[#566B82]">
             Ces infos arrivent dans la fiche de chaque plongeur, avec le site, la date, le bateau et sa palanquée. Chacun ajoute ensuite sa profondeur et son air.
           </p>
           <div className="flex flex-col gap-[12px]">
@@ -647,7 +647,7 @@ function SortieDp() {
       )}
       {annuler && s && !(s.statut === "prevue" && !s.entre_amis) && (
         <Feuille titre="Annuler cette sortie ?" onFermer={() => setAnnuler(false)}>
-          <p className="pb-[16px] text-[13.5px] leading-normal text-[#5B7189]">Les {participants.length} plongeurs inscrits seront prévenus dans leur app.</p>
+          <p className="pb-[16px] text-[13.5px] leading-normal text-[#566B82]">Les {participants.length} plongeurs inscrits seront prévenus dans leur app.</p>
           <button
             type="button"
             disabled={enCours}
@@ -661,7 +661,7 @@ function SortieDp() {
           >
             ANNULER LA SORTIE
           </button>
-          <button type="button" onClick={() => setAnnuler(false)} className="mx-auto mt-[10px] block py-2 text-[14px] font-semibold text-[#5B7189]">
+          <button type="button" onClick={() => setAnnuler(false)} className="mx-auto mt-[10px] block py-2 text-[14px] font-semibold text-[#566B82]">
             Garder la sortie
           </button>
         </Feuille>
@@ -703,12 +703,12 @@ function LigneParticipant({
         {onPasseport ? (
           <button type="button" onClick={onPasseport} title="Voir son passeport" className="flex max-w-full items-center gap-[4px] text-left">
             <span className="truncate text-[14px] font-bold underline decoration-[#B5D9EC] underline-offset-2">{p.prenom}</span>
-            {resume && resume.verifies > 0 && <BadgeCheck className="h-[13px] w-[13px] shrink-0 text-[#14805F]" aria-label="Carte vérifiée" />}
+            {resume && resume.verifies > 0 && <BadgeCheck className="h-[13px] w-[13px] shrink-0 text-[#137758]" aria-label="Carte vérifiée" />}
           </button>
         ) : (
-          <span className={`block truncate text-[14px] font-bold ${p.prevu ? "text-[#7D93A8]" : ""}`}>{p.prenom}</span>
+          <span className={`block truncate text-[14px] font-bold ${p.prevu ? "text-[#566B82]" : ""}`}>{p.prenom}</span>
         )}
-        <span className={`block truncate text-[11.5px] ${alertes.length ? "font-bold text-[#D9573F]" : "text-[#9DB0C0]"}`}>
+        <span className={`block truncate text-[11.5px] ${alertes.length ? "font-bold text-[#B8432F]" : "text-[#566B82]"}`}>
           {alertes.length
             ? alertes.join(" · ")
             : p.prevu
@@ -737,7 +737,7 @@ function LigneParticipant({
         aria-label={`Retirer ${p.prenom} de la sortie`}
         disabled={desactive}
         onClick={() => void onAgir(() => retirerParticipant(p.participant_id), "Ce plongeur n'a pas pu être retiré.")}
-        className="flex h-[30px] w-[30px] items-center justify-center rounded-full text-[#9DB0C0]"
+        className="flex h-[30px] w-[30px] items-center justify-center rounded-full text-[#566B82]"
       >
         <X className="h-[15px] w-[15px]" />
       </button>

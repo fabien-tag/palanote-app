@@ -36,14 +36,14 @@ function PageMaFormation() {
 
   return (
     <PageMoi titre="Ma formation">
-      {erreur && <p className="pt-[16px] text-[13.5px] text-[#5B7189]">{erreur}</p>}
+      {erreur && <p className="pt-[16px] text-[13.5px] text-[#566B82]">{erreur}</p>}
       {liste && liste.length === 0 && !erreur && (
         <div className="mt-[18px] flex flex-col items-center gap-[10px] text-center">
           <span className="flex h-[56px] w-[56px] items-center justify-center goutte bg-[#E3EDF6]">
-            <GraduationCap className="h-[26px] w-[26px] text-[#9DB0C0]" />
+            <GraduationCap className="h-[26px] w-[26px] text-[#566B82]" />
           </span>
           <p className="text-[16px] font-bold">Pas de formation en cours</p>
-          <p className="max-w-[300px] text-[13.5px] leading-normal text-[#5B7189]">
+          <p className="max-w-[300px] text-[13.5px] leading-normal text-[#566B82]">
             Quand ton club t'inscrit à un niveau (N1, N2, Nitrox…), ton programme jour par jour arrive ici, avec un rappel la veille de chaque cours.
           </p>
         </div>
@@ -60,7 +60,7 @@ function PageMaFormation() {
                 <span className="flex h-[38px] min-w-[44px] items-center justify-center goutte bg-[#0F3D70] px-[6px] text-[12.5px] font-bold text-white">{f.code ?? "—"}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[14px] font-bold">{f.intitule}</span>
-                  <span className="block text-[12px] text-[#7D93A8]">
+                  <span className="block text-[12px] text-[#566B82]">
                     {f.club} · {jourCourt(f.date_debut)} → {jourCourt(f.date_fin)}
                   </span>
                 </span>
@@ -111,14 +111,14 @@ function CarteFormation({ f }: { f: FormationEleve }) {
               .map((s, i) => (
                 <div key={s.id ?? i} className="flex items-center gap-[10px] px-[14px] py-[7px] text-[13.5px]">
                   <span className="w-[44px] font-bold">{s.heure_debut.replace(":", "h")}</span>
-                  <span className={`flex h-[28px] w-[28px] items-center justify-center goutte ${s.type === "theorie" ? "bg-[#EEF4F9] text-[#3F5B76]" : "bg-[#E2F8EF] text-[#14805F]"}`}>
+                  <span className={`flex h-[28px] w-[28px] items-center justify-center goutte ${s.type === "theorie" ? "bg-[#EEF4F9] text-[#3F5B76]" : "bg-[#E2F8EF] text-[#137758]"}`}>
                     {s.type === "theorie" ? <BookOpen className="h-[14px] w-[14px]" /> : <Waves className="h-[14px] w-[14px]" />}
                   </span>
-                  <span className={`min-w-0 flex-1 ${s.faite ? "text-[#9DB0C0] line-through" : ""}`}>
+                  <span className={`min-w-0 flex-1 ${s.faite ? "text-[#566B82] line-through" : ""}`}>
                     {s.type === "theorie" ? "Théorie" : "Pratique"}
                     {s.intitule ? ` · ${s.intitule}` : ""}
                   </span>
-                  {s.faite && <Check className="h-[15px] w-[15px] text-[#14805F]" />}
+                  {s.faite && <Check className="h-[15px] w-[15px] text-[#137758]" />}
                 </div>
               ))}
             <div className="h-[6px]" />

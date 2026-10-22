@@ -23,7 +23,7 @@ import { SectionForfaits } from "@/components/admin/Forfaits";
 
 const NOMS_MOIS = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
 const libelleMois = (m: string) => NOMS_MOIS[Number(m.slice(5, 7)) - 1] ?? m;
-const champ = "h-[38px] rounded-[10px] border border-[#DCE7F0] bg-white px-[10px] text-[13.5px] outline-none focus:border-[#57D4F5]";
+const champ = "h-[38px] rounded-[10px] border border-[#7B8FA3] bg-white px-[10px] text-[13.5px] outline-none focus:border-[#57D4F5]";
 
 function GraphiqueMois({ bilans }: { bilans: ReturnType<typeof bilanParMois> }) {
   const max = Math.max(1, ...bilans.flatMap((b) => [b.depenses, b.recettes]));
@@ -46,7 +46,7 @@ function GraphiqueMois({ bilans }: { bilans: ReturnType<typeof bilanParMois> }) 
           </div>
         ))}
       </div>
-      <div className="mt-[8px] flex gap-[10px] text-[11px] text-[#9DB0C0]">
+      <div className="mt-[8px] flex gap-[10px] text-[11px] text-[#566B82]">
         {bilans.map((b) => (
           <span key={b.mois} className="flex-1 text-center">
             {libelleMois(b.mois)}
@@ -94,18 +94,18 @@ function FormCharge({ initiale, onFini }: { initiale?: Charge; onFini: () => voi
         <option value="an">par an</option>
         <option value="unique">une fois</option>
       </select>
-      <label className="text-[11.5px] text-[#7D93A8]">
+      <label className="text-[11.5px] text-[#566B82]">
         depuis
         <input type="date" className={`${champ} block`} value={depuis} onChange={(e) => setDepuis(e.target.value)} />
       </label>
-      <label className="text-[11.5px] text-[#7D93A8]">
+      <label className="text-[11.5px] text-[#566B82]">
         jusqu'au (arrêt)
         <input type="date" className={`${champ} block`} value={jusqua} onChange={(e) => setJusqua(e.target.value)} />
       </label>
       <button type="button" onClick={() => void valider()} className="h-[38px] rounded-[10px] bg-[#0F2A4A] px-[14px] text-[13px] font-semibold text-white">
         {initiale ? "Enregistrer" : "Ajouter"}
       </button>
-      <button type="button" onClick={onFini} aria-label="Annuler" className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] text-[#7D93A8] hover:bg-white">
+      <button type="button" onClick={onFini} aria-label="Annuler" className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] text-[#566B82] hover:bg-white">
         <X className="h-[16px] w-[16px]" />
       </button>
       {erreur && <p className="w-full text-[12.5px] text-[#8A2A1A]">{erreur}</p>}
@@ -155,7 +155,7 @@ function FormDon({ onFini }: { onFini: () => void }) {
       <button type="button" onClick={() => void valider()} className="h-[38px] rounded-[10px] bg-[#0F2A4A] px-[14px] text-[13px] font-semibold text-white">
         Ajouter
       </button>
-      <button type="button" onClick={onFini} aria-label="Annuler" className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] text-[#7D93A8] hover:bg-white">
+      <button type="button" onClick={onFini} aria-label="Annuler" className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] text-[#566B82] hover:bg-white">
         <X className="h-[16px] w-[16px]" />
       </button>
       {erreur && <p className="w-full text-[12.5px] text-[#8A2A1A]">{erreur}</p>}
@@ -184,7 +184,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
   useEffect(() => void charger(), [charger]);
 
   if (erreur) return <p className="rounded-[16px] bg-[#FFECE8] p-[14px] text-[13.5px] text-[#8A2A1A]">{erreur}</p>;
-  if (!f) return <p className="py-[30px] text-center text-[14px] text-[#9DB0C0]">Chargement…</p>;
+  if (!f) return <p className="py-[30px] text-center text-[14px] text-[#566B82]">Chargement…</p>;
 
   const bilans = bilanParMois(f);
   const ceMois = bilans.at(-1)!;
@@ -211,23 +211,23 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
       <div className="grid grid-cols-1 gap-[12px] md:grid-cols-2 xl:grid-cols-4">
         <Bloc titre="Dépenses ce mois-ci" fond="bg-[linear-gradient(160deg,#FFF7F3_0%,#FBDCCF_100%)]">
           <div className="mt-auto text-[44px] font-light leading-none tracking-[-0.02em] text-[#0F2A4A]">{euros(ceMois.depenses)}</div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">
             {euros(ceMois.charges)} d'abonnements · {euros(ceMois.ia, 2)} d'IA ({ceMois.pages} pages)
           </p>
         </Bloc>
         <Bloc titre="Recettes ce mois-ci" fond="bg-[linear-gradient(160deg,#F2FBF7_0%,#D3F4E7_100%)]">
           <div className="mt-auto text-[44px] font-light leading-none tracking-[-0.02em] text-[#0F2A4A]">{euros(ceMois.recettes)}</div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">
             {euros(ceMois.forfaits)} de forfaits · {euros(ceMois.dons)} de dons ({nouveauxMembres} nouveau{nouveauxMembres > 1 ? "x" : ""} membre
             {nouveauxMembres > 1 ? "s" : ""} du Récif)
           </p>
         </Bloc>
         <Bloc titre={ceMois.solde >= 0 ? "Gain du mois" : "Perte du mois"} voyant={soldeCouleur} fond="bg-white border border-[#E9EEF3]">
-          <div className={`mt-auto text-[44px] font-light leading-none tracking-[-0.02em] ${ceMois.solde >= 0 ? "text-[#14805F]" : "text-[#C2383D]"}`}>
+          <div className={`mt-auto text-[44px] font-light leading-none tracking-[-0.02em] ${ceMois.solde >= 0 ? "text-[#137758]" : "text-[#C2383D]"}`}>
             {ceMois.solde > 0 ? "+" : ""}
             {euros(ceMois.solde)}
           </div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">
             Sur 12 mois : {total.recettes - total.depenses >= 0 ? "+" : ""}
             {euros(total.recettes - total.depenses)}
           </p>
@@ -237,7 +237,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
             <Arc part={couverture} couleur="#7C67D6" />
           </div>
           <div className="mt-auto text-[44px] font-light leading-none tracking-[-0.02em] text-[#0F2A4A]">{Math.round(couverture * 100)} %</div>
-          <p className="pt-[6px] text-[12.5px] text-[#123A63]/65">
+          <p className="pt-[6px] text-[12.5px] text-[#566B82]">
             des dépenses payées par les forfaits et les dons ({euros(total.recettes)} / {euros(total.depenses)})
           </p>
         </Bloc>
@@ -245,7 +245,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
 
       <div className="grid grid-cols-1 items-start gap-[12px] xl:grid-cols-[minmax(0,1fr)_360px]">
         <Bloc titre="Dépenses et recettes, 12 derniers mois" fond="bg-white border border-[#E9EEF3]">
-          <div className="mt-[6px] flex gap-[16px] text-[12px] text-[#7D93A8]">
+          <div className="mt-[6px] flex gap-[16px] text-[12px] text-[#566B82]">
             <span className="flex items-center gap-[6px]">
               <span className="h-[9px] w-[9px] rounded-full bg-[#F2A48F]" /> dépenses (abonnements + IA)
             </span>
@@ -273,9 +273,9 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
           <Bloc titre="L'équilibre" voyant={equilibre ? "vert" : "orange"} fond="bg-white border border-[#E9EEF3]">
             <div className="mt-auto flex items-baseline gap-[8px] text-[#0F2A4A]">
               <span className="text-[44px] font-light leading-none tracking-[-0.02em]">{euros(total.recettes)}</span>
-              <span className="text-[13px] text-[#123A63]/60">sur {euros(coutAnnuel)} par an</span>
+              <span className="text-[13px] text-[#566B82]">sur {euros(coutAnnuel)} par an</span>
             </div>
-            <p className="pt-[6px] text-[12.5px] leading-snug text-[#123A63]/65">
+            <p className="pt-[6px] text-[12.5px] leading-snug text-[#566B82]">
               Pour couvrir {euros(coutAnnuel)} de dépenses par an, il faudrait environ <b className="text-[#0F2A4A]">{abonnesNecessaires} abonnés Palanote+</b> à 19 €,
               ou <b className="text-[#0F2A4A]">{membresNecessaires} membres du Récif</b> à {euros(donMoyen)}. Aujourd'hui : {membres} membre{membres > 1 ? "s" : ""} du Récif.
             </p>
@@ -288,7 +288,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-[15px] font-semibold">Abonnements et frais</h2>
           <div className="flex items-center gap-[12px]">
-            <label className="flex items-center gap-[8px] text-[12.5px] text-[#7D93A8]">
+            <label className="flex items-center gap-[8px] text-[12.5px] text-[#566B82]">
               Coût d'une page lue par l'IA
               <input
                 className={`${champ} w-[80px]`}
@@ -340,13 +340,13 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
                       {c.libelle}
                     </span>
                   </td>
-                  <td className="py-[10px] text-[#7D93A8]">{c.categorie ?? ""}</td>
+                  <td className="py-[10px] text-[#566B82]">{c.categorie ?? ""}</td>
                   <td className="py-[10px] text-right font-semibold">
-                    {euros(c.montant, 2)} <span className="font-normal text-[#7D93A8]">{c.periodicite === "mois" ? "/ mois" : c.periodicite === "an" ? "/ an" : "une fois"}</span>
+                    {euros(c.montant, 2)} <span className="font-normal text-[#566B82]">{c.periodicite === "mois" ? "/ mois" : c.periodicite === "an" ? "/ an" : "une fois"}</span>
                   </td>
-                  <td className="py-[10px] pl-[14px] text-[12px] text-[#9DB0C0]">{c.jusqu_a ? `arrêtée le ${new Date(c.jusqu_a).toLocaleDateString("fr-FR")}` : ""}</td>
+                  <td className="py-[10px] pl-[14px] text-[12px] text-[#566B82]">{c.jusqu_a ? `arrêtée le ${new Date(c.jusqu_a).toLocaleDateString("fr-FR")}` : ""}</td>
                   <td className="w-[80px] py-[10px] text-right">
-                    <button type="button" aria-label={`Modifier ${c.libelle}`} onClick={() => setEdition(c.id)} className="rounded-[8px] p-[6px] text-[#7D93A8] hover:bg-[#F6F8FA]">
+                    <button type="button" aria-label={`Modifier ${c.libelle}`} onClick={() => setEdition(c.id)} className="rounded-[8px] p-[6px] text-[#566B82] hover:bg-[#F6F8FA]">
                       <Pencil className="h-[14px] w-[14px]" />
                     </button>
                     <button
@@ -356,7 +356,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
                         if (window.confirm(`Supprimer « ${c.libelle} » ? Pour un abonnement arrêté, mets plutôt une date de fin.`))
                           void supprimerCharge(c.id).then(charger).catch((e) => console.error("Charge non supprimée", e));
                       }}
-                      className="rounded-[8px] p-[6px] text-[#C94957] hover:bg-[#FFF1EE]"
+                      className="rounded-[8px] p-[6px] text-[#B8432F] hover:bg-[#FFF1EE]"
                     >
                       <Trash2 className="h-[14px] w-[14px]" />
                     </button>
@@ -366,7 +366,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
             )}
           </tbody>
         </table>
-        <p className="pt-[8px] text-[12px] text-[#9DB0C0]">
+        <p className="pt-[8px] text-[12px] text-[#566B82]">
           Le coût de l'IA est estimé : nombre de pages lues × coût d'une page. Ta facture Anthropic exacte est sur console.anthropic.com.
         </p>
       </div>
@@ -390,17 +390,17 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
           </div>
         )}
         {f.dons.length === 0 ? (
-          <p className="py-[20px] text-[13.5px] text-[#9DB0C0]">Aucun don pour l'instant. Tant que le paiement en ligne n'est pas branché, ajoute ici ceux que tu reçois.</p>
+          <p className="py-[20px] text-[13.5px] text-[#566B82]">Aucun don pour l'instant. Tant que le paiement en ligne n'est pas branché, ajoute ici ceux que tu reçois.</p>
         ) : (
           <table className="mt-[10px] w-full text-left text-[13.5px]">
             <tbody>
               {f.dons.map((d) => (
                 <tr key={d.id} className="border-t border-[#EDF2F7] first:border-t-0">
                   <td className="py-[10px] font-semibold">{d.prenom || d.email || "Anonyme"}</td>
-                  <td className="py-[10px] text-[#7D93A8]">{{ cafe: "Un café", "coup-de-main": "Un coup de main", "a-vie": "À vie" }[d.formule ?? ""] ?? d.formule ?? ""}</td>
-                  <td className="py-[10px] text-[#7D93A8]">{new Date(d.recu_le).toLocaleDateString("fr-FR")}</td>
-                  <td className="py-[10px] text-[12px] text-[#9DB0C0]">{d.source === "stripe" ? "Stripe" : "saisi à la main"}</td>
-                  <td className="py-[10px] text-right font-semibold text-[#14805F]">+{euros(d.montant, 2)}</td>
+                  <td className="py-[10px] text-[#566B82]">{{ cafe: "Un café", "coup-de-main": "Un coup de main", "a-vie": "À vie" }[d.formule ?? ""] ?? d.formule ?? ""}</td>
+                  <td className="py-[10px] text-[#566B82]">{new Date(d.recu_le).toLocaleDateString("fr-FR")}</td>
+                  <td className="py-[10px] text-[12px] text-[#566B82]">{d.source === "stripe" ? "Stripe" : "saisi à la main"}</td>
+                  <td className="py-[10px] text-right font-semibold text-[#137758]">+{euros(d.montant, 2)}</td>
                   <td className="w-[44px] py-[10px] text-right">
                     <button
                       type="button"
@@ -408,7 +408,7 @@ export function SectionFinances({ stats }: { stats: StatsAdmin }) {
                       onClick={() => {
                         if (window.confirm("Supprimer ce don ?")) void supprimerDon(d.id).then(charger).catch((e) => console.error("Don non supprimé", e));
                       }}
-                      className="rounded-[8px] p-[6px] text-[#C94957] hover:bg-[#FFF1EE]"
+                      className="rounded-[8px] p-[6px] text-[#B8432F] hover:bg-[#FFF1EE]"
                     >
                       <Trash2 className="h-[14px] w-[14px]" />
                     </button>

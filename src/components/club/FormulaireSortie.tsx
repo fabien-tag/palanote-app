@@ -115,7 +115,7 @@ export function FormulaireNouvelleSortie({
       </div>
 
       <Titre aide="tu pourras en ajouter">Palanquées</Titre>
-      <div className="flex items-center justify-between galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[14px] py-[10px]">
+      <div className="flex items-center justify-between galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[14px] py-[10px]">
         <span className="text-[15px] font-semibold">
           {palanquees} palanquée{palanquees > 1 ? "s" : ""}
         </span>
@@ -139,7 +139,7 @@ export function FormulaireNouvelleSortie({
         </span>
       </div>
 
-      <p className="pt-[12px] text-[12.5px] leading-snug text-[#5B7189]">
+      <p className="pt-[12px] text-[12.5px] leading-snug text-[#566B82]">
         Tu connais déjà ton monde ? Note les prénoms : en scannant le QR, chacun retrouve sa place et sa palanquée. Facultatif.
       </p>
       <div className="flex flex-col gap-[8px] pt-[10px]">
@@ -154,7 +154,7 @@ export function FormulaireNouvelleSortie({
                     type="button"
                     aria-label={`Retirer ${nom}`}
                     onClick={() => setNoms((l) => l.map((x, j) => (j === i ? x.filter((_, m) => m !== k) : x)))}
-                    className="flex h-[20px] w-[20px] items-center justify-center rounded-full text-[#5B7189]"
+                    className="flex h-[20px] w-[20px] items-center justify-center rounded-full text-[#566B82]"
                   >
                     <X className="h-[12px] w-[12px]" strokeWidth={2.6} />
                   </button>
@@ -172,7 +172,7 @@ export function FormulaireNouvelleSortie({
                 onBlur={() => ajouterPrenoms(i)}
                 placeholder={liste.length ? "+ prénom" : "Léa, Paul…"}
                 aria-label={`Prénoms de la palanquée ${i + 1}`}
-                className="h-[30px] min-w-[90px] flex-1 bg-transparent text-[14px] outline-none placeholder:text-[#B5C4D1]"
+                className="h-[36px] min-w-[90px] flex-1 bg-transparent text-[14px] outline-none placeholder:text-[#B5C4D1]"
               />
             </div>
           </div>
@@ -186,17 +186,17 @@ export function FormulaireNouvelleSortie({
             key={g}
             type="button"
             onClick={() => setMelange(melange === g ? null : g)}
-            className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+            className={`h-[34px] rounded-[17px] px-[12px] text-[12.5px] font-bold ${melange === g ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
           >
             {g}
           </button>
         ))}
       </div>
       <label className={`mt-[10px] flex cursor-pointer items-center gap-[12px] galet-b border px-[14px] py-[11px] ${reservee ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1] bg-white"}`}>
-        <Star className="h-[19px] w-[19px] shrink-0" fill={reservee ? "#E9A93A" : "none"} stroke={reservee ? "#E9A93A" : "#9DB0C0"} />
+        <Star className="h-[19px] w-[19px] shrink-0" fill={reservee ? "#E9A93A" : "none"} stroke={reservee ? "#E9A93A" : "#5B7189"} />
         <span className="min-w-0 flex-1">
           <span className="block text-[14px] font-bold">Réservée aux membres privilégiés</span>
-          <span className="block text-[12px] text-[#7D93A8]">Épave, plongée profonde… seuls les privilégiés s'inscrivent avec le QR ou le lien</span>
+          <span className="block text-[12px] text-[#566B82]">Épave, plongée profonde… seuls les privilégiés s'inscrivent avec le QR ou le lien</span>
         </span>
         <input type="checkbox" checked={reservee} onChange={(e) => setReservee(e.target.checked)} className="h-[18px] w-[18px] accent-[#E9A93A]" />
       </label>
@@ -208,9 +208,9 @@ export function FormulaireNouvelleSortie({
         rows={3}
         placeholder="Rendez-vous au ponton à 8h45, Nitrox disponible…"
         aria-label="Consignes pour les plongeurs"
-        className="w-full galet-moyen border-[1.5px] border-[#E4EBF1] bg-white px-[16px] py-[12px] text-[15px] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
+        className="w-full galet-moyen border-[1.5px] border-[#7B8FA3] bg-white px-[16px] py-[12px] text-[15px] outline-none placeholder:text-[#B5C4D1] focus:border-[#57D4F5]"
       />
-      <p className="pt-[8px] text-[12px] leading-snug text-[#9DB0C0]">Les plongeurs inscrits reçoivent tout ça dans leur app.</p>
+      <p className="pt-[8px] text-[12px] leading-snug text-[#566B82]">Les plongeurs inscrits reçoivent tout ça dans leur app.</p>
       <MessageErreur texte={erreur} />
       <div className="sticky bottom-0 -mx-[2px] mt-[18px] bg-gradient-to-t from-white via-white to-white/0 px-[2px] pb-[4px] pt-[14px]">
         <button

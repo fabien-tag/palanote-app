@@ -137,7 +137,7 @@ function PageInvitation() {
           <div className="px-[24px] pt-[26px]">
             <div className="relative galet-c border border-[#FFD3C8] bg-[#FFF3EF] p-[16px]">
               <p className="text-[15px] font-bold">{etatProbleme.titre}</p>
-              <p className="pt-[4px] text-[13.5px] leading-normal text-[#5B7189]">{etatProbleme.texte}</p>
+              <p className="pt-[4px] text-[13.5px] leading-normal text-[#566B82]">{etatProbleme.texte}</p>
             </div>
           </div>
         ) : (
@@ -149,7 +149,7 @@ function PageInvitation() {
                 </span>
                 <span className="min-w-0">
                   <span className="block text-[14.5px] font-bold leading-snug">{titre}</span>
-                  <span className="block pt-[2px] text-[13px] leading-normal text-[#5B7189]">{texte}</span>
+                  <span className="block pt-[2px] text-[13px] leading-normal text-[#566B82]">{texte}</span>
                 </span>
               </div>
             ))}
@@ -186,7 +186,7 @@ function PageInvitation() {
               <button
                 type="button"
                 onClick={() => rejoindre("/connexion")}
-                className="self-center text-[13.5px] font-semibold text-[#1176A8] underline underline-offset-4"
+                className="self-center text-[13.5px] font-semibold text-[#106F9F] underline underline-offset-4"
               >
                 J'ai déjà un compte
               </button>
@@ -206,14 +206,14 @@ function PageInvitation() {
             <button
               type="button"
               onClick={() => navigate({ to: connecte ? "/amis" : "/" })}
-              className="flex h-[52px] items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#1176A8]"
+              className="flex h-[52px] items-center justify-center galet-moyen border border-[#57D4F5] bg-white text-[14px] font-bold text-[#106F9F]"
             >
               {connecte ? "ALLER À MES AMIS" : "DÉCOUVRIR PALANOTE"}
             </button>
           )}
         </div>
 
-        <p className="px-[24px] pb-[max(28px,env(safe-area-inset-bottom))] pt-[22px] text-center text-[11.5px] leading-normal text-[#9DB0C0]">
+        <p className="px-[24px] pb-[max(28px,env(safe-area-inset-bottom))] pt-[22px] text-center text-[11.5px] leading-normal text-[#566B82]">
           Carnet gratuit, sans publicité. Ce lien expire au bout de 10 minutes et ne donne accès à rien d'autre qu'à cette invitation.
         </p>
       </div>

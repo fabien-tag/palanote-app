@@ -35,7 +35,7 @@ export function FeuilleAjoutMembre({ centre, nomClub, onFermer, onAjoute }: { ce
 
   return (
     <Feuille titre="Ajouter un membre" onFermer={onFermer}>
-      <p className="pb-[10px] text-[13px] leading-snug text-[#5B7189]">
+      <p className="pb-[10px] text-[13px] leading-snug text-[#566B82]">
         Il rejoint la liste des adhérents et reçoit son lien Palanote pour créer son carnet, relié au club.
       </p>
       <div className="grid grid-cols-2 gap-x-[10px]">
@@ -44,15 +44,15 @@ export function FeuilleAjoutMembre({ centre, nomClub, onFermer, onAjoute }: { ce
       </div>
       <ChampTexte label="Téléphone (pour l'envoi par SMS)" type="tel" inputMode="tel" value={m.telephone} onChange={(e) => setM({ ...m, telephone: e.target.value })} placeholder="06 12 34 56 78" />
       <ChampTexte label="E-mail (relie son compte au club)" type="email" inputMode="email" value={m.email} onChange={(e) => setM({ ...m, email: e.target.value })} placeholder="camille@exemple.fr" />
-      {!emailOk && <p className="-mt-[6px] pb-[6px] text-[12px] font-semibold text-[#D9573F]">Adresse e-mail incomplète.</p>}
-      <p className="pb-[6px] pt-[4px] text-[12px] font-bold text-[#5B7189]">Niveau</p>
+      {!emailOk && <p className="-mt-[6px] pb-[6px] text-[12px] font-semibold text-[#B8432F]">Adresse e-mail incomplète.</p>}
+      <p className="pb-[6px] pt-[4px] text-[12px] font-bold text-[#566B82]">Niveau</p>
       <div className="flex flex-wrap gap-[6px] pb-[10px]">
         {NIVEAUX.map((n) => (
           <button
             key={n}
             type="button"
             onClick={() => setM({ ...m, niveau: m.niveau === n ? "" : n })}
-            className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${m.niveau === n ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#5B7189]"}`}
+            className={`h-[32px] rounded-[10px] px-[10px] text-[12.5px] font-bold ${m.niveau === n ? "bg-[#0F3D70] text-white" : "border border-[#D8E5EE] bg-white text-[#566B82]"}`}
           >
             {n}
           </button>
@@ -67,7 +67,7 @@ export function FeuilleAjoutMembre({ centre, nomClub, onFermer, onAjoute }: { ce
         onClick={() => setM({ ...m, privilegie: !m.privilegie })}
         className={`mt-[4px] flex w-full items-center gap-[10px] rounded-[10px] border px-[12px] py-[10px] text-left text-[13.5px] font-bold ${m.privilegie ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1]"}`}
       >
-        <Star className="h-[17px] w-[17px]" fill={m.privilegie ? "#E9A93A" : "none"} stroke={m.privilegie ? "#E9A93A" : "#9DB0C0"} />
+        <Star className="h-[17px] w-[17px]" fill={m.privilegie ? "#E9A93A" : "none"} stroke={m.privilegie ? "#E9A93A" : "#5B7189"} />
         Membre privilégié
       </button>
       <MessageErreur texte={erreur} />
@@ -97,33 +97,33 @@ export function FeuilleInvitationMembre({ invite, nomClub, onFermer, nouveau = f
   return (
     <Feuille titre={nouveau ? `${invite.prenom} est ajouté` : `Inviter ${invite.prenom}`} onFermer={onFermer}>
       {invite.compte ? (
-        <p className="mb-[12px] flex items-start gap-[8px] rounded-[10px] bg-[#E2F8EF] px-[12px] py-[10px] text-[13px] leading-snug text-[#14805F]">
+        <p className="mb-[12px] flex items-start gap-[8px] rounded-[10px] bg-[#E2F8EF] px-[12px] py-[10px] text-[13px] leading-snug text-[#137758]">
           <UserCheck className="mt-[1px] h-[16px] w-[16px] shrink-0" />
           <span>
             <b>{invite.prenom} a déjà un compte Palanote</b> avec cette adresse : il est relié au club et prévenu dans l'app.
           </span>
         </p>
       ) : (
-        <p className="pb-[12px] text-[13px] leading-snug text-[#5B7189]">
+        <p className="pb-[12px] text-[13px] leading-snug text-[#566B82]">
           Il scanne le QR code avec son téléphone, ou reçoit le lien par SMS ou e-mail. Il crée son carnet, et son compte est relié au club.
         </p>
       )}
       <div className="mx-auto w-[190px] rounded-[10px] border border-[#E4EBF1] bg-white p-[14px]" aria-label="QR code d'invitation">
         {qr ? <div className="[&>svg]:h-auto [&>svg]:w-full" dangerouslySetInnerHTML={{ __html: qr }} /> : <div className="aspect-square" />}
       </div>
-      <p className="pb-[12px] pt-[6px] text-center text-[12px] text-[#7D93A8]">À scanner sur place avec l'appareil photo</p>
+      <p className="pb-[12px] pt-[6px] text-center text-[12px] text-[#566B82]">À scanner sur place avec l'appareil photo</p>
       <div className="grid grid-cols-2 gap-[8px]">
         <a
           href={tel ? `sms:${tel}?&body=${encodeURIComponent(message)}` : undefined}
           aria-disabled={!tel}
-          className={`flex h-[46px] items-center justify-center gap-[6px] rounded-[10px] text-[13px] font-bold ${tel ? "bg-[#0F3D70] text-white" : "pointer-events-none bg-[#EEF2F6] text-[#9DB0C0]"}`}
+          className={`flex h-[46px] items-center justify-center gap-[6px] rounded-[10px] text-[13px] font-bold ${tel ? "bg-[#0F3D70] text-white" : "pointer-events-none bg-[#EEF2F6] text-[#566B82]"}`}
         >
           <MessageSquare className="h-[16px] w-[16px]" /> Par SMS
         </a>
         <a
           href={invite.email ? `mailto:${invite.email}?subject=${encodeURIComponent(`Bienvenue à ${nomClub} sur Palanote`)}&body=${encodeURIComponent(message)}` : undefined}
           aria-disabled={!invite.email}
-          className={`flex h-[46px] items-center justify-center gap-[6px] rounded-[10px] text-[13px] font-bold ${invite.email ? "border border-[#57D4F5] bg-white text-[#1176A8]" : "pointer-events-none bg-[#EEF2F6] text-[#9DB0C0]"}`}
+          className={`flex h-[46px] items-center justify-center gap-[6px] rounded-[10px] text-[13px] font-bold ${invite.email ? "border border-[#57D4F5] bg-white text-[#106F9F]" : "pointer-events-none bg-[#EEF2F6] text-[#566B82]"}`}
         >
           <Mail className="h-[16px] w-[16px]" /> Par e-mail
         </a>
@@ -139,7 +139,7 @@ export function FeuilleInvitationMembre({ invite, nomClub, onFermer, nouveau = f
             /* presse-papiers indisponible */
           }
         }}
-        className="mx-auto mt-[12px] flex items-center gap-[6px] text-[13px] font-semibold text-[#1176A8]"
+        className="mx-auto mt-[12px] flex items-center gap-[6px] text-[13px] font-semibold text-[#106F9F]"
       >
         {copie ? <Check className="h-[15px] w-[15px]" /> : <Copy className="h-[15px] w-[15px]" />} {copie ? "Message copié" : "Copier le message (WhatsApp…)"}
       </button>

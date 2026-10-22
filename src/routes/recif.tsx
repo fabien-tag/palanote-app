@@ -83,7 +83,7 @@ function Recif() {
             <h2 className="pb-[10px] text-[14px] font-bold">Ce que ça paye, en vrai</h2>
             {COUTS_RECIF.map(([quoi, combien]) => (
               <div key={quoi} className="flex items-center justify-between py-[6px] text-[13.5px]">
-                <span className="text-[#5B7189]">{quoi}</span>
+                <span className="text-[#566B82]">{quoi}</span>
                 <b>{combien}</b>
               </div>
             ))}
@@ -120,7 +120,7 @@ function Recif() {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-[15.5px] font-bold">{f.titre}</span>
-                    <span className="block text-[12.5px] text-[#5B7189]">{f.texte}</span>
+                    <span className="block text-[12.5px] text-[#566B82]">{f.texte}</span>
                   </span>
                   <span className="text-[19px] font-bold">{f.montant} €</span>
                 </button>
@@ -139,7 +139,7 @@ function Recif() {
                   </span>
                   <span>
                     <span className="block text-[14px] font-bold leading-snug">{titre}</span>
-                    <span className="block pt-[2px] text-[12.5px] leading-normal text-[#5B7189]">{texte}</span>
+                    <span className="block pt-[2px] text-[12.5px] leading-normal text-[#566B82]">{texte}</span>
                   </span>
                 </div>
               ))}
@@ -164,7 +164,7 @@ function Recif() {
           >
             REJOINDRE LE RÉCIF — {formule.montant} €
           </button>
-          <p className="px-[10px] text-center text-[11.5px] leading-normal text-[#9DB0C0]">
+          <p className="px-[10px] text-center text-[11.5px] leading-normal text-[#566B82]">
             Paiement unique. Rien ne se renouvelle, il n'y a donc rien à résilier.
           </p>
         </div>

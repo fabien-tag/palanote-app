@@ -25,7 +25,7 @@ const QUI_VOIT: [string, "binomes" | "concerne" | "toi"][] = [
 const PASTILLES = {
   binomes: { texte: "tes binômes", classe: "bg-[#3DEFBE]/25 text-[#0B6B52]" },
   concerne: { texte: "le binôme concerné", classe: "bg-[#3DEFBE]/25 text-[#0B6B52]" },
-  toi: { texte: "toi seul", classe: "bg-[#EEF4F9] text-[#5B7189]" },
+  toi: { texte: "toi seul", classe: "bg-[#EEF4F9] text-[#566B82]" },
 };
 
 function Confidentialite() {

@@ -19,3 +19,11 @@ Palanote suit les recommandations du Bootcamp (module agents) jusqu'à la restit
 - Tout travail sur l'agent se cadre avec la grille du cours : archétype (B, extraction structurée), les 6 briques (harnais, provider, connecteurs, database, contexte, tâches), l'échec acceptable (silence, fallback, retry, escalade humaine) écrit dans le PRD, et un eval set de 10 à 20 cas (règle 60-20-20 : nominaux, bordure, hostiles) avec critère réussi / raté.
 - Une modification de la consigne, des outils ou du modèle de l'agent se valide sur l'eval set avant d'être livrée, et s'observe ensuite (journal_agent, étapes, jetons, taux de correction humaine).
 - Le plongeur valide toujours : l'agent propose, il ne décide jamais seul de ce qui entre dans le carnet.
+
+## Livraison par lots (règle convenue avec Fabien, 22 octobre 2026)
+- Le travail se fait sur une branche locale `travail`, jamais directement sur `main`.
+- Quand un lot est prêt et testé (tsc, build, tests Playwright), il est présenté à Fabien ; après son accord, il part sur `main` en UN seul commit (squash), avec un message qui résume le lot.
+- Ne jamais réécrire l'historique déjà poussé (pas de force push, pas de rebase de commits publiés).
+- Seule exception à la règle du lot : un correctif urgent demandé par Fabien (ex. pendant une évaluation), poussé seul.
+- Pas de push sur `main` dans les deux jours qui précèdent la soutenance du 26 octobre, sauf correctif urgent.
+

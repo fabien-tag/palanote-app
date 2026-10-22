@@ -91,7 +91,7 @@ function FicheEspece() {
           </div>
           <div className="px-[10px] pb-[8px] pt-[10px]">
             <h1 className="text-[24px] font-bold leading-tight">{nom}</h1>
-            {latin && <p className="text-[14px] italic text-[#1176A8]">{latin}</p>}
+            {latin && <p className="text-[14px] italic text-[#106F9F]">{latin}</p>}
           </div>
         </div>
 
@@ -99,22 +99,22 @@ function FicheEspece() {
           <Meduse className="-right-[4px] -top-[14px]" />
           <div>
             <b className="block text-[20px] leading-tight">{stats.observations}</b>
-            <small className="text-[11.5px] text-[#9DB0C0]">observation{stats.observations > 1 ? "s" : ""}</small>
+            <small className="text-[11.5px] text-[#566B82]">observation{stats.observations > 1 ? "s" : ""}</small>
           </div>
           <div>
             <b className="block text-[20px] leading-tight">{sites.length}</b>
-            <small className="text-[11.5px] text-[#9DB0C0]">site{sites.length > 1 ? "s" : ""}</small>
+            <small className="text-[11.5px] text-[#566B82]">site{sites.length > 1 ? "s" : ""}</small>
           </div>
           <div>
             <b className="block text-[20px] leading-tight">{stats.meilleurMois ?? "—"}</b>
-            <small className="text-[11.5px] text-[#9DB0C0]">le meilleur mois</small>
+            <small className="text-[11.5px] text-[#566B82]">le meilleur mois</small>
           </div>
         </div>
 
         {stats.observations > 0 && (
           <div className="mt-[12px] galet-c border border-[#DCE7F0] bg-white px-[16px] py-[14px] shadow-[0_4px_14px_#123A6308]">
             <h2 className="text-[15px] font-bold">Quand tu l'as croisé</h2>
-            <p className="text-[12px] text-[#9DB0C0]">
+            <p className="text-[12px] text-[#566B82]">
               observations par mois, sur tes {stats.observations} rencontre{stats.observations > 1 ? "s" : ""}
             </p>
             <div className="flex h-[120px] items-end gap-[6px] pt-[16px]" aria-hidden="true">
@@ -127,7 +127,7 @@ function FicheEspece() {
             </div>
             <div className="flex gap-[6px] pt-[6px]">
               {INITIALES_MOIS.map((m, i) => (
-                <span key={i} className={`flex-1 text-center text-[10.5px] ${stats.parMois[i] === max && max > 0 ? "font-bold text-[#123A63]" : "text-[#9DB0C0]"}`}>
+                <span key={i} className={`flex-1 text-center text-[10.5px] ${stats.parMois[i] === max && max > 0 ? "font-bold text-[#123A63]" : "text-[#566B82]"}`}>
                   {m}
                 </span>
               ))}
@@ -145,23 +145,23 @@ function FicheEspece() {
                 className="flex w-full items-center gap-[12px] border-t border-[#EDF2F7] px-[14px] py-[12px] text-left first:border-t-0"
               >
                 <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center goutte bg-[#E3F4FC]">
-                  <MapPin className="h-[16px] w-[16px] text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+                  <MapPin className="h-[16px] w-[16px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[15px] font-bold">{s.nom}</span>
-                  {s.ville && <span className="block truncate text-[12.5px] text-[#9DB0C0]">{s.ville}</span>}
+                  {s.ville && <span className="block truncate text-[12.5px] text-[#566B82]">{s.ville}</span>}
                 </span>
-                <span className="text-[12.5px] font-bold text-[#5B7189]">{n}×</span>
+                <span className="text-[12.5px] font-bold text-[#566B82]">{n}×</span>
               </button>
             ))}
           </div>
         )}
 
-        {stats.observations === 0 && <p className="pt-[18px] text-center text-[14px] text-[#5B7189]">Pas encore croisé dans ton carnet.</p>}
+        {stats.observations === 0 && <p className="pt-[18px] text-center text-[14px] text-[#566B82]">Pas encore croisé dans ton carnet.</p>}
 
         {protegee && (
           <div className="mt-[12px] flex gap-[10px] galet-moyen border border-[#BFE6F5] bg-[#E3F4FC] px-[14px] py-[12px] text-[13px] leading-snug">
-            <ShieldAlert className="mt-[1px] h-[17px] w-[17px] shrink-0 text-[#1176A8]" strokeWidth={2.2} aria-hidden="true" />
+            <ShieldAlert className="mt-[1px] h-[17px] w-[17px] shrink-0 text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
             <span>
               <b>Espèce protégée.</b> La position de tes plongées n'est jamais partagée avec les autres plongeurs : on ne peut pas remonter jusqu'à ses sites depuis Palanote.
             </span>

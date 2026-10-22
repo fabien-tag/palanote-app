@@ -71,10 +71,10 @@ export function SuiviPalanquees({
   return (
     <div className="mt-[14px] rounded-[10px] border border-[#E4EBF1] bg-white">
       <button type="button" onClick={() => setOuvert(!ouvert)} className="flex w-full items-center gap-[10px] px-[14px] py-[11px] text-left">
-        <Timer className="h-[18px] w-[18px] shrink-0 text-[#1176A8]" />
+        <Timer className="h-[18px] w-[18px] shrink-0 text-[#106F9F]" />
         <span className="min-w-0 flex-1">
           <span className="block text-[14px] font-bold">Suivi à l'eau</span>
-          <span className="block text-[12px] text-[#7D93A8]">
+          <span className="block text-[12px] text-[#566B82]">
             {enCours > 0
               ? `${enCours} palanquée${enCours > 1 ? "s" : ""} à l'eau${sorties ? ` · ${sorties} sortie${sorties > 1 ? "s" : ""}` : ""}`
               : sorties > 0
@@ -82,7 +82,7 @@ export function SuiviPalanquees({
                 : "Facultatif : un geste par palanquée, si quelqu'un a le temps"}
           </span>
         </span>
-        <ChevronDown className={`h-[17px] w-[17px] shrink-0 text-[#9DB0C0] transition-transform ${ouvert ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-[17px] w-[17px] shrink-0 text-[#566B82] transition-transform ${ouvert ? "rotate-180" : ""}`} />
       </button>
       {ouvert && (
         <div className="flex flex-col gap-[8px] border-t border-[#EEF3F8] px-[12px] pb-[12px] pt-[10px]">
@@ -101,10 +101,10 @@ export function SuiviPalanquees({
                 <div className="flex items-center gap-[10px]">
                   <span className="min-w-0 flex-1">
                     <span className="block text-[14px] font-bold">
-                      P{q.numero} <span className="font-semibold text-[#7D93A8]">· {effectifs[q.id]} plongeur{(effectifs[q.id] ?? 0) > 1 ? "s" : ""}</span>
+                      P{q.numero} <span className="font-semibold text-[#566B82]">· {effectifs[q.id]} plongeur{(effectifs[q.id] ?? 0) > 1 ? "s" : ""}</span>
                     </span>
                     <span
-                      className={`block text-[12.5px] ${retard === "rouge" ? "font-bold text-[#D9573F]" : retard === "orange" ? "font-bold text-[#8A5A10]" : "text-[#5B7189]"}`}
+                      className={`block text-[12.5px] ${retard === "rouge" ? "font-bold text-[#B8432F]" : retard === "orange" ? "font-bold text-[#8A5A10]" : "text-[#566B82]"}`}
                     >
                       {!q.immersion_le
                         ? `Pas encore à l'eau · ${prevue} min prévues`
@@ -125,7 +125,7 @@ export function SuiviPalanquees({
                 </div>
                 <div className="flex flex-wrap items-center gap-x-[14px] gap-y-[4px] pt-[6px] text-[12px]">
                   {!q.immersion_le && (
-                    <label className="flex items-center gap-[5px] text-[#7D93A8]">
+                    <label className="flex items-center gap-[5px] text-[#566B82]">
                       Durée prévue
                       <select
                         value={prevue}
@@ -141,11 +141,11 @@ export function SuiviPalanquees({
                     </label>
                   )}
                   {q.immersion_le && (
-                    <button type="button" onClick={() => agir(() => marquerPalanquee(q.id, "annuler"))} className="flex items-center gap-[4px] font-semibold text-[#7D93A8]">
+                    <button type="button" onClick={() => agir(() => marquerPalanquee(q.id, "annuler"))} className="flex items-center gap-[4px] font-semibold text-[#566B82]">
                       <Undo2 className="h-[12px] w-[12px]" /> Annuler
                     </button>
                   )}
-                  <button type="button" onClick={() => setCorrection(correction === q.id ? null : q.id)} className="font-semibold text-[#1176A8]">
+                  <button type="button" onClick={() => setCorrection(correction === q.id ? null : q.id)} className="font-semibold text-[#106F9F]">
                     {correction === q.id ? "Fermer" : "Saisir les heures"}
                   </button>
                 </div>
@@ -174,8 +174,8 @@ export function SuiviPalanquees({
               </div>
             );
           })}
-          {erreur && <p className="text-[12.5px] font-semibold text-[#D9573F]">{erreur}</p>}
-          <p className="text-[11.5px] leading-snug text-[#9DB0C0]">Les heures notées remplissent la fiche de sécurité. Rien n'est obligatoire.</p>
+          {erreur && <p className="text-[12.5px] font-semibold text-[#B8432F]">{erreur}</p>}
+          <p className="text-[11.5px] leading-snug text-[#566B82]">Les heures notées remplissent la fiche de sécurité. Rien n'est obligatoire.</p>
         </div>
       )}
     </div>

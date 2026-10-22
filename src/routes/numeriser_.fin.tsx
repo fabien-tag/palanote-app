@@ -98,20 +98,20 @@ function Fin() {
           onClick={() => navigate({ to: "/numeriser/capture" })}
           className="flex w-full items-center gap-3 galet border border-[#CFE6F3] bg-[#E3F2FB] p-[16px] text-left"
         >
-          <BookOpen className="h-[20px] w-[20px] shrink-0 text-[#1176A8]" strokeWidth={1.9} aria-hidden="true" />
+          <BookOpen className="h-[20px] w-[20px] shrink-0 text-[#106F9F]" strokeWidth={1.9} aria-hidden="true" />
           <span className="flex-grow">
             <span className="block text-[15px] font-bold">Un autre carnet&nbsp;?</span>
-            <span className="block text-[13px] text-[#5B7189]">Celui-ci t'a pris {duree}.</span>
+            <span className="block text-[13px] text-[#566B82]">Celui-ci t'a pris {duree}.</span>
           </span>
           <ChevronRight className="h-[17px] w-[17px] text-[#8FA9C0]" strokeWidth={2.4} aria-hidden="true" />
         </button>
-        <p className="px-1 pt-[14px] text-[13px] leading-normal text-[#5B7189]">
+        <p className="px-1 pt-[14px] text-[13px] leading-normal text-[#566B82]">
           <b className="text-[#123A63]">Ton carnet est gratuit, et le restera.</b> L'app est faite par un plongeur, sur son temps libre. La lecture par l'IA, elle, coûte à
           chaque page : les {PAGES_OFFERTES} premières sont offertes, ensuite il y a{" "}
-          <button type="button" onClick={() => navigate({ to: "/forfait" })} className="font-bold text-[#1176A8] underline underline-offset-2">
+          <button type="button" onClick={() => navigate({ to: "/forfait" })} className="font-bold text-[#106F9F] underline underline-offset-2">
             les forfaits
           </button>
-          . Et si l'app t'a fait gagner une soirée, tu peux aussi <b className="text-[#1176A8]">rejoindre le Récif</b>.
+          . Et si l'app t'a fait gagner une soirée, tu peux aussi <b className="text-[#106F9F]">rejoindre le Récif</b>.
         </p>
       </div>
 
