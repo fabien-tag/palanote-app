@@ -140,6 +140,7 @@ const OUTIL_VOISINE = {
 
 const CONSIGNE = `Tu lis une page photographiée d'un carnet de plongée papier (souvent un carnet français type FFESSM, parfois manuscrit, parfois ancien).
 Une page peut contenir une ou plusieurs plongées : renvoie-les toutes, dans l'ordre.
+Seulement les plongées entières : une plongée dont on ne voit qu'un morceau (coupée par le bord de la photo, ou qui déborde de la page voisine) n'est pas renvoyée, elle sera lue sur sa propre photo. Les observations et les exercices écrits sous une plongée font partie de cette plongée (champ commentaire), ce n'est pas une autre plongée.
 
 Règles :
 - Ne devine jamais. Une donnée fausse est pire qu'une donnée absente : si un champ n'est pas écrit, valeur = null et confiance = "non_lu".
