@@ -426,9 +426,17 @@ const normal = (v: unknown) =>
     .replace(/[^a-z0-9.,:\- ]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+// Une date s'écrit 23/08/2021 dans la bonne réponse et 2021-08-23 dans la sortie de l'agent :
+// les deux sont ramenées au format AAAA-MM-JJ avant de comparer.
+function dateIso(v: string) {
+  const m = /^(\d{1,2})[/.\- ](\d{1,2})[/.\- ](\d{2}|\d{4})$/.exec(v);
+  if (!m) return v;
+  const an = m[3]!.length === 2 ? (Number(m[3]) >= 50 ? `19${m[3]}` : `20${m[3]}`) : m[3]!;
+  return `${an}-${m[2]!.padStart(2, "0")}-${m[1]!.padStart(2, "0")}`;
+}
 function egaux(attendu: unknown, lu: unknown) {
-  const a = normal(attendu);
-  const b = normal(lu);
+  const a = dateIso(normal(attendu));
+  const b = dateIso(normal(lu));
   if (!a || !b) return false;
   const na = Number(a.replace(",", "."));
   const nb = Number(b.replace(",", "."));
