@@ -177,8 +177,8 @@ export function SectionAgent() {
             <Plus className="h-[14px] w-[14px]" aria-hidden="true" /> Ajouter un cas
           </button>
         </div>
-        {ajout && <FormulaireCas onFait={() => (setAjout(false), void charger())} />}
-        {donnees.cas.length === 0 && !ajout && <p className="px-[20px] py-[18px] text-[13.5px] text-[#7D93A8]">Ajoute tes 10 photos de pages, avec ce qui est vraiment écrit dessus.</p>}
+        {ajout && <FormulaireCas onFait={() => (setAjout(false), void charger())} onAnnuler={() => setAjout(false)} />}
+        {donnees.cas.length === 0 && !ajout && <p className="px-[20px] py-[18px] text-[13.5px] text-[#566B82]">Ajoute tes 10 photos de pages, avec ce qui est vraiment écrit dessus.</p>}
         <table className="w-full text-left text-[13px]">
           <tbody>
             {donnees.cas.map((c) => {
@@ -305,7 +305,7 @@ function DetailResultat({ cas, r, onFermer }: { cas: CasEval; r: ResultatEval; o
 }
 
 // Ajouter un cas : la photo, son type et ce qui est vraiment écrit dessus
-function FormulaireCas({ onFait }: { onFait: () => void }) {
+function FormulaireCas({ onFait, onAnnuler }: { onFait: () => void; onAnnuler: () => void }) {
   const [fichier, setFichier] = useState<File | null>(null);
   const [titre, setTitre] = useState("");
   const [type, setType] = useState<TypeCas>("nominal");
@@ -378,37 +378,57 @@ function FormulaireCas({ onFait }: { onFait: () => void }) {
         <>
           <p className="text-[12px] text-[#7D93A8]">Ce qui est vraiment écrit. Laisse vide pour ne pas vérifier un champ ; tape « - » si rien n'est écrit (l'agent ne doit rien inventer).</p>
           {plongees.map((p, i) => (
-            <div key={i} className="grid grid-cols-2 gap-[8px] md:grid-cols-5">
-              {CHAMPS_EVAL.map((c) => (
-                <label key={c.cle} className="text-[11.5px] font-semibold text-[#5B7189]">
-                  {plongees.length > 1 ? `${c.label} (${i + 1})` : c.label}
-                  <input
-                    className={`${champ} mt-[4px] h-[36px]`}
-                    placeholder={c.aide}
-                    value={p[c.cle] ?? ""}
-                    onChange={(e) => setPlongees(plongees.map((x, j) => (j === i ? { ...x, [c.cle]: e.target.value } : x)))}
-                  />
-                </label>
-              ))}
+            <div key={i} className="flex flex-col gap-[6px] rounded-[12px] border border-[#E4EBF1] bg-white px-[12px] py-[10px]">
+              <div className="flex items-center justify-between">
+                <p className="text-[12px] font-bold text-[#0F3D70]">{plongees.length > 1 ? `Plongée ${i + 1} sur la page` : "La plongée de la page"}</p>
+                {plongees.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setPlongees(plongees.filter((_, j) => j !== i))}
+                    aria-label={`Retirer la plongée ${i + 1}`}
+                    className="flex h-[28px] items-center gap-[5px] rounded-[8px] px-[8px] text-[12px] font-bold text-[#B8432F] hover:bg-[#FFF1EC]"
+                  >
+                    <Trash2 className="h-[14px] w-[14px]" aria-hidden="true" />
+                    Retirer
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-[8px] md:grid-cols-6">
+                {CHAMPS_EVAL.map((c) => (
+                  <label key={c.cle} className="text-[11.5px] font-semibold text-[#566B82]">
+                    {c.label}
+                    <input
+                      className={`${champ} mt-[4px] h-[36px]`}
+                      placeholder={c.aide}
+                      value={p[c.cle] ?? ""}
+                      onChange={(e) => setPlongees(plongees.map((x, j) => (j === i ? { ...x, [c.cle]: e.target.value } : x)))}
+                    />
+                  </label>
+                ))}
+              </div>
             </div>
           ))}
-          <div className="flex gap-[8px]">
-            <button type="button" onClick={() => setPlongees([...plongees, {}])} className="text-[12.5px] font-bold text-[#1176A8]">
-              + Une autre plongée sur la page
-            </button>
-            {plongees.length > 1 && (
-              <button type="button" onClick={() => setPlongees(plongees.slice(0, -1))} className="text-[12.5px] font-bold text-[#9DB0C0]">
-                Retirer la dernière
-              </button>
-            )}
-          </div>
+          <button type="button" onClick={() => setPlongees([...plongees, {}])} className="w-fit text-[12.5px] font-bold text-[#106F9F]">
+            + Une autre plongée sur la page
+          </button>
         </>
       )}
       <input className={`${champ} h-[38px]`} placeholder="Note (ce qui rend ce cas difficile)" value={note} onChange={(e) => setNote(e.target.value)} />
       {erreur && <p className="text-[13px] font-semibold text-[#8A2A1A]">{erreur}</p>}
-      <button type="button" disabled={enCours} onClick={() => void valider()} className="h-[42px] w-fit rounded-[12px] bg-[#3DEFBE] px-[18px] text-[13px] font-bold text-[#0B3B63] disabled:opacity-50">
-        {enCours ? "ENVOI…" : "AJOUTER CE CAS"}
-      </button>
+      <div className="flex flex-wrap items-center gap-[10px]">
+        <button type="button" disabled={enCours} onClick={() => void valider()} className="h-[42px] w-fit rounded-[12px] bg-[#3DEFBE] px-[18px] text-[13px] font-bold text-[#0B3B63] disabled:opacity-50">
+          {enCours ? "ENVOI…" : "AJOUTER CE CAS"}
+        </button>
+        <button
+          type="button"
+          disabled={enCours}
+          onClick={onAnnuler}
+          className="flex h-[42px] items-center gap-[6px] rounded-[12px] border border-[#DCE7F0] bg-white px-[14px] text-[13px] font-bold text-[#566B82] hover:text-[#B8432F] disabled:opacity-50"
+        >
+          <Trash2 className="h-[15px] w-[15px]" aria-hidden="true" />
+          Abandonner ce cas
+        </button>
+      </div>
     </div>
   );
 }

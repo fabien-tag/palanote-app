@@ -38,6 +38,7 @@ export type ResultatEval = {
 export const CHAMPS_EVAL: { cle: string; label: string; aide: string }[] = [
   { cle: "date", label: "Date", aide: "AAAA-MM-JJ" },
   { cle: "site", label: "Site", aide: "Épave du Togo" },
+  { cle: "lieu", label: "Ville", aide: "Le Lavandou" },
   { cle: "profondeur_max", label: "Profondeur (m)", aide: "32" },
   { cle: "duree", label: "Durée (min)", aide: "45" },
   { cle: "temperature", label: "Température (°C)", aide: "19" },
