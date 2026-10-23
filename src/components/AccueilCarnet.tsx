@@ -187,7 +187,7 @@ export function FiltresPlongees({
   );
 }
 
-// ---------- Bandeau « X a noté votre plongée » (parcours 07, écran 38) ----------
+// ---------- Bandeau « X a rempli votre plongée » (parcours 07, écran 38) ----------
 
 export function BandeauProposition({ propositions }: { propositions: PlongeeAConfirmer[] }) {
   const navigate = useNavigate();

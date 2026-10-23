@@ -221,6 +221,22 @@ const nombre = (v: string | null | undefined) => {
 const texte = (v: string | null | undefined) => (v && String(v).trim() ? String(v).trim() : null);
 const ouiNon = (v: string | null | undefined) => (v === "oui" ? true : v === "non" ? false : null);
 
+// Type de plongée lu sur le carnet → les types proposés dans l'app (fiche plongée et filtres)
+export function typeDePlongee(v: string | null | undefined): string | null {
+  const t = (v ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  if (!t.trim()) return null;
+  if (/epave|wreck/.test(t)) return "Épave";
+  if (/nuit|night/.test(t)) return "Nuit";
+  if (/formation|training|technique|exercice|bapteme/.test(t)) return "Formation";
+  if (/explo|recreational|loisir/.test(t)) return "Exploration";
+  if (/deriv|drift/.test(t)) return "Dérivante";
+  if (/grotte|cave/.test(t)) return "Grotte";
+  return null;
+}
+
 // Valide une plongée relue : elle entre dans le carnet (table dives).
 export async function validerExtraction(e: Extraction, champs: Record<string, string | null>, garderCommentaire: boolean) {
   const user = await utilisateurConnecte();
@@ -244,6 +260,7 @@ export async function validerExtraction(e: Extraction, champs: Record<string, st
       .map((s) => s.trim())
       .filter(Boolean),
     club_name: texte(champs["club"]),
+    dive_type: typeDePlongee(champs["type_plongee"]),
     signed: ouiNon(champs["signee"]),
     stamped: ouiNon(champs["tamponnee"]),
     comment: garderCommentaire ? texte(champs["commentaire"]) : null,

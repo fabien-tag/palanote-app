@@ -267,7 +267,7 @@ function PageAmis() {
                             {initiales(p.de.prenom)}
                           </span>
                           <span className="min-w-0 text-[13.5px] leading-snug text-[#566B82]">
-                            <b className="text-[#123A63]">{p.de.prenom}</b> a noté votre plongée
+                            <b className="text-[#123A63]">{p.de.prenom}</b> a rempli votre plongée
                           </span>
                         </div>
                         <div className="mt-[11px] galet-moyen bg-[#F1F6FC] px-[12px] py-[10px]">

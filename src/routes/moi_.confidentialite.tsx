@@ -1,3 +1,4 @@
+import { reglagePartagePhotos, reglerPartagePhotos } from "@/lib/galerie";
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Download, Trash2 } from "lucide-react";
@@ -54,6 +55,22 @@ function Confidentialite() {
   }, [pret]);
 
   const [analyse, setAnalyse] = useState(false);
+  const [partage, setPartage] = useState<boolean | null | undefined>(undefined);
+  useEffect(() => {
+    if (pret) void reglagePartagePhotos().then(setPartage);
+  }, [pret]);
+  const basculerPartage = async (v: boolean) => {
+    const avant = partage;
+    setPartage(v);
+    try {
+      await reglerPartagePhotos(v);
+      setMessage(v ? "Tes photos de plongée sont partagées avec ta palanquée" : "Tes photos ne sont plus partagées");
+    } catch (e) {
+      console.error(e);
+      setPartage(avant);
+      setErreur("Ton choix n'a pas pu être enregistré. Lance le script palanote-partage-photos.sql, ou vérifie ta connexion.");
+    }
+  };
   const basculerAnalyse = async (v: boolean) => {
     setAnalyse(v);
     try {
@@ -125,6 +142,20 @@ function Confidentialite() {
         Ton carnet est privé au départ, et le reste tant que tu ne partages rien. Personne ne peut le demander. Les positions de tes plongées sont
         en plus décalées de 100 à 150 mètres, pour ne jamais donner le point exact d'un site.
       </Note>
+
+      {partage !== undefined && (
+        <>
+          <TitreSection>Tes photos et ta palanquée</TitreSection>
+          <Bloc>
+            <Interrupteur
+              titre="Partager mes photos avec ma palanquée"
+              texte="Les binômes qui ont la même plongée dans leur carnet voient tes photos de cette plongée, et seulement eux. Les désactiver retire le partage de toutes tes photos."
+              actif={partage === true}
+              onChange={(v) => void basculerPartage(v)}
+            />
+          </Bloc>
+        </>
+      )}
 
       <TitreSection>Les espèces sur tes photos</TitreSection>
       <Bloc>

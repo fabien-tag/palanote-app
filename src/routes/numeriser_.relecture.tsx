@@ -40,6 +40,7 @@ const SECONDAIRES: Def[] = [
   { cle: "lieu", label: "Lieu" },
   { cle: "pression_debut", label: "Pression départ", unite: "bar", type: "nombre" },
   { cle: "melange", label: "Mélange" },
+  { cle: "type_plongee", label: "Type de plongée" },
   { cle: "binomes", label: "Binômes" },
   { cle: "club", label: "Club" },
 ];

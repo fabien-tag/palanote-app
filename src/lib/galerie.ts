@@ -49,3 +49,20 @@ export async function partagerPhotos(diveId: string, ids: string[]): Promise<num
 export function nomCourt(p: Plongeur, moi: boolean) {
   return moi ? "Toi" : p.prenom;
 }
+
+// ---------- Accord de partage (demandé une fois, réglable dans Moi › Confidentialité) ----------
+// null : jamais demandé ; true : mes photos de plongée sont partagées d'office avec la palanquée ; false : non.
+export async function reglagePartagePhotos(): Promise<boolean | null | undefined> {
+  const { data: s } = await supabase.auth.getSession();
+  const uid = s.session?.user.id;
+  if (!uid) return undefined;
+  const { data, error } = await supabase.from("profiles").select("partage_photos").eq("id", uid).maybeSingle();
+  if (error) return undefined; // script palanote-partage-photos.sql pas encore lancé : on ne demande rien
+  return (data as { partage_photos?: boolean | null } | null)?.partage_photos ?? null;
+}
+
+export async function reglerPartagePhotos(actif: boolean): Promise<number> {
+  const { data, error } = await supabase.rpc("regler_partage_photos", { p_actif: actif });
+  if (error) throw error;
+  return Number(data ?? 0);
+}

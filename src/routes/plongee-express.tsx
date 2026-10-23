@@ -1,3 +1,4 @@
+import { DemandePartagePhotos } from "@/components/DemandePartagePhotos";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Camera, Check, ChevronLeft, ChevronRight, MapPin, Plus, Star } from "lucide-react";
@@ -429,6 +430,7 @@ function SaisieExpress() {
             e.target.value = "";
           }}
         />
+        {identifies.length > 0 && photos.length > 0 && <DemandePartagePhotos avecQui={identifies.map(prenomDe)} />}
 
         <div className="min-h-[24px] flex-grow" />
 

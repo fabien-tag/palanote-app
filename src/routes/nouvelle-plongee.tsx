@@ -7,6 +7,7 @@ import { annoncerSurAccueil } from "@/lib/message-accueil";
 import { estErreurReseau, estHorsLigne, garderPourPlusTard, MESSAGE_EN_ATTENTE } from "@/lib/hors-ligne";
 import { reprendreBrouillon } from "@/lib/brouillon-plongee";
 import { CarrouselPhotos } from "@/components/CarrouselPhotos";
+import { DemandePartagePhotos } from "@/components/DemandePartagePhotos";
 import { BandeAnalyse } from "@/components/especes/BandeAnalyse";
 import { chargerPhotosPlongee, enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
@@ -777,8 +778,7 @@ function NouvellePlongee() {
         {existante && !edition && <CarrouselPhotos photos={photos} />}
         {existante && !edition && !chargement && (
           <div className="px-[22px]">
-            {/* Bande d'analyse des espèces (écran 57) et galerie commune de la palanquée (écran 42) */}
-            <BandeAnalyse diveId={idPlongee} nbPhotos={photos.length} />
+            {/* Galerie commune de la palanquée (écran 42) ; l'analyse des espèces est dans la partie Photos, plus bas */}
             <button
               type="button"
               onClick={() => navigate({ to: "/plongee/photos", search: { id: idPlongee } })}
@@ -1393,6 +1393,13 @@ function NouvellePlongee() {
                 e.target.value = "";
               }}
             />
+            {edition && identifies.length > 0 && photos.some((p) => p.fichier) && <DemandePartagePhotos avecQui={identifies.map(prenomAmi)} />}
+            {/* Bande d'analyse des espèces (écran 57), à côté des photos qu'elle analyse */}
+            {existante && !edition && !chargement && photos.length > 0 && (
+              <div className="pt-[12px]">
+                <BandeAnalyse diveId={idPlongee} nbPhotos={photos.length} />
+              </div>
+            )}
           </Section>
 
           {/* QUI PEUT LA VOIR */}

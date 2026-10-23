@@ -104,8 +104,8 @@ function PageInvitation() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#123A63]">
-      <div className="cascade mx-auto flex min-h-screen w-full max-w-[430px] flex-col">
+    <div className="min-h-[100dvh] bg-white text-[#123A63]">
+      <div className="cascade mx-auto flex min-h-[100dvh] w-full max-w-[430px] flex-col">
         {/* En-tête marin */}
         <div
           className="relative flex h-[clamp(230px,34svh,300px)] shrink-0 flex-col overflow-hidden rounded-b-[30px] bg-[#0E3D72] bg-cover bg-center"
@@ -172,7 +172,9 @@ function PageInvitation() {
 
         <div className="flex-grow" />
 
-        <div className="flex flex-col gap-[12px] px-[24px] pt-[22px]">
+        {/* Bas de l'écran : bouton et mention toujours visibles, même sous la barre du navigateur */}
+        <div className="sticky bottom-0 z-10 bg-white">
+        <div className="flex flex-col gap-[12px] px-[24px] pt-[16px]">
           {erreur && <p className="text-center text-[13px] text-[#8A2A1A]">{erreur}</p>}
           {valide && connecte === false && (
             <>
@@ -213,9 +215,10 @@ function PageInvitation() {
           )}
         </div>
 
-        <p className="px-[24px] pb-[max(28px,env(safe-area-inset-bottom))] pt-[22px] text-center text-[11.5px] leading-normal text-[#566B82]">
+        <p className="px-[24px] pb-[max(16px,env(safe-area-inset-bottom))] pt-[12px] text-center text-[11.5px] leading-normal text-[#566B82]">
           Carnet gratuit, sans publicité. Ce lien expire au bout de 10 minutes et ne donne accès à rien d'autre qu'à cette invitation.
         </p>
+        </div>
       </div>
     </div>
   );

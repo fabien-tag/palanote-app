@@ -119,8 +119,11 @@ export function BandeAnalyse({ diveId, nbPhotos }: { diveId: string; nbPhotos: n
         <span className={`${pastille} bg-white/70`}>
           <Fish className="h-[18px] w-[18px] text-[#106F9F]" strokeWidth={2} aria-hidden="true" />
         </span>
-        <span className="flex-1 text-[14px] font-semibold leading-snug">
-          Identifier les espèces sur {nbPhotos > 1 ? `ces ${nbPhotos} photos` : "cette photo"}
+        <span className="flex-1 leading-snug">
+          <span className="block text-[14px] font-semibold">Qui as-tu croisé sous l'eau ?</span>
+          <span className="block text-[12.5px] text-[#566B82]">
+            Découvre les espèces sur {nbPhotos > 1 ? `tes ${nbPhotos} photos` : "ta photo"} : l'IA propose, tu valides.
+          </span>
         </span>
         <ChevronRight className="h-[17px] w-[17px] text-[#106F9F]" strokeWidth={2.4} aria-hidden="true" />
       </button>

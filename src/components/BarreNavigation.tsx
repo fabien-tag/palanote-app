@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { IconeAmis, IconeCarnet, IconeCarte, IconeMoi } from "@/components/IconesOnglets";
+import { AlertesBinomes } from "@/components/AlertesBinomes";
 
 // Barre de navigation du bas, commune aux pages internes de l'app du plongeur.
 // Le directeur de plongée n'a pas d'onglet ici : son espace club se travaille sur ordinateur
@@ -19,6 +20,9 @@ export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?:
   const navigate = useNavigate();
   const visibles = onglets;
   return (
+    <>
+    {/* Sur l'accueil, la carte « X a rempli votre plongée » est déjà gérée par la page (bouton + Plongée remonté) */}
+    <AlertesBinomes avecCarte={actif !== "carnet"} />
     <nav
       aria-label="Navigation principale"
       className={`${cote ? "lg:hidden" : ""} sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white pt-[10px] pb-[calc(10px+env(safe-area-inset-bottom))] px-[28px]`}
@@ -62,5 +66,6 @@ export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?:
         );
       })}
     </nav>
+    </>
   );
 }

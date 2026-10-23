@@ -51,6 +51,8 @@ const CHAMPS = {
   pression_debut: "Pression du bloc au départ, en bar (nombre)",
   pression_fin: "Pression du bloc en fin de plongée, en bar (nombre)",
   melange: "Gaz respiré : Air, Nitrox ou Trimix",
+  type_plongee:
+    "Type de plongée, souvent des cases à cocher (« Technique / Training », « Exploration », « Plongée de nuit », « Épaves ») : une seule valeur parmi Formation (case Technique ou Training), Exploration, Nuit, Épave. Si plusieurs cases sont cochées, garde la plus particulière : Épave, puis Nuit, puis Formation, puis Exploration",
   binomes: "Noms des binômes ou membres de la palanquée, séparés par des virgules",
   club: "Club ou centre de plongée",
   signee: "La plongée est-elle signée par un encadrant ? « oui » ou « non »",
@@ -147,6 +149,7 @@ Règles :
 - Si l'écriture est ambiguë (ex. « 1g » qui pourrait être 19), propose la valeur la plus probable, recopie ce que tu lis dans « lu », et mets confiance = "a_verifier".
 - Normalise les valeurs : date en AAAA-MM-JJ (les carnets français écrivent JJ/MM/AA ; « 87 » = 1987), heure en HH:MM, nombres avec un point décimal, sans unité.
 - « lu » contient toujours le texte brut tel qu'il apparaît sur la page (ou null si rien n'est écrit).
+- Cases à cocher : une case cochée (croix, coche, trait, case noircie) vaut oui, une case vide vaut non. Pour type_plongee, si aucune case n'est cochée et que rien n'est écrit, valeur = null et confiance = "non_lu". Dans « lu », recopie le libellé de la case cochée.
 - Si la page n'est pas lisible ou n'est pas une page de carnet, lisible = false, plongees = [] et explique en une phrase dans « raison ».
 Réponds uniquement en appelant l'outil enregistrer_page avec ton résultat, sans autre texte.`;
 
