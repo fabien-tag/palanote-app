@@ -129,7 +129,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                   {(
                     [
                       ["tous", "Tous"],
-                      ["privilegies", "★ Privilégiés"],
+                      ["privilegies", "★ Premium"],
                       ["certificat", "Certificat à renouveler"],
                       ["pas_inscrits", "Pas encore sur Palanote"],
                     ] as const
@@ -150,7 +150,7 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                 <table className="w-full min-w-[900px] border-collapse text-[13px]">
                   <thead>
                     <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#566B82]">
-                      <th className="w-[40px] pl-[10px]" aria-label="Privilégié" />
+                      <th className="w-[40px] pl-[10px]" aria-label="Premium" />
                       <th className="px-[10px] py-[10px] font-bold">Adhérent</th>
                       <th className="px-[8px] font-bold">Niveau</th>
                       <th className="px-[8px] font-bold">Licence</th>
@@ -170,8 +170,8 @@ export function OngletAdherents({ centre, qInitial }: { centre: Centre; qInitial
                             <button
                               type="button"
                               aria-pressed={vip.has(a.id)}
-                              aria-label={vip.has(a.id) ? `Retirer l'étoile de ${a.prenom}` : `${a.prenom} devient membre privilégié`}
-                              title={vip.has(a.id) ? "Membre privilégié" : "Mettre l'étoile"}
+                              aria-label={vip.has(a.id) ? `Retirer l'étoile de ${a.prenom}` : `${a.prenom} devient membre premium`}
+                              title={vip.has(a.id) ? "Membre premium" : "Mettre l'étoile"}
                               onClick={() => {
                                 const oui = !vip.has(a.id);
                                 const n = new Set(vip);

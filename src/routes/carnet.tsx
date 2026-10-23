@@ -278,7 +278,7 @@ function Carnet() {
   if (chargement)
     return (
       <div className="flex min-h-screen flex-col bg-[#F5F9FC]" aria-busy="true">
-        <div className="h-[300px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
+        <div className="h-[256px] w-full shrink-0 rounded-b-[34px] bg-[#0E3D72]" />
         <div className="mx-auto flex w-full max-w-[430px] flex-grow flex-col">
           <div className="flex flex-col gap-[12px] p-[22px]">
             {[0, 1, 2].map((i) => (
@@ -420,7 +420,7 @@ function Carnet() {
               const premiere = g.plongees[0]!;
               return (
               <div key={g.annee} className="flex flex-col">
-                <div className="flex items-center justify-between gap-3 pb-4 pt-[34px]">
+                <div className="flex items-center justify-between gap-3 pb-3 pt-[24px]">
                   <div className="flex min-w-0 items-baseline gap-2">
                     <span className="text-[15px] font-bold text-[#123A63]">{g.annee}</span>
                     <span className="text-[12px] text-[#566B82]">
@@ -483,7 +483,7 @@ function Carnet() {
                     </span>
                   </button>
                 ) : (
-                <div className={`flex flex-col ${vue === "liste" ? "gap-[10px]" : "gap-[18px]"}`}>
+                <div className={`flex flex-col ${vue === "liste" ? "gap-[10px]" : "gap-[12px]"}`}>
                   {(anneesDepliees.includes(g.annee) ? g.plongees : g.plongees.slice(0, PAR_ANNEE)).map(({ p, numero }, i) => (
                     <button
                       key={p.id}

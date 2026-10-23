@@ -82,7 +82,7 @@ function Lecture() {
   return (
     <FondNumerisation fixe>
       <div className="flex shrink-0 items-center justify-between px-[22px] pt-[clamp(14px,2.6svh,22px)]">
-        <h1 className="text-[20px] font-bold">Lecture des pages</h1>
+        <h1 className="text-[20px] font-bold">{pages.length === 1 ? "Lecture de ta photo" : "Lecture des pages"}</h1>
         {donnees?.lot.libelle && (
           <span className="galet-moyen bg-[#E3EDF6] px-3 py-[6px] text-[12.5px] font-bold text-[#566B82]">{donnees.lot.libelle}</span>
         )}
@@ -94,7 +94,7 @@ function Lecture() {
         <div className="flex items-baseline justify-between">
           <div className="flex items-baseline gap-2">
             <span className="text-[30px] font-bold leading-none">{r.lues}</span>
-            <span className="text-[17px] font-bold text-[#566B82]">pages sur {r.total}</span>
+            <span className="text-[17px] font-bold text-[#566B82]">{r.total > 1 ? "pages" : "page"} sur {r.total}</span>
           </div>
           <span className="text-[13.5px] text-[#566B82]">
             {restantes > 0 ? `encore ~${minutes} min` : r.total > 0 ? "lecture terminée" : ""}

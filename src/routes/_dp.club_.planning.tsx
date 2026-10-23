@@ -456,7 +456,7 @@ function CarteSortie({ s, plan, reservee, onClick }: { s: SortiePlanning; plan: 
       <span className="flex items-center gap-[4px] text-[11.5px] font-bold text-[#106F9F]">
         {heureCourte(s.heure) || "—"}
         {!s.mienne && <span className="font-semibold text-[#566B82]"> · DP {s.dp}</span>}
-        {reservee && <Star className="ml-auto h-[13px] w-[13px] shrink-0" fill="#E9A93A" stroke="#E9A93A" aria-label="Réservée aux membres privilégiés" />}
+        {reservee && <Star className="ml-auto h-[13px] w-[13px] shrink-0" fill="#E9A93A" stroke="#E9A93A" aria-label="Réservée aux membres premium" />}
       </span>
       <span className="block truncate text-[14px] font-bold leading-snug">{s.site}</span>
       <span className="block truncate text-[11.5px] text-[#566B82]">

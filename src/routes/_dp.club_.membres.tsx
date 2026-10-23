@@ -156,7 +156,7 @@ function PageMembres() {
               <table className="w-full min-w-[760px] border-collapse text-[13px]">
                 <thead>
                   <tr className="text-left text-[11px] uppercase tracking-[.06em] text-[#566B82]">
-                    <th className="w-[40px] pl-[10px]" aria-label="Privilégié" />
+                    <th className="w-[40px] pl-[10px]" aria-label="Premium" />
                     <th className="px-[10px] py-[10px] font-bold">Membre</th>
                     <th className="px-[8px] font-bold">Sorties</th>
                     <th className="px-[8px] font-bold">1re sortie</th>
@@ -173,8 +173,8 @@ function PageMembres() {
                         <button
                           type="button"
                           aria-pressed={vip.has(m.id)}
-                          aria-label={vip.has(m.id) ? `Retirer l'étoile de ${m.prenom}` : `${m.prenom} devient membre privilégié`}
-                          title={vip.has(m.id) ? "Membre privilégié" : "Mettre l'étoile"}
+                          aria-label={vip.has(m.id) ? `Retirer l'étoile de ${m.prenom}` : `${m.prenom} devient membre premium`}
+                          title={vip.has(m.id) ? "Membre premium" : "Mettre l'étoile"}
                           onClick={() => {
                             if (!centre) return;
                             const oui = !vip.has(m.id);

@@ -195,8 +195,8 @@ export function FormulaireNouvelleSortie({
       <label className={`mt-[10px] flex cursor-pointer items-center gap-[12px] galet-b border px-[14px] py-[11px] ${reservee ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1] bg-white"}`}>
         <Star className="h-[19px] w-[19px] shrink-0" fill={reservee ? "#E9A93A" : "none"} stroke={reservee ? "#E9A93A" : "#5B7189"} />
         <span className="min-w-0 flex-1">
-          <span className="block text-[14px] font-bold">Réservée aux membres privilégiés</span>
-          <span className="block text-[12px] text-[#566B82]">Épave, plongée profonde… seuls les privilégiés s'inscrivent avec le QR ou le lien</span>
+          <span className="block text-[14px] font-bold">Réservée aux membres premium</span>
+          <span className="block text-[12px] text-[#566B82]">Épave, plongée profonde… seuls les membres premium s'inscrivent avec le QR ou le lien</span>
         </span>
         <input type="checkbox" checked={reservee} onChange={(e) => setReservee(e.target.checked)} className="h-[18px] w-[18px] accent-[#E9A93A]" />
       </label>

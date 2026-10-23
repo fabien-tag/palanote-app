@@ -191,9 +191,9 @@ export function PanneauSortie({ id, onFermer, onChange }: { id: string; onFermer
                   >
                     <Star className="h-[19px] w-[19px] shrink-0" fill={options.reservee ? "#E9A93A" : "none"} stroke={options.reservee ? "#E9A93A" : "#5B7189"} />
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[14px] font-bold">Réservée aux membres privilégiés</span>
+                      <span className="block text-[14px] font-bold">Réservée aux membres premium</span>
                       <span className="block text-[12px] text-[#566B82]">
-                        {options.reservee ? "Seuls les privilégiés peuvent s'inscrire avec le QR ou le lien" : "Ouverte à tous les plongeurs"}
+                        {options.reservee ? "Seuls les membres premium peuvent s'inscrire avec le QR ou le lien" : "Ouverte à tous les plongeurs"}
                       </span>
                     </span>
                     <span className={`h-[24px] w-[42px] shrink-0 rounded-full p-[3px] transition-colors ${options.reservee ? "bg-[#E9A93A]" : "bg-[#D5E1EC]"}`}>

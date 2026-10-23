@@ -66,7 +66,7 @@ export function EnTeteStatistiques({
   const niveauCourt = niveau ? (niveau.split("/")[0] ?? niveau).trim() : "—";
   const sousTitre = derniereplongeeTexte(plongees);
   return (
-    <div className="relative h-[300px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
+    <div className="relative h-[256px] w-full shrink-0 overflow-hidden rounded-b-[34px] bg-[#0E3D72]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={fondMarin}
@@ -305,7 +305,7 @@ export function PoissonOrange({ className = "" }: { className?: string }) {
 
 export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
   return (
-    <div className="px-[22px] pt-[26px]">
+    <div className="px-[22px] pt-[18px]">
       <button
         type="button"
         onClick={onClick}
@@ -348,7 +348,7 @@ export function RaccourcisAccueil() {
     },
   ];
   return (
-    <div className="grid grid-cols-2 gap-[14px] px-[22px] pt-[16px]">
+    <div className="grid grid-cols-2 gap-[12px] px-[22px] pt-[12px]">
       {raccourcis.map(({ titre, texte, Icone, fond, ouvrir }, i) => (
         <button
           key={titre}
@@ -357,7 +357,7 @@ export function RaccourcisAccueil() {
           aria-disabled={ouvrir ? undefined : "true"}
           aria-label={ouvrir ? titre : `${titre} — bientôt disponible`}
           style={{ borderRadius: GALETS[i === 0 ? 0 : 2] }}
-          className={`relative flex h-[150px] ${ouvrir ? "" : "cursor-default"} flex-col items-start gap-[10px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
+          className={`relative flex h-[146px] ${ouvrir ? "" : "cursor-default"} flex-col items-start gap-[10px] border border-[#D9E6F0] p-[15px] text-left shadow-[0_3px_13px_#123A6306] ${fond}`}
         >
           <span style={{ borderRadius: GOUTTE }} className="flex h-[35px] w-[35px] shrink-0 items-center justify-center bg-[#DCEEF8]">
             <Icone className="h-[21px] w-[21px] text-[#566B82]" strokeWidth={1.7} aria-hidden="true" />

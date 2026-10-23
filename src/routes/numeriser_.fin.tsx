@@ -63,9 +63,19 @@ function Fin() {
     { n: vides, texte: `champ${vides > 1 ? "s" : ""} laissé${vides > 1 ? "s" : ""} vide${vides > 1 ? "s" : ""} — tu les rempliras plus tard`, fond: "bg-[#E3F0FA]" },
   ].filter((l, i) => i === 0 || l.n > 0);
 
+  // Une seule photo : on parle de la photo, pas d'un carnet entier
+  const unePhoto = pages.length === 1;
+  const titre = unePhoto ? "Ta photo est importée" : `${donnees.lot.libelle ?? "Ton carnet"} terminé`;
+
+  // Une seule plongée : on ouvre directement sa fiche ; plusieurs : le carnet
+  const seule = nb === 1 ? r.validees[0]?.dive_id : null;
   const voirPlongees = () => {
+    if (seule) {
+      void navigate({ to: "/nouvelle-plongee", search: { id: seule } });
+      return;
+    }
     if (nb > 0) annoncerSurAccueil(`${nb} plongée${nb > 1 ? "s ajoutées" : " ajoutée"} à ton carnet`);
-    navigate({ to: "/carnet" });
+    void navigate({ to: "/carnet" });
   };
 
   return (
@@ -74,9 +84,9 @@ function Fin() {
         <span className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#3DEFBE]">
           <Check className="h-[22px] w-[22px] text-[#0B3B63]" strokeWidth={3} />
         </span>
-        <h1 className="pt-[20px] text-[24px] font-bold leading-tight">{donnees.lot.libelle ?? "Ton carnet"} terminé</h1>
+        <h1 className="pt-[20px] text-[24px] font-bold leading-tight">{titre}</h1>
         <p className="pt-[6px] text-[14px] text-white/85">
-          {nb > 0 ? `${nb} plongée${nb > 1 ? "s" : ""}${periode} ${nb > 1 ? "sont" : "est"} dans ton carnet.` : "Aucune plongée n'a été ajoutée depuis ce carnet."}
+          {nb > 0 ? `${nb} plongée${nb > 1 ? "s" : ""}${periode} ${nb > 1 ? "sont" : "est"} dans ton carnet.` : `Aucune plongée n'a été ajoutée depuis ${unePhoto ? "cette photo" : "ce carnet"}.`}
         </p>
       </div>
 
@@ -100,8 +110,8 @@ function Fin() {
         >
           <BookOpen className="h-[20px] w-[20px] shrink-0 text-[#106F9F]" strokeWidth={1.9} aria-hidden="true" />
           <span className="flex-grow">
-            <span className="block text-[15px] font-bold">Un autre carnet&nbsp;?</span>
-            <span className="block text-[13px] text-[#566B82]">Celui-ci t'a pris {duree}.</span>
+            <span className="block text-[15px] font-bold">{unePhoto ? "Une autre page" : "Un autre carnet"}&nbsp;?</span>
+            <span className="block text-[13px] text-[#566B82]">{unePhoto ? "Celle-ci" : "Celui-ci"} t'a pris {duree}.</span>
           </span>
           <ChevronRight className="h-[17px] w-[17px] text-[#8FA9C0]" strokeWidth={2.4} aria-hidden="true" />
         </button>
@@ -117,7 +127,7 @@ function Fin() {
 
       <div className="flex flex-col gap-[11px] px-[22px] pb-[24px] pt-[20px]">
         <BoutonPrincipal onClick={voirPlongees}>{nb > 0 ? nb > 1 ? `Voir mes ${nb} plongées` : "Voir ma plongée" : "Voir mon carnet"}</BoutonPrincipal>
-        <BoutonSecondaire onClick={() => navigate({ to: "/numeriser/capture" })}>Numériser le carnet suivant</BoutonSecondaire>
+        <BoutonSecondaire onClick={() => navigate({ to: "/numeriser/capture" })}>{unePhoto ? "Photographier une autre page" : "Numériser le carnet suivant"}</BoutonSecondaire>
         <div className="pt-2">
           <LienDiscret onClick={() => navigate({ to: "/carnet" })}>Revenir à l'accueil</LienDiscret>
         </div>

@@ -68,12 +68,12 @@ export async function telechargerExport(e: ExportSaison, p: Periode) {
     ["Carnets tamponnés", e.plongees.filter((x) => x.tamponnee).length],
     ["Plongeurs différents", e.plongeurs.length],
     ["Dont adhérents du club", e.plongeurs.filter((x) => x.adherent).length],
-    ["Dont membres privilégiés", e.plongeurs.filter((x) => x.privilegie).length],
+    ["Dont membres premium", e.plongeurs.filter((x) => x.privilegie).length],
     ["Sorties au Nitrox ou Trimix", e.sorties.filter((s) => s.melange === "Nitrox" || s.melange === "Trimix").length],
   ];
 
   const sorties = [
-    entete(["Date", "Heure", "Site", "Lieu", "Bateau", "DP", "Statut", "Mélange", "Réservée privilégiés", "Prof. prévue (m)", "Durée (min)", "Temp. fond (°C)", "Visibilité (m)", "Plongeurs", "Palanquées", "Tampons", "Annulation / report"]),
+    entete(["Date", "Heure", "Site", "Lieu", "Bateau", "DP", "Statut", "Mélange", "Réservée premium", "Prof. prévue (m)", "Durée (min)", "Temp. fond (°C)", "Visibilité (m)", "Plongeurs", "Palanquées", "Tampons", "Annulation / report"]),
     ...e.sorties.map((s) => [
       d(s.date), s.heure, s.site, s.lieu, s.bateau, s.dp, s.statut, s.melange, ouiNon(s.reservee),
       nombre(s.profondeur_prevue), nombre(s.duree), nombre(s.temperature), nombre(s.visibilite), s.plongeurs, s.palanquees, s.tampons, s.motif,
@@ -89,7 +89,7 @@ export async function telechargerExport(e: ExportSaison, p: Periode) {
   ];
 
   const plongeurs = [
-    entete(["Prénom", "Nom", "Niveau", "Plongées", "Tampons", "Prof. max (m)", "Première", "Dernière", "Compte Palanote", "Adhérent", "Licence", "Fin du certificat", "Privilégié"]),
+    entete(["Prénom", "Nom", "Niveau", "Plongées", "Tampons", "Prof. max (m)", "Première", "Dernière", "Compte Palanote", "Adhérent", "Licence", "Fin du certificat", "Premium"]),
     ...e.plongeurs.map((x) => [
       x.prenom, x.nom, x.niveau, x.plongees, x.tampons, nombre(x.prof_max), d(x.premiere), d(x.derniere),
       ouiNon(x.compte), ouiNon(x.adherent), x.licence, x.certificat_fin ? d(x.certificat_fin) : null, ouiNon(x.privilegie),

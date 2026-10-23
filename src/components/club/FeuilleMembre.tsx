@@ -68,7 +68,7 @@ export function FeuilleAjoutMembre({ centre, nomClub, onFermer, onAjoute }: { ce
         className={`mt-[4px] flex w-full items-center gap-[10px] rounded-[10px] border px-[12px] py-[10px] text-left text-[13.5px] font-bold ${m.privilegie ? "border-[#F2D49A] bg-[#FFF8E8]" : "border-[#E4EBF1]"}`}
       >
         <Star className="h-[17px] w-[17px]" fill={m.privilegie ? "#E9A93A" : "none"} stroke={m.privilegie ? "#E9A93A" : "#5B7189"} />
-        Membre privilégié
+        Membre premium
       </button>
       <MessageErreur texte={erreur} />
       <button

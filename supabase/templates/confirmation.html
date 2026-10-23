@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Confirme ton adresse e-mail</title></head>
+<body style="margin:0;background:#EEF3F8;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:#123A63">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EEF3F8;padding:24px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px">
+<tr><td style="background:#0F3D70;border-radius:22px 22px 0 0;padding:24px">
+  <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+    <td style="vertical-align:middle"><img src="https://palanote.fabientag.fr/icone-192.png" width="40" height="40" alt="" style="display:block;border-radius:10px"></td>
+    <td style="vertical-align:middle;padding-left:12px;font-size:17px;font-weight:700;color:#ffffff">Palanote</td>
+  </tr></table>
+  <div style="font-size:24px;font-weight:700;line-height:1.25;padding-top:18px;color:#ffffff">Confirme ton adresse e-mail</div>
+</td></tr>
+<tr><td style="background:#ffffff;border-radius:0 0 22px 22px;padding:24px;font-size:15px;line-height:1.55;color:#3F5B76">
+  <p style="margin:0 0 12px 0">Bienvenue à bord !</p><p style="margin:0 0 12px 0">Il reste une étape : confirmer ton adresse <strong>{{ .Email }}</strong> pour ouvrir ton carnet de plongée.</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:22px 0 8px 0"><tr><td align="center" style="background:#3DEFBE;border-radius:14px">
+    <a href="{{ .ConfirmationURL }}" style="display:block;padding:15px 10px;font-size:15px;font-weight:700;color:#0B3B63;text-decoration:none">Confirmer mon adresse</a>
+  </td></tr></table>
+  <p style="margin:14px 0 0 0;font-size:12.5px;line-height:1.5;color:#566B82">Le bouton ne marche pas ? Copie ce lien dans ton navigateur :<br><a href="{{ .ConfirmationURL }}" style="color:#106F9F;word-break:break-all">{{ .ConfirmationURL }}</a></p>
+  <p style="margin:0 0 12px 0"><span style="font-size:13px;color:#566B82">Ce lien ne sert qu'une fois et expire au bout d'un moment : s'il ne marche plus, demande-en un nouveau depuis l'app.</span></p>
+</td></tr>
+<tr><td style="padding:18px 10px;font-size:11.5px;line-height:1.5;color:#566B82;text-align:center">Tu reçois ce message parce qu'un compte Palanote a été créé avec cette adresse. Si ce n'est pas toi, ignore-le.<br>Palanote · le carnet de plongée</td></tr>
+</table>
+</td></tr></table>
+</body>
+</html>

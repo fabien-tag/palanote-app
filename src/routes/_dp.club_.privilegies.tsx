@@ -30,7 +30,7 @@ import {
 // Une étoile, des plongées qui leur sont réservées (épaves, plongées profondes, nitrox…),
 // une série programmée en une fois, et l'invitation envoyée dans l'app et par e-mail.
 export const Route = createFileRoute("/_dp/club_/privilegies")({
-  head: () => ({ meta: [{ title: "Palanote — Membres privilégiés" }] }),
+  head: () => ({ meta: [{ title: "Palanote — Membres premium" }] }),
   component: PagePrivilegies,
 });
 
@@ -53,7 +53,7 @@ function PagePrivilegies() {
       setErreur(null);
     } catch (e) {
       console.error(e);
-      setErreur(messagePlanning(e, "Les membres privilégiés n'ont pas pu être chargés.").replace("palanote-planning-club.sql", "palanote-privilegies.sql"));
+      setErreur(messagePlanning(e, "Les membres premium n'ont pas pu être chargés.").replace("palanote-planning-club.sql", "palanote-privilegies.sql"));
     }
   }, [centre]);
 
@@ -71,7 +71,7 @@ function PagePrivilegies() {
 
   return (
     <PageClub
-      titre="Membres privilégiés"
+      titre="Membres premium"
       large
       navigation={<NavigationDpMobile />}
       droite={
@@ -108,7 +108,7 @@ function PagePrivilegies() {
 
           <div className="grid grid-cols-2 gap-[10px] pt-[14px] lg:grid-cols-4">
             {[
-              { v: c.membres.length, l: "privilégiés", d: "dans la communauté", Icone: Star },
+              { v: c.membres.length, l: "premium", d: "dans la communauté", Icone: Star },
               { v: c.membres.filter((m) => m.sur_palanote).length, l: "sur Palanote", d: "reçoivent l'invitation dans l'app" },
               { v: c.sorties.length, l: "plongées réservées", d: "à venir" },
               { v: inscrits, l: "inscriptions", d: "aux plongées réservées" },
@@ -210,7 +210,7 @@ function PagePrivilegies() {
                 </div>
               )}
               <p className="pt-[8px] text-[12px] leading-normal text-[#566B82]">
-                Sur une plongée réservée, seuls les privilégiés peuvent s'inscrire avec le QR code ou le lien. Toi, tu peux toujours ajouter qui tu veux.
+                Sur une plongée réservée, seuls les membres premium peuvent s'inscrire avec le QR code ou le lien. Toi, tu peux toujours ajouter qui tu veux.
               </p>
             </div>
           </div>
@@ -452,13 +452,13 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
     `• ${dateCourte(s.date)}${s.heure ? ` à ${heureCourte(s.heure)}` : ""} : ${s.site}${s.lieu ? ` (${s.lieu})` : ""}${s.melange ? ` · ${s.melange}` : ""}${
       s.profondeur_prevue ? ` · ${String(s.profondeur_prevue).replace(".0", "")} m` : ""
     }\n  Je m'inscris : ${lienSortie(s.jeton, "lien")}`;
-  const texteParDefaut = `Bonjour,\n\nCette saison, ${nomCentre} organise des plongées réservées aux membres privilégiés du club :\n\n${sorties
+  const texteParDefaut = `Bonjour,\n\nCette saison, ${nomCentre} organise des plongées réservées aux membres premium du club :\n\n${sorties
     .map(ligne)
     .join("\n\n")}\n\nInscris-toi en un clic avec le lien de chaque plongée (il te faut l'app Palanote, avec l'adresse e-mail que tu as donnée au club), ou réponds simplement à ce message.\n\nÀ bientôt sous l'eau,\n${prenomDp}${prenomDp ? ", " : ""}${nomCentre}`;
   const texte = message ?? texteParDefaut;
   const destinataires = c.membres.filter((m) => dest.has(m.id));
   const emails = destinataires.map((m) => m.email).filter((e): e is string => Boolean(e));
-  const objet = `${nomCentre} : plongées réservées aux membres privilégiés`;
+  const objet = `${nomCentre} : plongées réservées aux membres premium`;
   const mailto = `mailto:?bcc=${encodeURIComponent(emails.join(","))}&subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(texte)}`;
 
   const basculer = (set: Set<string>, id: string, maj: (s: Set<string>) => void) => {
@@ -479,7 +479,7 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
     try {
       const r = await inviterPrivilegies(centre, [...dest], [...choix]);
       setResultat(
-        `${r.avec_app} privilégié${r.avec_app > 1 ? "s" : ""} prévenu${r.avec_app > 1 ? "s" : ""} dans l'app (une notification par plongée).${
+        `${r.avec_app} membre${r.avec_app > 1 ? "s" : ""} premium prévenu${r.avec_app > 1 ? "s" : ""} dans l'app (une notification par plongée).${
           r.sans_app ? ` ${r.sans_app} n'${r.sans_app > 1 ? "ont" : "a"} pas encore l'app : envoie-leur l'e-mail.` : ""
         }`,
       );
@@ -490,7 +490,7 @@ function FeuilleInvitation({ centre, nomCentre, c, onFermer }: { centre: string;
   };
 
   return (
-    <Fenetre titre="Inviter les membres privilégiés" onFermer={onFermer} large>
+    <Fenetre titre="Inviter les membres premium" onFermer={onFermer} large>
       <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
         <div>
           <p className="pb-[6px] text-[12px] font-bold uppercase tracking-[.08em] text-[#566B82]">

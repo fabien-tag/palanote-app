@@ -57,7 +57,7 @@ begin
   select * into s from public.sorties where id = new.sortie_id;
   if s.reservee_privilegies and s.centre_id is not null and new.user_id <> s.dp_id
      and not public.est_privilegie(s.centre_id, new.user_id) then
-    raise exception 'sortie réservée aux membres privilégiés';
+    raise exception 'sortie réservée aux membres premium';
   end if;
   return new;
 end;
@@ -302,7 +302,7 @@ begin
              where id = any(coalesce(p_sorties, '{}')) and centre_id = p_centre and reservee_privilegies and statut = 'prevue'
              order by date_sortie, heure loop
       perform public.notifier(a.user_id, 'privilegies_invitation',
-        'Plongée réservée aux membres privilégiés',
+        'Plongée réservée aux membres premium',
         public.date_fr(s.date_sortie) || coalesce(' à ' || to_char(s.heure, 'HH24"h"MI'), '') || ' · ' || s.site_name
           || coalesce(' · ' || s.melange, '') || '. ' || coalesce(v_dp, 'Ton DP') || ' t''invite.',
         '/sortie?code=' || s.jeton || '&via=lien', jsonb_build_object('sortie_id', s.id));

@@ -25,7 +25,7 @@ export function CarteDePlongee({ p }: { p: CartePlongee }) {
   return (
     <div style={{ borderRadius: GALETS[forme] }} className="border border-[#DCE7F0] bg-white p-[7px] shadow-[0_4px_14px_#123A6308]">
       <div
-        className="relative flex h-[182px] flex-col justify-between overflow-hidden bg-cover bg-center px-[15px] py-[14px]"
+        className="relative flex h-[160px] flex-col justify-between overflow-hidden bg-cover bg-center px-[15px] py-[14px]"
         style={{ borderRadius: GALETS_INTERIEURS[forme], ...(p.photo ? { backgroundImage: `url(${p.photo})` } : { background: "linear-gradient(150deg,#3E7BA8,#16385C)" }) }}
       >
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,30,60,.34)_0%,rgba(6,26,52,.06)_42%,rgba(5,22,46,.80)_100%)]" />

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Anchor, BadgeCheck, GraduationCap, BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
+import { Anchor, BadgeCheck, LogOut, GraduationCap, BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { BarreNavigation } from "@/components/BarreNavigation";
 import { BandeauConfirmation } from "@/components/BandeauConfirmation";
@@ -10,6 +10,7 @@ import { initiales, mesBinomes } from "@/lib/amis";
 import { estAdmin } from "@/lib/suivi";
 import { chargerForfait, resumeForfait, type Forfait } from "@/lib/forfait";
 import { mesCentres } from "@/lib/club";
+import { signOut } from "@/lib/auth";
 import { effacerMessageAccueil, lireMessageAccueil } from "@/lib/message-accueil";
 import { chargerProfil, exporterUDDF, type Profil } from "@/lib/moi";
 import { chargerNumeroDepart, chargerPlongees, dureeEnMinutes, utilisateurConnecte, type CartePlongee } from "@/lib/plongees";
@@ -236,6 +237,15 @@ function Moi() {
                   </Bloc>
                 </>
               )}
+
+              {/* Se déconnecter, en bas de la page : on ne le cherche pas dans les réglages */}
+              <button
+                type="button"
+                onClick={() => void signOut().catch(() => undefined).then(() => navigate({ to: "/connexion", replace: true }))}
+                className="mt-[26px] flex h-[52px] w-full items-center justify-center gap-[8px] galet-moyen border border-[#E4EBF1] bg-white text-[14px] font-bold"
+              >
+                <LogOut className="h-[16px] w-[16px]" aria-hidden="true" /> Se déconnecter
+              </button>
             </>
           )}
         </div>

@@ -117,8 +117,8 @@ function PageSortie() {
     } catch (e) {
       const m = String((e as { message?: string })?.message ?? "");
       setErreur(
-        /réservée aux membres privilégiés/.test(m)
-          ? "Cette plongée est réservée aux membres privilégiés du club. Demande au directeur de plongée de t'ajouter."
+        /réservée aux membres (privilégiés|premium)/.test(m)
+          ? "Cette plongée est réservée aux membres premium du club. Demande au directeur de plongée de t'ajouter."
           : detailErreur(e, "L'inscription n'a pas marché. Vérifie ta connexion et réessaie."),
       );
     } finally {
@@ -195,7 +195,7 @@ function PageSortie() {
                 <p className={`mt-[12px] flex items-start gap-[8px] rounded-[14px] px-[12px] py-[9px] text-[13px] leading-snug ${reservation.privilegie ? "bg-[#FFF8E8] text-[#6B5320]" : "bg-[#FFF3EF] text-[#8A2A1A]"}`}>
                   <Star className="mt-[1px] h-[16px] w-[16px] shrink-0" fill="#E9A93A" stroke="#E9A93A" aria-hidden="true" />
                   <span>
-                    <b>Réservée aux membres privilégiés du club.</b>{" "}
+                    <b>Réservée aux membres premium du club.</b>{" "}
                     {reservation.privilegie ? "Tu en fais partie : tu peux t'inscrire." : connecte ? "Tu n'en fais pas partie pour l'instant : demande au directeur de plongée de t'ajouter." : "Connecte-toi pour vérifier ton accès."}
                   </span>
                 </p>

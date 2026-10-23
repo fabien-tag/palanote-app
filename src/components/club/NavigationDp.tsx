@@ -40,7 +40,7 @@ const SECTIONS: { titre: string; entrees: Entree[] }[] = [
     titre: "Le club",
     entrees: [
       { to: "/club/membres", label: "Membres du club", Icone: Waves, voyant: "membres" },
-      { to: "/club/privilegies", label: "Privilégiés", Icone: Star },
+      { to: "/club/privilegies", label: "Premium", Icone: Star },
       { to: "/club/formations", label: "Formations", Icone: GraduationCap },
       { to: "/club/equipe", label: "Équipe", Icone: UsersRound },
       { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, voyant: "materiel" },
@@ -198,7 +198,7 @@ const PRINCIPAUX: { to: Cible; label: string; Icone: typeof LayoutDashboard; voy
 ];
 const SECONDAIRES: { to: Cible; label: string; Icone: typeof LayoutDashboard; texte: string }[] = [
   { to: "/club/formations", label: "Formations", Icone: GraduationCap, texte: "Niveaux, tarifs, élèves et moniteurs" },
-  { to: "/club/privilegies", label: "Membres privilégiés", Icone: Star, texte: "La communauté, les plongées réservées" },
+  { to: "/club/privilegies", label: "Membres premium", Icone: Star, texte: "La communauté, les plongées réservées" },
   { to: "/club/materiel", label: "Matériel", Icone: LifeBuoy, texte: "Bateaux, blocs, gilets, contrôles" },
   { to: "/club/carte", label: "Carte du club", Icone: IconeCarte, texte: "Les sites plongés par le centre" },
   { to: "/club/site", label: "Mon site internet", Icone: Globe, texte: "Le site vitrine du club" },

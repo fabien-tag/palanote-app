@@ -82,7 +82,7 @@ function useLignes(q: string, centre: string | null, r: Recherche | null, fermer
       { titre: "Équipe", mots: "equipe guide pilote gonfleur encadrant personnel", Icone: UsersRound, aller: () => navigate({ to: "/club/equipe" }) },
       { titre: "Matériel", mots: "materiel bloc bateau gilet detendeur controle", Icone: LifeBuoy, aller: () => navigate({ to: "/club/materiel" }) },
       { titre: "Membres du club", mots: "membres adherents plongeurs certificat", Icone: Waves, aller: () => navigate({ to: "/club/membres" }) },
-      { titre: "Membres privilégiés", mots: "privilegies vip etoile serie", Icone: Star, aller: () => navigate({ to: "/club/privilegies" }) },
+      { titre: "Membres premium", mots: "premium privilegies vip etoile serie", Icone: Star, aller: () => navigate({ to: "/club/privilegies" }) },
       { titre: "Formations", mots: "formations niveau n1 n2 n3 n4 nitrox trimix rifap eleves moniteur cours tarifs", Icone: GraduationCap, aller: () => navigate({ to: "/club/formations" }) },
       { titre: "Carte du club", mots: "carte sites plongees", Icone: IconeCarte, aller: () => navigate({ to: "/club/carte" }) },
       { titre: "Notifications", mots: "notifications cloche rappels", Icone: Bell, aller: () => navigate({ to: "/club/notifications" }) },
