@@ -340,3 +340,15 @@ export async function repondreDemandeBinome(id: string, accepter: boolean) {
   const { error } = await supabase.rpc("repondre_demande_binome", { p_id: id, p_accepter: accepter });
   if (error) throw error;
 }
+
+// Ne plus être binômes : la relation disparaît des deux côtés. Les plongées déjà dans les carnets restent.
+export async function retirerBinome(id: string) {
+  const { data: s } = await supabase.auth.getSession();
+  const moi = s.session?.user.id;
+  if (!moi) throw new Error("non_connecte");
+  const { error } = await supabase
+    .from("friendships")
+    .delete()
+    .or(`and(user_a.eq.${moi},user_b.eq.${id}),and(user_a.eq.${id},user_b.eq.${moi})`);
+  if (error) throw error;
+}

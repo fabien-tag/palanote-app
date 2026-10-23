@@ -29,12 +29,12 @@ test.describe("Numérisation d'un carnet par l'agent de lecture", () => {
     if (!(await envoyer.isVisible())) await page.getByRole("button", { name: /choisir cette photo/i }).first().click();
     await page.getByRole("button", { name: /envoyer 1 page/i }).click();
     await expect(page).toHaveURL(/\/numeriser\/lecture/);
-    await expect(page.getByRole("button", { name: /relire la page déjà prête/i })).toBeEnabled({ timeout: 20_000 });
+    await expect(page.getByRole("button", { name: /vérifier la page/i })).toBeEnabled({ timeout: 20_000 });
     await photo("2-lecture.png");
     expect(faux.journal.filter((j) => j === "fonction lire-page")).toHaveLength(1);
 
-    // 3. Relire : les champs douteux sont signalés, la photo reste sous les yeux
-    await page.getByRole("button", { name: /relire la page déjà prête/i }).click();
+    // 3. Vérifier : les champs douteux sont signalés, la photo reste sous les yeux
+    await page.getByRole("button", { name: /vérifier la page/i }).click();
     await expect(page).toHaveURL(/\/numeriser\/relecture/);
     await expect(page.locator("input[value=\"Sec de la Fourmigue\"], :text(\"Sec de la Fourmigue\")").first()).toBeVisible();
     await photo("3-relecture.png");

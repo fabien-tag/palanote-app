@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ChevronLeft, Clock, Share2 } from "lucide-react";
+import { Check, ChevronLeft, Clock, Share2 } from "lucide-react";
 import QRCode from "qrcode";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
-import { creerInvitation, initiales, lienInvitation, monProfil } from "@/lib/amis";
+import { creerInvitation, initiales, lienInvitation, mesBinomes, monProfil, type Plongeur } from "@/lib/amis";
 
 export const Route = createFileRoute("/amis_/ajouter")({
   // ?depuis=carnet : ouvert depuis l'accueil, le bouton retour y ramène.
@@ -25,6 +25,37 @@ function AjouterBinome() {
   const [reste, setReste] = useState(0);
   const [erreur, setErreur] = useState<string | null>(null);
   const [partage, setPartage] = useState<string | null>(null);
+  const [nouveau, setNouveau] = useState<Plongeur | null>(null);
+
+  // Dès que le binôme a scanné le code, on le voit ici, sans recharger la page.
+  useEffect(() => {
+    if (!pret) return;
+    let connus: Set<string> | null = null;
+    let actif = true;
+    const verifier = async () => {
+      try {
+        const liste = await mesBinomes();
+        if (!actif) return;
+        if (!connus) {
+          connus = new Set(liste.map((b) => b.id));
+          return;
+        }
+        const arrive = liste.find((b) => !connus!.has(b.id));
+        if (arrive) {
+          connus.add(arrive.id);
+          setNouveau(arrive);
+        }
+      } catch {
+        /* hors connexion : on réessaie au prochain tour */
+      }
+    };
+    void verifier();
+    const t = setInterval(() => void verifier(), 3000);
+    return () => {
+      actif = false;
+      clearInterval(t);
+    };
+  }, [pret]);
 
   const nouvelle = useCallback(async () => {
     setErreur(null);
@@ -140,6 +171,20 @@ function AjouterBinome() {
             <p className="text-[13px] text-[#8A2A1A]">{erreur}</p>
             <button type="button" onClick={() => void nouvelle()} className="pt-2 text-[13.5px] font-bold text-[#106F9F] underline">
               Réessayer
+            </button>
+          </div>
+        )}
+
+        {nouveau && (
+          <div role="status" className="mt-[14px] flex items-center gap-3 galet-b border border-[#B8E4D8] bg-[#E2F8EF] p-[14px]">
+            <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[#3DEFBE]">
+              <Check className="h-[18px] w-[18px] text-[#0B3B63]" strokeWidth={3} aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1 text-[14px] leading-snug">
+              <b>{nouveau.prenom}</b> est maintenant ton binôme.
+            </span>
+            <button type="button" onClick={() => navigate({ to: "/amis" })} className="shrink-0 text-[13.5px] font-bold text-[#106F9F] underline">
+              Voir
             </button>
           </div>
         )}

@@ -12,6 +12,7 @@ import {
   mesBinomes,
   plongeesEnsemble,
   plongeesEnsembleTexte,
+  retirerBinome,
   type PlongeeEnsemble,
   type Plongeur,
 } from "@/lib/amis";
@@ -37,6 +38,20 @@ function FicheBinome() {
   const [message, setMessage] = useState<string | null>(null);
   const [ajoutEnCours, setAjoutEnCours] = useState<string | null>(null);
   const finMessage = useCallback(() => setMessage(null), []);
+  const [confirmerRetrait, setConfirmerRetrait] = useState(false);
+  const [retraitEnCours, setRetraitEnCours] = useState(false);
+  const retirer = async () => {
+    if (!id || retraitEnCours) return;
+    setRetraitEnCours(true);
+    try {
+      await retirerBinome(id);
+      navigate({ to: "/amis", replace: true });
+    } catch (e) {
+      console.error(e);
+      setErreur("Le binôme n'a pas pu être retiré. Vérifie ta connexion et réessaie.");
+      setRetraitEnCours(false);
+    }
+  };
 
   useEffect(() => {
     if (!pret || !id) return;
@@ -188,6 +203,32 @@ function FicheBinome() {
             <p className="pt-[18px] text-center text-[11.5px] leading-normal text-[#566B82]">
               Tu ne vois que les plongées faites ensemble. Le reste du carnet de {ami.prenom} reste privé.
             </p>
+            <div className="pt-[22px] text-center">
+              {!confirmerRetrait ? (
+                <button type="button" onClick={() => setConfirmerRetrait(true)} className="text-[13.5px] font-semibold text-[#B8432F] underline underline-offset-4">
+                  Retirer {ami.prenom} de mes binômes
+                </button>
+              ) : (
+                <div className="galet-b border border-[#F2C9C0] bg-white p-[14px] text-left text-[13px] leading-normal">
+                  <p>
+                    Vous ne serez plus binômes, des deux côtés. Les plongées déjà dans vos carnets restent. Pour vous retrouver, il faudra un nouveau QR code.
+                  </p>
+                  <div className="flex gap-[10px] pt-[12px]">
+                    <button
+                      type="button"
+                      disabled={retraitEnCours}
+                      onClick={() => void retirer()}
+                      className="h-[42px] flex-1 rounded-full bg-[#B8432F] text-[13.5px] font-bold text-white disabled:opacity-60"
+                    >
+                      {retraitEnCours ? "Retrait…" : "Retirer"}
+                    </button>
+                    <button type="button" onClick={() => setConfirmerRetrait(false)} className="h-[42px] flex-1 rounded-full bg-[#E7EFF6] text-[13.5px] font-bold text-[#123A63]">
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
