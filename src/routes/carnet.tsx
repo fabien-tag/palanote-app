@@ -404,7 +404,6 @@ function Carnet() {
       ) : (
         /* Dès la première plongée : statistiques, filtres, raccourcis et liste */
         <>
-          <BandeauProposition propositions={propositions} />
           <QuestionSatisfaction nbPlongees={plongees.length} />
           <BandeauCarnetsPapier onClick={() => navigate({ to: "/numeriser" })} />
           <RaccourcisAccueil />
@@ -519,7 +518,7 @@ function Carnet() {
             {groupes.length === 0 && (
               <p className="pt-8 text-center text-[13px] text-[#566B82]">Aucune plongée pour ce filtre.</p>
             )}
-            <div className="h-[120px]" aria-hidden="true" />
+            <div className={propositions.length > 0 ? "h-[200px]" : "h-[120px]"} aria-hidden="true" />
           </div>
         </>
       )}
@@ -529,13 +528,16 @@ function Carnet() {
           type="button"
           onClick={() => navigate({ to: "/plongee-express" })}
           aria-label="Nouvelle plongée"
-          className={`fixed bottom-[calc(90px+env(safe-area-inset-bottom))] right-[max(20px,calc(50vw-215px+20px))] z-20 flex h-[52px] items-center justify-center overflow-hidden rounded-[26px] bg-[#3DEFBE] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322] transition-all duration-300 ${
+          className={`fixed ${propositions.length > 0 ? "bottom-[calc(176px+env(safe-area-inset-bottom))]" : "bottom-[calc(90px+env(safe-area-inset-bottom))]"} right-[max(20px,calc(50vw-215px+20px))] z-20 flex h-[52px] items-center justify-center overflow-hidden rounded-[26px] bg-[#3DEFBE] text-[14px] font-semibold text-[#123A63] shadow-[0_6px_18px_#123A6322] transition-all duration-300 ${
             boutonCompact ? "w-[52px] gap-0 px-0" : "w-[128px] gap-[9px] px-[19px]"
           }`}
         >
           <Plus className="h-[20px] w-[20px] shrink-0" strokeWidth={2} aria-hidden="true" />
           <span className={`whitespace-nowrap transition-all duration-300 ${boutonCompact ? "w-0 opacity-0" : "opacity-100"}`}>Plongée</span>
         </button>}
+
+        {/* Plongée notée par un binôme : carte flottante, visible tant qu'elle n'est pas complétée */}
+        <BandeauProposition propositions={propositions} />
 
         <div className="flex-grow" />
 

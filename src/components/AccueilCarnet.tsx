@@ -1,6 +1,6 @@
 import { minutesAvant } from "@/lib/profil-plongeur";
 import { useNavigate } from "@tanstack/react-router";
-import { Anchor, Bell, Camera, ChevronRight, Fish, PenLine, Star, Users } from "lucide-react";
+import { Anchor, Bell, Camera, ChevronRight, PenLine, Star, Upload, Users } from "lucide-react";
 import { heureCourte, type SortieResume } from "@/lib/club";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import fondMarin from "@/assets/fond-marin.mp4";
@@ -194,37 +194,30 @@ export function BandeauProposition({ propositions }: { propositions: PlongeeACon
   const p = propositions[0];
   if (!p) return null;
   const autres = propositions.length - 1;
-  const details = [
-    p.site,
-    p.duree ? `${p.duree} min` : null,
-    p.temp_fond !== null && p.temp_fond !== undefined ? `${String(Number(p.temp_fond)).replace(".", ",")} °C` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  const quand = p.date ? new Date(`${p.date}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : null;
   return (
-    <div className="px-[22px] pt-[22px]">
+    <div className="fixed inset-x-0 bottom-[calc(84px+env(safe-area-inset-bottom))] z-20 mx-auto w-full max-w-[430px] px-[14px]">
       <button
         type="button"
         onClick={() => navigate({ to: "/amis/proposition", search: { id: p.id, depuis: "carnet" } })}
-        style={{ borderRadius: GALETS[0] }}
-        className="flex w-full items-center gap-3 border border-[#BFE6F5] bg-[#E3F4FC] px-[15px] py-[13px] text-left shadow-[0_4px_14px_#123A6309]"
+        className="flex w-full items-center gap-3 rounded-[20px] bg-[#0F2A4A] px-[14px] py-[12px] text-left text-white shadow-[0_10px_28px_rgba(9,30,60,.35)]"
       >
         <span
-          className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full text-[15px] font-bold text-[#0F3D70]"
+          className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full text-[15px] font-bold text-[#0F3D70]"
           style={{ background: couleurAvatar(p.de.id) }}
         >
           {initiales(p.de.prenom)}
         </span>
-        <span className="flex min-w-0 flex-grow flex-col gap-px">
-          <span className="text-[14.5px] font-bold text-[#123A63]">{p.de.prenom} a noté votre plongée</span>
-          {details && <span className="truncate text-[12.5px] text-[#566B82]">{details}</span>}
-          {autres > 0 && (
-            <span className="text-[12px] font-semibold text-[#106F9F]">
-              + {autres} autre{autres > 1 ? "s" : ""} proposition{autres > 1 ? "s" : ""} dans Amis
-            </span>
-          )}
+        <span className="flex min-w-0 flex-grow flex-col gap-[2px]">
+          <span className="text-[14px] font-bold leading-snug">
+            {p.de.prenom} a rempli votre plongée{p.site ? ` à ${p.site}` : ""}
+          </span>
+          <span className="text-[12.5px] leading-snug text-white/80">
+            {quand ? `Le ${quand}. ` : ""}Ajoute tes infos pour l'avoir dans ton carnet.
+            {autres > 0 ? ` (+ ${autres} autre${autres > 1 ? "s" : ""})` : ""}
+          </span>
         </span>
-        <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
+        <span className="shrink-0 rounded-full bg-[#3DEFBE] px-[12px] py-[7px] text-[12.5px] font-bold text-[#0B3B63]">Compléter</span>
       </button>
     </div>
   );
@@ -340,11 +333,11 @@ export function RaccourcisAccueil() {
       ouvrir: () => navigate({ to: "/amis/ajouter", search: { depuis: "carnet" } }),
     },
     {
-      titre: "Qui as-tu croisé sous l’eau ?",
-      texte: "L’IA t’aide à identifier les espèces sur vos photos.",
-      Icone: Fish,
+      titre: "Un ordinateur de plongée ?",
+      texte: "Importe ses plongées depuis un fichier UDDF.",
+      Icone: Upload,
       fond: "bg-[#E5F3FC]",
-      ouvrir: () => navigate({ to: "/especes" }),
+      ouvrir: () => navigate({ to: "/importer" }),
     },
   ];
   return (

@@ -119,14 +119,7 @@ function SaisieExpress() {
       .catch(() => undefined);
   }, [pret]);
 
-  // Site par défaut : celui de ta dernière plongée
-  const derniere = useMemo(() => [...passees].filter((p) => p.siteNom).sort((a, b) => (b.date || "").localeCompare(a.date || ""))[0], [passees]);
-  useEffect(() => {
-    if (!siteDepart && !siteNom && derniere) {
-      setSiteNom(derniere.siteNom);
-      setSiteLieu(derniere.siteLieu ?? "");
-    }
-  }, [derniere]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Chaque nouvelle plongée part vide : les sites déjà plongés sont seulement proposés en suggestions.
   const sitesConnus = useMemo(() => [...new Set(passees.map((p) => p.siteNom).filter(Boolean))].slice(0, 30), [passees]);
 
   useEffect(() => () => photos.forEach((p) => p.fichier && URL.revokeObjectURL(p.url)), []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -277,7 +270,7 @@ function SaisieExpress() {
               </div>
             </div>
             <button type="button" onClick={() => setModifSite((v) => !v)} className="shrink-0 px-[2px] py-[6px] text-[13.5px] font-bold text-[#106F9F]">
-              {modifSite ? "OK" : "Changer"}
+              {modifSite ? "OK" : siteNom ? "Changer" : "Choisir"}
             </button>
           </div>
           {modifSite && (

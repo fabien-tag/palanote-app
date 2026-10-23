@@ -308,10 +308,13 @@ function PageCarte() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => api.current?.toutVoir()}
+                    onClick={() => {
+                      api.current?.toutVoir();
+                      setVue("liste");
+                    }}
                     className="flex h-[36px] shrink-0 items-center gap-1 rounded-[18px] bg-[#E7EFF6] px-[14px] text-[13px] font-bold text-[#123A63]"
                   >
-                    Tout voir
+                    Voir la liste
                     <ChevronRight className="h-[15px] w-[15px]" strokeWidth={2.4} aria-hidden="true" />
                   </button>
                 </div>

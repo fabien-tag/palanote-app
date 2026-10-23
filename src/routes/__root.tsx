@@ -16,6 +16,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { installerSuivi } from "../lib/suivi";
 import { installerHorsLigne } from "../lib/hors-ligne";
+import { eviterZoomChamps } from "../lib/zoom-champs";
 import { FeuilleConditions } from "../components/legal/FeuilleConditions";
 
 function NotFoundComponent() {
@@ -139,6 +140,8 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   // Présence et erreurs pour le tableau de bord du développeur.
   useEffect(() => installerSuivi(), []);
+  // Pas de zoom automatique de Safari quand on touche un champ
+  useEffect(() => eviterZoomChamps(), []);
   // Hors ligne : envoi des plongées en attente, service worker, écrans gardés d'avance.
   const router = useRouter();
   useEffect(() => {
