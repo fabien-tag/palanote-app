@@ -518,11 +518,13 @@ function Carnet() {
                       <ChevronDown className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
                     </button>
                   )}
-                  {anneesDepliees.includes(g.annee) && g.plongees.length > PAR_ANNEE && (
+                  {(anneesDepliees.includes(g.annee) || gi === 0) && g.plongees.length > 1 && (
                     <button
                       type="button"
                       onClick={(e) => {
+                        // Replie toute l'année : la pile, comme avant de l'ouvrir
                         setAnneesDepliees((a) => a.filter((x) => x !== g.annee));
+                        basculer(false);
                         // On remonte au titre de l'année, sinon on se retrouve plus bas que la liste repliée
                         e.currentTarget.closest("[data-annee]")?.scrollIntoView({ block: "start", behavior: "smooth" });
                       }}
