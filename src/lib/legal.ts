@@ -44,8 +44,8 @@ export const AVANT_MISE_EN_LIGNE: { tache: string; fait: boolean }[] = [
   { tache: "Ajouter l'e-mail de contact dans src/lib/legal.ts (EDITEUR.email)", fait: EDITEUR.email !== null },
   { tache: "Vérifier l'hébergeur final (Lovable ou autre) dans les mentions légales", fait: true },
   { tache: "Retirer « Se souvenir de moi » de la page Connexion", fait: true },
-  { tache: "Configurer la connexion Google (Google Cloud + Supabase)", fait: false },
-  { tache: "Ajouter le domaine final dans Supabase › Authentication › URL Configuration", fait: false },
+  { tache: "Configurer la connexion Google (Google Cloud + Supabase)", fait: true },
+  { tache: "Ajouter le domaine final dans Supabase › Authentication › URL Configuration", fait: true },
   { tache: "Brancher le paiement des forfaits (Stripe), avec conditions de vente et médiateur de la consommation", fait: false },
 ];
 

@@ -174,10 +174,10 @@ function Lecture() {
       <div className="flex shrink-0 flex-col gap-[clamp(8px,1.4svh,11px)] bg-gradient-to-t from-[#F1F6FC] via-[#F1F6FC] to-[#F1F6FC]/0 px-[22px] pb-[max(clamp(12px,2.6svh,24px),env(safe-area-inset-bottom))] pt-[12px]">
         <BoutonPrincipal disabled={pretes === 0} onClick={() => navigate({ to: "/numeriser/relecture", search: { lot } })}>
           {pretes > 0
-            ? `Relire ${pretes > 1 ? `les ${pretes} pages déjà prêtes` : "la page déjà prête"}`
+            ? pretes > 1 ? `Vérifier les ${pretes} pages prêtes` : "Vérifier la page"
             : restantes > 0
               ? "Lecture en cours…"
-              : "Rien à relire pour l'instant"}
+              : "Rien à vérifier pour l'instant"}
         </BoutonPrincipal>
         <BoutonSecondaire onClick={() => navigate({ to: "/numeriser/capture", search: { lot } })}>Photographier la suite</BoutonSecondaire>
         <div className="pt-[clamp(0px,0.8svh,8px)]">

@@ -83,7 +83,7 @@ function Reprendre() {
             <>
               Il te reste{" "}
               <span className="text-[#B4740A]">
-                {aRelire.length} page{aRelire.length > 1 ? "s" : ""} à relire
+                {aRelire.length} page{aRelire.length > 1 ? "s" : ""} à vérifier
               </span>
               .
             </>
@@ -133,7 +133,7 @@ function Reprendre() {
         </span>
         <span className="flex items-center gap-2">
           <span className="h-[12px] w-[12px] rounded-[4px] border-2 border-[#F5A524]" />
-          {aRelire.length} à relire
+          {aRelire.length} à vérifier
         </span>
         <span className="flex items-center gap-2">
           <span className="h-[12px] w-[12px] rounded-[4px] border border-[#D9E3EC] bg-[#F1F5F9]" />
@@ -184,7 +184,7 @@ function Reprendre() {
       <div className="px-[22px] pb-[24px] pt-[22px]">
         {premiereARelire ? (
           <BoutonPrincipal onClick={() => navigate({ to: "/numeriser/relecture", search: { lot } })}>
-            Relire la page {premiereARelire.ordre}
+            Vérifier la page {premiereARelire.ordre}
           </BoutonPrincipal>
         ) : pasLues.length > 0 ? (
           <BoutonPrincipal onClick={() => navigate({ to: "/numeriser/lecture", search: { lot } })}>Voir la lecture</BoutonPrincipal>
