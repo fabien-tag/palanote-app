@@ -418,7 +418,7 @@ function Carnet() {
                 });
               const premiere = g.plongees[0]!;
               return (
-              <div key={g.annee} className="flex flex-col">
+              <div key={g.annee} data-annee={g.annee} className="flex scroll-mt-[12px] flex-col">
                 <div className="flex items-center justify-between gap-3 pb-3 pt-[24px]">
                   <div className="flex min-w-0 items-baseline gap-2">
                     <span className="text-[15px] font-bold text-[#123A63]">{g.annee}</span>
@@ -506,6 +506,20 @@ function Carnet() {
                     >
                       Voir plus de plongées ({g.plongees.length - PAR_ANNEE})
                       <ChevronDown className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
+                    </button>
+                  )}
+                  {anneesDepliees.includes(g.annee) && g.plongees.length > PAR_ANNEE && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        setAnneesDepliees((a) => a.filter((x) => x !== g.annee));
+                        // On remonte au titre de l'année, sinon on se retrouve plus bas que la liste repliée
+                        e.currentTarget.closest("[data-annee]")?.scrollIntoView({ block: "start", behavior: "smooth" });
+                      }}
+                      className="mx-auto flex items-center gap-[6px] rounded-full bg-[#E7EFF6] px-[16px] py-[9px] text-[13.5px] font-semibold text-[#566B82]"
+                    >
+                      Réduire
+                      <ChevronUp className="h-[15px] w-[15px]" strokeWidth={2.4} aria-hidden="true" />
                     </button>
                   )}
                 </div>
