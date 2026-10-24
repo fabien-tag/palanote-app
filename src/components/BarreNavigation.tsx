@@ -21,11 +21,15 @@ export function BarreNavigation({ actif, cote = false }: { actif: Onglet; cote?:
   const visibles = onglets;
   return (
     <>
-    {/* Sur l'accueil, la carte « X a rempli votre plongée » est déjà gérée par la page (bouton + Plongée remonté) */}
+    {/* Sur l'accueil, la carte « X a rempli votre plongée » est déjà affichée par la page */}
     <AlertesBinomes avecCarte={actif !== "carnet"} />
     <nav
       aria-label="Navigation principale"
-      className={`${cote ? "lg:hidden" : ""} sticky bottom-0 z-10 flex items-stretch border-t border-[#DFEAF2] bg-white pt-[10px] pb-[calc(10px+env(safe-area-inset-bottom))] px-[28px]`}
+      className={`${cote ? "lg:hidden" : ""} sticky bottom-0 z-10 flex items-stretch bg-white pt-[10px] pb-[calc(10px+env(safe-area-inset-bottom))] px-[28px]`}
+      // Le fond blanc et le filet du haut débordent de la colonne de l'app (430 px) jusqu'aux bords
+      // de l'écran, quelle que soit sa largeur ; les onglets, eux, restent centrés. Les ombres ne
+      // créent pas de défilement horizontal, et le clip-path coupe tout ce qui dépasse en hauteur.
+      style={{ boxShadow: "0 0 0 100vmax #fff, 0 -1px 0 100vmax #DFEAF2", clipPath: "inset(-1px -100vmax 0 -100vmax)" }}
     >
       <span
         aria-hidden="true"

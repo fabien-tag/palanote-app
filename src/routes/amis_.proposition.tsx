@@ -203,14 +203,10 @@ function PageProposition() {
     try {
       const dive = await ajouterPlongeeIdentifiee(p.id, perso);
       setMaPlongee(dive);
-      // Il manque encore tes mesures : on ouvre la fiche préremplie (écran 40).
-      if (champsVides > 0) {
-        setEcran("fiche");
-        window.scrollTo({ top: 0 });
-      } else {
-        annoncerSurAccueil("La plongée a été ajoutée à ton carnet");
-        navigate({ to: "/carnet" });
-      }
+      // Tout se remplit sur un seul écran : on valide et on retourne au carnet.
+      // Les mesures laissées vides se complètent plus tard depuis la fiche de la plongée.
+      annoncerSurAccueil("La plongée a été ajoutée à ton carnet");
+      navigate({ to: "/carnet" });
     } catch (e) {
       console.error(e);
       setErreur(`La plongée n'a pas pu être ajoutée.${detail(e)}`);
@@ -346,6 +342,8 @@ function PageProposition() {
                 <ChampMesure label="Bloc au départ" unite="bar" valeur={perso.pression_debut ?? ""} onChange={(v) => set("pression_debut", v)} />
                 <ChampMesure label="Bloc à l'arrivée" unite="bar" valeur={perso.pression_fin ?? ""} onChange={(v) => set("pression_fin", v)} />
               </div>
+              <span className="block pb-[7px] pt-[12px] text-[13px] font-semibold text-[#566B82]">Ta note</span>
+              <Etoiles valeur={perso.note ?? 0} onChange={(n) => set("note", n)} />
             </div>
 
             <div className="min-h-[22px] flex-grow" />

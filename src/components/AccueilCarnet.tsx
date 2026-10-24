@@ -196,11 +196,11 @@ export function BandeauProposition({ propositions }: { propositions: PlongeeACon
   const autres = propositions.length - 1;
   const quand = p.date ? new Date(`${p.date}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : null;
   return (
-    <div className="fixed inset-x-0 bottom-[calc(84px+env(safe-area-inset-bottom))] z-20 mx-auto w-full max-w-[430px] px-[14px]">
+    <div className="fixed inset-x-0 top-[calc(12px+env(safe-area-inset-top))] z-30 mx-auto w-full max-w-[430px] px-[14px]">
       <button
         type="button"
         onClick={() => navigate({ to: "/amis/proposition", search: { id: p.id, depuis: "carnet" } })}
-        className="flex w-full items-center gap-3 rounded-[20px] bg-[#0F2A4A] px-[14px] py-[12px] text-left text-white shadow-[0_10px_28px_rgba(9,30,60,.35)]"
+        className="flex w-full items-center gap-3 rounded-[20px] border border-white/20 bg-[#0F2A4A] px-[14px] py-[12px] text-left text-white shadow-[0_10px_28px_rgba(9,30,60,.35)]"
       >
         <span
           className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full text-[15px] font-bold text-[#0F3D70]"
