@@ -1,3 +1,4 @@
+import { useReserveAuxConnectes } from "@/lib/useReserveAuxConnectes";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Camera, ChevronDown, ChevronRight, ChevronUp, Plus, Watch } from "lucide-react";
@@ -88,8 +89,7 @@ export const Route = createFileRoute("/carnet")({
 
 
 function Carnet() {
-  // Mode maquette temporaire : la page est visible sans connexion
-  // pour pouvoir la relire et la corriger. Remettre la vérification avant lancement.
+  useReserveAuxConnectes();
   const navigate = useNavigate();
   void supabase;
   // null = pas encore chargé : on n'affiche surtout pas l'accueil vide en attendant.
@@ -258,10 +258,8 @@ function Carnet() {
       }
       try {
         const user = await utilisateurConnecte();
-        const [liste, depart] = await Promise.all([
-          user ? chargerPlongees() : Promise.resolve([...lirePlongees()]),
-          user ? chargerNumeroDepart(user.id) : Promise.resolve(0),
-        ]);
+        if (!user) return; // sans compte : renvoyé vers la connexion (useReserveAuxConnectes)
+        const [liste, depart] = await Promise.all([chargerPlongees(), chargerNumeroDepart(user.id)]);
         if (!actif) return;
         setPlongees(liste);
         setNumeroDepart(depart);
@@ -419,6 +417,35 @@ function Carnet() {
           <RaccourcisAccueil />
 
           <div className="flex shrink-0 flex-col px-[22px] pb-[22px]">
+            {/* Filtres et choix de la vue : au-dessus des plongées, avant le titre de l'année */}
+            {groupes.length > 0 && (
+              <div className="flex items-center gap-[10px] pt-[24px]">
+                <div className="-ml-[22px] min-w-0 flex-1">
+                  <FiltresPlongees filtres={filtres} actif={filtreActif.id} onChange={setFiltre} className="pl-[22px] pr-[6px]" />
+                </div>
+                <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
+                  {(
+                    [
+                      { v: "cartes", label: "Vue en cartes", Icone: IconeVueCartes },
+                      { v: "liste", label: "Vue en liste", Icone: IconeVueListe },
+                    ] as const
+                  ).map(({ v, label, Icone }) => (
+                    <button
+                      key={v}
+                      type="button"
+                      aria-label={label}
+                      aria-pressed={vue === v}
+                      onClick={(e) => changerVue(v, e.currentTarget)}
+                      className={`flex h-8 w-[38px] items-center justify-center galet-petit transition ${
+                        vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""
+                      }`}
+                    >
+                      <Icone actif={vue === v} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {groupes.map((g, gi) => {
               const ouverte = g.plongees.length <= 1 || (pilesOuvertes === null ? gi === 0 : pilesOuvertes.includes(g.annee));
               const basculer = (ouvrir: boolean) =>
@@ -427,51 +454,33 @@ function Carnet() {
                   return ouvrir ? [...base.filter((a) => a !== g.annee), g.annee] : base.filter((a) => a !== g.annee);
                 });
               const premiere = g.plongees[0]!;
+              // Replie toute l'année : la pile, comme avant de l'ouvrir
+              const reduire = (bouton: HTMLElement) => {
+                setAnneesDepliees((a) => a.filter((x) => x !== g.annee));
+                basculer(false);
+                // On remonte au titre de l'année, sinon on se retrouve plus bas que la liste repliée
+                bouton.closest("[data-annee]")?.scrollIntoView({ block: "start", behavior: "smooth" });
+              };
               return (
               <div key={g.annee} data-annee={g.annee} className="flex scroll-mt-[12px] flex-col">
-                <div className="flex items-center justify-between gap-3 pb-3 pt-[24px]">
+                <div className={`flex items-center justify-between gap-3 pb-3 ${gi === 0 ? "pt-[16px]" : "pt-[24px]"}`}>
                   <div className="flex min-w-0 items-baseline gap-2">
                     <span className="text-[15px] font-bold text-[#123A63]">{g.annee}</span>
                     <span className="text-[12px] text-[#566B82]">
                       {g.plongees.length} plongée{g.plongees.length > 1 ? "s" : ""}
                     </span>
                   </div>
-                  {gi !== 0 && ouverte && g.plongees.length > 1 && (
+                  {ouverte && g.plongees.length > 1 && (
                     <button
                       type="button"
-                      onClick={() => basculer(false)}
+                      onClick={(e) => reduire(e.currentTarget)}
                       className="flex shrink-0 items-center gap-[4px] rounded-full bg-[#E7EFF6] px-[11px] py-[5px] text-[12.5px] font-semibold text-[#566B82]"
                     >
                       Réduire
                       <ChevronUp className="h-[14px] w-[14px]" strokeWidth={2.4} aria-hidden="true" />
                     </button>
                   )}
-                  {gi === 0 && (
-                    <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
-                      {(
-                        [
-                          { v: "cartes", label: "Vue en cartes", Icone: IconeVueCartes },
-                          { v: "liste", label: "Vue en liste", Icone: IconeVueListe },
-                        ] as const
-                      ).map(({ v, label, Icone }) => (
-                        <button
-                          key={v}
-                          type="button"
-                          aria-label={label}
-                          aria-pressed={vue === v}
-                          onClick={(e) => changerVue(v, e.currentTarget)}
-                          className={`flex h-8 w-[38px] items-center justify-center galet-petit transition ${
-                            vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""
-                          }`}
-                        >
-                          <Icone actif={vue === v} />
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
-                {/* Filtres : sous le titre des plongées, juste avant les cartes */}
-                {gi === 0 && filtresListe}
                 {!ouverte ? (
                   /* Pile repliée : la plongée la plus récente, et le bord des autres dessous */
                   <button
@@ -518,16 +527,11 @@ function Carnet() {
                       <ChevronDown className="h-[17px] w-[17px]" strokeWidth={2.4} aria-hidden="true" />
                     </button>
                   )}
-                  {(anneesDepliees.includes(g.annee) || gi === 0) && g.plongees.length > 1 && (
+                  {/* Liste longue dépliée : un second « Réduire » en bas, pour ne pas remonter */}
+                  {anneesDepliees.includes(g.annee) && g.plongees.length > 1 && (
                     <button
                       type="button"
-                      onClick={(e) => {
-                        // Replie toute l'année : la pile, comme avant de l'ouvrir
-                        setAnneesDepliees((a) => a.filter((x) => x !== g.annee));
-                        basculer(false);
-                        // On remonte au titre de l'année, sinon on se retrouve plus bas que la liste repliée
-                        e.currentTarget.closest("[data-annee]")?.scrollIntoView({ block: "start", behavior: "smooth" });
-                      }}
+                      onClick={(e) => reduire(e.currentTarget)}
                       className="mx-auto flex items-center gap-[6px] rounded-full bg-[#E7EFF6] px-[16px] py-[9px] text-[13.5px] font-semibold text-[#566B82]"
                     >
                       Réduire

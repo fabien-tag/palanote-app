@@ -1,3 +1,4 @@
+import { useReserveAuxConnectes } from "@/lib/useReserveAuxConnectes";
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { CalendarPlus, ChevronRight, Search, UserPlus } from "lucide-react";
@@ -42,6 +43,7 @@ function Masques() {
 }
 
 function PageAmis() {
+  useReserveAuxConnectes();
   const navigate = useNavigate();
   const [connecte, setConnecte] = useState<boolean | null>(null);
   const [binomes, setBinomes] = useState<Plongeur[] | null>(null);

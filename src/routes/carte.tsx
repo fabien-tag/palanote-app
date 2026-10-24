@@ -1,3 +1,4 @@
+import { useReserveAuxConnectes } from "@/lib/useReserveAuxConnectes";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ChevronRight, MapPin, Search, Star, X } from "lucide-react";
@@ -62,6 +63,7 @@ function PastilleProfondeur({ m }: { m: number | null }) {
 }
 
 function PageCarte() {
+  useReserveAuxConnectes();
   const navigate = useNavigate();
   const plongees = usePlongees();
   const [vue, setVue] = useState<Vue>("carte");

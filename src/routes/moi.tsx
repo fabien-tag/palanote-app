@@ -1,3 +1,4 @@
+import { useReserveAuxConnectes } from "@/lib/useReserveAuxConnectes";
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Anchor, BadgeCheck, LogOut, GraduationCap, BarChart3, Camera, ChevronRight, Download, FileText, Gem, HelpCircle, Lock, MessageCircle, Pencil, Scale, ShieldCheck, SlidersHorizontal, Upload } from "lucide-react";
@@ -40,6 +41,7 @@ function calculerStats(liste: CartePlongee[], depart: number, nbBinomes: number,
 }
 
 function Moi() {
+  useReserveAuxConnectes();
   const navigate = useNavigate();
   const [connecte, setConnecte] = useState<boolean | null>(null);
   const [profil, setProfil] = useState<Profil | null>(null);

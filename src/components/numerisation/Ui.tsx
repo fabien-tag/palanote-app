@@ -118,15 +118,19 @@ export function useConnexionRequise() {
   const navigate = useNavigate();
   const [ok, setOk] = useState<boolean | null>(null);
   useEffect(() => {
-    void utilisateurConnecte().then((u) => setOk(Boolean(u)));
-  }, []);
+    void utilisateurConnecte().then((u) => {
+      setOk(Boolean(u));
+      // Sans compte, on va directement à la connexion (l'écran ci-dessous ne fait que la transition)
+      if (!u) void navigate({ to: "/connexion", replace: true });
+    });
+  }, [navigate]);
   const ecran =
     ok === false ? (
       <FondNumerisation>
         <div className="flex flex-grow flex-col items-center justify-center gap-4 px-8 text-center">
-          <h1 className="text-[22px] font-bold">Connecte-toi pour numériser</h1>
+          <h1 className="text-[22px] font-bold">Connecte-toi pour continuer</h1>
           <p className="text-[14px] leading-normal text-[#566B82]">
-            Les pages et les plongées lues sont enregistrées dans ton compte, pour que rien ne se perde.
+            Ton carnet, tes binômes et tes sorties sont enregistrés dans ton compte.
           </p>
           <div className="w-full pt-2">
             <BoutonPrincipal onClick={() => navigate({ to: "/connexion" })}>Me connecter</BoutonPrincipal>
