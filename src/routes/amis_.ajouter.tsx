@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronLeft, Clock, Share2 } from "lucide-react";
 import QRCode from "qrcode";
 import logoCorail from "@/assets/palanote-logo-cigle.png";
 import { Meduse, useConnexionRequise } from "@/components/numerisation/Ui";
 import { creerInvitation, initiales, lienInvitation, mesBinomes, monProfil, type Plongeur } from "@/lib/amis";
+import { useTempsReel } from "@/lib/tempsReel";
 
 export const Route = createFileRoute("/amis_/ajouter")({
   // ?depuis=carnet : ouvert depuis l'accueil, le bouton retour y ramène.
@@ -27,7 +28,9 @@ function AjouterBinome() {
   const [partage, setPartage] = useState<string | null>(null);
   const [nouveau, setNouveau] = useState<Plongeur | null>(null);
 
-  // Dès que le binôme a scanné le code, on le voit ici, sans recharger la page.
+  // Dès que le binôme a scanné le code, on le voit ici, sans recharger la page (temps réel).
+  const relancer = useRef<() => void>(() => undefined);
+  useTempsReel(["friendships"], () => relancer.current(), pret);
   useEffect(() => {
     if (!pret) return;
     let connus: Set<string> | null = null;
@@ -49,8 +52,9 @@ function AjouterBinome() {
         /* hors connexion : on réessaie au prochain tour */
       }
     };
+    relancer.current = () => void verifier();
     void verifier();
-    const t = setInterval(() => void verifier(), 3000);
+    const t = setInterval(() => void verifier(), 10_000); // en secours
     return () => {
       actif = false;
       clearInterval(t);

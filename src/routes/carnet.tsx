@@ -1,4 +1,5 @@
 import { useReserveAuxConnectes } from "@/lib/useReserveAuxConnectes";
+import { useTempsReel } from "@/lib/tempsReel";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Camera, ChevronDown, ChevronRight, ChevronUp, Plus, Watch } from "lucide-react";
@@ -107,21 +108,27 @@ function Carnet() {
   }, [navigate]);
   // Plongées notées par un binôme, à ajouter à mon carnet (parcours 07)
   const [propositions, setPropositions] = useState<PlongeeAConfirmer[]>([]);
-  useEffect(() => {
-    const charger = () =>
+  const chargerPropositions = useCallback(
+    () =>
       void plongeesAConfirmer()
         .then(setPropositions)
-        .catch(() => undefined); // script pas encore lancé ou hors connexion : pas de bandeau
+        .catch(() => undefined), // script pas encore lancé ou hors connexion : pas de bandeau
+    [],
+  );
+  // Une plongée notée par un binôme arrive tout de suite (temps réel)
+  useTempsReel(["dive_buddies"], chargerPropositions);
+  useEffect(() => {
+    const charger = chargerPropositions;
     charger();
-    // Une plongée notée par un binôme arrive sans recharger : toutes les 10 s, et au retour sur l'app
-    const t = setInterval(() => document.visibilityState === "visible" && charger(), 10_000);
+    // En secours : toutes les 30 s, et au retour sur l'app
+    const t = setInterval(() => document.visibilityState === "visible" && charger(), 30_000);
     const auRetour = () => document.visibilityState === "visible" && charger();
     document.addEventListener("visibilitychange", auRetour);
     return () => {
       clearInterval(t);
       document.removeEventListener("visibilitychange", auRetour);
     };
-  }, []);
+  }, [chargerPropositions]);
   // Sorties club (parcours 15) et pastille de la cloche
   const [sorties, setSorties] = useState<SortieResume[]>([]);
   const [nonLues, setNonLues] = useState(0);

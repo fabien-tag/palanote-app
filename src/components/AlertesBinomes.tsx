@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Camera, Check, X } from "lucide-react";
 import { BandeauProposition } from "@/components/AccueilCarnet";
 import { mesBinomes, plongeesAConfirmer, type PlongeeAConfirmer, type Plongeur } from "@/lib/amis";
 import type { Notification } from "@/lib/notifications";
 import { supabase } from "@/lib/supabase";
+import { useTempsReel } from "@/lib/tempsReel";
 
 // Alertes « binômes », sur tous les onglets de l'app (Carnet, Carte, Amis, Moi) :
 // - une plongée remplie par un binôme : la carte flottante « X a rempli votre plongée » ;
 // - un nouveau binôme (il a scanné ton QR code, ou toi le sien) : une petite notification en haut.
-// L'app vérifie toutes les 10 s et au retour sur l'app, sans recharger la page.
+// Mises à jour en temps réel (Supabase Realtime), avec une vérification toutes les 30 s
+// et au retour sur l'app en secours, sans recharger la page.
 
 const CLE = "palanote-binomes-connus";
 const CLE_PHOTOS = "palanote-photos-annoncees";
@@ -43,6 +45,8 @@ export function AlertesBinomes({ avecCarte }: { avecCarte: boolean }) {
   const [propositions, setPropositions] = useState<PlongeeAConfirmer[]>([]);
   const [nouveau, setNouveau] = useState<Plongeur | null>(null);
   const [photo, setPhoto] = useState<Notification | null>(null);
+  const relancer = useRef<() => void>(() => undefined);
+  useTempsReel(["notifications", "dive_buddies", "friendships"], () => relancer.current());
 
   useEffect(() => {
     let actif = true;
@@ -90,8 +94,9 @@ export function AlertesBinomes({ avecCarte }: { avecCarte: boolean }) {
         /* hors connexion : on réessaie au prochain tour */
       }
     };
+    relancer.current = () => void verifier();
     void verifier();
-    const t = setInterval(() => void verifier(), 10_000);
+    const t = setInterval(() => void verifier(), 30_000);
     const auRetour = () => void verifier();
     document.addEventListener("visibilitychange", auRetour);
     return () => {
