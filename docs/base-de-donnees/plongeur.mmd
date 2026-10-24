@@ -1,0 +1,72 @@
+erDiagram
+  AUTH_USERS ||--|| PROFILES : "a un profil"
+  AUTH_USERS ||--o{ DIVES : "tient son carnet"
+  AUTH_USERS ||--o{ FRIENDSHIPS : "est binôme"
+  AUTH_USERS ||--o{ OCR_BATCHES : "numérise"
+  AUTH_USERS ||--o{ NOTIFICATIONS : "reçoit"
+  AUTH_USERS ||--o{ PLONGEUR_BREVETS : "possède"
+  DIVES ||--o{ MEDIA : "photos"
+  DIVES ||--o{ DIVE_SPECIES : "espèces vues"
+  MEDIA ||--o{ DIVE_SPECIES : "identifiées sur"
+  DIVES ||--o{ DIVE_BUDDIES : "palanquée"
+  OCR_BATCHES ||--o{ OCR_PAGES : "pages"
+  MEDIA ||--o| OCR_PAGES : "photo de la page"
+  OCR_PAGES ||--o{ OCR_EXTRACTIONS : "plongées lues par l'IA"
+  OCR_EXTRACTIONS }o--o| DIVES : "validée en"
+  AUTH_USERS { uuid id PK
+    text email }
+  PROFILES { uuid id PK "FK auth.users"
+    text prenom
+    text niveau
+    bool partage_photos }
+  DIVES { uuid id PK
+    uuid user_id FK
+    uuid sortie_id FK
+    date dive_date
+    text site_name
+    numeric max_depth_m
+    int duration_min
+    text dive_type
+    bool stamped }
+  MEDIA { uuid id PK
+    uuid user_id FK
+    uuid dive_id FK
+    text chemin
+    bool partagee }
+  DIVE_SPECIES { uuid id PK
+    uuid dive_id FK
+    uuid media_id FK
+    text nom
+    numeric confiance
+    text statut }
+  DIVE_BUDDIES { uuid id PK
+    uuid dive_id FK
+    uuid buddy_user_id FK
+    uuid copie_dive_id FK
+    text statut }
+  FRIENDSHIPS { uuid id PK
+    uuid user_a FK
+    uuid user_b FK
+    friend_status statut }
+  OCR_BATCHES { uuid id PK
+    uuid user_id FK
+    int nb_pages
+    ocr_batch_status statut }
+  OCR_PAGES { uuid id PK
+    uuid batch_id FK
+    uuid media_id FK
+    ocr_page_status statut
+    text modele }
+  OCR_EXTRACTIONS { uuid id PK
+    uuid page_id FK
+    uuid dive_id FK
+    jsonb champs
+    jsonb confiances }
+  NOTIFICATIONS { uuid id PK
+    uuid user_id FK
+    text type
+    timestamptz lue_le }
+  PLONGEUR_BREVETS { uuid id PK
+    uuid user_id FK
+    text intitule
+    uuid verifie_par FK }

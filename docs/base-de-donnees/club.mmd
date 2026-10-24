@@ -1,0 +1,67 @@
+erDiagram
+  AUTH_USERS ||--o{ CENTRES : "crée"
+  CENTRES ||--o{ CENTRE_ADHERENTS : "adhérents"
+  CENTRES ||--o{ CENTRE_EQUIPE : "équipe"
+  CENTRES ||--o{ SORTIES : "organise"
+  CENTRES ||--o{ MATERIEL : "matériel et bateaux"
+  CENTRES ||--o{ FORMATIONS_CATALOGUE : "propose"
+  FORMATIONS_CATALOGUE ||--o{ FORMATIONS_ELEVES : "inscriptions"
+  CENTRE_ADHERENTS ||--o{ FORMATIONS_ELEVES : "suit"
+  CENTRE_EQUIPE ||--o{ FORMATIONS_ELEVES : "encadre"
+  MATERIEL ||--o{ SORTIES : "bateau"
+  SORTIES ||--o{ SORTIE_PALANQUEES : "palanquées"
+  SORTIES ||--o{ SORTIE_PARTICIPANTS : "inscrits"
+  SORTIE_PALANQUEES ||--o{ SORTIE_PARTICIPANTS : "regroupe"
+  AUTH_USERS ||--o{ SORTIE_PARTICIPANTS : "participe"
+  SORTIES ||--o{ DIVES : "remplit les carnets"
+  SORTIE_PARTICIPANTS }o--o| DIVES : "plongée tamponnée"
+  AUTH_USERS ||--o{ DIVES : "carnet"
+  AUTH_USERS { uuid id PK }
+  CENTRES { uuid id PK
+    text nom
+    text ville
+    uuid cree_par FK }
+  CENTRE_ADHERENTS { uuid id PK
+    uuid centre_id FK
+    uuid user_id FK
+    text niveau
+    date certificat_fin
+    bool privilegie }
+  CENTRE_EQUIPE { uuid id PK
+    uuid centre_id FK
+    uuid user_id FK
+    text role }
+  SORTIES { uuid id PK
+    uuid centre_id FK
+    uuid dp_id FK
+    uuid bateau_id FK
+    date date_sortie
+    text site_name
+    text statut }
+  SORTIE_PALANQUEES { uuid id PK
+    uuid sortie_id FK
+    int numero
+    uuid guide_id FK }
+  SORTIE_PARTICIPANTS { uuid id PK
+    uuid sortie_id FK
+    uuid palanquee_id FK
+    uuid user_id FK
+    uuid dive_id FK
+    timestamptz tamponne_le }
+  MATERIEL { uuid id PK
+    uuid centre_id FK
+    text type
+    date prochain_controle }
+  FORMATIONS_CATALOGUE { uuid id PK
+    uuid centre_id FK
+    text intitule
+    numeric prix }
+  FORMATIONS_ELEVES { uuid id PK
+    uuid catalogue_id FK
+    uuid adherent_id FK
+    uuid moniteur_id FK
+    text statut }
+  DIVES { uuid id PK
+    uuid user_id FK
+    uuid sortie_id FK
+    bool stamped }

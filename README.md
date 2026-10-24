@@ -51,14 +51,24 @@ Projet réalisé dans le cadre de la certification RNCP 41143 « Concepteur de s
 | Tableau de bord du DP | Prochaine sortie, semaine, points d'attention (certificats, matériel), actions à faire |
 | Sorties | Création, inscriptions par QR code, liste d'attente, palanquées, fiche de sécurité signée à l'écran |
 | Tampon numérique | En fin de sortie, le DP tamponne les carnets de tous les plongeurs d'un geste |
-| Membres | Import Excel des adhérents, certificats médicaux, membres privilégiés |
+| Membres | Import Excel des adhérents, certificats médicaux, membres premium |
 | Équipe, matériel, formations | Planning de l'équipe, inventaire et contrôles du matériel, formations et fiches de progression |
 | Site du club | Mini site vitrine public généré à partir des données du club |
 | Sécurité | Un centre déjà géré par un DP ne peut pas être rejoint par quelqu'un d'autre |
 
 ### Administration (ordinateur)
 
-Tableau de bord réservé à l'administrateur : vue d'ensemble (connectés, actifs, plongées, pages lues), **suivi de l'agent IA en production et banc d'essai (eval set)**, retours des utilisateurs, erreurs de l'app, utilisateurs, finances, lettre annuelle.
+Tableau de bord réservé à l'administrateur : vue d'ensemble (connectés, actifs, plongées, pages lues), **suivi de l'agent IA en production et banc d'essai (eval set)**, audience du site (Vercel Web Analytics, sans cookie), retours des utilisateurs, erreurs de l'app, utilisateurs, finances, lettre annuelle.
+
+### Automatisations
+
+| Automatisation | Déclencheur | Ce qu'elle fait |
+|---|---|---|
+| Notifications du plongeur | Fonctions serveur et déclencheurs de la base | Page de carnet lue, binôme qui a rempli une plongée commune, photo ajoutée par la palanquée, carnet tamponné par le DP |
+| Partage des photos | Déclencheur PostgreSQL | Une photo ajoutée à une plongée est partagée avec la palanquée si le plongeur l'a accepté une fois |
+| Rappels du DP | Ouverture de l'espace club (au plus toutes les 30 min) | Certificats médicaux et contrôles de matériel qui arrivent à échéance, sorties à préparer, cours de la veille |
+| Alertes dans l'app | Vérification toutes les 10 secondes | Plongée à confirmer, nouveau binôme, photo partagée : affichées sur n'importe quel écran |
+| Bilan hebdomadaire | Tâche planifiée Claude, chaque lundi | Lit la base et l'audience (lecture seule), publie un bilan dans Notion avec les points d'action |
 
 ---
 
@@ -83,11 +93,12 @@ La brique principale du projet. Code : [`supabase/functions/lire-page`](supabase
 | Génération et itération | **Lovable** | Construction de l'interface par vibe coding, synchronisée avec ce dépôt |
 | Front | React 19, TypeScript, **TanStack Start / Router**, Vite | Application, routes par fichiers (`src/routes`), rendu côté serveur |
 | Style | **Tailwind CSS v4**, composants Radix UI / shadcn, Lucide | Design system Palanote (palette marine, menthe, corail ; formes organiques) |
-| Données | **Supabase** (PostgreSQL, Auth, Storage, Edge Functions, Realtime) | Base de données, connexion (e-mail et Google), photos, fonctions serveur |
+| Données | **Supabase** (PostgreSQL, Auth, Storage, Edge Functions) | Base de données, connexion (e-mail et Google), photos, fonctions serveur. Les alertes se mettent à jour par interrogation toutes les 10 secondes (pas de Supabase Realtime) |
 | IA | **Anthropic Claude** (API Messages, outils) | Lecture des carnets, identification des espèces |
 | Carte | Leaflet | Carte des sites |
 | E-mails | Resend | Lettre annuelle |
 | Hébergement | **Vercel** | Production sur https://palanote.fabientag.fr (HTTPS automatique) |
+| Audience | Vercel Web Analytics | Visites anonymes, sans cookie, lues dans l'admin |
 | Tests | **Playwright** | Tests de parcours, lancés à chaque push par GitHub Actions |
 
 ---
@@ -104,11 +115,12 @@ src/
   assets/          Images et illustrations
 supabase/
   functions/       Edge Functions : lire-page (agent IA), identifier-especes,
-                   envoyer-lettre, abonnement-club
+                   envoyer-lettre, abonnement-club, stats-audience
+  templates/       E-mails de connexion aux couleurs de Palanote
 sql/               Un script SQL autonome et relançable par fonctionnalité,
                    palanote-schema-complet.sql (référence), palanote-schema.dbml (schéma)
 tests/e2e/         Tests Playwright (paquet isolé, Supabase simulé)
-docs/              Mise en ligne, rapports d'accessibilité (docs/accessibilite)
+docs/              Mise en ligne, accessibilité, sécurité, diagrammes de la base
 .github/workflows/ Tests Playwright à chaque push
 ```
 
@@ -118,7 +130,7 @@ Le client Supabase est créé dans [`src/lib/supabase.ts`](src/lib/supabase.ts) 
 
 ## Base de données et sécurité
 
-- **Schéma :** [`sql/palanote-schema.dbml`](sql/palanote-schema.dbml), à ouvrir dans [dbdiagram.io](https://dbdiagram.io). Tables principales : `profiles`, `dives`, `media`, `dive_species`, `ocr_batches` / `ocr_pages` / `ocr_extractions` (numérisation), `centres` / `centre_membres` / `sorties` / `sortie_participants` (club), plus les tables du suivi et de l'eval set.
+- **Diagrammes entité-relation** (générés depuis la base de production) : [le carnet du plongeur](docs/base-de-donnees/era-plongeur.png) et [l'espace club](docs/base-de-donnees/era-club.png). Schéma complet : [`sql/palanote-schema.dbml`](sql/palanote-schema.dbml), à ouvrir dans [dbdiagram.io](https://dbdiagram.io). Tables principales : `profiles`, `dives`, `media`, `dive_species`, `ocr_batches` / `ocr_pages` / `ocr_extractions` (numérisation), `centres` / `centre_membres` / `sorties` / `sortie_participants` (club), plus les tables du suivi et de l'eval set.
 - **Scripts :** chaque fonctionnalité a son script SQL autonome et relançable dans `sql/`. [`sql/palanote-schema-complet.sql`](sql/palanote-schema-complet.sql) recrée toute la base.
 - **RLS activée sur toutes les tables.** Un plongeur ne voit que ses données ; un DP ne voit que les adhérents de son centre ; l'admin passe par des fonctions `security definer` qui vérifient `est_admin()`. Les règles du PRD et les politiques correspondantes sont détaillées dans [`sql/palanote-rls-prd.sql`](sql/palanote-rls-prd.sql).
 - **Secrets :** aucune clé secrète dans le code ni dans l'historique Git. Les clés (Anthropic, Resend, Stripe) sont dans les secrets Supabase ; `.env` est ignoré par Git.
@@ -132,8 +144,8 @@ Le client Supabase est créé dans [`src/lib/supabase.ts`](src/lib/supabase.ts) 
 Prérequis : Node.js 22 et npm (ou Bun).
 
 ```sh
-git clone https://github.com/fabien-tag/palanote-b745c068.git
-cd palanote-b745c068
+git clone https://github.com/fabien-tag/palanote-app.git
+cd palanote-app
 npm install
 npm run dev
 ```
@@ -160,6 +172,7 @@ Pour repartir d'une base Supabase vide : créer un projet, lancer `sql/palanote-
 | `identifier-especes` | Espèces proposées à partir des photos | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL_ESPECES` (facultatif) |
 | `envoyer-lettre` | Lettre annuelle aux plongeurs | `RESEND_API_KEY`, `LETTRE_EXPEDITEUR`, `APP_URL` |
 | `abonnement-club` | Offres club (paiement pas encore branché) | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PRIX_ADVANCED`, `PRIX_PREMIUM` |
+| `stats-audience` | Audience du site pour l'admin (réservée à l'administrateur) | `VERCEL_TOKEN` |
 
 Les secrets se règlent dans Supabase › Edge Functions › Secrets. `SUPABASE_URL` et la clé secrète du projet sont fournies automatiquement aux fonctions.
 
