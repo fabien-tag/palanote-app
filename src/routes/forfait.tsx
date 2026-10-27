@@ -1,3 +1,4 @@
+import { PAGES_OFFERTES } from "@/lib/legal";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Check, ChevronLeft, ChevronRight, Infinity as Infini, Sparkles } from "lucide-react";
@@ -55,7 +56,7 @@ function PageForfait() {
         </div>
         <h1 className="pt-[12px] text-[26px] font-bold leading-tight">Ton forfait</h1>
         <p className="pt-[4px] text-[14px] leading-snug text-[#566B82]">
-          Le carnet est gratuit, pour tout le monde. Seule la lecture de tes carnets papier par l'IA a un coût : on t'offre les {f?.offertes ?? 50} premières pages.
+          Le carnet est gratuit, pour tout le monde. Seule la lecture de tes carnets papier par l'IA a un coût : on t'offre les {f?.offertes ?? PAGES_OFFERTES} premières pages.
         </p>
 
         {/* Où j'en suis */}
@@ -98,7 +99,7 @@ function PageForfait() {
             {f && !f.plus && <span className="rounded-full bg-[#E2F8EF] px-[10px] py-[3px] text-[11.5px] font-bold text-[#137758]">Ton forfait</span>}
           </div>
           <ul className="flex flex-col gap-[6px] pt-[8px]">
-            {[...GRATUIT, `${f?.offertes ?? 50} pages de carnet papier lues par l'IA`].map((t) => (
+            {[...GRATUIT, `${f?.offertes ?? PAGES_OFFERTES} pages de carnet papier lues par l'IA`].map((t) => (
               <li key={t} className="flex gap-[8px] text-[13.5px] leading-snug text-[#3F5B76]">
                 <Check className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[#137758]" strokeWidth={2.6} aria-hidden="true" />
                 {t}

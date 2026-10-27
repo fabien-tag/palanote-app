@@ -2,7 +2,7 @@
 export const QUESTIONS: { q: string; r: string }[] = [
   {
     q: "Comment numériser mes vieux carnets papier ?",
-    r: "Carnet › « Numériser mes carnets ». Photographie une page à la fois, à plat, sans ombre. L'IA lit chaque plongée et te la propose : tu relis, tu corriges, tu valides. Rien n'entre dans ton carnet sans ton accord. Les 50 premières pages sont offertes.",
+    r: "Carnet › « Numériser mes carnets ». Photographie une page à la fois, à plat, sans ombre. L'IA lit chaque plongée et te la propose : tu relis, tu corriges, tu valides. Rien n'entre dans ton carnet sans ton accord. Les 20 premières pages sont offertes.",
   },
   {
     q: "L'IA s'est trompée en lisant une page",

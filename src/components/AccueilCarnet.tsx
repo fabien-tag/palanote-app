@@ -1,3 +1,4 @@
+import { PAGES_OFFERTES } from "@/lib/legal";
 import { minutesAvant } from "@/lib/profil-plongeur";
 import { useNavigate } from "@tanstack/react-router";
 import { Anchor, Bell, Camera, ChevronRight, PenLine, Star, Upload, Users } from "lucide-react";
@@ -310,7 +311,7 @@ export function BandeauCarnetsPapier({ onClick }: { onClick: () => void }) {
         </span>
         <span className="flex min-w-0 flex-grow flex-col gap-px">
           <span className="text-[14.5px] font-bold text-[#123A63]">Tu as des carnets papier&nbsp;?</span>
-          <span className="text-[12.5px] text-[#123A63]">Photographie-les, on remplit les fiches. 50 pages offertes.</span>
+          <span className="text-[12.5px] text-[#123A63]">Photographie-les, on remplit les fiches. {PAGES_OFFERTES} pages offertes.</span>
         </span>
         <ChevronRight className="h-[17px] w-[17px] shrink-0 text-[#123A63]" strokeWidth={2.4} aria-hidden="true" />
         <PoissonOrange className="right-3 top-[-13px]" />

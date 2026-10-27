@@ -9,6 +9,7 @@ import { reprendreBrouillon } from "@/lib/brouillon-plongee";
 import { CarrouselPhotos } from "@/components/CarrouselPhotos";
 import { DemandePartagePhotos } from "@/components/DemandePartagePhotos";
 import { BandeAnalyse } from "@/components/especes/BandeAnalyse";
+import { chargerMesSites, filtrerSites, type MonSite } from "@/lib/mes-sites";
 import { chargerPhotosPlongee, enregistrerPhotosPlongee, type PhotoPlongee } from "@/lib/photos-plongee";
 import { binomesIdentifies, couleurAvatar, initiales as initialesAmi, identifierBinomes, mesBinomes, type Plongeur } from "@/lib/amis";
 import { MapPin, LocateFixed, Plus, X, Star, Camera, Check, ChevronRight, Images } from "lucide-react";
@@ -561,6 +562,8 @@ function NouvellePlongee() {
     };
   }, [idExistant]);
   const prenomAmi = (id: string) => amis.find((a) => a.id === id)?.prenom ?? "Binôme";
+  // Plongée enregistrée, hors modification : on l'affiche comme une fiche à lire
+  const modeFiche = existante && !edition && !chargement;
 
   const [enCours, setEnCours] = useState(false);
   const [confirmerSuppression, setConfirmerSuppression] = useState(false);
@@ -586,6 +589,23 @@ function NouvellePlongee() {
     }
   };
   const [message, setMessage] = useState<{ type: "erreur" | "info"; texte: string } | null>(null);
+  // Mes sites déjà plongés : à choisir dans une liste plutôt qu'à retaper
+  const [mesSites, setMesSites] = useState<MonSite[]>([]);
+  useEffect(() => {
+    if (!edition) return;
+    let actif = true;
+    void utilisateurConnecte().then(async (u) => {
+      if (!u) return;
+      const liste = await chargerMesSites().catch(() => []);
+      if (actif) setMesSites(liste);
+    });
+    return () => {
+      actif = false;
+    };
+  }, [edition]);
+  const sitesProposes = filtrerSites(mesSites, plongee.siteNom).slice(0, 10);
+  const choisirSite = (s: MonSite) =>
+    setPlongee((p) => ({ ...p, siteNom: s.nom, siteLieu: s.lieu || p.siteLieu, siteCoords: s.coords || p.siteCoords }));
 
   const versLigne = (p: Plongee): LignePlongee => ({
     id: idPlongee,
@@ -640,6 +660,41 @@ function NouvellePlongee() {
     wildlife: p.faune,
     visibility: VISIBILITE_VERS_BASE[p.visibiliteFiche] ?? "private",
   });
+
+  // Depuis la fiche à lire : ajoute un membre à la palanquée et enregistre tout de suite, sans passer par « Modifier ».
+  const ajouterDansPalanquee = async (ajout: { ami?: string; nom?: string }) => {
+    if (enCours) return;
+    const avantIds = identifies;
+    const avant = plongee;
+    const ids = ajout.ami ? [...identifies, ajout.ami] : identifies;
+    const nouvelle = ajout.nom ? { ...plongee, binomes: [...plongee.binomes, ajout.nom] } : plongee;
+    setIdentifies(ids);
+    setPlongee(nouvelle);
+    setEnCours(true);
+    setMessage(null);
+    try {
+      if (await utilisateurConnecte()) {
+        const ligne = versLigne(nouvelle);
+        await sauverPlongee({ ...ligne, buddies: [...ids.map(prenomAmi), ...ligne.buddies] });
+        if (ajout.ami) await identifierBinomes(idPlongee, ids);
+      }
+      original.current = nouvelle;
+      identifiesOriginaux.current = ids;
+      setMessage({
+        type: "info",
+        texte: ajout.ami
+          ? `${prenomAmi(ajout.ami)} rejoint ta palanquée : la plongée lui est proposée dans son carnet.`
+          : `${ajout.nom} rejoint ta palanquée.`,
+      });
+    } catch (e) {
+      console.error(e);
+      setIdentifies(avantIds);
+      setPlongee(avant);
+      setMessage({ type: "erreur", texte: "Le membre n'a pas pu être ajouté. Vérifie ta connexion et réessaie." });
+    } finally {
+      setEnCours(false);
+    }
+  };
 
   const enregistrer = async () => {
     if (enCours) return;
@@ -776,20 +831,6 @@ function NouvellePlongee() {
 
         {/* Fiche d'une plongée enregistrée : toutes ses photos en haut, sans passer par « Modifier » */}
         {existante && !edition && <CarrouselPhotos photos={photos} />}
-        {existante && !edition && !chargement && (
-          <div className="px-[22px]">
-            {/* Galerie commune de la palanquée (écran 42) ; l'analyse des espèces est dans la partie Photos, plus bas */}
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/plongee/photos", search: { id: idPlongee } })}
-              className="mt-[10px] flex w-full items-center gap-[10px] galet-moyen border border-[#DCE7F0] bg-white px-[14px] py-[11px] text-left"
-            >
-              <Images className="h-[17px] w-[17px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
-              <span className="flex-1 text-[14px] font-semibold">Les photos de la palanquée</span>
-              <ChevronRight className="h-[16px] w-[16px] text-[#566B82]" aria-hidden="true" />
-            </button>
-          </div>
-        )}
 
         {/* Tampon numérique du club */}
         {existante && !chargement && tampon?.le && tampon.infos && (
@@ -838,7 +879,23 @@ function NouvellePlongee() {
           </div>
         )}
 
+        {/* Fiche à lire ; « Modifier » ouvre le formulaire complet */}
+        {modeFiche && (
+          <FichePlongee
+            p={plongee}
+            binomesPalanote={identifies.map((id) => ({ id, prenom: prenomAmi(id) }))}
+            photos={photos}
+            idPlongee={idPlongee}
+            onPhotosPalanquee={() => navigate({ to: "/plongee/photos", search: { id: idPlongee } })}
+            amisDisponibles={amis.filter((a) => !identifies.includes(a.id))}
+            onAjouter={(ajout) => void ajouterDansPalanquee(ajout)}
+            ajoutEnCours={enCours}
+          />
+        )}
+
         <div className="px-[22px] pb-[30px]">
+          {!modeFiche && (
+          <>
           {/* ESSENTIEL */}
           <Section titre="ESSENTIEL">
             <div className="flex gap-3">
@@ -926,6 +983,29 @@ function NouvellePlongee() {
                   </div>
                 )}
               </div>
+              {edition && sitesProposes.length > 0 && (
+                <div className="flex flex-col gap-[6px] pt-[2px]">
+                  <span className="text-[11.5px] font-semibold text-[#566B82]">{plongee.siteNom.trim() ? "Un de tes sites ?" : "Tes sites de plongée"}</span>
+                  <div className="-mx-[22px] flex gap-[7px] overflow-x-auto px-[22px] pb-[2px] [scrollbar-width:none]">
+                    {sitesProposes.map((s) => (
+                      <button
+                        key={s.nom}
+                        type="button"
+                        onClick={() => choisirSite(s)}
+                        className="flex h-[44px] shrink-0 items-center gap-[8px] rounded-full border-[1.5px] border-[#DCE7F0] bg-white pl-[6px] pr-[14px] text-left"
+                      >
+                        <span className="flex h-[32px] w-[32px] items-center justify-center rounded-full bg-[#E1F3FB]">
+                          <MapPin className="h-[15px] w-[15px] text-[#106F9F]" strokeWidth={2.4} aria-hidden="true" />
+                        </span>
+                        <span className="flex flex-col leading-tight">
+                          <span className="text-[13px] font-bold text-[#123A63]">{s.nom}</span>
+                          {s.lieu && <span className="text-[11px] text-[#566B82]">{s.lieu}</span>}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3">
@@ -1410,6 +1490,9 @@ function NouvellePlongee() {
             </div>
           </Section>
 
+          </>
+          )}
+
           {/* Bas de page */}
           <div className="h-[30px]" />
           {edition ? (
@@ -1519,6 +1602,342 @@ function NouvellePlongee() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ---------- Fiche d'une plongée enregistrée (lecture) ----------
+// Une page à lire, comme une fiche produit : le site, les chiffres clés en tuiles,
+// la palanquée, les photos, la faune, les conditions. « Modifier » ouvre le formulaire complet.
+
+const aValeur = (v: string | null | undefined) => Boolean(v && v.trim() && v.trim() !== "—");
+// Nombre seul, sans unité déjà saisie ni zéro inutile : « 44 min » → « 44 », « 19.0 » → « 19 »
+const sansZero = (v: string) => v.replace(/\s*(min|m|°C|kg|L|bar)$/i, "").replace(/\.0+$/, "").replace(".", ",");
+
+function dateLongue(iso: string) {
+  if (!iso) return "";
+  const d = new Date(`${iso}T12:00:00`);
+  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+}
+
+function Tuile({ label, valeur, unite, fond, sombre = false }: { label: string; valeur: string; unite?: string; fond: string; sombre?: boolean }) {
+  return (
+    <div className={`flex min-h-[96px] flex-col justify-between galet-c p-[14px] ${fond}`}>
+      <span className={`text-[12px] font-semibold ${sombre ? "text-white/75" : "text-[#566B82]"}`}>{label}</span>
+      <span className={`text-[26px] font-bold leading-none ${sombre ? "text-white" : "text-[#123A63]"}`}>
+        {valeur}
+        {unite && <span className={`pl-[4px] text-[14px] font-semibold ${sombre ? "text-white/75" : "text-[#566B82]"}`}>{unite}</span>}
+      </span>
+    </div>
+  );
+}
+
+function Carte_({ titre, children }: { titre: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-[14px] galet border border-[#E4EBF1] bg-white px-[16px] py-[14px] shadow-[0_4px_14px_#123A6308]">
+      <h2 className="pb-[8px] text-[15px] font-bold text-[#123A63]">{titre}</h2>
+      {children}
+    </section>
+  );
+}
+
+function Ligne({ label, valeur }: { label: string; valeur: React.ReactNode }) {
+  return (
+    <div className="flex items-baseline justify-between gap-3 border-t border-[#EEF2F6] py-[8px] first:border-t-0 first:pt-0">
+      <span className="text-[13px] text-[#566B82]">{label}</span>
+      <span className="text-right text-[14px] font-semibold text-[#123A63]">{valeur}</span>
+    </div>
+  );
+}
+
+function PetitesEtoiles({ valeur }: { valeur: number }) {
+  return (
+    <span className="inline-flex gap-[1px]" aria-label={`${valeur} sur 5`}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <Star key={n} className={`h-[14px] w-[14px] ${n <= valeur ? "fill-[#FFC65C] text-[#FFC65C]" : "fill-transparent text-[#FFC65C]/50"}`} strokeWidth={1.8} aria-hidden="true" />
+      ))}
+    </span>
+  );
+}
+
+function FichePlongee({
+  p,
+  binomesPalanote,
+  photos,
+  idPlongee,
+  onPhotosPalanquee,
+  amisDisponibles,
+  onAjouter,
+  ajoutEnCours,
+}: {
+  p: Plongee;
+  binomesPalanote: { id: string; prenom: string }[];
+  photos: PhotoPlongee[];
+  idPlongee: string;
+  onPhotosPalanquee: () => void;
+  amisDisponibles: Plongeur[];
+  onAjouter: (ajout: { ami?: string; nom?: string }) => void;
+  ajoutEnCours: boolean;
+}) {
+  const [ajout, setAjout] = useState(false);
+  const [nom, setNom] = useState("");
+  const validerNom = () => {
+    if (!nom.trim()) return;
+    onAjouter({ nom: nom.trim() });
+    setNom("");
+    setAjout(false);
+  };
+  const heure = aValeur(p.immersion) ? p.immersion.slice(0, 5).replace(":", " h ") : "";
+  const tuiles = [
+    aValeur(p.profMax) && { label: "Profondeur max", valeur: sansZero(p.profMax), unite: "m", fond: "bg-[#0F2A4A]", sombre: true },
+    aValeur(p.duree) && { label: "Durée", ...(/\bh\b/.test(p.duree) ? { valeur: p.duree, unite: "" } : { valeur: sansZero(p.duree), unite: "min" }), fond: "bg-[#D5FAF0]" },
+    aValeur(p.tempFond) && { label: "Eau au fond", valeur: sansZero(p.tempFond), unite: "°C", fond: "bg-[#DDEEF7]" },
+    aValeur(p.visibilite) && { label: "Visibilité", valeur: sansZero(p.visibilite), unite: "m", fond: "bg-[#FFE3DC]" },
+  ].filter(Boolean) as { label: string; valeur: string; unite: string; fond: string; sombre?: boolean }[];
+  const conso =
+    aValeur(p.pressionDepart) && aValeur(p.pressionSortie) ? Number(p.pressionDepart) - Number(p.pressionSortie) : null;
+  const gaz = p.melange === "Air" || !aValeur(p.melange) ? "Air" : `${p.melange}${aValeur(p.o2) ? ` ${p.o2} % O₂` : ""}${aValeur(p.he) ? `, ${p.he} % He` : ""}`;
+  const encadrement = [
+    aValeur(p.encadrant) && { label: "Guide", valeur: p.encadrant },
+    aValeur(p.directeur) && { label: "Directeur de plongée", valeur: p.directeur },
+    aValeur(p.club) && { label: "Club", valeur: p.club },
+    aValeur(p.bateau) && { label: "Bateau", valeur: p.bateau },
+  ].filter(Boolean) as { label: string; valeur: string }[];
+  const conditions = [
+    aValeur(p.courant) && { label: "Courant", valeur: p.courant },
+    aValeur(p.etatMer) && { label: "État de la mer", valeur: p.etatMer },
+    aValeur(p.meteo) && { label: "Météo", valeur: p.meteo },
+    aValeur(p.tempSurface) && { label: "Eau en surface", valeur: `${sansZero(p.tempSurface)} °C` },
+    aValeur(p.tempAir) && { label: "Air", valeur: `${sansZero(p.tempAir)} °C` },
+    aValeur(p.milieu) && { label: "Milieu", valeur: p.milieu },
+    aValeur(p.miseALEau) && { label: "Mise à l'eau", valeur: p.miseALEau },
+  ].filter(Boolean) as { label: string; valeur: string }[];
+  const profil = [
+    aValeur(p.profMoyenne) && { label: "Profondeur moyenne", valeur: `${sansZero(p.profMoyenne)} m` },
+    aValeur(p.tempsTotal) && { label: "Temps total", valeur: `${sansZero(p.tempsTotal)} min` },
+    aValeur(p.intervalleSurface) && { label: "Intervalle surface", valeur: `${sansZero(p.intervalleSurface)} min` },
+    { label: "Paliers", valeur: p.paliers.length ? p.paliers.map((x) => `${x.duree} min à ${x.profondeur} m`).join(" · ") : "Aucun palier" },
+    aValeur(p.methode) && { label: "Relevé", valeur: [p.methode, p.ordinateur].filter(aValeur).join(" · ") },
+  ].filter(Boolean) as { label: string; valeur: string }[];
+  const equipement = [
+    { label: "Gaz", valeur: gaz },
+    (aValeur(p.configuration) || aValeur(p.volumeBloc)) && { label: "Bloc", valeur: [p.configuration, aValeur(p.volumeBloc) ? `${sansZero(p.volumeBloc)} L` : ""].filter(aValeur).join(" · ") },
+    aValeur(p.pressionDepart) && { label: "Pression", valeur: `${p.pressionDepart} → ${aValeur(p.pressionSortie) ? p.pressionSortie : "?"} bar${conso !== null && conso > 0 ? ` (${conso} bar consommés)` : ""}` },
+    aValeur(p.lestage) && { label: "Lestage", valeur: `${sansZero(p.lestage)} kg` },
+    aValeur(p.combinaison) && { label: "Combinaison", valeur: `${p.combinaison}${aValeur(p.epaisseur) ? ` ${p.epaisseur} mm` : ""}` },
+  ].filter(Boolean) as { label: string; valeur: string }[];
+  const notes = [
+    p.noteLieu > 0 && { label: "Le site", valeur: p.noteLieu },
+    p.noteConditions > 0 && { label: "Les conditions", valeur: p.noteConditions },
+    p.noteFaune > 0 && { label: "La faune", valeur: p.noteFaune },
+  ].filter(Boolean) as { label: string; valeur: number }[];
+  const palanquee = binomesPalanote.length + p.binomes.length;
+
+  return (
+    <div className="px-[22px] pb-[8px]">
+      {/* En-tête : le site, le lieu, la date, la note */}
+      <div className="pt-[18px]">
+        <div className="flex flex-wrap items-center gap-[6px] pb-[8px]">
+          {aValeur(p.typePlongee) && (
+            <span className="rounded-full bg-[#E7EFF6] px-[10px] py-[4px] text-[12px] font-semibold text-[#123A63]">{p.typePlongee}</span>
+          )}
+          {p.note > 0 && (
+            <span className="flex items-center gap-[6px] rounded-full bg-[#FFF4DA] px-[10px] py-[4px] text-[12px] font-semibold text-[#6B4A14]">
+              <PetitesEtoiles valeur={p.note} /> {NOTES_TEXTE[p.note]}
+            </span>
+          )}
+        </div>
+        <h2 className="text-[26px] font-bold leading-tight text-[#123A63]">{aValeur(p.siteNom) ? p.siteNom : "Plongée sans nom de site"}</h2>
+        {aValeur(p.siteLieu) && (
+          <p className="flex items-center gap-[5px] pt-[4px] text-[14px] text-[#566B82]">
+            <MapPin className="h-[15px] w-[15px]" aria-hidden="true" />
+            {p.siteLieu}
+          </p>
+        )}
+        {aValeur(p.date) && (
+          <p className="pt-[2px] text-[14px] text-[#566B82] first-letter:uppercase">
+            {dateLongue(p.date)}
+            {heure && ` · ${heure}`}
+          </p>
+        )}
+      </div>
+
+      {/* Les chiffres clés, en tuiles */}
+      {tuiles.length > 0 && (
+        <div className="grid grid-cols-2 gap-[10px] pt-[16px]">
+          {tuiles.map((t) => (
+            <Tuile key={t.label} {...t} />
+          ))}
+        </div>
+      )}
+
+      {/* Palanquée */}
+        <Carte_ titre="Ma palanquée">
+            <div className="flex flex-wrap gap-[8px] pb-[6px]">
+              {binomesPalanote.map((b) => (
+                <span key={b.id} className="flex h-[40px] items-center gap-[8px] rounded-full py-0 pl-[4px] pr-[13px]" style={{ background: `${couleurAvatar(b.id)}40` }}>
+                  <span className="flex h-[32px] w-[32px] items-center justify-center rounded-full text-[11px] font-bold text-[#0F3D70]" style={{ background: couleurAvatar(b.id) }}>
+                    {initialesAmi(b.prenom)}
+                  </span>
+                  <span className="text-[13.5px] font-bold text-[#0F3D70]">{b.prenom}</span>
+                </span>
+              ))}
+              {p.binomes.map((nom, i) => {
+                const c = COULEURS_BINOMES[i % COULEURS_BINOMES.length] ?? COULEURS_BINOMES[0]!;
+                return (
+                  <span key={nom + i} className="flex h-[40px] items-center gap-[8px] rounded-full py-0 pl-[4px] pr-[13px]" style={{ background: c.fond }}>
+                    <span className="flex h-[32px] w-[32px] items-center justify-center rounded-full bg-white/70 text-[11px] font-bold" style={{ color: c.texte }}>
+                      {initiales(nom)}
+                    </span>
+                    <span className="text-[13.5px] font-bold" style={{ color: c.texte }}>
+                      {nom}
+                    </span>
+                  </span>
+                );
+              })}
+              {!ajout && (
+                <button
+                  type="button"
+                  onClick={() => setAjout(true)}
+                  disabled={ajoutEnCours}
+                  className="flex h-[40px] items-center gap-[6px] rounded-full border-[1.5px] border-dashed border-[#9DB0C0] bg-white px-[15px] disabled:opacity-50"
+                >
+                  <Plus className="h-[14px] w-[14px] text-[#106F9F]" strokeWidth={2.6} aria-hidden="true" />
+                  <span className="text-[13.5px] font-semibold text-[#106F9F]">{ajoutEnCours ? "Ajout…" : "Ajouter un membre"}</span>
+                </button>
+              )}
+            </div>
+          {palanquee === 0 && !ajout && (
+            <p className="pb-[6px] text-[13px] text-[#566B82]">Avec qui as-tu plongé ? Ajoute tes binômes : ceux qui sont sur Palanote recevront la plongée.</p>
+          )}
+          {ajout && (
+            <div className="mb-[8px] flex flex-col gap-[8px] galet-moyen border-[1.5px] border-[#7B8FA3] bg-white p-[11px]">
+              {amisDisponibles.length > 0 && (
+                <>
+                  <span className="text-[11.5px] font-semibold text-[#566B82]">Tes binômes Palanote</span>
+                  <div className="flex flex-wrap gap-[7px]">
+                    {amisDisponibles.map((a) => (
+                      <button
+                        key={a.id}
+                        type="button"
+                        onClick={() => {
+                          onAjouter({ ami: a.id });
+                          setAjout(false);
+                        }}
+                        className="flex h-9 items-center gap-[7px] rounded-full border-[1.5px] border-[#DCE7F0] bg-[#F5F9FC] pl-[3px] pr-[12px]"
+                      >
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full text-[10.5px] font-bold text-[#0F3D70]" style={{ background: couleurAvatar(a.id) }}>
+                          {initialesAmi(a.prenom)}
+                        </span>
+                        <span className="text-[13px] font-semibold text-[#123A63]">{a.prenom}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <span className="pt-[2px] text-[11.5px] font-semibold text-[#566B82]">Ou un autre nom</span>
+                </>
+              )}
+              <div className="flex items-center gap-[8px]">
+                <input
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && validerNom()}
+                  placeholder="Prénom N."
+                  aria-label="Nom du membre"
+                  autoFocus
+                  className="h-10 min-w-0 flex-1 rounded-full border-[1.5px] border-[#DCE7F0] bg-[#F5F9FC] px-[13px] text-[13.5px] outline-none"
+                />
+                <button type="button" onClick={validerNom} disabled={!nom.trim()} className="h-10 rounded-full bg-[#0F3D70] px-[16px] text-[13px] font-bold text-white disabled:opacity-40">
+                  Ajouter
+                </button>
+                <button type="button" onClick={() => { setAjout(false); setNom(""); }} aria-label="Fermer" className="flex h-10 w-10 items-center justify-center">
+                  <X className="h-4 w-4 text-[#566B82]" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          )}
+          {encadrement.map((l) => (
+            <Ligne key={l.label} label={l.label} valeur={l.valeur} />
+          ))}
+        </Carte_>
+
+      {/* Photos */}
+      <Carte_ titre={photos.length ? `Photos (${photos.length})` : "Photos"}>
+        {photos.length > 0 ? (
+          <div className="grid grid-cols-3 gap-[6px]">
+            {photos.slice(0, 6).map((photo, i) => (
+              <div key={photo.id ?? photo.url} className="relative aspect-square overflow-hidden galet-petit">
+                <img src={photo.url} alt={`Photo ${i + 1} de la plongée`} className="h-full w-full object-cover" />
+                {i === 5 && photos.length > 6 && (
+                  <span className="absolute inset-0 flex items-center justify-center bg-[#0A2A50]/60 text-[15px] font-bold text-white">+{photos.length - 6}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-[13.5px] text-[#566B82]">Pas encore de photo. Ajoute-les avec « Modifier ».</p>
+        )}
+        <button
+          type="button"
+          onClick={onPhotosPalanquee}
+          className="mt-[10px] flex w-full items-center gap-[10px] galet-moyen border border-[#DCE7F0] bg-[#F5F9FC] px-[14px] py-[11px] text-left"
+        >
+          <Images className="h-[17px] w-[17px] text-[#106F9F]" strokeWidth={2.2} aria-hidden="true" />
+          <span className="flex-1 text-[14px] font-semibold">Les photos de la palanquée</span>
+          <ChevronRight className="h-[16px] w-[16px] text-[#566B82]" aria-hidden="true" />
+        </button>
+        {photos.length > 0 && (
+          <div className="pt-[10px]">
+            <BandeAnalyse diveId={idPlongee} nbPhotos={photos.length} />
+          </div>
+        )}
+      </Carte_>
+
+      {/* Faune */}
+      {p.faune.length > 0 && (
+        <Carte_ titre="Qui as-tu croisé ?">
+          <div className="flex flex-wrap gap-[6px]">
+            {p.faune.map((f) => (
+              <span key={f} className="rounded-full bg-[#E2F8EF] px-[11px] py-[5px] text-[13px] font-semibold text-[#0B5B45]">
+                {f}
+              </span>
+            ))}
+          </div>
+        </Carte_>
+      )}
+
+      {/* Ressenti */}
+      {(aValeur(p.commentaire) || notes.length > 0) && (
+        <Carte_ titre="Mon ressenti">
+          {aValeur(p.commentaire) && <p className="pb-[6px] text-[14.5px] italic leading-relaxed text-[#123A63]">« {p.commentaire} »</p>}
+          {notes.map((n) => (
+            <Ligne key={n.label} label={n.label} valeur={<PetitesEtoiles valeur={n.valeur} />} />
+          ))}
+        </Carte_>
+      )}
+
+      {conditions.length > 0 && (
+        <Carte_ titre="Conditions">
+          {conditions.map((l) => (
+            <Ligne key={l.label} label={l.label} valeur={l.valeur} />
+          ))}
+        </Carte_>
+      )}
+
+      <Carte_ titre="Profil de plongée">
+        {profil.map((l) => (
+          <Ligne key={l.label} label={l.label} valeur={l.valeur} />
+        ))}
+      </Carte_>
+
+      <Carte_ titre="Gaz et équipement">
+        {equipement.map((l) => (
+          <Ligne key={l.label} label={l.label} valeur={l.valeur} />
+        ))}
+      </Carte_>
+
+      <p className="pt-[14px] text-center text-[12.5px] text-[#566B82]">
+        Visible par : <b className="text-[#123A63]">{p.visibiliteFiche}</b>. La position précise du site n'est jamais partagée.
+      </p>
     </div>
   );
 }

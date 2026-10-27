@@ -6,11 +6,11 @@ import { supabase } from "@/lib/supabase";
 // ============================================================
 
 // Changer cette date oblige chaque plongeur à accepter à nouveau les conditions.
-export const VERSION_CONDITIONS = "2026-10-07-forfaits";
-export const DATE_CONDITIONS = "7 octobre 2026";
+export const VERSION_CONDITIONS = "2026-10-27-pages-offertes";
+export const DATE_CONDITIONS = "27 octobre 2026";
 
 // Pages de carnet papier lues gratuitement par l'IA (le serveur fait foi : admin_reglages.pages_offertes)
-export const PAGES_OFFERTES = 50;
+export const PAGES_OFFERTES = 20;
 
 export const EDITEUR = {
   nom: "Fabien Tagliareni",

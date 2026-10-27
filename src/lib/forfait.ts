@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 
 // ============================================================
 // Version gratuite et forfaits (palanote-forfaits.sql)
-// Gratuit : tout le carnet + 50 pages lues par l'IA (espèces illimitées).
+// Gratuit : tout le carnet + 20 pages lues par l'IA (espèces illimitées).
 // Au-delà : le pack « Numériser mes carnets » ou Palanote+.
 // Le compteur est tenu par le serveur (fonction lire-page).
 // ============================================================

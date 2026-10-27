@@ -151,7 +151,7 @@ function Recif() {
             <h2 className="pb-[8px] text-[14px] font-bold text-[#123A63]">Ce que tu ne reçois pas</h2>
             <p>
               Aucune fonctionnalité. Le carnet, l'identification des espèces, la carte, les statistiques, l'export :{" "}
-              <b className="text-[#123A63]">c'est gratuit, pour tout le monde, et ça le restera.</b> Seule la lecture des carnets papier par l'IA a un forfait au-delà des 50 premières pages, parce qu'elle coûte à chaque page.
+              <b className="text-[#123A63]">c'est gratuit, pour tout le monde, et ça le restera.</b> Seule la lecture des carnets papier par l'IA a un forfait au-delà des 20 premières pages, parce qu'elle coûte à chaque page.
             </p>
             <p className="pt-[8px]">Il n'y a rien de caché derrière ce bouton. C'est bien pour ça qu'il faut le dire avant, et pas après.</p>
           </div>

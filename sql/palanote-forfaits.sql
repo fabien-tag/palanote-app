@@ -11,7 +11,7 @@
 -- ============================================================
 
 -- ------------------------------------------------------------
--- 1. Le nombre de pages offertes, réglable (50 par défaut)
+-- 1. Le nombre de pages offertes, réglable (20 par défaut depuis le 27 octobre 2026, voir palanote-pages-offertes-20.sql)
 -- ------------------------------------------------------------
 alter table public.admin_reglages add column if not exists pages_offertes integer not null default 50;
 do $$ begin
