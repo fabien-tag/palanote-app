@@ -9,6 +9,9 @@ import { LogoGoogle } from "@/components/LogoGoogle";
 import logoAsset from "@/assets/logo.png";
 const logoImg = logoAsset;
 
+// Comptes fermés après la soutenance : un message clair au lieu de « mot de passe incorrect »
+const COMPTES_SUPPRIMES = ["fabien.tagliareni+jury@gmail.com"];
+
 export const Route = createFileRoute("/connexion")({
   head: () => ({
     meta: [
@@ -54,6 +57,14 @@ function Connexion() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    // Compte de démonstration de la soutenance, supprimé depuis
+    if (COMPTES_SUPPRIMES.includes(email.trim().toLowerCase())) {
+      setError(
+        "Ce compte a été supprimé pour des raisons de sécurité. Si vous souhaitez revoir le projet, veuillez contacter fabien.tagliareni@gmail.com.",
+      );
+      setLoading(false);
+      return;
+    }
     try {
       memoriserChoix(souvenir, email);
       await signInWithEmail(email, password);

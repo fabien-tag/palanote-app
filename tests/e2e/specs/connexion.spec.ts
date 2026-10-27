@@ -30,4 +30,16 @@ test.describe("Connexion et carnet", () => {
     await expect(page.getByText(/connecte|compte/i).first()).toBeVisible();
     await page.screenshot({ path: test.info().outputPath("connexion-requise.png") });
   });
+
+  test("le compte de démonstration supprimé affiche un message clair", async ({ page }) => {
+    const faux = new FauxSupabase(LEA);
+    await preparer(page, faux, { connecte: false });
+    await ouvrir(page, "/connexion");
+    await page.locator("#email").fill("fabien.tagliareni+jury@gmail.com");
+    await page.locator("#password").fill("nimporte-quoi");
+    await page.getByRole("button", { name: /se connecter/i }).click();
+    await expect(page.getByRole("alert")).toContainText("Ce compte a été supprimé pour des raisons de sécurité");
+    await expect(page.getByRole("alert")).toContainText("fabien.tagliareni@gmail.com");
+    await expect(page).toHaveURL(/\/connexion/);
+  });
 });

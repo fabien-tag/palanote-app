@@ -424,33 +424,10 @@ function Carnet() {
           <RaccourcisAccueil />
 
           <div className="flex shrink-0 flex-col px-[22px] pb-[22px]">
-            {/* Filtres et choix de la vue : au-dessus des plongées, avant le titre de l'année */}
+            {/* Filtres : au-dessus des plongées, sur toute la largeur */}
             {groupes.length > 0 && (
-              <div className="flex items-center gap-[10px] pt-[24px]">
-                <div className="-ml-[22px] min-w-0 flex-1">
-                  <FiltresPlongees filtres={filtres} actif={filtreActif.id} onChange={setFiltre} className="pl-[22px] pr-[6px]" />
-                </div>
-                <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
-                  {(
-                    [
-                      { v: "cartes", label: "Vue en cartes", Icone: IconeVueCartes },
-                      { v: "liste", label: "Vue en liste", Icone: IconeVueListe },
-                    ] as const
-                  ).map(({ v, label, Icone }) => (
-                    <button
-                      key={v}
-                      type="button"
-                      aria-label={label}
-                      aria-pressed={vue === v}
-                      onClick={(e) => changerVue(v, e.currentTarget)}
-                      className={`flex h-8 w-[38px] items-center justify-center galet-petit transition ${
-                        vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""
-                      }`}
-                    >
-                      <Icone actif={vue === v} />
-                    </button>
-                  ))}
-                </div>
+              <div className="pt-[24px]">
+                <FiltresPlongees filtres={filtres} actif={filtreActif.id} onChange={setFiltre} className="-mx-[22px] px-[22px]" />
               </div>
             )}
             {groupes.map((g, gi) => {
@@ -477,16 +454,41 @@ function Carnet() {
                       {g.plongees.length} plongée{g.plongees.length > 1 ? "s" : ""}
                     </span>
                   </div>
-                  {ouverte && g.plongees.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={(e) => reduire(e.currentTarget)}
-                      className="flex shrink-0 items-center gap-[4px] rounded-full bg-[#E7EFF6] px-[11px] py-[5px] text-[12.5px] font-semibold text-[#566B82]"
-                    >
-                      Réduire
-                      <ChevronUp className="h-[14px] w-[14px]" strokeWidth={2.4} aria-hidden="true" />
-                    </button>
-                  )}
+                  <div className="flex shrink-0 items-center gap-[8px]">
+                    {ouverte && g.plongees.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={(e) => reduire(e.currentTarget)}
+                        className="flex shrink-0 items-center gap-[4px] rounded-full bg-[#E7EFF6] px-[11px] py-[5px] text-[12.5px] font-semibold text-[#566B82]"
+                      >
+                        Réduire
+                        <ChevronUp className="h-[14px] w-[14px]" strokeWidth={2.4} aria-hidden="true" />
+                      </button>
+                    )}
+                    {gi === 0 && (
+                      <div role="group" aria-label="Affichage" className="flex shrink-0 gap-[3px] galet-petit bg-[#E7EFF6] p-[3px]">
+                        {(
+                          [
+                            { v: "cartes", label: "Vue en cartes", Icone: IconeVueCartes },
+                            { v: "liste", label: "Vue en liste", Icone: IconeVueListe },
+                          ] as const
+                        ).map(({ v, label, Icone }) => (
+                          <button
+                            key={v}
+                            type="button"
+                            aria-label={label}
+                            aria-pressed={vue === v}
+                            onClick={(e) => changerVue(v, e.currentTarget)}
+                            className={`flex h-8 w-[38px] items-center justify-center galet-petit transition ${
+                              vue === v ? "bg-white shadow-[0_2px_6px_rgba(15,61,112,.14)]" : ""
+                            }`}
+                          >
+                            <Icone actif={vue === v} />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 {!ouverte ? (
                   /* Pile repliée : la plongée la plus récente, et le bord des autres dessous */
